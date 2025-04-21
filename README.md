@@ -1,1 +1,3 @@
-# abutlb.github.io
+layout: page
+title: "index"
+permalink: /
