@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة التنقل | Commute Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Load Chart.js in the head to ensure it's available -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #8b5cf6; /* Purple for moon */
+        }
+        .sun-icon {
+            color: #fbbf24; /* Yellow for sun */
+        }
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">حاسبة تكاليف التنقل</h1>
+                <p class="text-gray-600 dark:text-gray-400">احسب تكاليف التنقل والوقت والتأثير البيئي</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch - Improved Design -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch_field" class="sr-only">Toggle Dark Mode</label>
+                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="calculator">
+                    <i class="fas fa-calculator ml-2"></i>الحاسبة
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="settings">
+                    <i class="fas fa-cog ml-2"></i>الإعدادات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول
+                </button>
+            </div>
+            
+            <!-- Calculator Tab -->
+            <div id="calculator-tab" class="tab-content p-6 block">
+                <form id="calcForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Basic Info Section -->
+                        <div class="col-span-full bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-road ml-2"></i>المعلومات الأساسية
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="distance_field">
+                                        المسافة (ذهاب فقط)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="distance_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="0.1" min="0.1">
+                                        <span id="distanceUnit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">كم</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="speed_field">
+                                        متوسط السرعة
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="speed_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="1" min="1" value="60">
+                                        <span id="speedUnit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">كم/س</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="daysPerWeek_field">
+                                        أيام التنقل في الأسبوع
+                                    </label>
+                                    <input type="number" id="daysPerWeek_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required min="1" max="7" value="5">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="tripType_field">
+                                        نوع الرحلة
+                                    </label>
+                                    <select id="tripType_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="roundtrip">ذهاب وإياب</option>
+                                        <option value="oneway">اتجاه واحد</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Vehicle Section -->
+                        <div class="col-span-full bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-car ml-2"></i>معلومات المركبة
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="fuelType_field">
+                                        نوع الوقود
+                                    </label>
+                                    <select id="fuelType_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="gasoline">بنزين</option>
+                                        <option value="diesel">ديزل</option>
+                                        <option value="electric">كهرباء</option>
+                                        <option value="hybrid">هجين</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="fuelEfficiency_field">
+                                        كفاءة استهلاك الوقود
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="fuelEfficiency_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="0.1" min="0.1" value="12">
+                                        <span id="efficiencyUnit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">كم/لتر</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="fuelCost_field">
+                                        تكلفة الوقود
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="fuelCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="0.01" min="0.01" value="2.18">
+                                        <span id="fuelCostUnit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">﷼/لتر</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Costs Section -->
+                        <div class="col-span-full bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-coins ml-2"></i>تكاليف إضافية
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="parkingCost_field">
+                                        تكلفة موقف السيارات (يومياً)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="parkingCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.01" min="0" value="0">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 currency-unit">﷼</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="maintenanceCost_field">
+                                        تكلفة الصيانة (شهرياً)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="maintenanceCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.01" min="0" value="0">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 currency-unit">﷼</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="tollsCost_field">
+                                        تكلفة الرسوم (يومياً)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="tollsCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.01" min="0" value="0">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 currency-unit">﷼</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-span-full">
+                            <button type="button" id="calculateBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md">
+                                <i class="fas fa-calculator ml-2"></i>احسب التكاليف
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Results Section -->
+                <div id="results" class="mt-8 hidden">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">نتائج التنقل الخاصة بك</h2>
+                    
+                    <!-- Summary Cards -->
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <div class="flex-1 min-w-[200px] bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg p-4 shadow-sm">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">التكلفة السنوية</p>
+                                    <p id="totalYearlyCost_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                                </div>
+                                <div class="p-3 bg-blue-100 dark:bg-blue-800/50 rounded-full">
+                                    <i class="fas fa-money-bill-wave text-blue-600 dark:text-blue-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 min-w-[200px] bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-lg p-4 shadow-sm">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">الوقت السنوي</p>
+                                    <p id="totalYearlyTime_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                                </div>
+                                <div class="p-3 bg-purple-100 dark:bg-purple-800/50 rounded-full">
+                                    <i class="fas fa-clock text-purple-600 dark:text-purple-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 min-w-[200px] bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/30 dark:to-teal-900/30 rounded-lg p-4 shadow-sm">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">انبعاثات CO2 السنوية</p>
+                                    <p id="totalYearlyCO2_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                                </div>
+                                <div class="p-3 bg-green-100 dark:bg-green-800/50 rounded-full">
+                                    <i class="fas fa-leaf text-green-600 dark:text-green-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed Results -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow gradient-border">
+                            <h3 class="font-medium text-gray-500 dark:text-gray-400 mb-3">يومياً</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقت:</span>
+                                    <span id="dailyTime_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">المسافة:</span>
+                                    <span id="dailyDistance_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقود:</span>
+                                    <span id="dailyFuel_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">التكلفة:</span>
+                                    <span id="dailyCost_result" class="font-semibold text-blue-600 dark:text-blue-400"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">CO2:</span>
+                                    <span id="dailyCO2_result" class="font-semibold text-green-600 dark:text-green-400"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow gradient-border">
+                            <h3 class="font-medium text-gray-500 dark:text-gray-400 mb-3">أسبوعياً</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقت:</span>
+                                    <span id="weeklyTime_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">المسافة:</span>
+                                    <span id="weeklyDistance_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقود:</span>
+                                    <span id="weeklyFuel_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">التكلفة:</span>
+                                    <span id="weeklyCost_result" class="font-semibold text-blue-600 dark:text-blue-400"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">CO2:</span>
+                                    <span id="weeklyCO2_result" class="font-semibold text-green-600 dark:text-green-400"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow gradient-border">
+                            <h3 class="font-medium text-gray-500 dark:text-gray-400 mb-3">شهرياً</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقت:</span>
+                                    <span id="monthlyTime_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">المسافة:</span>
+                                    <span id="monthlyDistance_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقود:</span>
+                                    <span id="monthlyFuel_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">التكلفة:</span>
+                                    <span id="monthlyCost_result" class="font-semibold text-blue-600 dark:text-blue-400"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">CO2:</span>
+                                    <span id="monthlyCO2_result" class="font-semibold text-green-600 dark:text-green-400"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow gradient-border">
+                            <h3 class="font-medium text-gray-500 dark:text-gray-400 mb-3">سنوياً</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقت:</span>
+                                    <span id="yearlyTime_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">المسافة:</span>
+                                    <span id="yearlyDistance_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">الوقود:</span>
+                                    <span id="yearlyFuel_result" class="font-semibold text-gray-800 dark:text-white"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">التكلفة:</span>
+                                    <span id="yearlyCost_result" class="font-semibold text-blue-600 dark:text-blue-400"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600 dark:text-gray-300">CO2:</span>
+                                    <span id="yearlyCO2_result" class="font-semibold text-green-600 dark:text-green-400"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CO2 Offset Calculator -->
+                    <div class="mt-6 bg-green-50 dark:bg-green-900/30 p-4 rounded-lg shadow">
+                        <h3 class="font-bold text-green-800 dark:text-green-400 mb-2">تعويض انبعاثات الكربون</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-3">لتعويض انبعاثات الكربون السنوية البالغة <span id="co2OffsetAmount"></span>، يمكنك:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li id="treesNeeded"></li>
+                            <li id="solarNeeded"></li>
+                            <li id="carbonCredit"></li>
+                        </ul>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">* هذه التقديرات تقريبية وتعتمد على متوسطات عالمية. القيم الفعلية قد تختلف.</p>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="mt-8 bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
+                        <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4">توزيع التكاليف</h3>
+                        <div class="h-64 flex items-center justify-center">
+                            <canvas id="costChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">إعدادات الحاسبة</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">وحدات القياس</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">نظام القياس</label>
+                                <div class="flex space-x-4 space-x-reverse">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="units" value="metric" class="form-radio text-blue-600" checked>
+                                        <span class="mr-2 text-gray-700 dark:text-gray-300">متري (كم، لتر)</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="units" value="imperial" class="form-radio text-blue-600">
+                                        <span class="mr-2 text-gray-700 dark:text-gray-300">إمبراطوري (ميل، جالون)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                                    العملة
+                                </label>
+                                <select id="currency_field" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="SAR" selected>ريال سعودي (﷼)</option>
+                                    <option value="BHD">دينار بحريني (د.ب)</option>
+                                    <option value="QAR">ريال قطري (ر.ق)</option>
+                                    <option value="OMR">ريال عماني (ر.ع)</option>
+                                    <option value="USD">دولار أمريكي ($)</option>
+                                    <option value="EUR">يورو (€)</option>
+                                    <option value="AED">درهم إماراتي (د.إ)</option>
+                                    <option value="KWD">دينار كويتي (د.ك)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">خيارات الحساب</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">أيام العمل في الشهر</label>
+                                <input type="number" id="workDaysPerMonth" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="22" min="1" max="31">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">معامل انبعاثات CO2 (جرام/كم)</label>
+                                <input type="number" id="co2Factor" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="120" min="0">
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <input type="checkbox" id="includeDepreciation" class="form-checkbox text-blue-600">
+                                <label for="includeDepreciation" class="mr-2 text-gray-700 dark:text-gray-300">تضمين استهلاك السيارة في الحساب</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="saveSettings" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md">
+                        <i class="fas fa-save ml-2"></i>حفظ الإعدادات
+                    </button>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول حاسبة التنقل</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            حاسبة التنقل هي أداة مصممة لمساعدتك في حساب التكاليف الحقيقية للتنقل اليومي من وإلى العمل. توفر لك معلومات عن:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>التكلفة الإجمالية للتنقل (الوقود، الصيانة، وقوف السيارات، الرسوم)</li>
+                            <li>الوقت المستغرق في التنقل</li>
+                            <li>الأثر البيئي من خلال انبعاثات CO2</li>
+                            <li>تحليل مفصل للتكاليف اليومية والأسبوعية والشهرية والسنوية</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تواصل معي</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-linkedin-in text-blue-700"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">LinkedIn</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">Email</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">ابريل 2025</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Chart -->
+    <div class="mt-8 bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
+    
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2025</span> حاسبة التنقل - جميع الحقوق محفوظة لعبدالله التويجري</p>
+    </footer>
+
+    <script>
+        // Simple dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dark mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+        });
+        
+        // Tab switching
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and hide all contents
+                tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+                
+                // Add active class to clicked button and show corresponding content
+                button.classList.add('active', 'opacity-100');
+                document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+            });
+        });
+        
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Currency exchange rates (relative to SAR)
+        const exchangeRates = {
+            'SAR': 1.0,
+            'BHD': 0.10,
+            'QAR': 0.97,
+            'OMR': 0.10,
+            'USD': 0.27,
+            'EUR': 0.24,
+            'AED': 0.98,
+            'KWD': 0.082
+        };
+
+        // Currency symbols/formatting
+        const currencyFormats = {
+            'SAR': { symbol: '﷼', position: 'after' },
+            'BHD': { symbol: 'د.ب', position: 'after' },
+            'QAR': { symbol: 'ر.ق', position: 'after' },
+            'OMR': { symbol: 'ر.ع', position: 'after' },
+            'USD': { symbol: '$', position: 'before' },
+            'EUR': { symbol: '€', position: 'before' },
+            'AED': { symbol: 'د.إ', position: 'after' },
+            'KWD': { symbol: 'د.ك', position: 'after' }
+        };
+
+        // Store raw cost values for currency conversion
+        let rawCosts = {
+            daily: 0,
+            weekly: 0,
+            monthly: 0,
+            yearly: 0
+        };
+
+        // Format currency based on selected currency
+        function formatCurrency(amount, currencyCode = 'SAR') {
+            // Convert amount to the selected currency
+            const convertedAmount = amount / exchangeRates['SAR'] * exchangeRates[currencyCode];
+            
+            // Format with appropriate precision (more for high-value currencies)
+            const precision = ['BHD', 'KWD', 'OMR'].includes(currencyCode) ? 3 : 2;
+            const formattedAmount = convertedAmount.toFixed(precision);
+            
+            // Apply symbol according to position preference
+            const format = currencyFormats[currencyCode];
+            if (format.position === 'before') {
+                return `${format.symbol}${formattedAmount}`;
+            } else {
+                return `${formattedAmount} ${format.symbol}`;
+            }
+        }
+        
+        // Unit conversion variables
+        let isMetric = true;
+        const metricUnits = {
+            distance: 'كم',
+            speed: 'كم/س',
+            fuel: 'لتر',
+            efficiency: 'كم/لتر'
+        };
+        
+        const imperialUnits = {
+            distance: 'ميل',
+            speed: 'ميل/س',
+            fuel: 'جالون',
+            efficiency: 'ميل/جالون'
+        };
+        
+        // Unit conversion functions
+        function kmToMiles(km) {
+            return km * 0.621371;
+        }
+        
+        function milesToKm(miles) {
+            return miles * 1.60934;
+        }
+        
+        function litersToGallons(liters) {
+            return liters * 0.264172;
+        }
+        
+        function gallonsToLiters(gallons) {
+            return gallons * 3.78541;
+        }
+        
+        function kmPerLiterToMPG(kml) {
+            return kml * 2.35215;
+        }
+        
+        function mpgToKmPerLiter(mpg) {
+            return mpg * 0.425144;
+        }
+        
+        // Handle unit change
+        document.querySelectorAll('input[name="units"]').forEach(input => {
+            input.addEventListener('change', function() {
+                isMetric = this.value === 'metric';
+                updateUnitLabels();
+            });
+        });
+        
+        // Update unit labels based on current system
+        function updateUnitLabels() {
+            const units = isMetric ? metricUnits : imperialUnits;
+            document.getElementById('distanceUnit').textContent = units.distance;
+            document.getElementById('speedUnit').textContent = units.speed;
+            document.getElementById('efficiencyUnit').textContent = units.efficiency;
+            
+            // Update currency unit labels
+            const selectedCurrency = document.getElementById('currency_field').value;
+            const currencySymbol = currencyFormats[selectedCurrency].symbol;
+            
+            // Update fuel cost unit with appropriate currency and volume unit
+            document.getElementById('fuelCostUnit').textContent = `${currencySymbol}/${isMetric ? 'لتر' : 'جالون'}`;
+            
+            // Update other currency units
+            document.querySelectorAll('.currency-unit').forEach(element => {
+                element.textContent = currencySymbol;
+            });
+        }
+        
+        // Format time in hours:minutes
+        function formatTime(hours) {
+            const totalMinutes = Math.round(hours * 60);
+            const h = Math.floor(totalMinutes / 60);
+            const m = totalMinutes % 60;
+            return `${h} ساعة ${m > 0 ? `و ${m} دقيقة` : ''}`;
+        }
+        
+        // Format distance based on current unit system
+        function formatDistance(distance) {
+            if (!isMetric) {
+                distance = kmToMiles(distance);
+                return `${distance.toFixed(1)} ${imperialUnits.distance}`;
+            }
+            return `${distance.toFixed(1)} ${metricUnits.distance}`;
+        }
+        
+        // Format fuel based on current unit system
+        function formatFuel(fuel) {
+            if (!isMetric) {
+                fuel = litersToGallons(fuel);
+                return `${fuel.toFixed(2)} ${imperialUnits.fuel}`;
+            }
+            return `${fuel.toFixed(2)} ${metricUnits.fuel}`;
+        }
+        
+        // Initialize chart variable
+        let costChart = null;
+        
+        // Create cost breakdown chart
+        function createCostChart(fuelCost, parkingCost, tollsCost, maintenanceCost) {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            const selectedCurrency = document.getElementById('currency_field').value;
+            
+            // If chart already exists, destroy it before creating a new one
+            if (costChart) {
+                costChart.destroy();
+            }
+            
+            // Data for the chart
+            const data = {
+                labels: ['الوقود', 'موقف السيارات', 'الرسوم', 'الصيانة'],
+                datasets: [{
+                    data: [fuelCost, parkingCost, tollsCost, maintenanceCost],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            
+            // Create the chart
+            costChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#1e293b'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    // Format currency according to selected type
+                                    const formattedValue = formatCurrency(value, selectedCurrency);
+                                    let percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${formattedValue} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Calculate function
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            // Get input values
+            let distance = parseFloat(document.getElementById('distance_field').value);
+            if (isNaN(distance)) {
+                alert("الرجاء إدخال قيمة صحيحة للمسافة");
+                return;
+            }
+            
+            let speed = parseFloat(document.getElementById('speed_field').value);
+            if (isNaN(speed) || speed <= 0) {
+                speed = 60; // Default value
+            }
+            
+            let fuelEfficiency = parseFloat(document.getElementById('fuelEfficiency_field').value);
+            if (isNaN(fuelEfficiency) || fuelEfficiency <= 0) {
+                fuelEfficiency = 12; // Default value
+            }
+            
+            const fuelCost = parseFloat(document.getElementById('fuelCost_field').value) || 2.18;
+            const daysPerWeek = parseInt(document.getElementById('daysPerWeek_field').value) || 5;
+            const tripType = document.getElementById('tripType_field').value;
+            const fuelType = document.getElementById('fuelType_field').value;
+            const parkingCost = parseFloat(document.getElementById('parkingCost_field').value) || 0;
+            const maintenanceCost = parseFloat(document.getElementById('maintenanceCost_field').value) || 0;
+            const tollsCost = parseFloat(document.getElementById('tollsCost_field').value) || 0;
+            const selectedCurrency = document.getElementById('currency_field').value;
+            
+            // CO2 emissions factor (g/km) - different for each fuel type
+            let co2Factor;
+            switch(fuelType) {
+                case 'gasoline':
+                    co2Factor = 120;
+                    break;
+                case 'diesel':
+                    co2Factor = 140;
+                    break;
+                case 'electric':
+                    co2Factor = 50;
+                    break;
+                case 'hybrid':
+                    co2Factor = 90;
+                    break;
+                default:
+                    co2Factor = 120;
+            }
+            
+            // Convert to metric if using imperial
+            if (!isMetric) {
+                distance = milesToKm(distance);
+                speed = milesToKm(speed);
+                fuelEfficiency = mpgToKmPerLiter(fuelEfficiency);
+            }
+            
+            // Apply trip type (one-way vs round trip)
+            const dailyDistance = tripType === 'roundtrip' ? distance * 2 : distance;
+            
+            // Calculate daily values
+            const dailyTimeHours = dailyDistance / speed;
+            const dailyFuel = dailyDistance / fuelEfficiency;
+            const dailyFuelCost = dailyFuel * fuelCost;
+            const dailyTotalCost = dailyFuelCost + parkingCost + tollsCost;
+            const dailyCO2 = dailyDistance * co2Factor / 1000; // Convert to kg
+            
+            // Calculate weekly values
+            const weeklyDistance = dailyDistance * daysPerWeek;
+            const weeklyTimeHours = dailyTimeHours * daysPerWeek;
+            const weeklyFuel = dailyFuel * daysPerWeek;
+            const weeklyFuelCost = dailyFuelCost * daysPerWeek;
+            const weeklyTotalCost = dailyTotalCost * daysPerWeek;
+            const weeklyCO2 = dailyCO2 * daysPerWeek;
+            
+            // Calculate monthly values (assuming 4.33 weeks per month)
+            const monthlyDistance = weeklyDistance * 4.33;
+            const monthlyTimeHours = weeklyTimeHours * 4.33;
+            const monthlyFuel = weeklyFuel * 4.33;
+            const monthlyFuelCost = weeklyFuelCost * 4.33;
+            const monthlyTotalCost = weeklyTotalCost * 4.33 + maintenanceCost;
+            const monthlyCO2 = weeklyCO2 * 4.33;
+            
+            // Calculate yearly values
+            const yearlyDistance = dailyDistance * daysPerWeek * 52;
+            const yearlyTimeHours = dailyTimeHours * daysPerWeek * 52;
+            const yearlyFuel = dailyFuel * daysPerWeek * 52;
+            const yearlyFuelCost = dailyFuelCost * daysPerWeek * 52;
+            const yearlyTotalCost = (dailyTotalCost * daysPerWeek * 52) + (maintenanceCost * 12);
+            const yearlyCO2 = dailyCO2 * daysPerWeek * 52;
+
+            // Update CO2 offset suggestions
+            updateOffsetSuggestions(yearlyCO2);
+
+            // Display results (existing code)
+            document.getElementById('dailyTime_result').textContent = formatTime(dailyTimeHours);
+            // ...rest of your display code
+
+            // Store raw cost values for currency conversion
+            rawCosts = {
+                daily: dailyTotalCost,
+                weekly: weeklyTotalCost,
+                monthly: monthlyTotalCost,
+                yearly: yearlyTotalCost
+            };
+            
+            // Display results
+            document.getElementById('dailyTime_result').textContent = formatTime(dailyTimeHours);
+            document.getElementById('dailyDistance_result').textContent = formatDistance(dailyDistance);
+            document.getElementById('dailyFuel_result').textContent = formatFuel(dailyFuel);
+            document.getElementById('dailyCost_result').textContent = formatCurrency(dailyTotalCost, selectedCurrency);
+            document.getElementById('dailyCO2_result').textContent = `${dailyCO2.toFixed(2)} كجم`;
+            
+            document.getElementById('weeklyTime_result').textContent = formatTime(weeklyTimeHours);
+            document.getElementById('weeklyDistance_result').textContent = formatDistance(weeklyDistance);
+            document.getElementById('weeklyFuel_result').textContent = formatFuel(weeklyFuel);
+            document.getElementById('weeklyCost_result').textContent = formatCurrency(weeklyTotalCost, selectedCurrency);
+            document.getElementById('weeklyCO2_result').textContent = `${weeklyCO2.toFixed(2)} كجم`;
+            
+            document.getElementById('monthlyTime_result').textContent = formatTime(monthlyTimeHours);
+            document.getElementById('monthlyDistance_result').textContent = formatDistance(monthlyDistance);
+            document.getElementById('monthlyFuel_result').textContent = formatFuel(monthlyFuel);
+            document.getElementById('monthlyCost_result').textContent = formatCurrency(monthlyTotalCost, selectedCurrency);
+            document.getElementById('monthlyCO2_result').textContent = `${monthlyCO2.toFixed(2)} كجم`;
+            
+            document.getElementById('yearlyTime_result').textContent = formatTime(yearlyTimeHours);
+            document.getElementById('yearlyDistance_result').textContent = formatDistance(yearlyDistance);
+            document.getElementById('yearlyFuel_result').textContent = formatFuel(yearlyFuel);
+            document.getElementById('yearlyCost_result').textContent = formatCurrency(yearlyTotalCost, selectedCurrency);
+            document.getElementById('yearlyCO2_result').textContent = `${yearlyCO2.toFixed(2)} كجم`;
+            
+            // Update summary cards
+            document.getElementById('totalYearlyCost_result').textContent = formatCurrency(yearlyTotalCost, selectedCurrency);
+            document.getElementById('totalYearlyTime_result').textContent = formatTime(yearlyTimeHours);
+            document.getElementById('totalYearlyCO2_result').textContent = `${yearlyCO2.toFixed(2)} كجم`;
+            
+            // Create/update the pie chart
+            createCostChart(yearlyFuelCost, parkingCost * daysPerWeek * 52, tollsCost * daysPerWeek * 52, maintenanceCost * 12);
+            
+            // Show results
+            document.getElementById('results').classList.remove('hidden');
+            console.log("Calculation completed successfully!");
+        });
+        
+        // Update currency display when currency selection changes
+        document.getElementById('currency_field').addEventListener('change', function() {
+            // Update fuel cost unit label
+            updateUnitLabels();
+            
+            // If results are already displayed, update the currency format
+            if (!document.getElementById('results').classList.contains('hidden')) {
+                const selectedCurrency = this.value;
+                
+                // Update all currency displays with stored raw values
+                document.getElementById('dailyCost_result').textContent = formatCurrency(rawCosts.daily, selectedCurrency);
+                document.getElementById('weeklyCost_result').textContent = formatCurrency(rawCosts.weekly, selectedCurrency);
+                document.getElementById('monthlyCost_result').textContent = formatCurrency(rawCosts.monthly, selectedCurrency);
+                document.getElementById('yearlyCost_result').textContent = formatCurrency(rawCosts.yearly, selectedCurrency);
+                document.getElementById('totalYearlyCost_result').textContent = formatCurrency(rawCosts.yearly, selectedCurrency);
+                
+                // Re-create chart with new currency
+                const calcButton = document.getElementById('calculateBtn');
+                if (calcButton) {
+                    calcButton.click();
+                }
+            }
+        });
+        
+        // Save settings and apply conversions
+        document.getElementById('saveSettings').addEventListener('click', function() {
+            // Get values from settings form
+            const currency = document.getElementById('currency_field').value;
+            const workDaysPerMonth = document.getElementById('workDaysPerMonth').value;
+            const co2Factor = document.getElementById('co2Factor').value;
+            const includeDepreciation = document.getElementById('includeDepreciation').checked;
+            
+            // Get current unit system setting
+            const newUnitSystem = document.querySelector('input[name="units"]:checked').value;
+            const wasMetric = isMetric;
+            isMetric = (newUnitSystem === 'metric');
+            
+            // Save to localStorage
+            localStorage.setItem('currency', currency);
+            localStorage.setItem('workDaysPerMonth', workDaysPerMonth);
+            localStorage.setItem('co2Factor', co2Factor);
+            localStorage.setItem('includeDepreciation', includeDepreciation);
+            localStorage.setItem('unitSystem', newUnitSystem);
+            
+            // Empty all calculator input fields
+            document.getElementById('distance_field').value = '';
+            document.getElementById('speed_field').value = '60'; // Keep default speed
+            document.getElementById('daysPerWeek_field').value = '5'; // Keep default days
+            document.getElementById('fuelEfficiency_field').value = ''; // Empty fuel efficiency
+            document.getElementById('fuelCost_field').value = ''; // Empty fuel cost
+            document.getElementById('parkingCost_field').value = '0';
+            document.getElementById('maintenanceCost_field').value = '0';
+            document.getElementById('tollsCost_field').value = '0';
+            
+            // Update UI to reflect changes
+            updateUnitLabels();
+            
+            // Hide results section if visible
+            document.getElementById('results').classList.add('hidden');
+            
+            // Reset charts if they exist
+            if (costChart) {
+                costChart.destroy();
+                costChart = null;
+            }
+            
+            // Show success message
+            alert('تم حفظ الإعدادات بنجاح! تم مسح حقول الإدخال.');
+        });        // Load settings from localStorage on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            // Load unit system setting - default to metric if not set
+            const savedUnitSystem = localStorage.getItem('unitSystem') || 'metric';
+            isMetric = (savedUnitSystem === 'metric');
+            document.querySelector(`input[name="units"][value="${savedUnitSystem}"]`).checked = true;
+            
+            // Load currency setting - default to SAR if not set
+            const savedCurrency = localStorage.getItem('currency') || 'SAR';
+            document.getElementById('currency_field').value = savedCurrency;
+            
+            // Load other settings
+            if (localStorage.getItem('workDaysPerMonth')) {
+                document.getElementById('workDaysPerMonth').value = localStorage.getItem('workDaysPerMonth');
+            }
+            
+            if (localStorage.getItem('co2Factor')) {
+                document.getElementById('co2Factor').value = localStorage.getItem('co2Factor');
+            }
+            
+            if (localStorage.getItem('includeDepreciation') === 'true') {
+                document.getElementById('includeDepreciation').checked = true;
+            }
+            
+            // Initialize unit labels
+            updateUnitLabels();
+        });
+        
+        // Language toggle functionality (placeholder - would need more work for full implementation)
+        document.getElementById('langToggle').addEventListener('click', function() {
+            alert('لتغيير اللغة بشكل كامل يتطلب المزيد من التطوير.');
+        });
+
+
+        // CO2 Offset Calculator
+function updateOffsetSuggestions(yearlyCO2) {
+    document.getElementById('co2OffsetAmount').textContent = `${yearlyCO2.toFixed(2)} كجم`;
+    
+    // Approx. number of trees to absorb this CO2 (average tree absorbs ~22kg CO2 per year)
+    const treesCount = Math.ceil(yearlyCO2 / 22);
+    document.getElementById('treesNeeded').textContent = `زراعة ${treesCount} شجرة سنوياً (كل شجرة تمتص حوالي 22 كجم من CO2)`;
+    
+    // Approx. solar panels needed (1kW solar panel offsets ~1.5 tons CO2 per year)
+    const solarNeeded = (yearlyCO2 / 1500).toFixed(2);
+    document.getElementById('solarNeeded').textContent = `تركيب ${solarNeeded} كيلوواط من الألواح الشمسية (كل 1 كيلوواط يوفر 1.5 طن من CO2)`;
+    
+    // Carbon credit cost (approx $10-15 per ton)
+    const creditCost = formatCurrency((yearlyCO2 / 1000) * 12, document.getElementById('currency_field').value);
+    document.getElementById('carbonCredit').textContent = `شراء أرصدة كربون بتكلفة تقريبية ${creditCost} سنوياً (حوالي 12 ${currencyFormats[document.getElementById('currency_field').value].symbol} لكل طن)`;
+}
+
+    </script>
+</body>
+</html>
