@@ -91,28 +91,38 @@
 <body class="min-h-screen py-6 transition-colors duration-300">
     <div class="max-w-6xl mx-auto px-4">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">حاسبة تكاليف التنقل</h1>
-                <p class="text-gray-600 dark:text-gray-400">احسب تكاليف التنقل والوقت والتأثير البيئي</p>
-            </div>
-            <div class="flex space-x-3 space-x-reverse items-center">
-                <!-- Theme Toggle Switch - Improved Design -->
-                <div class="relative inline-flex items-center">
-                    <label for="themeSwitch_field" class="sr-only">Toggle Dark Mode</label>
-                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
-                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
-                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
-                        </div>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
-                            <i class="fas fa-sun text-amber-500 text-xs"></i>
-                        </div>
-                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
-                    </div>
+<div class="grid grid-cols-3 items-center mb-8">
+    <!-- Back button (right side in RTL) -->
+    <div class="flex justify-start">
+        <a href="/" class="p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <i class="fas fa-arrow-right text-gray-600 dark:text-gray-300"></i>
+        </a>
+    </div>
+    
+    <!-- Title (centered) -->
+    <div class="text-center">
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">حاسبة تكاليف التنقل</h1>
+        <p class="text-gray-600 dark:text-gray-400">احسب تكاليف التنقل والوقت والتأثير البيئي</p>
+    </div>
+    
+    <!-- Dark mode toggle (left side in RTL) -->
+    <div class="flex justify-end">
+        <div class="relative inline-flex items-center">
+            <label for="themeSwitch_field" class="sr-only">Toggle Dark Mode</label>
+            <input type="checkbox" id="themeSwitch_field" class="sr-only">
+            <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                    <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
                 </div>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                    <i class="fas fa-sun text-amber-500 text-xs"></i>
+                </div>
+                <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
             </div>
         </div>
+    </div>
+</div>
+
         
         <!-- Main Content -->
         <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
@@ -144,8 +154,18 @@
                                         المسافة (ذهاب فقط)
                                     </label>
                                     <div class="relative">
-                                        <input type="number" id="distance_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="0.1" min="0.1">
+                                        <input type="number" id="distance_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="0.1" min="0.1" onchange="handleDistanceChange()" oninput="handleDistanceChange()">
                                         <span id="distanceUnit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">كم</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="time_field">
+                                        الوقت المستغرق (ذهاب فقط)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="time_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1" min="1" onchange="handleTimeChange()" oninput="handleTimeChange()">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">دقيقة</span>
                                     </div>
                                 </div>
                                 
@@ -154,10 +174,12 @@
                                         متوسط السرعة
                                     </label>
                                     <div class="relative">
-                                        <input type="number" id="speed_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="1" min="1" value="60">
+                                        <input type="number" id="speed_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required step="1" min="1" value="60" onchange="handleSpeedChange()" oninput="handleSpeedChange()">
                                         <span id="speedUnit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">كم/س</span>
                                     </div>
                                 </div>
+                                
+                                
                                 
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="daysPerWeek_field">
@@ -553,9 +575,69 @@
                     
                     <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
                         <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
-                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار الحالي: <span class="font-semibold">1.1.0</span></p>
                         <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">ابريل 2025</span></p>
-                    </div>
+                        
+                        <!-- Version History Timeline -->
+                        <div class="mt-6">
+                            <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-3">سجل التحديثات</h4>
+                            
+                            <div class="space-y-4 relative before:absolute before:inset-y-0 before:right-4 before:w-0.5 before:bg-blue-200 dark:before:bg-blue-900 mr-2">
+                                <!-- Current Version -->
+                                <div class="flex">
+                                    <div class="flex-none relative">
+                                        <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center relative z-10 ml-2">
+                                            <i class="fas fa-star text-white text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-center">
+                                            <h5 class="font-bold text-blue-600 dark:text-blue-400">الإصدار 1.1.0</h5>
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">ابريل 2025</span>
+                                        </div>
+                                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300 space-y-1 list-disc list-inside">
+                                            <li>إضافة حقل الوقت المستغرق للرحلة مع حساب تلقائي بين المسافة والسرعة والوقت</li>
+                                            <li>تحسين عرض الوقت ليظهر عدد الأيام عند تجاوز 24 ساعة</li>
+                                            <li>إضافة زر العودة للصفحة الرئيسية</li>
+                                            <li>تحسين واجهة المستخدم وإضافة عنصر مركزي للعنوان</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <!-- Version 1.0.0 -->
+                                <div class="flex">
+                                    <div class="flex-none relative">
+                                        <div class="h-8 w-8 rounded-full bg-blue-300 flex items-center justify-center relative z-10 ml-2">
+                                            <i class="fas fa-rocket text-white text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-center">
+                                            <h5 class="font-bold text-blue-600 dark:text-blue-400">الإصدار 1.0.0</h5>
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">ابريل 2025</span>
+                                        </div>
+                                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300 space-y-1 list-disc list-inside">
+                                            <li>إطلاق النسخة الأولى من حاسبة تكاليف التنقل</li>
+                                            <li>حساب التكاليف اليومية والأسبوعية والشهرية والسنوية</li>
+                                            <li>حساب استهلاك الوقود والانبعاثات الكربونية</li>
+                                            <li>دعم أنواع مختلفة من الوقود ووسائل النقل</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Future Plans -->
+                        <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-2">خطط مستقبلية</h4>
+                            <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1 list-disc list-inside">
+                                <li>إضافة مقارنة بين وسائل النقل المختلفة</li>
+                                <li>إضافة خرائط لتحديد المسافة تلقائياً</li>
+                                <li>تطبيق للهواتف الذكية</li>
+                                <li>إمكانية حفظ وتصدير النتائج</li>
+                            </ul>
+                        </div>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -737,15 +819,33 @@
                 element.textContent = currencySymbol;
             });
         }
-        
-        // Format time in hours:minutes
+
+        // Format time in hours:minutes with days in parentheses// Format time in hours:minutes with days on a new line in gray text
         function formatTime(hours) {
             const totalMinutes = Math.round(hours * 60);
             const h = Math.floor(totalMinutes / 60);
             const m = totalMinutes % 60;
-            return `${h} ساعة ${m > 0 ? `و ${m} دقيقة` : ''}`;
+
+            let formattedTime = `${h} ساعة ${m > 0 ? `و ${m} دقيقة` : ''}`;
+
+            // Add days reference on a new line if more than 24 hours
+            if (h >= 24) {
+                const days = (h / 24).toFixed(1);
+                // If it's a whole number, remove the decimal point
+                const daysFormatted = days.endsWith('.0') ? days.slice(0, -2) : days;
+
+                // Wrap the reference in a div with styling
+                formattedTime = `<div>${formattedTime}</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    (يعادل ${daysFormatted} ${Number(daysFormatted) === 1 ? 'يوم' : 'أيام'})
+                                 </div>`;
+            }
+
+            return formattedTime;
         }
-        
+
+
+
         // Format distance based on current unit system
         function formatDistance(distance) {
             if (!isMetric) {
@@ -921,9 +1021,6 @@
             // Update CO2 offset suggestions
             updateOffsetSuggestions(yearlyCO2);
 
-            // Display results (existing code)
-            document.getElementById('dailyTime_result').textContent = formatTime(dailyTimeHours);
-            // ...rest of your display code
 
             // Store raw cost values for currency conversion
             rawCosts = {
@@ -934,25 +1031,25 @@
             };
             
             // Display results
-            document.getElementById('dailyTime_result').textContent = formatTime(dailyTimeHours);
+            document.getElementById('dailyTime_result').innerHTML = formatTime(dailyTimeHours);
             document.getElementById('dailyDistance_result').textContent = formatDistance(dailyDistance);
             document.getElementById('dailyFuel_result').textContent = formatFuel(dailyFuel);
             document.getElementById('dailyCost_result').textContent = formatCurrency(dailyTotalCost, selectedCurrency);
             document.getElementById('dailyCO2_result').textContent = `${dailyCO2.toFixed(2)} كجم`;
             
-            document.getElementById('weeklyTime_result').textContent = formatTime(weeklyTimeHours);
+            document.getElementById('weeklyTime_result').innerHTML = formatTime(weeklyTimeHours);
             document.getElementById('weeklyDistance_result').textContent = formatDistance(weeklyDistance);
             document.getElementById('weeklyFuel_result').textContent = formatFuel(weeklyFuel);
             document.getElementById('weeklyCost_result').textContent = formatCurrency(weeklyTotalCost, selectedCurrency);
             document.getElementById('weeklyCO2_result').textContent = `${weeklyCO2.toFixed(2)} كجم`;
             
-            document.getElementById('monthlyTime_result').textContent = formatTime(monthlyTimeHours);
+            document.getElementById('monthlyTime_result').innerHTML = formatTime(monthlyTimeHours);
             document.getElementById('monthlyDistance_result').textContent = formatDistance(monthlyDistance);
             document.getElementById('monthlyFuel_result').textContent = formatFuel(monthlyFuel);
             document.getElementById('monthlyCost_result').textContent = formatCurrency(monthlyTotalCost, selectedCurrency);
             document.getElementById('monthlyCO2_result').textContent = `${monthlyCO2.toFixed(2)} كجم`;
             
-            document.getElementById('yearlyTime_result').textContent = formatTime(yearlyTimeHours);
+            document.getElementById('yearlyTime_result').innerHTML = formatTime(yearlyTimeHours);
             document.getElementById('yearlyDistance_result').textContent = formatDistance(yearlyDistance);
             document.getElementById('yearlyFuel_result').textContent = formatFuel(yearlyFuel);
             document.getElementById('yearlyCost_result').textContent = formatCurrency(yearlyTotalCost, selectedCurrency);
@@ -960,7 +1057,7 @@
             
             // Update summary cards
             document.getElementById('totalYearlyCost_result').textContent = formatCurrency(yearlyTotalCost, selectedCurrency);
-            document.getElementById('totalYearlyTime_result').textContent = formatTime(yearlyTimeHours);
+            document.getElementById('totalYearlyTime_result').innerHTML = formatTime(yearlyTimeHours);
             document.getElementById('totalYearlyCO2_result').textContent = `${yearlyCO2.toFixed(2)} كجم`;
             
             // Create/update the pie chart
@@ -1067,10 +1164,6 @@
             updateUnitLabels();
         });
         
-        // Language toggle functionality (placeholder - would need more work for full implementation)
-        document.getElementById('langToggle').addEventListener('click', function() {
-            alert('لتغيير اللغة بشكل كامل يتطلب المزيد من التطوير.');
-        });
 
 
         // CO2 Offset Calculator
@@ -1089,6 +1182,79 @@ function updateOffsetSuggestions(yearlyCO2) {
     const creditCost = formatCurrency((yearlyCO2 / 1000) * 12, document.getElementById('currency_field').value);
     document.getElementById('carbonCredit').textContent = `شراء أرصدة كربون بتكلفة تقريبية ${creditCost} سنوياً (حوالي 12 ${currencyFormats[document.getElementById('currency_field').value].symbol} لكل طن)`;
 }
+
+// Functions for automatic calculation between time, speed, and distance
+let lastChanged = 'speed'; // Track which field was last changed
+
+function handleDistanceChange() {
+    const distanceField = document.getElementById('distance_field');
+    const timeField = document.getElementById('time_field');
+    const speedField = document.getElementById('speed_field');
+    
+    if (!distanceField || !timeField || !speedField) return;
+    
+    const distance = parseFloat(distanceField.value);
+    if (isNaN(distance) || distance <= 0) return;
+    
+    if (lastChanged === 'speed') {
+        // Calculate time based on distance and speed
+        const speed = parseFloat(speedField.value);
+        if (!isNaN(speed) && speed > 0) {
+            const timeHours = distance / speed;
+            const timeMinutes = Math.round(timeHours * 60);
+            timeField.value = timeMinutes;
+        }
+    } else if (lastChanged === 'time') {
+        // Calculate speed based on distance and time
+        const timeMinutes = parseFloat(timeField.value);
+        if (!isNaN(timeMinutes) && timeMinutes > 0) {
+            const timeHours = timeMinutes / 60;
+            const speed = Math.round(distance / timeHours);
+            speedField.value = speed;
+        }
+    }
+}
+
+function handleSpeedChange() {
+    lastChanged = 'speed';
+    
+    const distanceField = document.getElementById('distance_field');
+    const timeField = document.getElementById('time_field');
+    const speedField = document.getElementById('speed_field');
+    
+    if (!distanceField || !timeField || !speedField) return;
+    
+    const speed = parseFloat(speedField.value);
+    if (isNaN(speed) || speed <= 0) return;
+    
+    const distance = parseFloat(distanceField.value);
+    if (!isNaN(distance) && distance > 0) {
+        const timeHours = distance / speed;
+        const timeMinutes = Math.round(timeHours * 60);
+        timeField.value = timeMinutes;
+    }
+}
+
+function handleTimeChange() {
+    lastChanged = 'time';
+    
+    const distanceField = document.getElementById('distance_field');
+    const timeField = document.getElementById('time_field');
+    const speedField = document.getElementById('speed_field');
+    
+    if (!distanceField || !timeField || !speedField) return;
+    
+    const timeMinutes = parseFloat(timeField.value);
+    if (isNaN(timeMinutes) || timeMinutes <= 0) return;
+    
+    const distance = parseFloat(distanceField.value);
+    if (!isNaN(distance) && distance > 0) {
+        const timeHours = timeMinutes / 60;
+        const speed = Math.round(distance / timeHours);
+        speedField.value = speed;
+    }
+}
+
 
     </script>
 </body>
