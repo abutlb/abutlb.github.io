@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حاسبة استئجار مقابل تملك | Rent vs Buy Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Load Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #f8fafc;
+    }
+    .dark-mode {
+      background-color: #1e293b;
+      color: #e2e8f0;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .glass-card-dark {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(30, 41, 59, 0.3);
+    }
+    .gradient-border {
+      border-width: 1px;
+      border-style: solid;
+      border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1);
+    }
+    /* Custom colors for dark mode toggle */
+    .moon-icon {
+        color: #8b5cf6; /* Purple for moon */
+    }
+    .sun-icon {
+        color: #fbbf24; /* Yellow for sun */
+    }
+    /* Fix for toggle dot in dark mode */
+    html.dark .toggle-dot {
+        transform: translateX(1.5rem) !important;
+    }
+    /* Active tab styling */
+    .tab-btn.active {
+        opacity: 1 !important;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Header -->
+    <div class="grid grid-cols-3 items-center mb-8">
+      <!-- Back button (right side in RTL) -->
+      <div class="flex justify-start">
+        <a href="/" class="p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <i class="fas fa-arrow-right text-gray-600 dark:text-gray-300"></i>
+        </a>
+      </div>
+      
+      <!-- Title (centered) -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">حاسبة استئجار مقابل تملك</h1>
+        <p class="text-gray-600 dark:text-gray-400">قارن بين تكلفة استئجار أو تملك العقار</p>
+      </div>
+      
+      <!-- Dark mode toggle (left side in RTL) -->
+      <div class="flex justify-end">
+        <div class="relative inline-flex items-center">
+          <label for="themeSwitch_field" class="sr-only">Toggle Dark Mode</label>
+          <input type="checkbox" id="themeSwitch_field" class="sr-only">
+          <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+              <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+            </div>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+              <i class="fas fa-sun text-amber-500 text-xs"></i>
+            </div>
+            <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+      <!-- Tabs -->
+      <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="calculator">
+          <i class="fas fa-calculator ml-2"></i>الحاسبة
+        </button>
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="settings">
+          <i class="fas fa-cog ml-2"></i>الإعدادات
+        </button>
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+          <i class="fas fa-info-circle ml-2"></i>حول
+        </button>
+      </div>
+      
+      <!-- Calculator Tab -->
+      <div id="calculator-tab" class="tab-content p-6 block">
+        <form id="calcForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Basic Property Info Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-home ml-2"></i>معلومات العقار
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="propertyType_field">
+                    نوع العقار
+                  </label>
+                  <select id="propertyType_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="apartment">شقة</option>
+                    <option value="villa">فيلا</option>
+                    <option value="duplex">دوبلكس</option>
+                    <option value="land">أرض</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="propertySize_field">
+                    مساحة العقار (متر مربع)
+                  </label>
+                  <input type="number" id="propertySize_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1" min="1">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="location_field">
+                    المنطقة
+                  </label>
+                  <select id="location_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="riyadh">الرياض</option>
+                    <option value="jeddah">جدة</option>
+                    <option value="dammam">الدمام</option>
+                    <option value="makkah">مكة</option>
+                    <option value="madinah">المدينة</option>
+                    <option value="other">مدينة أخرى</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Purchase Options Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-tag ml-2"></i>خيارات التملك
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="purchasePrice_field">
+                    سعر الشراء (﷼)
+                  </label>
+                  <input type="number" id="purchasePrice_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1000" min="0" required>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="downPayment_field">
+                    الدفعة المقدمة (﷼)
+                  </label>
+                  <input type="number" id="downPayment_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1000" min="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="mortgageInterest_field">
+                    معدل فائدة القرض (%)
+                  </label>
+                  <input type="number" id="mortgageInterest_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.1" min="0" max="100" value="4.5">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="mortgageTerm_field">
+                    مدة القرض (سنوات)
+                  </label>
+                  <input type="number" id="mortgageTerm_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="1" max="30" value="25">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Rent Options Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-file-invoice ml-2"></i>خيارات الإيجار
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="monthlyRent_field">
+                    الإيجار الشهري (﷼)
+                  </label>
+                  <input type="number" id="monthlyRent_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="100" min="0" required>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="rentIncrease_field">
+                    معدل زيادة الإيجار السنوي (%)
+                  </label>
+                  <input type="number" id="rentIncrease_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.1" min="0" max="100" value="2">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="rentInsurance_field">
+                    تأمين مستردد (﷼)
+                  </label>
+                  <input type="number" id="rentInsurance_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="100" min="0" value="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="rentUtilities_field">
+                    متوسط تكاليف الخدمات الشهرية (﷼)
+                  </label>
+                  <input type="number" id="rentUtilities_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0" value="0">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Additional Factors Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-balance-scale ml-2"></i>عوامل إضافية
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="ownershipYears_field">
+                    مدة السكن المتوقعة (سنوات)
+                  </label>
+                  <input type="number" id="ownershipYears_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="1" max="50" value="10" required>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="propertyAppreciation_field">
+                    معدل ارتفاع قيمة العقار السنوي (%)
+                  </label>
+                  <input type="number" id="propertyAppreciation_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.1" min="0" max="100" value="3">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="maintenanceCost_field">
+                    تكاليف الصيانة السنوية (% من قيمة العقار)
+                  </label>
+                  <input type="number" id="maintenanceCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.1" min="0" max="100" value="1">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="propertyTax_field">
+                    ضريبة العقار السنوية (﷼)
+                  </label>
+                  <input type="number" id="propertyTax_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0" value="0">
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-span-full">
+              <button type="button" id="calculateBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md">
+                <i class="fas fa-calculator ml-2"></i>احسب وقارن
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Results Section -->
+        <div id="results" class="mt-8 hidden">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">نتائج المقارنة</h2>
+          
+          <!-- Summary Cards -->
+          <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex-1 min-w-[200px] bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg p-4 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي تكلفة التملك</p>
+                  <p id="totalOwnership_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                </div>
+                <div class="p-3 bg-blue-100 dark:bg-blue-800/50 rounded-full">
+                  <i class="fas fa-home text-blue-600 dark:text-blue-300"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex-1 min-w-[200px] bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-lg p-4 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي تكلفة الإيجار</p>
+                  <p id="totalRent_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                </div>
+                <div class="p-3 bg-purple-100 dark:bg-purple-800/50 rounded-full">
+                  <i class="fas fa-file-invoice-dollar text-purple-600 dark:text-purple-300"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex-1 min-w-[200px] bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/30 dark:to-teal-900/30 rounded-lg p-4 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">الفرق بين الخيارين</p>
+                  <p id="difference_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                </div>
+                <div class="p-3 bg-green-100 dark:bg-green-800/50 rounded-full">
+                  <i class="fas fa-balance-scale text-green-600 dark:text-green-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recommendation Box -->
+          <div id="recommendation" class="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-r-4 border-blue-500">
+            <div class="flex items-start">
+              <div class="p-2 bg-blue-100 dark:bg-blue-800/50 rounded-full mr-3 mt-1">
+                <i class="fas fa-lightbulb text-blue-600 dark:text-blue-300"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-blue-800 dark:text-blue-300 mb-1">توصية</h3>
+                <p id="recommendation_text" class="text-gray-700 dark:text-gray-300"></p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Comparison Table -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden mb-8">
+            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4">
+              <h3 class="font-bold text-gray-800 dark:text-gray-200">مقارنة تفصيلية</h3>
+            </div>
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="w-full text-right">
+                  <thead>
+                    <tr class="text-gray-600 dark:text-gray-300 border-b dark:border-gray-700">
+                      <th class="pb-3 font-medium">البند</th>
+                      <th class="pb-3 font-medium">التملك</th>
+                      <th class="pb-3 font-medium">الإيجار</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-gray-700 dark:text-gray-300">
+                    <tr class="border-b dark:border-gray-700">
+                      <td class="py-3">التكلفة الشهرية</td>
+                      <td id="monthlyOwnership_result"></td>
+                      <td id="monthlyRent_result"></td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                      <td class="py-3">التكلفة السنوية</td>
+                      <td id="yearlyOwnership_result"></td>
+                      <td id="yearlyRent_result"></td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                      <td class="py-3">تكلفة التمويل/القرض</td>
+                      <td id="financingCost_result"></td>
+                      <td>-</td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                      <td class="py-3">تكاليف الصيانة</td>
+                      <td id="maintenanceCosts_result"></td>
+                      <td>-</td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                      <td class="py-3">الضرائب والرسوم</td>
+                      <td id="taxes_result"></td>
+                      <td>-</td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700">
+                      <td class="py-3">قيمة العقار بعد المدة</td>
+                      <td id="propertyValue_result"></td>
+                      <td>-</td>
+                    </tr>
+                    <tr class="border-b dark:border-gray-700 bg-green-50 dark:bg-green-900/20">
+                        <td class="py-3 font-bold">القيمة المتبقية (الأصل)</td>
+                        <td id="remainingAsset_result" class="font-bold text-green-600 dark:text-green-400"></td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                      <td class="py-3 font-bold">صافي التكلفة</td>
+                      <td id="netOwnership_result" class="font-bold text-blue-600 dark:text-blue-400"></td>
+                      <td id="netRent_result" class="font-bold text-purple-600 dark:text-purple-400"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Chart -->
+          <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow mb-8">
+            <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4">مقارنة التكاليف على مدار السنوات</h3>
+            <div class="h-64 flex items-center justify-center">
+              <canvas id="costsChart"></canvas>
+            </div>
+          </div>
+          
+          <!-- Break-even Analysis -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
+            <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4">نقطة التعادل بين الخيارين</h3>
+            <div id="breakEvenInfo" class="text-gray-700 dark:text-gray-300">
+              <p class="mb-2" id="breakEvenText"></p>
+              <div class="h-48 flex items-center justify-center">
+                <canvas id="breakEvenChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Settings Tab -->
+      <div id="settings-tab" class="tab-content p-6 hidden">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">إعدادات الحاسبة</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معاملات الحساب</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                  دقة حساب القرض
+                </label>
+                <select id="loanCalculationMethod" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                  <option value="simple">تقريبي (أسرع)</option>
+                  <option value="amortization" selected>دقيق - جدول الإطفاء (أدق)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                  معدل التضخم السنوي (%)
+                </label>
+                <input type="number" id="inflationRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="2.5" min="0" max="20" step="0.1">
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                معدل الفائدة على الاستثمار البديل (%)
+              </label>
+              <input type="number" id="investmentRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="5" min="0" max="30" step="0.1">
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                معدل العائد المتوقع إذا تم استثمار دفعة مقدمة الشراء في مكان آخر
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تكاليف إضافية</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                تكاليف التأمين السنوية (%)
+              </label>
+              <input type="number" id="insuranceRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="0.3" min="0" max="5" step="0.1">
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                نسبة من قيمة العقار
+              </p>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                تكاليف الشراء (%)
+              </label>
+              <input type="number" id="closingCostsRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="1.5" min="0" max="10" step="0.1">
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                رسوم التوثيق والعقود والوساطة العقارية
+              </p>
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                تكاليف البيع (%)
+              </label>
+              <input type="number" id="sellingCostsRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="2" min="0" max="10" step="0.1">
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                تكاليف بيع العقار عند انتهاء المدة
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <button id="saveSettings" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md">
+          <i class="fas fa-save ml-2"></i>حفظ الإعدادات
+        </button>
+      </div>
+    </div>
+    
+    <!-- About Tab -->
+    <div id="about-tab" class="tab-content p-6 hidden">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول حاسبة استئجار مقابل تملك</h2>
+      
+      <div class="space-y-6">
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <p class="text-gray-700 dark:text-gray-300 mb-4">
+            حاسبة استئجار مقابل تملك هي أداة مصممة لمساعدتك في اتخاذ قرار مالي أفضل بخصوص سكنك. تقوم الحاسبة بتحليل:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>التكلفة الإجمالية لتملك العقار (ثمن الشراء، القرض، الفوائد، الصيانة، الضرائب)</li>
+            <li>التكلفة الإجمالية للاستئجار على مدى السنوات</li>
+            <li>القيمة المستقبلية للعقار بعد فترة الحساب</li>
+            <li>نقطة التعادل بين خياري الاستئجار والتملك</li>
+            <li>حساب التكلفة الصافية مع الأخذ بالاعتبار تضخم العملة ونمو قيمة العقار</li>
+          </ul>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">كيفية استخدام الحاسبة</h3>
+          <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>أدخل معلومات العقار الأساسية (النوع، المساحة، الموقع)</li>
+            <li>أدخل معلومات التملك (السعر، الدفعة المقدمة، معدل الفائدة)</li>
+            <li>أدخل معلومات الإيجار (القيمة الشهرية، معدل الزيادة السنوي)</li>
+            <li>حدد المدة المتوقعة للسكن والعوامل الإضافية</li>
+            <li>اضغط على زر "احسب وقارن" لعرض نتائج المقارنة</li>
+            <li>اطلع على التحليل المفصل والتوصية بناء على بياناتك</li>
+          </ol>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">ملاحظات هامة</h3>
+          <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>هذه الحاسبة أداة تقديرية لمساعدتك في اتخاذ القرار</li>
+            <li>النتائج تعتمد على دقة البيانات المدخلة والافتراضات المستقبلية</li>
+            <li>استشر مختصاً مالياً أو عقارياً قبل اتخاذ قرارات مالية كبيرة</li>
+            <li>معدلات التضخم ونمو العقار تختلف من وقت لآخر ومن منطقة لأخرى</li>
+            <li>تختلف ظروف القروض العقارية، لذا تأكد من إدخال البيانات الصحيحة للقرض الخاص بك</li>
+          </ul>
+        </div>
+        
+        <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg mt-4">
+            <h4 class="font-medium text-gray-800 dark:text-gray-200 mb-2">ميزة التملك: بناء الثروة</h4>
+            <p class="text-gray-700 dark:text-gray-300">
+              من أهم الاعتبارات عند المقارنة بين التملك والإيجار أن <strong>الإيجار مصروف مستنفذ</strong> بينما <strong>التملك استثمار في أصل</strong> يبقى بعد انتهاء المدة. هذا يعني أنه حتى مع التكاليف الأعلى للتملك في بعض الأحيان، فإنك تبني ثروتك العقارية مع مرور الوقت.
+            </p>
+        </div>
+
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تواصل معي</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                <i class="fab fa-twitter text-blue-400"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                <i class="fab fa-linkedin-in text-blue-700"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">LinkedIn</span>
+            </a>
+            
+            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                <i class="fab fa-github text-gray-700 dark:text-white"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+            </a>
+            
+            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                <i class="fas fa-envelope text-red-500"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">Email</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Version Info -->
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+          <p class="text-gray-700 dark:text-gray-300">الإصدار الحالي: <span class="font-semibold">1.0.0</span></p>
+          <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">مايو 2025</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+    <p>© <span id="currentYear">2025</span> - تم التطوير بواسطة عبدالله التويجري</p>
+  </footer>
+</div>
+
+<script>
+  // Set current year in footer
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+  
+  // Simple dark mode toggle function
+  function toggleDarkMode() {
+    // Toggle dark class on html element
+    document.documentElement.classList.toggle('dark');
+    
+    // Toggle dark-mode class on body
+    document.body.classList.toggle('dark-mode');
+    
+    // Save preference to localStorage
+    if (document.documentElement.classList.contains('dark')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+    
+    // If chart exists, update its colors
+    if (costsChart) {
+      updateChartColors();
+    }
+  }
+
+  // Initialize dark mode on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check for saved theme preference or use system preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark-mode');
+    }
+    
+    // Add event listener to theme toggle button
+    document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+    
+    // Load saved settings if available
+    loadSettings();
+  });
+  
+  // Tab switching
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons and hide all contents
+      tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+      tabContents.forEach(content => content.classList.add('hidden'));
+      
+      // Add active class to clicked button and show corresponding content
+      button.classList.add('active', 'opacity-100');
+      document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+    });
+  });
+  
+  // Chart variables
+  let costsChart = null;
+  let breakEvenChart = null;
+  
+  // Format currency (﷼ only)
+  function formatCurrency(amount) {
+    return amount.toLocaleString('ar-SA', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ﷼';
+  }
+  
+  // Calculate loan monthly payment using amortization
+  function  calculateMonthlyPayment(principal, interestRate, termYears) {
+      // Monthly interest rate (annual rate divided by 12)
+      const monthlyRate = interestRate / 100 / 12;
+      // Total number of payments (years * 12 months)
+      const totalPayments = termYears * 12;
+      
+      // If interest rate is 0, just divide principal by number of months
+      if (interestRate === 0) {
+        return principal / totalPayments;
+      }
+      
+      // Calculate monthly payment using the amortization formula
+      const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
+                     (Math.pow(1 + monthlyRate, totalPayments) - 1);
+      
+      return payment;
+    }
+    
+    // Calculate total interest paid over loan term
+    function calculateTotalInterest(principal, monthlyPayment, termYears) {
+      const totalPaid = monthlyPayment * termYears * 12;
+      return totalPaid - principal;
+    }
+    
+    // Calculate future value with compounding growth
+    function calculateFutureValue(presentValue, growthRate, years) {
+      return presentValue * Math.pow(1 + (growthRate / 100), years);
+    }
+    
+    // Create costs chart
+    function createCostsChart(years, buyData, rentData) {
+      const ctx = document.getElementById('costsChart').getContext('2d');
+      
+      // If chart already exists, destroy it
+      if (costsChart) {
+        costsChart.destroy();
+      }
+      
+      // Create labels array for years [1, 2, 3, ..., n]
+      const labels = Array.from({length: years}, (_, i) => i + 1);
+      
+      // Chart colors based on dark mode
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+      const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+      
+      // Create new chart
+      costsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'تكلفة التملك',
+              data: buyData,
+              borderColor: '#3b82f6', // blue
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              borderWidth: 2,
+              tension: 0.1,
+              fill: true
+            },
+            {
+              label: 'تكلفة الإيجار',
+              data: rentData,
+              borderColor: '#8b5cf6', // purple
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              borderWidth: 2,
+              tension: 0.1,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: textColor,
+                font: {
+                  family: 'Tajawal'
+                }
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y);
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'السنوات',
+                color: textColor,
+                font: {
+                  family: 'Tajawal',
+                  weight: 'bold'
+                }
+              },
+              ticks: {
+                color: textColor,
+                font: {
+                  family: 'Tajawal'
+                }
+              },
+              grid: {
+                color: gridColor
+              }
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'التكلفة التراكمية (﷼)',
+                color: textColor,
+                font: {
+                  family: 'Tajawal',
+                  weight: 'bold'
+                }
+              },
+              ticks: {
+                color: textColor,
+                font: {
+                  family: 'Tajawal'
+                },
+                callback: function(value) {
+                  if (value >= 1000000) {
+                    return (value / 1000000).toFixed(1) + ' مليون';
+                  } else if (value >= 1000) {
+                    return (value / 1000).toFixed(0) + ' ألف';
+                  }
+                  return value;
+                }
+              },
+              grid: {
+                color: gridColor
+              }
+            }
+          }
+        }
+      });
+    }
+    // document.getElementById('remainingAsset_result').textContent = formatCurrency(futurePropertyValue - sellingCosts);
+    // Create break-even chart
+    function createBreakEvenChart(years, cumulativeBuy, cumulativeRent, breakEvenYear) {
+      const ctx = document.getElementById('breakEvenChart').getContext('2d');
+      
+      // If chart already exists, destroy it
+      if (breakEvenChart) {
+        breakEvenChart.destroy();
+      }
+      
+      // Create labels array for years [1, 2, 3, ..., n]
+      const labels = Array.from({length: years}, (_, i) => i + 1);
+      
+      // Chart colors based on dark mode
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+      const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+      
+      // Create annotation for break-even point if it exists
+      let annotations = {};
+      
+      if (breakEvenYear > 0 && breakEvenYear <= years) {
+        annotations = {
+          breakEvenLine: {
+            type: 'line',
+            xMin: breakEvenYear,
+            xMax: breakEvenYear,
+            borderColor: '#ef4444', // red
+            borderWidth: 2,
+            borderDash: [6, 6],
+            label: {
+              enabled: true,
+              content: 'نقطة التعادل',
+              position: 'top',
+              backgroundColor: '#ef4444',
+              font: {
+                family: 'Tajawal'
+              }
+            }
+          }
+        };
+      }
+      
+      // Create new chart
+      breakEvenChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'تكلفة التملك',
+              data: cumulativeBuy,
+              borderColor: '#3b82f6', // blue
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              borderWidth: 2,
+              fill: true
+            },
+            {
+              label: 'تكلفة الإيجار',
+              data: cumulativeRent,
+              borderColor: '#8b5cf6', // purple
+              backgroundColor: 'rgba(139, 92, 246, 0.1)',
+              borderWidth: 2,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: textColor,
+                font: {
+                  family: 'Tajawal'
+                }
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y);
+                  }
+                  return label;
+                }
+              }
+            },
+            annotation: {
+              annotations: annotations
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'السنوات',
+                color: textColor,
+                font: {
+                  family: 'Tajawal',
+                  weight: 'bold'
+                }
+              },
+              ticks: {
+                color: textColor,
+                font: {
+                  family: 'Tajawal'
+                }
+              },
+              grid: {
+                color: gridColor
+              }
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'التكلفة التراكمية (﷼)',
+                color: textColor,
+                font: {
+                  family: 'Tajawal',
+                  weight: 'bold'
+                }
+              },
+              ticks: {
+                color: textColor,
+                font: {
+                  family: 'Tajawal'
+                },
+                callback: function(value) {
+                  if (value >= 1000000) {
+                    return (value / 1000000).toFixed(1) + ' مليون';
+                  } else if (value >= 1000) {
+                    return (value / 1000).toFixed(0) + ' ألف';
+                  }
+                  return value;
+                }
+              },
+              grid: {
+                color: gridColor
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Update chart colors when switching between light/dark modes
+    function updateChartColors() {
+      if (costsChart) {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+        const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        
+        // Update text colors
+        costsChart.options.scales.x.ticks.color = textColor;
+        costsChart.options.scales.x.title.color = textColor;
+        costsChart.options.scales.y.ticks.color = textColor;
+        costsChart.options.scales.y.title.color = textColor;
+        
+        // Update grid colors
+        costsChart.options.scales.x.grid.color = gridColor;
+        costsChart.options.scales.y.grid.color = gridColor;
+        
+        // Update legend color
+        costsChart.options.plugins.legend.labels.color = textColor;
+        
+        costsChart.update();
+      }
+      
+      if (breakEvenChart) {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+        const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        
+        // Update text colors
+        breakEvenChart.options.scales.x.ticks.color = textColor;
+        breakEvenChart.options.scales.x.title.color = textColor;
+        breakEvenChart.options.scales.y.ticks.color = textColor;
+        breakEvenChart.options.scales.y.title.color = textColor;
+        
+        // Update grid colors
+        breakEvenChart.options.scales.x.grid.color = gridColor;
+        breakEvenChart.options.scales.y.grid.color = gridColor;
+        
+        // Update legend color
+        breakEvenChart.options.plugins.legend.labels.color = textColor;
+        
+        breakEvenChart.update();
+      }
+    }
+    
+    // Load settings from localStorage
+    function loadSettings() {
+      // Calculation methods
+      if (localStorage.getItem('loanCalculationMethod')) {
+        document.getElementById('loanCalculationMethod').value = localStorage.getItem('loanCalculationMethod');
+      }
+      
+      // Rates and constants
+      if (localStorage.getItem('inflationRate')) {
+        document.getElementById('inflationRate').value = localStorage.getItem('inflationRate');
+      }
+      
+      if (localStorage.getItem('investmentRate')) {
+        document.getElementById('investmentRate').value = localStorage.getItem('investmentRate');
+      }
+      
+      if (localStorage.getItem('insuranceRate')) {
+        document.getElementById('insuranceRate').value = localStorage.getItem('insuranceRate');
+      }
+      
+      if (localStorage.getItem('closingCostsRate')) {
+        document.getElementById('closingCostsRate').value = localStorage.getItem('closingCostsRate');
+      }
+      
+      if (localStorage.getItem('sellingCostsRate')) {
+        document.getElementById('sellingCostsRate').value = localStorage.getItem('sellingCostsRate');
+      }
+    }
+    
+    // Save settings to localStorage
+    document.getElementById('saveSettings').addEventListener('click', function() {
+      // Save calculation methods
+      localStorage.setItem('loanCalculationMethod', document.getElementById('loanCalculationMethod').value);
+      
+      // Save rates and constants
+      localStorage.setItem('inflationRate', document.getElementById('inflationRate').value);
+      localStorage.setItem('investmentRate', document.getElementById('investmentRate').value);
+      localStorage.setItem('insuranceRate', document.getElementById('insuranceRate').value);
+      localStorage.setItem('closingCostsRate', document.getElementById('closingCostsRate').value);
+      localStorage.setItem('sellingCostsRate', document.getElementById('sellingCostsRate').value);
+      
+      // Show success message
+      alert('تم حفظ الإعدادات بنجاح!');
+    });
+    
+    // Calculate button click handler
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+      // Get basic values
+      const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value);
+      const monthlyRent = parseFloat(document.getElementById('monthlyRent_field').value);
+      const ownershipYears = parseInt(document.getElementById('ownershipYears_field').value);
+      
+      if (isNaN(purchasePrice) || isNaN(monthlyRent) || isNaN(ownershipYears)) {
+        alert('يرجى تعبئة الحقول الإلزامية: سعر الشراء، الإيجار الشهري، ومدة السكن المتوقعة.');
+        return;
+      }
+      
+      // Get purchase options
+      const downPayment = parseFloat(document.getElementById('downPayment_field').value) || 0;
+      const mortgageInterest = parseFloat(document.getElementById('mortgageInterest_field').value) || 0;
+      const mortgageTerm = parseInt(document.getElementById('mortgageTerm_field').value) || 30;
+      
+      // Get rent options
+      const rentIncrease = parseFloat(document.getElementById('rentIncrease_field').value) || 0;
+      const rentInsurance = parseFloat(document.getElementById('rentInsurance_field').value) || 0;
+      const rentUtilities = parseFloat(document.getElementById('rentUtilities_field').value) || 0;
+      
+      // Get additional factors
+      const propertyAppreciation = parseFloat(document.getElementById('propertyAppreciation_field').value) || 0;
+      const maintenanceCost = parseFloat(document.getElementById('maintenanceCost_field').value) || 0;
+      const propertyTax = parseFloat(document.getElementById('propertyTax_field').value) || 0;
+      
+      // Get settings values
+      const inflationRate = parseFloat(document.getElementById('inflationRate').value) || 2.5;
+      const investmentRate = parseFloat(document.getElementById('investmentRate').value) || 5;
+      const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0.3;
+      const closingCostsRate = parseFloat(document.getElementById('closingCostsRate').value) || 1.5;
+      const sellingCostsRate = parseFloat(document.getElementById('sellingCostsRate').value) || 2;
+      
+      // Calculate mortgage loan amount
+      const loanAmount = purchasePrice - downPayment;
+      
+      // Calculate monthly mortgage payment
+      const monthlyPayment = calculateMonthlyPayment(loanAmount, mortgageInterest, mortgageTerm);
+      
+      // Calculate total interest over the loan term
+      const totalInterest = calculateTotalInterest(loanAmount, monthlyPayment, mortgageTerm);
+      
+      // Calculate closing costs
+      const closingCosts = purchasePrice * (closingCostsRate / 100);
+      
+      // Calculate yearly expenses for ownership
+      const yearlyPropertyTax = propertyTax;
+      const yearlyMaintenance = purchasePrice * (maintenanceCost / 100);
+      const yearlyInsurance = purchasePrice * (insuranceRate / 100);
+      
+      // Calculate future property value
+      const futurePropertyValue = calculateFutureValue(purchasePrice, propertyAppreciation, ownershipYears);
+      
+      // Calculate selling costs in the future
+      const sellingCosts = futurePropertyValue * (sellingCostsRate / 100);
+      
+      // Arrays to store yearly costs
+      const yearlyBuyCosts = [];
+      const yearlyRentCosts = [];
+      const cumulativeBuyCosts = [];
+      const cumulativeRentCosts = [];
+      
+      // Calculate yearly costs for both options
+      let totalBuyCost = downPayment + closingCosts; // Initial costs for buying
+      let totalRentCost = rentInsurance; // Initial costs for renting
+      
+      // Variables to track the break-even point
+      let breakEvenYear = -1;
+      let previousDifference = null;
+      
+      for (let year = 1; year <= ownershipYears; year++) {
+        // Calculate rent for this year (with yearly increases)
+        const adjustedRent = monthlyRent * Math.pow(1 + (rentIncrease / 100), year - 1);
+        const yearlyRent = adjustedRent * 12;
+        
+        // Calculate rent costs
+        let yearRentTotal = yearlyRent + rentUtilities * 12;
+        yearlyRentCosts.push(yearRentTotal);
+        
+        // Add to total rent cost
+        totalRentCost += yearRentTotal;
+        cumulativeRentCosts.push(totalRentCost);
+        
+        // Calculate ownership costs for this year
+        const yearlyMortgage = monthlyPayment * 12;
+        
+        // Check if we're still paying the mortgage or if it's been paid off
+        const mortgageCost = (year <= mortgageTerm) ? yearlyMortgage : 0;
+        
+        // Add yearly ownership costs
+        let yearBuyTotal = mortgageCost + yearlyPropertyTax + yearlyMaintenance + yearlyInsurance;
+        yearlyBuyCosts.push(yearBuyTotal);
+        
+        // Add to total buy cost
+        totalBuyCost += yearBuyTotal;
+        cumulativeBuyCosts.push(totalBuyCost);
+        
+        // Check for break-even point
+        const currentDifference = cumulativeBuyCosts[year - 1] - cumulativeRentCosts[year - 1];
+        
+        if (previousDifference !== null && 
+            ((previousDifference > 0 && currentDifference <= 0) || 
+             (previousDifference < 0 && currentDifference >= 0))) {
+          // We found a break-even point (sign change between previous and current)
+          breakEvenYear = year;
+        }
+        
+        previousDifference = currentDifference;
+      }
+      
+      // Subtract property appreciation and add selling costs
+      const netBuyCost = totalBuyCost - (futurePropertyValue - purchasePrice) + sellingCosts;
+      
+      // Format results
+      document.getElementById('totalOwnership_result').textContent = formatCurrency(totalBuyCost);
+      document.getElementById('totalRent_result').textContent = formatCurrency(totalRentCost);
+      document.getElementById('difference_result').textContent = formatCurrency(Math.abs(totalBuyCost - totalRentCost));
+      
+      // Set net costs
+      document.getElementById('netOwnership_result').textContent = formatCurrency(netBuyCost);
+      document.getElementById('netRent_result').textContent = formatCurrency(totalRentCost);
+      
+      // Set detailed comparison results
+      document.getElementById('monthlyOwnership_result').textContent = formatCurrency(monthlyPayment);
+      document.getElementById('monthlyRent_result').textContent = formatCurrency(monthlyRent);
+      
+      document.getElementById('yearlyOwnership_result').textContent = formatCurrency(monthlyPayment * 12);
+      document.getElementById('yearlyRent_result').textContent = formatCurrency(monthlyRent * 12);
+      
+      document.getElementById('financingCost_result').textContent = formatCurrency(totalInterest);
+      document.getElementById('maintenanceCosts_result').textContent = formatCurrency(yearlyMaintenance * ownershipYears);
+      document.getElementById('taxes_result').textContent = formatCurrency(yearlyPropertyTax * ownershipYears);
+      document.getElementById('propertyValue_result').textContent = formatCurrency(futurePropertyValue);
+      document.getElementById('remainingAsset_result').textContent = formatCurrency(futurePropertyValue - sellingCosts);
+
+      // Determine recommendation
+      let recommendationText = '';
+      if (netBuyCost < totalRentCost) {
+        recommendationText = `بناءً على البيانات المدخلة، يبدو أن <strong>التملك أكثر فائدة مالياً</strong> على مدى ${ownershipYears} سنة. الفرق الإجمالي في التكلفة هو ${formatCurrency(totalRentCost - netBuyCost)} لصالح التملك. <strong>بالإضافة إلى ذلك، س��متلك أصلاً عقارياً بقيمة ${formatCurrency(futurePropertyValue)} في نهاية المدة.</strong>`;
+      } else if (netBuyCost > totalRentCost) {
+        recommendationText = `بناءً على البيانات المدخلة، يبدو أن <strong>التملك أكثر فائدة مالياً</strong> على مدى ${ownershipYears} سنة. الفرق الإجمالي في التكلفة هو ${formatCurrency(netBuyCost - totalRentCost)} لصالح التملك.`;
+      } else {
+        recommendationText = `بناءً على البيانات المدخلة، <strong>الخياران متساويان تقريباً</strong> من الناحية المالية على مدى ${ownershipYears} سنة.`;
+      }
+      
+      // Add break-even information if applicable
+      if (breakEvenYear > 0 && breakEvenYear <= ownershipYears) {
+        recommendationText += ` نقطة التعادل بين الخيارين تحدث في السنة ${breakEvenYear}.`;
+      }
+      
+      // Set recommendation text
+      document.getElementById('recommendation_text').innerHTML = recommendationText;
+      
+      // Set break-even text
+      let breakEvenText = '';
+      if (breakEvenYear > 0 && breakEvenYear <= ownershipYears) {
+        breakEvenText = `نقطة التعادل بين التملك والإيجار تحدث في <strong>السنة ${breakEvenYear}</strong>.`;
+      } else if (cumulativeBuyCosts[ownershipYears - 1] < cumulativeRentCosts[ownershipYears - 1]) {
+        breakEvenText = `لم يتم الوصول إلى نقطة تعادل خلال فترة ${ownershipYears} سنة. التملك أكثر فائدة مالياً طوال هذه الفترة.`;
+      } else {
+        breakEvenText = `لم يتم الوصول إلى نقطة تعادل خلال فترة ${ownershipYears} سنة. الإيجار أكثر فائدة مالياً طوال هذه الفترة.`;
+      }
+      
+      document.getElementById('breakEvenText').innerHTML = breakEvenText;
+      
+      // Create charts
+      createCostsChart(ownershipYears, yearlyBuyCosts, yearlyRentCosts);
+      createBreakEvenChart(ownershipYears, cumulativeBuyCosts, cumulativeRentCosts, breakEvenYear);
+      
+      // Show results section
+      document.getElementById('results').classList.remove('hidden');
+      
+      // Scroll to results
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
