@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حاسبة السكن العائلي | التملك أم الاستمرار بالإيجار؟</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Load Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #f8fafc;
+    }
+    .dark-mode {
+      background-color: #1e293b;
+      color: #e2e8f0;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .glass-card-dark {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(30, 41, 59, 0.3);
+    }
+    .gradient-border {
+      border-width: 1px;
+      border-style: solid;
+      border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1);
+    }
+    /* Custom colors for dark mode toggle */
+    .moon-icon {
+        color: #8b5cf6; /* Purple for moon */
+    }
+    .sun-icon {
+        color: #fbbf24; /* Yellow for sun */
+    }
+    /* Fix for toggle dot in dark mode */
+    html.dark .toggle-dot {
+        transform: translateX(1.5rem) !important;
+    }
+    /* Active tab styling */
+    .tab-btn.active {
+        opacity: 1 !important;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Header -->
+    <div class="grid grid-cols-3 items-center mb-8">
+      <!-- Back button (right side in RTL) -->
+      <div class="flex justify-start">
+        <a href="/" class="p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <i class="fas fa-arrow-right text-gray-600 dark:text-gray-300"></i>
+        </a>
+      </div>
+      
+      <!-- Title (centered) -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">حاسبة السكن العائلي</h1>
+        <p class="text-gray-600 dark:text-gray-400">الاستمرار بالإيجار أم التملك مع نمو العائلة؟</p>
+      </div>
+      
+      <!-- Dark mode toggle (left side in RTL) -->
+      <div class="flex justify-end">
+        <div class="relative inline-flex items-center">
+          <label for="themeSwitch_field" class="sr-only">Toggle Dark Mode</label>
+          <input type="checkbox" id="themeSwitch_field" class="sr-only">
+          <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+              <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+            </div>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+              <i class="fas fa-sun text-amber-500 text-xs"></i>
+            </div>
+            <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+      <!-- Tabs -->
+      <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="calculator">
+          <i class="fas fa-calculator ml-2"></i>الحاسبة
+        </button>
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="settings">
+          <i class="fas fa-cog ml-2"></i>الإعدادات
+        </button>
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+          <i class="fas fa-info-circle ml-2"></i>حول
+        </button>
+      </div>
+      
+      <!-- Calculator Tab -->
+      <div id="calculator-tab" class="tab-content p-6 block">
+        <form id="calcForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Current Situation Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-house-user ml-2"></i>الوضع الحالي
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="currentRent_field">
+                    الإيجار الحالي السنوي (﷼)
+                  </label>
+                  <input type="number" id="currentRent_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1000" min="0" required>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="previousRent_field">
+                    الإيجار قبل سنتين (﷼)
+                  </label>
+                  <input type="number" id="previousRent_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1000" min="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="currentHome_field">
+                    نوع السكن الحالي
+                  </label>
+                  <select id="currentHome_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="apartment">شقة</option>
+                    <option value="floor">دور</option>
+                    <option value="villa">فيلا</option>
+                    <option value="other">أخرى</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="currentArea_field">
+                    مساحة السكن الحالي (متر مربع)
+                  </label>
+                  <input type="number" id="currentArea_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="10" min="0">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Family Situation Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-users ml-2"></i>الوضع العائلي
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="currentFamilySize_field">
+                    عدد أفراد العائلة الحالي
+                  </label>
+                  <input type="number" id="currentFamilySize_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="1" required>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="plannedChildren_field">
+                    عدد الأطفال المخطط إنجابهم مستقبلاً
+                  </label>
+                  <input type="number" id="plannedChildren_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="yearsUntilChildrenGrowUp_field">
+                    عدد السنوات حتى يكبر الأطفال (ويحتاجون غرف منفصلة)
+                  </label>
+                  <input type="number" id="yearsUntilChildrenGrowUp_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="expectedStayYears_field">
+                    مدة البقاء المتوقعة في المسكن (سنوات)
+                  </label>
+                  <input type="number" id="expectedStayYears_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="1" required value="15">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Purchase Options Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-home ml-2"></i>خيارات التملك
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="purchaseType_field">
+                    نوع العقار المراد تملكه
+                  </label>
+                  <select id="purchaseType_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="apartment">شقة</option>
+                    <option value="floor">دور</option>
+                    <option value="villa">فيلا</option>
+                    <option value="land_and_build">أرض وبناء</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="purchasePrice_field">
+                    سعر العقار المتوقع (﷼)
+                  </label>
+                  <input type="number" id="purchasePrice_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="10000" min="0" required>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="purchaseArea_field">
+                    مساحة العقار المراد تملكه (متر مربع)
+                  </label>
+                  <input type="number" id="purchaseArea_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="10" min="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="propertyLocation_field">
+                    المنطقة
+                  </label>
+                  <select id="propertyLocation_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="riyadh">الرياض</option>
+                    <option value="jeddah">جدة</option>
+                    <option value="dammam">الدمام</option>
+                    <option value="makkah">مكة</option>
+                    <option value="madinah">المدينة</option>
+                    <option value="other">مدينة أخرى</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Financing Options Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-money-bill-wave ml-2"></i>خيارات التمويل
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="downPayment_field">
+                    الدفعة المقدمة (﷼)
+                  </label>
+                  <input type="number" id="downPayment_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="10000" min="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="downPaymentPercent_field">
+                    الدفعة المقدمة (% من سعر العقار)
+                  </label>
+                  <input type="number" id="downPaymentPercent_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1" min="0" max="100" value="20">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="mortgageInterest_field">
+                    معدل فائدة التمويل (%)
+                  </label>
+                  <input type="number" id="mortgageInterest_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.1" min="0" value="3.5">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="mortgageTerm_field">
+                    مدة التمويل (سنوات)
+                  </label>
+                  <input type="number" id="mortgageTerm_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="1" max="30" value="25">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Future Housing Needs Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-chart-line ml-2"></i>احتياجات السكن المستقبلية
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="futureSizeNeeded_field">
+                    المساحة المطلوبة مستقبلاً (متر مربع)
+                  </label>
+                  <input type="number" id="futureSizeNeeded_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="10" min="0">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    سيتم حسابها تلقائياً بناء على نمو العائلة (أو يمكنك تعديلها)
+                  </p>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="futureUpgradeYear_field">
+                    سنة الانتقال إلى مسكن أكبر
+                  </label>
+                  <input type="number" id="futureUpgradeYear_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    سيتم تحديدها تلقائياً بناء على مؤشر نمو العائلة
+                  </p>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="futureHomeCost_field">
+                    التكلفة المتوقعة للمسكن المستقبلي (﷼)
+                  </label>
+                  <input type="number" id="futureHomeCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="10000" min="0">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    سيتم تقديرها بناءً على أسعار السوق وحجم المسكن المطلوب
+                  </p>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="futureRentCost_field">
+                    تكلفة إيجار المسكن المستقبلي (﷼ سنوياً)
+                  </label>
+                  <input type="number" id="futureRentCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="1000" min="0">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    سيتم تقديرها بناءً على متوسطات الإيجار وحجم المسكن المطلوب
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Additional Costs Section -->
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fas fa-coins ml-2"></i>تكاليف إضافية
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="maintenanceCost_field">
+                    تكاليف الصيانة السنوية (% من قيمة العقار)
+                  </label>
+                  <input type="number" id="maintenanceCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" step="0.1" min="0" value="1">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="propertyTax_field">
+                    الضرائب العقارية السنوية (﷼)
+                  </label>
+                  <input type="number" id="propertyTax_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0" value="0">
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="utilityDifference_field">
+                    الفرق في فواتير الخدمات الشهرية (﷼)
+                  </label>
+                  <input type="number" id="utilityDifference_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0" value="0">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    الفرق بين فواتير المسكن الملك والإيجار (كهرباء، ماء، إلخ)
+                  </p>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2" for="movingCost_field">
+                    تكلفة الانتقال (﷼)
+                  </label>
+                  <input type="number" id="movingCost_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" min="0" value="5000">
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-span-full">
+              <button type="button" id="calculateBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md">
+                <i class="fas fa-calculator ml-2"></i>احسب الخيار الأفضل لعائلتي
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Results Section -->
+        <div id="results" class="mt-8 hidden">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">نتائج المقارنة لعائلتك</h2>
+          
+          <!-- Summary Cards -->
+          <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex-1 min-w-[200px] bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg p-4 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي تكلفة التملك</p>
+                  <p id="totalOwnership_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                </div>
+                <div class="p-3 bg-blue-100 dark:bg-blue-800/50 rounded-full">
+                    <i class="fas fa-home text-blue-600 dark:text-blue-300"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex-1 min-w-[200px] bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-lg p-4 shadow-sm">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">إجمالي تكلفة الإيجار</p>
+                    <p id="totalRent_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                  </div>
+                  <div class="p-3 bg-purple-100 dark:bg-purple-800/50 rounded-full">
+                    <i class="fas fa-file-invoice-dollar text-purple-600 dark:text-purple-300"></i>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex-1 min-w-[200px] bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/30 dark:to-teal-900/30 rounded-lg p-4 shadow-sm">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">الخيار الأوفر مالياً</p>
+                    <p id="betterOption_result" class="text-2xl font-bold text-gray-800 dark:text-white"></p>
+                  </div>
+                  <div class="p-3 bg-green-100 dark:bg-green-800/50 rounded-full">
+                    <i class="fas fa-check-circle text-green-600 dark:text-green-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Family Growth Insight Box -->
+            <div id="familyInsight" class="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-r-4 border-blue-500">
+              <div class="flex items-start">
+                <div class="p-2 bg-blue-100 dark:bg-blue-800/50 rounded-full mr-3 mt-1">
+                  <i class="fas fa-users text-blue-600 dark:text-blue-300"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-blue-800 dark:text-blue-300 mb-1">تحليل احتياجات نمو العائلة</h3>
+                  <p id="familyInsight_text" class="text-gray-700 dark:text-gray-300"></p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Recommendation Box -->
+            <div id="recommendation" class="mb-8 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border-r-4 border-green-500">
+              <div class="flex items-start">
+                <div class="p-2 bg-green-100 dark:bg-green-800/50 rounded-full mr-3 mt-1">
+                  <i class="fas fa-lightbulb text-green-600 dark:text-green-300"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-green-800 dark:text-green-300 mb-1">التوصية</h3>
+                  <p id="recommendation_text" class="text-gray-700 dark:text-gray-300"></p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Timeline of Events -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden mb-8">
+              <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4">
+                <h3 class="font-bold text-gray-800 dark:text-gray-200">الجدول الزمني للأحداث</h3>
+              </div>
+              <div class="p-6">
+                <div class="relative">
+                  <!-- Timeline bar -->
+                  <div class="absolute h-full w-1 bg-blue-200 dark:bg-blue-900 left-7 ml-0.5"></div>
+                  
+                  <div id="timelineEvents" class="space-y-8 relative">
+                    <!-- Timeline entries will be added here by JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Comparison Table -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden mb-8">
+              <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4">
+                <h3 class="font-bold text-gray-800 dark:text-gray-200">مقارنة تفصيلية</h3>
+              </div>
+              <div class="p-6">
+                <div class="overflow-x-auto">
+                  <table class="w-full text-right">
+                    <thead>
+                      <tr class="text-gray-600 dark:text-gray-300 border-b dark:border-gray-700">
+                        <th class="pb-3 font-medium">البند</th>
+                        <th class="pb-3 font-medium">التملك</th>
+                        <th class="pb-3 font-medium">الإيجار</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-gray-700 dark:text-gray-300">
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">التكلفة الشهرية الأولية</td>
+                        <td id="initialMonthlyOwnership_result"></td>
+                        <td id="initialMonthlyRent_result"></td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">إجمالي التكلفة (الفترة الأولى)</td>
+                        <td id="initialPhaseOwnership_result"></td>
+                        <td id="initialPhaseRent_result"></td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">تكلفة الانتقال للمسكن الأكبر</td>
+                        <td id="upgradeCostOwnership_result"></td>
+                        <td id="upgradeCostRent_result"></td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">التكلفة الشهرية بعد الانتقال</td>
+                        <td id="laterMonthlyOwnership_result"></td>
+                        <td id="laterMonthlyRent_result"></td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">إجمالي التكلفة (الفترة اللاحقة)</td>
+                        <td id="laterPhaseOwnership_result"></td>
+                        <td id="laterPhaseRent_result"></td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">تكاليف الصيانة الإجمالية</td>
+                        <td id="maintenanceCosts_result"></td>
+                        <td>-</td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700">
+                        <td class="py-3">تكاليف التمويل الإجمالية</td>
+                        <td id="financingCosts_result"></td>
+                        <td>-</td>
+                      </tr>
+                      <tr class="border-b dark:border-gray-700 bg-green-50 dark:bg-green-900/20">
+                        <td class="py-3 font-bold">قيمة الأصول المملوكة في نهاية المدة</td>
+                        <td id="finalPropertyValue_result" class="font-bold text-green-600 dark:text-green-400"></td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td class="py-3 font-bold">صافي التكلفة بعد خصم قيمة الأصول</td>
+                        <td id="netOwnership_result" class="font-bold text-blue-600 dark:text-blue-400"></td>
+                        <td id="netRent_result" class="font-bold text-purple-600 dark:text-purple-400"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <!-- Costs Chart -->
+              <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
+                <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4">تطور التكاليف على مدار السنوات</h3>
+                <div class="h-64 flex items-center justify-center">
+                  <canvas id="costsChart"></canvas>
+                </div>
+              </div>
+              
+              <!-- Cumulative Costs Chart -->
+              <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
+                <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4">التكاليف التراكمية مع الوقت</h3>
+                <div class="h-64 flex items-center justify-center">
+                  <canvas id="cumulativeChart"></canvas>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Family Size Projection Chart -->
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow mb-8">
+              <h3 class="font-bold text-gray-700 dark:text-gray-300 mb-4">توقع نمو حجم العائلة والمساحة المطلوبة</h3>
+              <div class="h-64 flex items-center justify-center">
+                <canvas id="familySizeChart"></canvas>
+              </div>
+            </div>
+            <div id="finalInsight_text" class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 text-gray-700 dark:text-gray-300 rounded-lg border-r-4 border-yellow-500"></div>
+
+            <button id="addFinalTimelineEntry" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                <i class="fas fa-plus-circle mr-2"></i>إضافة نتيجة نهائية إلى الجدول الزمني
+              </button>
+          </div>
+        </div>
+        
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content p-6 hidden">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">إعدادات الحاسبة</h2>
+          
+          <div class="space-y-6">
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معاملات الاحتساب</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                    معدل التضخم السنوي (%)
+                  </label>
+                  <input type="number" id="inflationRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="2.5" min="0" max="20" step="0.1">
+              </div>
+              
+              <div>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                  معدل ارتفاع الإيجارات السنوي (%)
+                </label>
+                <input type="number" id="rentIncreaseRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="3" min="0" max="20" step="0.1">
+              </div>
+              
+              <div>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                  معدل ارتفاع قيمة العقارات السنوي (%)
+                </label>
+                <input type="number" id="propertyAppreciationRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="3.5" min="0" max="20" step="0.1">
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mt-6">
+            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معاملات حساب المساحة</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                  المساحة الأساسية لشخصين (متر مربع)
+                </label>
+                <input type="number" id="baseSqmForTwo" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="100" min="0" step="10">
+              </div>
+              
+              <div>
+                <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                  المساحة الإضافية لكل طفل صغير (متر مربع)
+                </label>
+                <input type="number" id="additionalSqmPerSmallChild" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="15" min="0" step="5">
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                المساحة الإضافية لكل طفل كبير (متر مربع)
+              </label>
+              <input type="number" id="additionalSqmPerBigChild" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="25" min="0" step="5">
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mt-6">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تكاليف إضافية</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                تكاليف البيع (% من قيمة العقار)
+              </label>
+              <input type="number" id="sellingCostsRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="2.5" min="0" max="10" step="0.1">
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                تكاليف الشراء (% من قيمة العقار)
+              </label>
+              <input type="number" id="purchaseCostsRate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="2" min="0" max="10" step="0.1">
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                متوسط سعر المتر المربع للمسكن (﷼)
+              </label>
+              <input type="number" id="averageSqmPrice" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="5000" min="0" step="100">
+            </div>
+          </div>
+        </div>
+        
+        <button id="saveSettings" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md mt-6">
+          <i class="fas fa-save ml-2"></i>حفظ الإعدادات
+        </button>
+      </div>
+    </div>
+    
+    <!-- About Tab -->
+    <div id="about-tab" class="tab-content p-6 hidden">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول حاسبة السكن العائلي</h2>
+      
+      <div class="space-y-6">
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <p class="text-gray-700 dark:text-gray-300 mb-4">
+            حاسبة السكن العائلي هي أداة مصممة لمساعدتك في اتخاذ قرار مالي أفضل بخصوص سكن عائلتك مع الأخذ بعين الاعتبار النمو المتوقع لعائلتك والاحتياجات المستقبلية. تقوم الحاسبة بتحليل:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>التكلفة الإجمالية لتملك العقار مقابل الاستمرار بالإيجار</li>
+            <li>التكاليف الإضافية للانتقال إلى سكن أكبر في المستقبل عند نمو العائلة</li>
+            <li>معدلات زيادة الإيجار المتوقعة بناءً على البيانات التاريخية</li>
+            <li>تكاليف الصيانة والتمويل على مدى سنوات</li>
+            <li>القيمة المستقبلية للعقارات المملوكة</li>
+            <li>التأثير المالي لنمو العائلة على احتياجات السكن</li>
+          </ul>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">كيفية استخدام الحاسبة</h3>
+          <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>أدخل معلومات وضعك الحالي (الإيجار الحالي، نوع السكن)</li>
+            <li>أدخل معلومات عائلتك (عدد الأفراد الحالي، الخطط المستقبلية)</li>
+            <li>أدخل معلومات العقار الذي تفكر بشرائه وخيارات التمويل</li>
+            <li>راجع احتياجات السكن المستقبلية المقترحة (أو عدلها)</li>
+            <li>اضغط على زر "احسب الخيار الأفضل لعائلتي" لعرض النتائج</li>
+            <li>اطلع على التحليل المفصل والتوصيات المناسبة لوضع عائلتك</li>
+          </ol>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">ملاحظات هامة</h3>
+          <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <li>هذه الحاسبة أداة تقديرية لمساعدتك في اتخاذ القرار</li>
+            <li>النتائج تعتمد على دقة البيانات المدخلة والتوقعات المستقبلية</li>
+            <li>التعديلات في حجم العائلة واحتياجاتها قد تختلف من أسرة لأخرى</li>
+            <li>استشر مختصاً مالياً أو عقارياً قبل اتخاذ قرارات مالية كبيرة</li>
+            <li>الظروف الاقتصادية والمالية قد تتغير مع الوقت، لذا من المفيد إعادة التقييم دورياً</li>
+          </ul>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تواصل معي</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                <i class="fab fa-twitter text-blue-400"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                <i class="fab fa-linkedin-in text-blue-700"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">LinkedIn</span>
+            </a>
+            
+            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                <i class="fab fa-github text-gray-700 dark:text-white"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+            </a>
+            
+            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+              <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                <i class="fas fa-envelope text-red-500"></i>
+              </div>
+              <span class="mr-3 text-gray-700 dark:text-gray-300">Email</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Version Info -->
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+          <p class="text-gray-700 dark:text-gray-300">الإصدار الحالي: <span class="font-semibold">1.0.0</span></p>
+          <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">مايو 2023</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+    <p>© <span id="currentYear">2023</span> - تم التطوير بواسطة عبدالله التويجري</p>
+  </footer>
+</div>
+
+<script>
+  // Set current year in footer
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+  
+  // Simple dark mode toggle function
+  function toggleDarkMode() {
+    // Toggle dark class on html element
+    document.documentElement.classList.toggle('dark');
+    
+    // Toggle dark-mode class on body
+    document.body.classList.toggle('dark-mode');
+    
+    // Save preference to localStorage
+    if (document.documentElement.classList.contains('dark')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+    
+    // Update charts if they exist
+    if (costsChart) updateChartColors(costsChart);
+    if (cumulativeChart) updateChartColors(cumulativeChart);
+    if (familySizeChart) updateChartColors(familySizeChart);
+  }
+
+  // Initialize dark mode on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check for saved theme preference or use system preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark-mode');
+    }
+    
+    // Add event listener to theme toggle button
+    document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+    
+    // Load saved settings if available
+    loadSettings();
+    
+    // Set up field interactions
+    setupFieldInteractions();
+  });
+  
+  // Tab switching
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons and hide all contents
+      tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+      tabContents.forEach(content => content.classList.add('hidden'));
+      
+      // Add active class to clicked button and show corresponding content
+      button.classList.add('active', 'opacity-100');
+      document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+    });
+  });
+  
+  // Chart variables
+  let costsChart = null;
+  let cumulativeChart = null;
+  let familySizeChart = null;
+  
+  // Format currency (﷼ only)
+  function formatCurrency(amount) {
+    return amount.toLocaleString('ar-SA', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ﷼';
+  }
+  
+  // Calculate monthly mortgage payment
+  function calculateMonthlyPayment(principal, interestRate, termYears) {
+    // Monthly interest rate (annual rate divided by 12)
+    const monthlyRate = interestRate / 100 / 12;
+    // Total number of payments (years * 12 months)
+    const totalPayments = termYears * 12;
+    
+    // If interest rate is 0, just divide principal by number of months
+    if (interestRate === 0) {
+      return principal / totalPayments;
+    }
+    
+    // Calculate monthly payment using the amortization formula
+    const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
+                   (Math.pow(1 + monthlyRate, totalPayments) - 1);
+    
+    return payment;
+  }
+  
+  // Calculate total interest paid over loan term
+  function calculateTotalInterest(principal, monthlyPayment, termYears) {
+    const totalPaid = monthlyPayment * termYears * 12;
+    return totalPaid - principal;
+  }
+  
+  // Calculate future value with compounding growth
+  function calculateFutureValue(presentValue, growthRate, years) {
+    return presentValue * Math.pow(1 + (growthRate / 100), years);
+  }
+  
+  // Calculate rent increase rate based on historical data
+  function calculateRentIncreaseRate(currentRent, previousRent, years = 2) {
+    if (!previousRent || previousRent <= 0 || currentRent <= 0) return 3; // Default to 3% if data is invalid
+    
+    return ((Math.pow(currentRent / previousRent, 1 / years) - 1) * 100).toFixed(1);
+  }
+  
+  // Calculate required living space based on family size
+  function calculateRequiredSpace(adults, smallChildren, bigChildren) {
+    const baseSqmForTwo = parseFloat(document.getElementById('baseSqmForTwo').value) || 100;
+    const additionalSqmPerSmallChild = parseFloat(document.getElementById('additionalSqmPerSmallChild').value) || 15;
+    const additionalSqmPerBigChild = parseFloat(document.getElementById('additionalSqmPerBigChild').value) || 25;
+    
+    return baseSqmForTwo + (smallChildren * additionalSqmPerSmallChild) + (bigChildren * additionalSqmPerBigChild);
+  }
+  
+  // Setup field interactions and automatic calculations
+  function setupFieldInteractions() {
+    // Update down payment when purchase price or percentage changes
+    document.getElementById('purchasePrice_field').addEventListener('input', updateDownPayment);
+    document.getElementById('downPaymentPercent_field').addEventListener('input', updateDownPayment);
+    
+    // Update down payment percentage when down payment changes
+    document.getElementById('downPayment_field').addEventListener('input', updateDownPaymentPercent);
+    
+    // Calculate rent increase rate when rent fields change
+    document.getElementById('currentRent_field').addEventListener('input', updateRentIncreaseRate);
+    document.getElementById('previousRent_field').addEventListener('input', updateRentIncreaseRate);
+    
+    // Update future space needs when family info changes
+    document.getElementById('currentFamilySize_field').addEventListener('input', updateFutureSpaceNeeds);
+    document.getElementById('plannedChildren_field').addEventListener('input', updateFutureSpaceNeeds);
+    document.getElementById('yearsUntilChildrenGrowUp_field').addEventListener('input', updateFutureSpaceNeeds);
+    
+    // Predict future home cost when size changes
+    document.getElementById('futureSizeNeeded_field').addEventListener('input', updateFutureHomeCost);
+    
+    // Set up location-based defaults
+    document.getElementById('propertyLocation_field').addEventListener('change', updateLocationDefaults);
+  }
+  
+  // Update down payment based on price and percentage
+  function updateDownPayment() {
+    const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value) || 0;
+    const downPaymentPercent = parseFloat(document.getElementById('downPaymentPercent_field').value) || 20;
+    
+    if (purchasePrice > 0) {
+      const downPayment = purchasePrice * (downPaymentPercent / 100);
+      document.getElementById('downPayment_field').value = Math.round(downPayment);
+    }
+  }
+  
+  // Update down payment percentage based on down payment amount
+  function updateDownPaymentPercent() {
+    const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value) || 0;
+    const downPayment = parseFloat(document.getElementById('downPayment_field').value) || 0;
+    
+    if (purchasePrice > 0 && downPayment > 0) {
+      const downPaymentPercent = (downPayment / purchasePrice) * 100;
+      document.getElementById('downPaymentPercent_field').value = downPaymentPercent.toFixed(1);
+    }
+  }
+  
+  // Update rent increase rate based on historical data
+  function updateRentIncreaseRate() {
+    const currentRent = parseFloat(document.getElementById('currentRent_field').value) || 0;
+    const previousRent = parseFloat(document.getElementById('previousRent_field').value) || 0;
+    
+    if (currentRent > 0 && previousRent > 0) {
+      const calculatedRate = calculateRentIncreaseRate(currentRent, previousRent);
+      document.getElementById('rentIncreaseRate').value = calculatedRate;
+    }
+  }
+  
+  // Update future space needs based on family growth
+  function updateFutureSpaceNeeds() {
+    const currentFamilySize = parseInt(document.getElementById('currentFamilySize_field').value) || 0;
+    const plannedChildren = parseInt(document.getElementById('plannedChildren_field').value) || 0;
+    const yearsUntilGrowUp = parseInt(document.getElementById('yearsUntilChildrenGrowUp_field').value) || 0;
+    
+    if (currentFamilySize > 0) {
+      // Estimate adults and children in the family
+      const adults = Math.min(currentFamilySize, 2); // Assume at most 2 adults
+      const currentChildren = Math.max(0, currentFamilySize - adults);
+      
+      // Future projection
+      const futureSmallChildren = Math.max(0, plannedChildren); // New children will be small
+      const futureBigChildren = currentChildren + futureSmallChildren; // After growing up, all children become "big"
+      
+      // Calculate future space needed
+      const futureSpaceNeeded = calculateRequiredSpace(adults, 0, futureBigChildren);
+      document.getElementById('futureSizeNeeded_field').value = Math.round(futureSpaceNeeded);
+      
+      // Set the year when upgrade will be needed
+      if (yearsUntilGrowUp > 0) {
+        document.getElementById('futureUpgradeYear_field').value = yearsUntilGrowUp;
+      }
+      
+      // Update future home cost
+      updateFutureHomeCost();
+    }
+  }
+  
+  // Update future home cost based on size
+  function updateFutureHomeCost() {
+    const futureSizeNeeded = parseFloat(document.getElementById('futureSizeNeeded_field').value) || 0;
+    const averageSqmPrice = parseFloat(document.getElementById('averageSqmPrice').value) || 5000;
+    
+    if (futureSizeNeeded > 0) {
+      const futureHomeCost = futureSizeNeeded * averageSqmPrice;
+      document.getElementById('futureHomeCost_field').value = Math.round(futureHomeCost);
+      
+      // Also update future rent cost (typically 5% annual return on property value)
+      const annualRentEstimate = futureHomeCost * 0.05;
+      document.getElementById('futureRentCost_field').value = Math.round(annualRentEstimate);
+    }
+  }
+  
+  // Update location-based defaults
+  function updateLocationDefaults() {
+    const location = document.getElementById('propertyLocation_field').value;
+    
+    // Location-based property appreciation rates and price per sqm
+    const locationDefaults = {
+      'riyadh': { appreciationRate: 3.5, pricePerSqm: 5500 },
+      'jeddah': { appreciationRate: 3.8, pricePerSqm: 6000 },
+      'dammam': { appreciationRate: 3.2, pricePerSqm: 4500 },
+      'makkah': { appreciationRate: 4.0, pricePerSqm: 7000 },
+      'madinah': { appreciationRate: 3.5, pricePerSqm: 5000 },
+      'other': { appreciationRate: 3.0, pricePerSqm: 4000 }
+    };
+    
+    const defaults = locationDefaults[location];
+    document.getElementById('propertyAppreciationRate').value = defaults.appreciationRate;
+    document.getElementById('averageSqmPrice').value = defaults.pricePerSqm;
+    
+    // Update future home cost based on new price per sqm
+    updateFutureHomeCost();
+  }
+  
+  // Create timeline entry
+  function createTimelineEntry(year, title, description, iconClass) {
+    const timelineContainer = document.getElementById('timelineEvents');
+    
+    const entryDiv = document.createElement('div');
+    entryDiv.className = 'flex items-start relative';
+    
+    entryDiv.innerHTML = `
+      <div class="flex items-center justify-center w-16 h-16 bg-white dark:bg-gray-700 rounded-full border-4 border-blue-200 dark:border-blue-900 z-10 mr-4">
+        <i class="${iconClass} text-blue-600 dark:text-blue-400 text-xl"></i>
+      </div>
+      <div class="flex-1">
+        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+          <h4 class="font-bold text-gray-800 dark:text-gray-200">السنة ${year}: ${title}</h4>
+          <p class="text-gray-600 dark:text-gray-400 mt-2">${description}</p>
+        </div>
+      </div>
+    `;
+    
+    timelineContainer.appendChild(entryDiv);
+  }
+  
+  // Clear timeline entries
+  function clearTimelineEntries() {
+    document.getElementById('timelineEvents').innerHTML = '';
+  }
+  
+  // Create costs chart
+  function createCostsChart(years, rentData, buyData) {
+    const ctx = document.getElementById('costsChart').getContext('2d');
+    
+    // If chart already exists, destroy it
+    if (costsChart) {
+      costsChart.destroy();
+    }
+    
+    // Create labels array for years [1, 2, 3, ..., n]
+    const labels = Array.from({length: years}, (_, i) => i + 1);
+    
+    // Chart colors based on dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    
+    // Create new chart
+    costsChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'تكلفة الإيجار السنوية',
+            data: rentData,
+            borderColor: '#8b5cf6', // purple
+            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true
+          },
+          {
+            label: 'تكلفة التملك السنوية',
+            data: buyData,
+            borderColor: '#3b82f6', // blue
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            }
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += formatCurrency(context.parsed.y);
+                }
+                return label;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'السنوات',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            },
+            grid: {
+              color: gridColor
+            }
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'التكلفة السنوية (﷼)',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              },
+              callback: function(value) {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + ' مليون';
+                } else if (value >= 1000) {
+                  return (value / 1000).toFixed(0) + ' ألف';
+                }
+                return value;
+              }
+            },
+            grid: {
+              color: gridColor
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Create cumulative chart
+  function createCumulativeChart(years, rentData, buyData) {
+    const ctx = document.getElementById('cumulativeChart').getContext('2d');
+    
+    // If chart already exists, destroy it
+    if (cumulativeChart) {
+      cumulativeChart.destroy();
+    }
+    
+    // Create labels array for years [1, 2, 3, ..., n]
+    const labels = Array.from({length: years}, (_, i) => i + 1);
+    
+    // Chart colors based on dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    
+    // Create new chart
+    cumulativeChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'تكلفة الإيجار التراكمية',
+            data: rentData,
+            borderColor: '#8b5cf6', // purple
+            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true
+          },
+          {
+            label: 'تكلفة التملك التراكمية',
+            data: buyData,
+            borderColor: '#3b82f6', // blue
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            }
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += formatCurrency(context.parsed.y);
+                }
+                return label;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'السنوات',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            },
+            grid: {
+              color: gridColor
+            }
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'التكلفة التراكمية (﷼)',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              },
+              callback: function(value) {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + ' مليون';
+                } else if (value >= 1000) {
+                  return (value / 1000).toFixed(0) + ' ألف';
+                }
+                return value;
+              }
+            },
+            grid: {
+              color: gridColor
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Create family size projection chart
+  function createFamilySizeChart(years, familySizeData, spaceNeededData, upgradeYear) {
+    const ctx = document.getElementById('familySizeChart').getContext('2d');
+    
+    // If chart already exists, destroy it
+    if (familySizeChart) {
+      familySizeChart.destroy();
+    }
+    
+    // Create labels array for years [1, 2, 3, ..., n]
+    const labels = Array.from({length: years}, (_, i) => i + 1);
+    
+    // Chart colors based on dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    
+    // Create annotation for upgrade year if provided
+    const annotations = {};
+    if (upgradeYear > 0 && upgradeYear <= years) {
+      annotations.upgradeYearLine = {
+        type: 'line',
+        xMin: upgradeYear,
+        xMax: upgradeYear,
+        borderColor: '#ef4444', // red
+        borderWidth: 2,
+        borderDash: [6, 6],
+        label: {
+          enabled: true,
+          content: 'الانتقال إلى مسكن أكبر',
+          position: 'top',
+          backgroundColor: '#ef4444',
+          font: {
+            family: 'Tajawal'
+          }
+        }
+      };
+    }
+    
+    // Create new chart
+    familySizeChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'عدد أفراد العائلة',
+            data: familySizeData,
+            borderColor: '#10b981', // green
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true,
+            yAxisID: 'y'
+          },
+          {
+            label: 'المساحة المطلوبة (متر مربع)',
+            data: spaceNeededData,
+            borderColor: '#f59e0b', // amber
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            }
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  if (context.dataset.yAxisID === 'y') {
+                    label += context.parsed.y + ' فرد';
+                  } else {
+                    label += context.parsed.y + ' متر مربع';
+                  }
+                }
+                return label;
+              }
+            }
+          },
+          annotation: {
+            annotations: annotations
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'السنوات',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            },
+            grid: {
+              color: gridColor
+            }
+          },
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'عدد أفراد العائلة',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            },
+            grid: {
+              color: gridColor
+            }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'المساحة المطلوبة (متر مربع)',
+              color: textColor,
+              font: {
+                family: 'Tajawal',
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              color: textColor,
+              font: {
+                family: 'Tajawal'
+              }
+            },
+            grid: {
+              drawOnChartArea: false
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Update chart colors when switching between light/dark modes
+  function updateChartColors(chart) {
+    if (!chart) return;
+    
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    
+    // Update text colors
+    chart.options.scales.x.ticks.color = textColor;
+    chart.options.scales.x.title.color = textColor;
+    chart.options.scales.y.ticks.color = textColor;
+    chart.options.scales.y.title.color = textColor;
+    
+    // Update grid colors
+    chart.options.scales.x.grid.color = gridColor;
+    chart.options.scales.y.grid.color = gridColor;
+    
+    // Update legend color
+    chart.options.plugins.legend.labels.color = textColor;
+    
+    // Update Y1 axis if it exists (for family size chart)
+    if (chart.options.scales.y1) {
+      chart.options.scales.y1.ticks.color = textColor;
+      chart.options.scales.y1.title.color = textColor;
+    }
+    
+    chart.update();
+  }
+  
+  // Load settings from localStorage
+  function loadSettings() {
+    // Rates and constants
+    if (localStorage.getItem('inflationRate')) {
+      document.getElementById('inflationRate').value = localStorage.getItem('inflationRate');
+    }
+    
+    if (localStorage.getItem('rentIncreaseRate')) {
+      document.getElementById('rentIncreaseRate').value = localStorage.getItem('rentIncreaseRate');
+    }
+    
+    if (localStorage.getItem('propertyAppreciationRate')) {
+      document.getElementById('propertyAppreciationRate').value = localStorage.getItem('propertyAppreciationRate');
+    }
+    
+    // Space calculation parameters
+    if (localStorage.getItem('baseSqmForTwo')) {
+      document.getElementById('baseSqmForTwo').value = localStorage.getItem('baseSqmForTwo');
+    }
+    
+    if (localStorage.getItem('additionalSqmPerSmallChild')) {
+      document.getElementById('additionalSqmPerSmallChild').value = localStorage.getItem('additionalSqmPerSmallChild');
+    }
+    
+    if (localStorage.getItem('additionalSqmPerBigChild')) {
+      document.getElementById('additionalSqmPerBigChild').value = localStorage.getItem('additionalSqmPerBigChild');
+    }
+    
+    // Additional costs
+    if (localStorage.getItem('sellingCostsRate')) {
+      document.getElementById('sellingCostsRate').value = localStorage.getItem('sellingCostsRate');
+    }
+    
+    if (localStorage.getItem('purchaseCostsRate')) {
+      document.getElementById('purchaseCostsRate').value = localStorage.getItem('purchaseCostsRate');
+    }
+    
+    if (localStorage.getItem('averageSqmPrice')) {
+      document.getElementById('averageSqmPrice').value = localStorage.getItem('averageSqmPrice');
+    }
+  }
+  
+  // Save settings to localStorage
+  document.getElementById('saveSettings').addEventListener('click', function() {
+    // Save rates and constants
+    localStorage.setItem('inflationRate', document.getElementById('inflationRate').value);
+    localStorage.setItem('rentIncreaseRate', document.getElementById('rentIncreaseRate').value);
+    localStorage.setItem('propertyAppreciationRate', document.getElementById('propertyAppreciationRate').value);
+    
+    // Save space calculation parameters
+    localStorage.setItem('baseSqmForTwo', document.getElementById('baseSqmForTwo').value);
+    localStorage.setItem('additionalSqmPerSmallChild', document.getElementById('additionalSqmPerSmallChild').value);
+    localStorage.setItem('additionalSqmPerBigChild', document.getElementById('additionalSqmPerBigChild').value);
+    
+    // Save additional costs
+    localStorage.setItem('sellingCostsRate', document.getElementById('sellingCostsRate').value);
+    localStorage.setItem('purchaseCostsRate', document.getElementById('purchaseCostsRate').value);
+    localStorage.setItem('averageSqmPrice', document.getElementById('averageSqmPrice').value);
+    
+    // Show success message
+    alert('تم حفظ الإعدادات بنجاح!');
+  });
+  
+  // Calculate button click handler
+  document.getElementById('calculateBtn').addEventListener('click', function() {
+    // Get basic values
+    const currentRent = parseFloat(document.getElementById('currentRent_field').value);
+    const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value);
+    const currentFamilySize = parseInt(document.getElementById('currentFamilySize_field').value);
+    
+    if (isNaN(currentRent) || isNaN(purchasePrice) || isNaN(currentFamilySize)) {
+      alert('يرجى تعبئة الحقول الإلزامية: الإيجار الحالي، سعر الشراء، وعدد أفراد العائلة الحالي.');
+      return;
+    }
+    
+    // Get family projection data
+    const plannedChildren = parseInt(document.getElementById('plannedChildren_field').value) || 0;
+    const yearsUntilGrowUp = parseInt(document.getElementById('yearsUntilChildrenGrowUp_field').value) || 0;
+    
+    // Get financing options
+    const downPayment = parseFloat(document.getElementById('downPayment_field').value) || 0;
+    const mortgageInterest = parseFloat(document.getElementById('mortgageInterest_field').value) || 0;
+    const mortgageTerm = parseInt(document.getElementById('mortgageTerm_field').value) || 25;
+    
+    // Get future housing needs
+    const futureSizeNeeded = parseFloat(document.getElementById('futureSizeNeeded_field').value) || 0;
+    const futureUpgradeYear = parseInt(document.getElementById('futureUpgradeYear_field').value) || 0;
+    const futureHomeCost = parseFloat(document.getElementById('futureHomeCost_field').value) || 0;
+    const futureRentCost = parseFloat(document.getElementById('futureRentCost_field').value) || 0;
+    
+    // Get additional costs
+    const maintenanceCost = parseFloat(document.getElementById('maintenanceCost_field').value) || 0;
+    const propertyAppreciationRate = parseFloat(document.getElementById('propertyAppreciationRate').value) || 3.5;
+    const rentIncreaseRate = parseFloat(document.getElementById('rentIncreaseRate').value) || 3;
+    const inflationRate = parseFloat(document.getElementById('inflationRate').value) || 2.5;
+    const sellingCostsRate = parseFloat(document.getElementById('sellingCostsRate').value) || 2.5;
+    const purchaseCostsRate = parseFloat(document.getElementById('purchaseCostsRate').value) || 2;
+    
+    // Define the total simulation period (max of mortgage term and future upgrade year + 15 years)
+    const totalYears = Math.max(mortgageTerm, futureUpgradeYear + 15);
+    
+    // Calculate loan amount and monthly payment
+    const loanAmount = purchasePrice - downPayment;
+    const monthlyPayment = calculateMonthlyPayment(loanAmount, mortgageInterest, mortgageTerm);
+    
+    // Calculate initial purchase costs
+    const initialPurchaseCosts = purchasePrice * (purchaseCostsRate / 100);
+    
+    // Calculate yearly maintenance costs
+    let yearlyMaintenance = purchasePrice * (maintenanceCost / 100);
+    
+    // Arrays to store projection data
+    const yearlyRentCosts = [];
+    const yearlyBuyCosts = [];
+    const cumulativeRentCosts = [];
+    const cumulativeBuyCosts = [];
+    const familySizeProjection = [];
+    const spaceNeededProjection = [];
+    
+    // Initialize totals
+    let totalRentCost = 0;
+    let totalBuyCost = downPayment + initialPurchaseCosts;
+    let futurePropertyValue = purchasePrice;
+    let futurePropertyValue2 = 0; // For the second property if applicable
+    
+    // Clear previous timeline entries
+    clearTimelineEntries();
+    
+    // Add initial timeline entry
+    createTimelineEntry(1, 'بداية المقارنة', 
+      `بدء المقارنة بين خيار الإيجار بقيمة ${formatCurrency(currentRent)} شهرياً وخيار التملك بقيمة ${formatCurrency(purchasePrice)} مع دفعة مقدمة ${formatCurrency(downPayment)}.`, 
+      'fas fa-flag');
+    
+    // Start of year-by-year simulation
+    for (let year = 1; year <= totalYears; year++) {
+      // Calculate family size for this year
+      let familySize = currentFamilySize;
+      // Add planned children when they arrive
+      if (year >= 2 && year <= 1 + plannedChildren) {
+        familySize++;
+      }
+      familySizeProjection.push(familySize);
+      
+      // Calculate required space for this year
+      const adults = Math.min(familySize, 2); // Assume at most 2 adults
+      let smallChildren = 0, bigChildren = 0;
+      
+      // Children grow from small to big at the yearsUntilGrowUp mark
+      if (year < yearsUntilGrowUp) {
+        smallChildren = Math.max(0, familySize - adults);
+        bigChildren = 0;
+      } else {
+        smallChildren = 0;
+        bigChildren = Math.max(0, familySize - adults);
+      }
+      
+      const spaceNeeded = calculateRequiredSpace(adults, smallChildren, bigChildren);
+      spaceNeededProjection.push(spaceNeeded);
+      
+      // Handle upgrade year if applicable
+      let upgradeEventThisYear = false;
+      if (year === futureUpgradeYear) {
+        upgradeEventThisYear = true;
+        
+        // Add timeline entry for upgrade
+        createTimelineEntry(year, 'الانتقال إلى مسكن أكبر', 
+          `الانتقال إلى مسكن أكبر بمساحة ${futureSizeNeeded} متر مربع وقيمة ${formatCurrency(futureHomeCost)}.`, 
+          'fas fa-home');
+      }
+      
+      // Calculate rent for this year
+      let yearRent;
+      if (year < futureUpgradeYear) {
+        // Before upgrade, use current rent with annual increases
+        yearRent = currentRent * 12 * Math.pow(1 + (rentIncreaseRate / 100), year - 1);
+      } else {
+        // After upgrade, use future rent with annual increases
+        yearRent = futureRentCost * Math.pow(1 + (rentIncreaseRate / 100), year - futureUpgradeYear);
+      }
+      
+      // Add moving costs if it's upgrade year
+      if (upgradeEventThisYear) {
+        yearRent += currentRent; // Typically one month's rent for moving costs
+      }
+      
+      yearlyRentCosts.push(yearRent);
+      totalRentCost += yearRent;
+      cumulativeRentCosts.push(totalRentCost);
+      
+      // Calculate ownership costs for this year
+      let yearBuy = 0;
+      
+      // Mortgage payments if still within term
+      if (year <= mortgageTerm) {
+        yearBuy += monthlyPayment * 12;
+      }
+      
+      // Add maintenance costs
+      yearBuy += yearlyMaintenance;
+      
+      // Handle property upgrade if applicable
+      if (upgradeEventThisYear) {
+        // Sell the first property
+        const firstPropertyValueAtSale = purchasePrice * Math.pow(1 + (propertyAppreciationRate / 100), year - 1);
+        const sellingCosts = firstPropertyValueAtSale * (sellingCostsRate / 100);
+        
+        // Net proceeds from first property
+        const netProceeds = firstPropertyValueAtSale - sellingCosts - (loanAmount * (1 - (year - 1) / mortgageTerm));
+        
+        // Purchase second property
+        const secondPropertyCosts = futureHomeCost * (purchaseCostsRate / 100);
+        const secondDownPayment = Math.min(netProceeds, futureHomeCost * 0.2); // Use proceeds as down payment, up to 20%
+        const secondLoanAmount = futureHomeCost - secondDownPayment;
+        
+        // New mortgage payment for second property
+        const secondMonthlyPayment = calculateMonthlyPayment(secondLoanAmount, mortgageInterest, mortgageTerm);
+        
+        // Add costs for this upgrade year
+        yearBuy += sellingCosts + secondPropertyCosts;
+        yearBuy += secondMonthlyPayment * (12 - (year % 12)); // Partial year of new mortgage
+        
+        // Set new maintenance costs based on new property value
+        yearlyMaintenance = futureHomeCost * (maintenanceCost / 100);
+        
+        // Track the second property value
+        futurePropertyValue2 = futureHomeCost;
+        
+        // Add timeline entry for mortgage change
+        createTimelineEntry(year, 'تغيير القرض العقاري', 
+          `تسوية القرض الأول والحصول على قرض جديد بمبلغ ${formatCurrency(secondLoanAmount)} وقسط شهري ${formatCurrency(secondMonthlyPayment)}.`, 
+          'fas fa-money-check-alt');
+      }
+      
+      yearlyBuyCosts.push(yearBuy);
+      totalBuyCost += yearBuy;
+      cumulativeBuyCosts.push(totalBuyCost);
+      
+      // Update future property values
+      futurePropertyValue = purchasePrice * Math.pow(1 + (propertyAppreciationRate / 100), year);
+      if (futurePropertyValue2 > 0) {
+        futurePropertyValue2 = futureHomeCost * Math.pow(1 + (propertyAppreciationRate / 100), year - futureUpgradeYear);
+      }
+    }
+    
+    // Final property values at the end of the period
+    const finalPropertyValue = futurePropertyValue2 > 0 ? futurePropertyValue2 : futurePropertyValue;
+    const sellingCosts = finalPropertyValue * (sellingCostsRate / 100);
+    const netAssetValue = finalPropertyValue - sellingCosts;
+    
+    // Net cost after accounting for asset value
+    const netOwnershipCost = totalBuyCost - netAssetValue;
+    
+    // Create charts
+    createCostsChart(totalYears, yearlyRentCosts, yearlyBuyCosts);
+    createCumulativeChart(totalYears, cumulativeRentCosts, cumulativeBuyCosts);
+    createFamilySizeChart(totalYears, familySizeProjection, spaceNeededProjection, futureUpgradeYear);
+    
+    // Determine the better option
+    const betterOption = netOwnershipCost < totalRentCost ? 'التملك' : 'الإيجار';
+    const savingsAmount = Math.abs(netOwnershipCost - totalRentCost);
+    
+    // Update results
+    document.getElementById('totalOwnership_result').textContent = formatCurrency(totalBuyCost);
+    document.getElementById('totalRent_result').textContent = formatCurrency(totalRentCost);
+    document.getElementById('betterOption_result').textContent = betterOption;
+    
+    // Update detailed comparison results
+    document.getElementById('initialMonthlyOwnership_result').textContent = formatCurrency(monthlyPayment);
+    document.getElementById('initialMonthlyRent_result').textContent = formatCurrency(currentRent);
+    
+    document.getElementById('initialPhaseOwnership_result').textContent = formatCurrency(monthlyPayment * 12 * (futureUpgradeYear || totalYears));
+    document.getElementById('initialPhaseRent_result').textContent = formatCurrency(currentRent * 12 * (futureUpgradeYear || totalYears));
+    
+    if (futureUpgradeYear > 0) {
+      document.getElementById('upgradeCostOwnership_result').textContent = formatCurrency(yearlyBuyCosts[futureUpgradeYear - 1] - (monthlyPayment * 12));
+      document.getElementById('upgradeCostRent_result').textContent = formatCurrency(currentRent);
+      
+      document.getElementById('laterMonthlyOwnership_result').textContent = formatCurrency(yearlyBuyCosts[futureUpgradeYear] / 12);
+      document.getElementById('laterMonthlyRent_result').textContent = formatCurrency(futureRentCost / 12);
+      
+      document.getElementById('laterPhaseOwnership_result').textContent = formatCurrency(totalBuyCost - cumulativeBuyCosts[futureUpgradeYear - 1]);
+      document.getElementById('laterPhaseRent_result').textContent = formatCurrency(totalRentCost - cumulativeRentCosts[futureUpgradeYear - 1]);
+    } else {
+      // No upgrade scenario
+      document.getElementById('upgradeCostOwnership_result').textContent = '-';
+      document.getElementById('upgradeCostRent_result').textContent = '-';
+      
+      document.getElementById('laterMonthlyOwnership_result').textContent = '-';
+      document.getElementById('laterMonthlyRent_result').textContent = '-';
+      
+      document.getElementById('laterPhaseOwnership_result').textContent = '-';
+      document.getElementById('laterPhaseRent_result').textContent = '-';
+    }
+    
+    document.getElementById('maintenanceCosts_result').textContent = formatCurrency(yearlyMaintenance * totalYears);
+    document.getElementById('financingCosts_result').textContent = formatCurrency((monthlyPayment * 12 * mortgageTerm) - loanAmount);
+    
+    document.getElementById('finalPropertyValue_result').textContent = formatCurrency(netAssetValue);
+    
+    document.getElementById('netOwnership_result').textContent = formatCurrency(netOwnershipCost);
+    document.getElementById('netRent_result').textContent = formatCurrency(totalRentCost);
+    
+    // Create family insight text
+    let familyInsightText = '';
+    if (plannedChildren > 0) {
+      familyInsightText = `مع نمو عائلتك من ${currentFamilySize} أفراد حالياً إلى ${currentFamilySize + plannedChildren} أفراد خلال السنوات القادمة، ستزداد احتياجاتكم السكنية من ${calculateRequiredSpace(Math.min(currentFamilySize, 2), Math.max(0, currentFamilySize - 2), 0)} متر مربع إلى ${futureSizeNeeded} متر مربع تقريباً.`;
+      
+      if (futureUpgradeYear > 0) {
+        familyInsightText += ` وقد تم تقدير الحاجة للانتقال إلى مسكن أكبر بعد ${futureUpgradeYear} سنوات.`;
+      }
+    } else {
+      familyInsightText = `مع بقاء حجم عائلتك ثابتاً عند ${currentFamilySize} أفراد، فإن احتياجاتكم السكنية من المتوقع أن تظل في حدود ${calculateRequiredSpace(Math.min(currentFamilySize, 2), 0, Math.max(0, currentFamilySize - 2))} متر مربع.`;
+    }
+    
+    document.getElementById('familyInsight_text').textContent = familyInsightText;
+    
+    // Create recommendation text
+    let recommendationText = '';
+    if (betterOption === 'التملك') {
+      recommendationText = `بناءً على المعطيات المدخلة، فإن خيار <strong>التملك</strong> هو الأفضل مالياً لعائلتك، حيث توفر حوالي ${formatCurrency(savingsAmount)} على مدى ${totalYears} سنة مقارنة بالإيجار. `;
+      
+      if (futureUpgradeYear > 0) {
+        recommendationText += `رغم أنك ستحتاج للانتقال لمسكن أكبر بعد ${futureUpgradeYear} سنوات، إلا أن قيمة العقار الأول ستساعد في تمويل العقار الثاني. `;
+      }
+      
+      recommendationText += `ستمتلك في نهاية المدة أصلاً عقارياً بقيمة صافية ${formatCurrency(netAssetValue)}.`;
+    } else {
+        recommendationText = `بناءً على المعطيات المدخلة، فإن خيار <strong>الإيجار</strong> هو الأفضل مالياً لعائلتك، حيث توفر حوالي ${formatCurrency(savingsAmount)} على مدى ${totalYears} سنة مقارنة بالتملك. `;
+      
+        if (futureUpgradeYear > 0) {
+          recommendationText += `المرونة التي يوفرها الإيجار ستكون مفيدة عند الحاجة للانتقال إلى مسكن أكبر بعد ${futureUpgradeYear} سنوات. `;
+        }
+        
+        recommendationText += `يمكنك استثمار الفرق بين تكلفة التملك والإيجار في مجالات أخرى لتنمية ثروتك.`;
+      }
+      
+      document.getElementById('recommendation_text').innerHTML = recommendationText;
+      
+      // Create final insight text based on family size and financial situation
+      let finalInsightText = '';
+      if (familySizeProjection[totalYears - 1] > currentFamilySize + 1) {
+        finalInsightText = 'مع نمو عائلتك بشكل كبير خلال السنوات القادمة، من المهم التفكير في المرونة واحتياجات المساحة المستقبلية.';
+      } else if (netOwnershipCost > totalRentCost * 1.2) {
+        finalInsightText = 'الفرق المالي كبير جداً لصالح الإيجار، مما يجعله الخيار الأفضل حتى مع اعتبار بناء الثروة العقارية.';
+      } else if (totalRentCost > netOwnershipCost * 1.2) {
+        finalInsightText = 'الفرق المالي كبير جداً لصالح التملك، خاصة مع اعتبار بناء الثروة العقارية على المدى الطويل.';
+      } else {
+        finalInsightText = 'الفرق المالي بين الخيارين ليس كبيراً جداً، لذا يمكنك اتخاذ القرار بناءً على عوامل أخرى غير مالية مثل الاستقرار والتحكم بالمسكن.';
+      }
+      
+      document.getElementById('finalInsight_text').textContent = finalInsightText;
+      
+      // Show results section
+      document.getElementById('results').classList.remove('hidden');
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Add timeline entry for the end of comparison
+    document.getElementById('addFinalTimelineEntry').addEventListener('click', function() {
+      const totalYears = parseInt(document.getElementById('ownershipYears_field').value) || 10;
+      const recommendations = document.getElementById('recommendation_text').innerHTML;
+      
+      createTimelineEntry(totalYears, 'نهاية فترة المقارنة', 
+        `بعد ${totalYears} سنوات من المقارنة: ${recommendations}`, 
+        'fas fa-check-circle');
+    });
+    
+    // Update form field maximums based on mortgage term
+    document.getElementById('mortgageTerm_field').addEventListener('input', function() {
+      const mortgageTerm = parseInt(this.value) || 25;
+      document.getElementById('futureUpgradeYear_field').max = mortgageTerm;
+      document.getElementById('yearsUntilChildrenGrowUp_field').max = mortgageTerm;
+    });
+  </script>
+  </body>
+  </html>
+  
