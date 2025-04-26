@@ -70,107 +70,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-  <style>
-    body {
-      font-family: 'Tajawal', sans-serif;
-      background-color: #f8fafc;
-    }
-    .dark-mode {
-      background-color: #0f172a;
-      color: #e2e8f0;
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-    .glass-card-dark {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(30, 41, 59, 0.3);
-    }
-    .gradient-border {
-      border-width: 1px;
-      border-style: solid;
-      border-image: linear-gradient(to bottom, #0ea5e9, #16a34a) 1;
-    }
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.1), 0 8px 10px -6px rgba(2, 132, 199, 0.1);
-    }
-    /* Custom colors for dark mode toggle */
-    .moon-icon {
-        color: #0ea5e9; /* Blue for moon */
-    }
-    .sun-icon {
-        color: #f59e0b; /* Gold for sun */
-    }
-    /* Fix for toggle dot in dark mode */
-    html.dark .toggle-dot {
-        transform: translateX(1.5rem) !important;
-    }
-    /* Active tab styling */
-    .tab-btn.active {
-        opacity: 1 !important;
-        font-weight: 600;
-    }
-    /* Help icon style */
-    .help-icon {
-      cursor: help;
-      transition: color 0.2s;
-    }
-    .help-icon:hover {
-      color: #0ea5e9;
-    }
-    /* Tooltip style */
-    .tooltip {
-      position: relative;
-      display: inline-block;
-    }
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 250px;
-      background-color: #0f172a;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 8px;
-      position: absolute;
-      z-index: 100;
-      bottom: 125%;
-      right: 50%;
-      margin-right: -125px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      font-size: 0.85rem;
-    }
-    .tooltip .tooltiptext::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      right: 50%;
-      margin-right: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #0f172a transparent transparent transparent;
-    }
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-      opacity: 1;
-    }
-    html.dark .tooltip .tooltiptext {
-      background-color: #e2e8f0;
-      color: #0f172a;
-    }
-    html.dark .tooltip .tooltiptext::after {
-      border-color: #e2e8f0 transparent transparent transparent;
-    }
-  </style>
+  <link rel="stylesheet" href="family_housing_calculator.css">
 </head>
 <body class="min-h-screen py-6 transition-colors duration-300">
   <div class="max-w-6xl mx-auto px-4">
@@ -322,15 +222,87 @@
                   <input type="number" id="yearsUntilChildrenGrowUp_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0">
                 </div>
                 
+                <!-- REPLACED: Split the expected stay years into two fields -->
                 <div>
-                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="expectedStayYears_field">
-                    مدة البقاء المتوقعة في المسكن (سنوات)
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="expectedStayYears_buy_field">
+                    مدة البقاء المتوقعة في المسكن المشتري (سنوات)
                     <span class="tooltip">
                       <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
-                      <span class="tooltiptext">المدة التي تتوقع فيها البقاء في المسكن. تؤثر على حسابات القيمة المستقبلية وعائد الاستثمار.</span>
+                      <span class="tooltiptext">المدة التي تتوقع فيها البقاء في المسكن المشتري. تؤثر على حسابات القيمة المستقبلية وعائد الاستثمار.</span>
                     </span>
                   </label>
-                  <input type="number" id="expectedStayYears_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" required value="15">
+                  <input type="number" id="expectedStayYears_buy_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" required value="15">
+                </div>
+
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="expectedStayYears_rent_field">
+                    مدة البقاء المتوقعة في المسكن المستأجر (سنوات)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">المدة التي تتوقع فيها البقاء في المسكن المستأجر. قد تختلف عن مدة البقاء في حالة الشراء.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="expectedStayYears_rent_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" required value="5">
+                </div>
+              </div>
+            </div>
+            
+            <!-- NEW: Income Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-money-bill-wave ml-2"></i>معلومات الدخل
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="monthlyIncome_field">
+                    الدخل الشهري (ريال)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">إجمالي الدخل الشهري بعد الضرائب.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="monthlyIncome_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" required value="15000">
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="additionalIncome_field">
+                    دخل إضافي شهري (ريال)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">أي دخل إضافي شهري مثل العقارات المؤجرة أو الاستثمارات.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="additionalIncome_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" value="0">
+                </div>
+              </div>
+            </div>
+            
+            <!-- NEW: Liabilities Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-credit-card ml-2"></i>الالتزامات المالية
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="monthlyDebt_field">
+                    مدفوعات الديون الشهرية (ريال)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">إجمالي المدفوعات الشهرية للقروض والديون (عدا الإيجار أو الرهن العقاري).</span>
+                    </span>
+                  </label>
+                  <input type="number" id="monthlyDebt_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" value="0">
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="monthlyExpenses_field">
+                    مصاريف شهرية أخرى (ريال)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">المصاريف الشهرية الأخرى مثل فواتير المرافق، الطعام، النقل، الخ.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="monthlyExpenses_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" value="5000">
                 </div>
               </div>
             </div>
@@ -581,6 +553,46 @@
         <!-- Results Section -->
         <div id="results" class="mt-8 hidden">
           <h2 class="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-4">نتائج المقارنة لعائلتك</h2>
+          
+          <!-- NEW: Affordability Results Section -->
+          <div id="affordabilityResults" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">تحليل القدرة المالية</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">القدرة على تحمل تكاليف الشراء</h4>
+                  <div id="mortgageAffordability" class="text-lg"></div>
+                  <div id="affordableHomePrice" class="mt-2"></div>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">القدرة على تحمل تكاليف الإيجار</h4>
+                  <div id="rentAffordability" class="text-lg"></div>
+                  <div id="recommendedRent" class="mt-2"></div>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg col-span-1 md:col-span-2">
+                  <h4 class="font-bold mb-2">ملخص الوضع المالي</h4>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <p class="text-sm text-neutral-600 dark:text-neutral-400">إجمالي الدخل الشهري</p>
+                      <p id="totalIncomeDisplay" class="text-lg font-bold"></p>
+                    </div>
+                    <div>
+                      <p class="text-sm text-neutral-600 dark:text-neutral-400">نسبة الدين إلى الدخل</p>
+                      <p id="dtiRatioDisplay" class="text-lg font-bold"></p>
+                    </div>
+                    <div>
+                      <p class="text-sm text-neutral-600 dark:text-neutral-400">الحد الأقصى المستحسن للسكن</p>
+                      <p id="maxHousingDisplay" class="text-lg font-bold"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           
           <!-- Summary Cards -->
           <div class="flex flex-wrap gap-4 mb-6">
@@ -889,6 +901,34 @@
           </div>
         </div>
         
+        <!-- NEW: Financial Affordability Settings -->
+        <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg mt-6">
+          <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">معاملات القدرة المالية</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                نسبة الدين المستحسنة (% من الدخل)
+                <span class="tooltip">
+                  <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                  <span class="tooltiptext">النسبة القصوى المستحسنة للدفعات الشهرية للديون من إجمالي الدخل.</span>
+                </span>
+              </label>
+              <input type="number" id="recommendedDtiRatio" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" value="36" min="0" max="100" step="1">
+            </div>
+            
+            <div>
+              <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                نسبة السكن المستحسنة (% من الدخل)
+                <span class="tooltip">
+                  <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                  <span class="tooltiptext">النسبة القصوى المستحسنة لمصاريف السكن من إجمالي الدخل.</span>
+                </span>
+              </label>
+              <input type="number" id="recommendedHousingRatio" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" value="28" min="0" max="100" step="1">
+            </div>
+          </div>
+        </div>
+        
         <button id="saveSettings" class="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors shadow-md mt-6">
           <i class="fas fa-save ml-2"></i>حفظ الإعدادات
         </button>
@@ -911,6 +951,7 @@
             <li>تكاليف الصيانة والتمويل على مدى سنوات</li>
             <li>القيمة المستقبلية للعقارات المملوكة</li>
             <li>التأثير المالي لنمو العائلة على احتياجات السكن</li>
+            <li>تحليل القدرة المالية وتوافق التكاليف مع دخلك</li>
           </ul>
         </div>
         
@@ -918,7 +959,8 @@
           <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">كيفية استخدام الحاسبة</h3>
           <ol class="list-decimal list-inside space-y-2 text-neutral-700 dark:text-neutral-300">
             <li>أدخل معلومات وضعك الحالي (الإيجار الحالي، نوع السكن)</li>
-            <li>أدخل معلومات عائلتك (عدد الأفراد الحالي، الخطط المستقبلية)</li>
+            <li>أدخل معلومات عائلتك وخططها (عدد الأفراد الحالي، الأطفال المستقبليين)</li>
+            <li>أدخل معلومات دخلك والتزاماتك المالية الحالية</li>
             <li>أدخل معلومات العقار الذي تفكر بشرائه وخيارات التمويل</li>
             <li>راجع احتياجات السكن المستقبلية المقترحة (أو عدلها)</li>
             <li>اضغط على زر "احسب الخيار الأفضل لعائلتي" لعرض النتائج</li>
@@ -934,6 +976,7 @@
             <li>التعديلات في حجم العائلة واحتياجاتها قد تختلف من أسرة لأخرى</li>
             <li>استشر مختصاً مالياً أو عقارياً قبل اتخاذ قرارات مالية كبيرة</li>
             <li>الظروف الاقتصادية والمالية قد تتغير مع الوقت، لذا من المفيد إعادة التقييم دورياً</li>
+            <li>تقديرات القدرة المالية تستند إلى معايير مالية عامة وقد تختلف حسب البنك أو المؤسسة المالية</li>
           </ul>
         </div>
         
@@ -973,11 +1016,14 @@
         <!-- Version Info -->
         <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
           <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">معلومات الإصدار</h3>
-          <p class="text-neutral-700 dark:text-neutral-300">الإصدار الحالي: <span class="font-semibold">1.1.0</span></p>
-          <p class="text-neutral-700 dark:text-neutral-300">آخر تحديث: <span id="lastUpdated">يونيو 2023</span></p>
+          <p class="text-neutral-700 dark:text-neutral-300">الإصدار الحالي: <span class="font-semibold">2.0.0</span></p>
+          <p class="text-neutral-700 dark:text-neutral-300">آخر تحديث: <span id="lastUpdated">مارس 2024</span></p>
           <p class="text-neutral-700 dark:text-neutral-300 mt-2">تم تحديث الحاسبة مع إضافة:</p>
           <ul class="list-disc list-inside space-y-1 text-neutral-700 dark:text-neutral-300 mt-1">
+            <li>تحليل القدرة المالية وحساب القدرة على تحمل التكاليف</li>
             <li>تحسينات في واجهة المستخدم وتجربة الاستخدام</li>
+            <li>فصل مدة البقاء المتوقعة بين التملك والإيجار</li>
+            <li>إضافة أقسام للدخل والالتزامات المالية</li>
             <li>توضيحات وشرح لكل حقل من حقول الإدخال</li>
             <li>تحسين خوارزميات التوقع المالي والعقاري</li>
             <li>إضافة مؤشرات إضافية في تحليل النتائج</li>
@@ -989,1355 +1035,11 @@
   
   <!-- Footer -->
   <footer class="mt-12 text-center text-neutral-500 dark:text-neutral-400 text-sm">        
-    <p>© <span id="currentYear">2023</span> - تم التطوير بواسطة عبدالله التويجري</p>
+    <p>© <span id="currentYear">2024</span> - تم التطوير بواسطة عبدالله التويجري</p>
     <p class="mt-1">جميع التحليلات والتوصيات تقريبية وتهدف للمساعدة في اتخاذ القرار فقط</p>
   </footer>
 </div>
 
-<!-- Additional CSS for tooltips -->
-<style>
-  .tooltip {
-    position: relative;
-    display: inline-block;
-  }
-
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 280px;
-    background-color: rgba(51, 65, 85, 0.95);
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 12px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -140px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 12px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  }
-
-  .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: rgba(51, 65, 85, 0.95) transparent transparent transparent;
-  }
-
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .help-icon:hover {
-    color: #3b82f6;
-  }
-
-  html.dark .tooltip .tooltiptext {
-    background-color: rgba(30, 41, 59, 0.95);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-  }
-
-  html.dark .tooltip .tooltiptext::after {
-    border-color: rgba(30, 41, 59, 0.95) transparent transparent transparent;
-  }
-</style>
-
-<script>
-  // Set current year in footer
-  document.getElementById('currentYear').textContent = new Date().getFullYear();
-  
-  // Simple dark mode toggle function
-  function toggleDarkMode() {
-    // Toggle dark class on html element
-    document.documentElement.classList.toggle('dark');
-    
-    // Toggle dark-mode class on body
-    document.body.classList.toggle('dark-mode');
-    
-    // Save preference to localStorage
-    if (document.documentElement.classList.contains('dark')) {
-      localStorage.setItem('theme', 'dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-    }
-    
-    // Update charts if they exist
-    if (costsChart) updateChartColors(costsChart);
-    if (cumulativeChart) updateChartColors(cumulativeChart);
-    if (familySizeChart) updateChartColors(familySizeChart);
-  }
-
-  // Initialize dark mode on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check for saved theme preference or use system preference
-    if (localStorage.getItem('theme') === 'dark' || 
-        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark-mode');
-    }
-    
-    // Add event listener to theme toggle button
-    document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
-    
-    // Load saved settings if available
-    loadSettings();
-    
-    // Set up field interactions
-    setupFieldInteractions();
-  });
-  
-  // Tab switching
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.tab-content');
-  
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      // Remove active class from all buttons and hide all contents
-      tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
-      tabContents.forEach(content => content.classList.add('hidden'));
-      
-      // Add active class to clicked button and show corresponding content
-      button.classList.add('active', 'opacity-100');
-      document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
-      
-      // Save active tab to localStorage
-      localStorage.setItem('activeTab', button.dataset.tab);
-    });
-  });
-  
-  // Restore active tab if available
-  if (localStorage.getItem('activeTab')) {
-    const activeTab = localStorage.getItem('activeTab');
-    const tabButton = document.querySelector(`.tab-btn[data-tab="${activeTab}"]`);
-    if (tabButton) tabButton.click();
-  }
-  
-  // Chart variables
-  let costsChart = null;
-  let cumulativeChart = null;
-  let familySizeChart = null;
-  
-  // Format currency (﷼ only)
-  function formatCurrency(amount) {
-    return amount.toLocaleString('ar-SA', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ﷼';
-  }
-  
-  // Calculate monthly mortgage payment
-  function calculateMonthlyPayment(principal, interestRate, termYears) {
-    // Monthly interest rate (annual rate divided by 12)
-    const monthlyRate = interestRate / 100 / 12;
-    // Total number of payments (years * 12 months)
-    const totalPayments = termYears * 12;
-    
-    // If interest rate is 0, just divide principal by number of months
-    if (interestRate === 0) {
-      return principal / totalPayments;
-    }
-    
-    // Calculate monthly payment using the amortization formula
-    const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / 
-                   (Math.pow(1 + monthlyRate, totalPayments) - 1);
-    
-    return payment;
-  }
-  
-  // Calculate remaining mortgage balance at any point in time
-  function calculateRemainingMortgage(principal, interestRate, termYears, yearsElapsed) {
-    if (yearsElapsed >= termYears) return 0;
-    
-    const monthlyRate = interestRate / 100 / 12;
-    const totalPayments = termYears * 12;
-    const paymentsRemaining = totalPayments - (yearsElapsed * 12);
-    
-    // If interest rate is 0, calculate linearly
-    if (interestRate === 0) {
-      return principal * (paymentsRemaining / totalPayments);
-    }
-    
-    const monthlyPayment = calculateMonthlyPayment(principal, interestRate, termYears);
-    const remainingBalance = (monthlyPayment / monthlyRate) * 
-                            (1 - Math.pow(1 + monthlyRate, -paymentsRemaining));
-    
-    return remainingBalance;
-  }
-  
-  // Calculate total interest paid over loan term
-  function calculateTotalInterest(principal, monthlyPayment, termYears) {
-    const totalPaid = monthlyPayment * termYears * 12;
-    return totalPaid - principal;
-  }
-  
-  // Calculate future value with compounding growth
-  function calculateFutureValue(presentValue, growthRate, years) {
-    return presentValue * Math.pow(1 + (growthRate / 100), years);
-  }
-  
-  // Calculate rent increase rate based on historical data
-  function calculateRentIncreaseRate(currentRent, previousRent, years = 2) {
-    if (!previousRent || previousRent <= 0 || currentRent <= 0) return 3; // Default to 3% if data is invalid
-    
-    return ((Math.pow(currentRent / previousRent, 1 / years) - 1) * 100).toFixed(1);
-  }
-  
-  // Calculate required living space based on family size
-  function calculateRequiredSpace(adults, smallChildren, bigChildren) {
-    const baseSqmForTwo = parseFloat(document.getElementById('baseSqmForTwo').value) || 100;
-    const additionalSqmPerSmallChild = parseFloat(document.getElementById('additionalSqmPerSmallChild').value) || 15;
-    const additionalSqmPerBigChild = parseFloat(document.getElementById('additionalSqmPerBigChild').value) || 25;
-    
-    return baseSqmForTwo + (smallChildren * additionalSqmPerSmallChild) + (bigChildren * additionalSqmPerBigChild);
-  }
-  
-  // Setup field interactions and automatic calculations
-  function setupFieldInteractions() {
-    // Update down payment when purchase price or percentage changes
-    document.getElementById('purchasePrice_field').addEventListener('input', updateDownPayment);
-    document.getElementById('downPaymentPercent_field').addEventListener('input', updateDownPayment);
-    
-    // Update down payment percentage when down payment changes
-    document.getElementById('downPayment_field').addEventListener('input', updateDownPaymentPercent);
-    
-    // Calculate rent increase rate when rent fields change
-    document.getElementById('currentRent_field').addEventListener('input', updateRentIncreaseRate);
-    document.getElementById('previousRent_field').addEventListener('input', updateRentIncreaseRate);
-    
-    // Update future space needs when family info changes
-    document.getElementById('currentFamilySize_field').addEventListener('input', updateFutureSpaceNeeds);
-    document.getElementById('plannedChildren_field').addEventListener('input', updateFutureSpaceNeeds);
-    document.getElementById('yearsUntilChildrenGrowUp_field').addEventListener('input', updateFutureSpaceNeeds);
-    
-    // Predict future home cost when size changes
-    document.getElementById('futureSizeNeeded_field').addEventListener('input', updateFutureHomeCost);
-    
-    // Set up location-based defaults
-    document.getElementById('propertyLocation_field').addEventListener('change', updateLocationDefaults);
-    
-    // Set up expected stay years to match the mortgage term by default
-    document.getElementById('mortgageTerm_field').addEventListener('input', function() {
-      document.getElementById('expectedStayYears_field').value = this.value;
-    });
-    
-    // Initialize ownershipYears_field for timeline entries
-    const ownershipYearsField = document.createElement('input');
-    ownershipYearsField.id = 'ownershipYears_field';
-    ownershipYearsField.type = 'hidden';
-    ownershipYearsField.value = document.getElementById('expectedStayYears_field').value;
-    document.getElementById('calcForm').appendChild(ownershipYearsField);
-    
-    // Update the hidden field when expected stay years changes
-    document.getElementById('expectedStayYears_field').addEventListener('input', function() {
-      document.getElementById('ownershipYears_field').value = this.value;
-    });
-  }
-  
-  // Update down payment based on price and percentage
-  function updateDownPayment() {
-    const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value) || 0;
-    const downPaymentPercent = parseFloat(document.getElementById('downPaymentPercent_field').value) || 20;
-    
-    if (purchasePrice > 0) {
-      const downPayment = purchasePrice * (downPaymentPercent / 100);
-      document.getElementById('downPayment_field').value = Math.round(downPayment);
-    }
-  }
-  
-  // Update down payment percentage based on down payment amount
-  function updateDownPaymentPercent() {
-    const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value) || 0;
-    const downPayment = parseFloat(document.getElementById('downPayment_field').value) || 0;
-    
-    if (purchasePrice > 0 && downPayment > 0) {
-      const downPaymentPercent = (downPayment / purchasePrice) * 100;
-      document.getElementById('downPaymentPercent_field').value = downPaymentPercent.toFixed(1);
-    }
-  }
-  
-  // Update rent increase rate based on historical data
-  function updateRentIncreaseRate() {
-    const currentRent = parseFloat(document.getElementById('currentRent_field').value) || 0;
-    const previousRent = parseFloat(document.getElementById('previousRent_field').value) || 0;
-    
-    if (currentRent > 0 && previousRent > 0) {
-      const calculatedRate = calculateRentIncreaseRate(currentRent, previousRent);
-      document.getElementById('rentIncreaseRate').value = calculatedRate;
-    }
-  }
-  
-  // Update future space needs based on family growth
-  function updateFutureSpaceNeeds() {
-    const currentFamilySize = parseInt(document.getElementById('currentFamilySize_field').value) || 0;
-    const plannedChildren = parseInt(document.getElementById('plannedChildren_field').value) || 0;
-    const yearsUntilGrowUp = parseInt(document.getElementById('yearsUntilChildrenGrowUp_field').value) || 0;
-    
-    if (currentFamilySize > 0) {
-      // Estimate adults and children in the family
-      const adults = Math.min(currentFamilySize, 2); // Assume at most 2 adults
-      const currentChildren = Math.max(0, currentFamilySize - adults);
-      
-      // Future projection
-      const futureSmallChildren = Math.max(0, plannedChildren); // New children will be small
-      const futureBigChildren = currentChildren + futureSmallChildren; // After growing up, all children become "big"
-      
-      // Calculate future space needed
-      const futureSpaceNeeded = calculateRequiredSpace(adults, 0, futureBigChildren);
-      document.getElementById('futureSizeNeeded_field').value = Math.round(futureSpaceNeeded);
-      
-      // Set the year when upgrade will be needed
-      if (yearsUntilGrowUp > 0) {
-        document.getElementById('futureUpgradeYear_field').value = yearsUntilGrowUp;
-      }
-      
-      // Update future home cost
-      updateFutureHomeCost();
-    }
-  }
-  
-  // Update future home cost based on size
-  function updateFutureHomeCost() {
-    const futureSizeNeeded = parseFloat(document.getElementById('futureSizeNeeded_field').value) || 0;
-    const averageSqmPrice = parseFloat(document.getElementById('averageSqmPrice').value) || 5000;
-    
-    if (futureSizeNeeded > 0) {
-      const futureHomeCost = futureSizeNeeded * averageSqmPrice;
-      document.getElementById('futureHomeCost_field').value = Math.round(futureHomeCost);
-      
-      // Also update future rent cost (typically 5% annual return on property value)
-      const annualRentEstimate = futureHomeCost * 0.05;
-      document.getElementById('futureRentCost_field').value = Math.round(annualRentEstimate);
-    }
-  }
-  
-  // Update location-based defaults
-  function updateLocationDefaults() {
-    const location = document.getElementById('propertyLocation_field').value;
-    
-    // Location-based property appreciation rates and price per sqm
-    const locationDefaults = {
-      'riyadh': { appreciationRate: 3.5, pricePerSqm: 5500 },
-      'jeddah': { appreciationRate: 3.8, pricePerSqm: 6000 },
-      'dammam': { appreciationRate: 3.2, pricePerSqm: 4500 },
-      'makkah': { appreciationRate: 4.0, pricePerSqm: 7000 },
-      'madinah': { appreciationRate: 3.5, pricePerSqm: 5000 },
-      'other': { appreciationRate: 3.0, pricePerSqm: 4000 }
-    };
-    
-    const defaults = locationDefaults[location];
-    document.getElementById('propertyAppreciationRate').value = defaults.appreciationRate;
-    document.getElementById('averageSqmPrice').value = defaults.pricePerSqm;
-    
-    // Update future home cost based on new price per sqm
-    updateFutureHomeCost();
-  }
-  
-  // Create timeline entry
-  function createTimelineEntry(year, title, description, iconClass) {
-    const timelineContainer = document.getElementById('timelineEvents');
-    
-    const entryDiv = document.createElement('div');
-    entryDiv.className = 'flex items-start relative';
-    
-    entryDiv.innerHTML = `
-      <div class="flex items-center justify-center w-16 h-16 bg-white dark:bg-neutral-700 rounded-full border-4 border-primary-200 dark:border-primary-900 z-10 mr-4">
-        <i class="${iconClass} text-primary-600 dark:text-primary-400 text-xl"></i>
-      </div>
-      <div class="flex-1">
-        <div class="bg-white dark:bg-neutral-700 p-4 rounded-lg shadow">
-          <h4 class="font-bold text-neutral-800 dark:text-neutral-200">السنة ${year}: ${title}</h4>
-          <p class="text-neutral-600 dark:text-neutral-400 mt-2">${description}</p>
-        </div>
-      </div>
-    `;
-    
-    timelineContainer.appendChild(entryDiv);
-  }
-  
-  // Clear timeline entries
-  function clearTimelineEntries() {
-    document.getElementById('timelineEvents').innerHTML = '';
-  }
-  
-  // Create costs chart
-  function createCostsChart(years, rentData, buyData) {
-    const ctx = document.getElementById('costsChart').getContext('2d');
-    
-    // If chart already exists, destroy it
-    if (costsChart) {
-      costsChart.destroy();
-    }
-    
-    // Create labels array for years [1, 2, 3, ..., n]
-    const labels = Array.from({length: years}, (_, i) => i + 1);
-    
-    // Chart colors based on dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    
-    // Create new chart
-    costsChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'تكلفة الإيجار السنوية',
-            data: rentData,
-            borderColor: '#8b5cf6', // purple
-            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-            borderWidth: 2,
-            tension: 0.1,
-            fill: true
-          },
-          {
-            label: 'تكلفة التملك السنوية',
-            data: buyData,
-            borderColor: '#3b82f6', // blue
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            borderWidth: 2,
-            tension: 0.1,
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            }
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: function(context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                if (context.parsed.y !== null) {
-                  label += formatCurrency(context.parsed.y);
-                }
-                return label;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'السنوات',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            },
-            grid: {
-              color: gridColor
-            }
-          },
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'التكلفة السنوية (﷼)',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              },
-              callback: function(value) {
-                if (value >= 1000000) {
-                  return (value / 1000000).toFixed(1) + ' مليون';
-                } else if (value >= 1000) {
-                  return (value / 1000).toFixed(0) + ' ألف';
-                }
-                return value;
-              }
-            },
-            grid: {
-              color: gridColor
-            }
-          }
-        }
-      }
-    });
-  }
-  
-  // Create cumulative chart
-  function createCumulativeChart(years, rentData, buyData) {
-    const ctx = document.getElementById('cumulativeChart').getContext('2d');
-    
-    // If chart already exists, destroy it
-    if (cumulativeChart) {
-      cumulativeChart.destroy();
-    }
-    
-    // Create labels array for years [1, 2, 3, ..., n]
-    const labels = Array.from({length: years}, (_, i) => i + 1);
-    
-    // Chart colors based on dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    
-    // Create new chart
-    cumulativeChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'تكلفة الإيجار التراكمية',
-            data: rentData,
-            borderColor: '#8b5cf6', // purple
-            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-            borderWidth: 2,
-            tension: 0.1,
-            fill: true
-          },
-          {
-            label: 'تكلفة التملك التراكمية',
-            data: buyData,
-            borderColor: '#3b82f6', // blue
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-            borderWidth: 2,
-            tension: 0.1,
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            }
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: function(context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                if (context.parsed.y !== null) {
-                  label += formatCurrency(context.parsed.y);
-                }
-                return label;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'السنوات',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            },
-            grid: {
-              color: gridColor
-            }
-          },
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'التكلفة التراكمية (﷼)',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              },
-              callback: function(value) {
-                if (value >= 1000000) {
-                  return (value / 1000000).toFixed(1) + ' مليون';
-                } else if (value >= 1000) {
-                  return (value / 1000).toFixed(0) + ' ألف';
-                }
-                return value;
-              }
-            },
-            grid: {
-              color: gridColor
-            }
-          }
-        }
-      }
-    });
-  }
-  
-  // Create family size projection chart
-  function createFamilySizeChart(years, familySizeData, spaceNeededData, upgradeYear) {
-    const ctx = document.getElementById('familySizeChart').getContext('2d');
-    
-    // If chart already exists, destroy it
-    if (familySizeChart) {
-      familySizeChart.destroy();
-    }
-    
-    // Create labels array for years [1, 2, 3, ..., n]
-    const labels = Array.from({length: years}, (_, i) => i + 1);
-    
-    // Chart colors based on dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    
-    // Create annotation for upgrade year if provided
-    const annotations = {};
-    if (upgradeYear > 0 && upgradeYear <= years) {
-      annotations.upgradeYearLine = {
-        type: 'line',
-        xMin: upgradeYear,
-        xMax: upgradeYear,
-        borderColor: '#ef4444', // red
-        borderWidth: 2,
-        borderDash: [6, 6],
-        label: {
-          enabled: true,
-          content: 'الانتقال إلى مسكن أكبر',
-          position: 'top',
-          backgroundColor: '#ef4444',
-          font: {
-            family: 'Tajawal'
-          }
-        }
-      };
-    }
-    
-    // Create new chart
-    familySizeChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'عدد أفراد العائلة',
-            data: familySizeData,
-            borderColor: '#10b981', // green
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 2,
-            tension: 0.1,
-            fill: true,
-            yAxisID: 'y'
-          },
-          {
-            label: 'المساحة المطلوبة (متر مربع)',
-            data: spaceNeededData,
-            borderColor: '#f59e0b', // amber
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            borderWidth: 2,
-            tension: 0.1,
-            fill: true,
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            }
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: function(context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                if (context.parsed.y !== null) {
-                  if (context.dataset.yAxisID === 'y') {
-                    label += context.parsed.y + ' فرد';
-                  } else {
-                    label += context.parsed.y + ' متر مربع';
-                  }
-                }
-                return label;
-              }
-            }
-          },
-          annotation: {
-            annotations: annotations
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'السنوات',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            },
-            grid: {
-              color: gridColor
-            }
-          },
-          y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'عدد أفراد العائلة',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            },
-            grid: {
-              color: gridColor
-            }
-          },
-          y1: {
-            type: 'linear',
-            display: true,
-            position: 'right',
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'المساحة المطلوبة (متر مربع)',
-              color: textColor,
-              font: {
-                family: 'Tajawal',
-                weight: 'bold'
-              }
-            },
-            ticks: {
-              color: textColor,
-              font: {
-                family: 'Tajawal'
-              }
-            },
-            grid: {
-              drawOnChartArea: false
-            }
-          }
-        }
-      }
-    });
-  }
-  
-  // Update chart colors when switching between light/dark modes
-  function updateChartColors(chart) {
-    if (!chart) return;
-    
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    
-    // Update text colors
-    chart.options.scales.x.ticks.color = textColor;
-    chart.options.scales.x.title.color = textColor;
-    chart.options.scales.y.ticks.color = textColor;
-    chart.options.scales.y.title.color = textColor;
-    
-    // Update grid colors
-    chart.options.scales.x.grid.color = gridColor;
-    chart.options.scales.y.grid.color = gridColor;
-    
-    // Update legend color
-    chart.options.plugins.legend.labels.color = textColor;
-    
-    // Update Y1 axis if it exists (for family size chart)
-    if (chart.options.scales.y1) {
-      chart.options.scales.y1.ticks.color = textColor;
-      chart.options.scales.y1.title.color = textColor;
-    }
-    
-    chart.update();
-  }
-  
-  // Load settings from localStorage
-  function loadSettings() {
-    // Rates and constants
-    if (localStorage.getItem('inflationRate')) {
-      document.getElementById('inflationRate').value = localStorage.getItem('inflationRate');
-    }
-    
-    if (localStorage.getItem('rentIncreaseRate')) {
-      document.getElementById('rentIncreaseRate').value = localStorage.getItem('rentIncreaseRate');
-    }
-    
-    if (localStorage.getItem('propertyAppreciationRate')) {
-      document.getElementById('propertyAppreciationRate').value = localStorage.getItem('propertyAppreciationRate');
-    }
-    
-    // Space calculation parameters
-    if (localStorage.getItem('baseSqmForTwo')) {
-      document.getElementById('baseSqmForTwo').value = localStorage.getItem('baseSqmForTwo');
-    }
-    
-    if (localStorage.getItem('additionalSqmPerSmallChild')) {
-      document.getElementById('additionalSqmPerSmallChild').value = localStorage.getItem('additionalSqmPerSmallChild');
-    }
-    
-    if (localStorage.getItem('additionalSqmPerBigChild')) {
-      document.getElementById('additionalSqmPerBigChild').value = localStorage.getItem('additionalSqmPerBigChild');
-    }
-    
-    // Additional costs
-    if (localStorage.getItem('sellingCostsRate')) {
-      document.getElementById('sellingCostsRate').value = localStorage.getItem('sellingCostsRate');
-    }
-    
-    if (localStorage.getItem('purchaseCostsRate')) {
-      document.getElementById('purchaseCostsRate').value = localStorage.getItem('purchaseCostsRate');
-    }
-    
-    if (localStorage.getItem('averageSqmPrice')) {
-      document.getElementById('averageSqmPrice').value = localStorage.getItem('averageSqmPrice');
-    }
-  }
-  
-  // Save settings to localStorage
-  document.getElementById('saveSettings').addEventListener('click', function() {
-    // Save rates and constants
-    localStorage.setItem('inflationRate', document.getElementById('inflationRate').value);
-    localStorage.setItem('rentIncreaseRate', document.getElementById('rentIncreaseRate').value);
-    localStorage.setItem('propertyAppreciationRate', document.getElementById('propertyAppreciationRate').value);
-    
-    // Save space calculation parameters
-    localStorage.setItem('baseSqmForTwo', document.getElementById('baseSqmForTwo').value);
-    localStorage.setItem('additionalSqmPerSmallChild', document.getElementById('additionalSqmPerSmallChild').value);
-    localStorage.setItem('additionalSqmPerBigChild', document.getElementById('additionalSqmPerBigChild').value);
-    
-    // Save additional costs
-    localStorage.setItem('sellingCostsRate', document.getElementById('sellingCostsRate').value);
-    localStorage.setItem('purchaseCostsRate', document.getElementById('purchaseCostsRate').value);
-    localStorage.setItem('averageSqmPrice', document.getElementById('averageSqmPrice').value);
-    
-    // Show success message
-    alert('تم حفظ الإعدادات بنجاح!');
-  });
-  
-  // Calculate button click handler
-  document.getElementById('calculateBtn').addEventListener('click', function() {
-    // Get basic values
-    const currentRent = parseFloat(document.getElementById('currentRent_field').value);
-    const purchasePrice = parseFloat(document.getElementById('purchasePrice_field').value);
-    const currentFamilySize = parseInt(document.getElementById('currentFamilySize_field').value);
-    
-    if (isNaN(currentRent) || isNaN(purchasePrice) || isNaN(currentFamilySize)) {
-      alert('يرجى تعبئة الحقول الإلزامية: الإيجار الحالي، سعر الشراء، وعدد أفراد العائلة الحالي.');
-      return;
-    }
-    
-    // Get family projection data
-    const plannedChildren = parseInt(document.getElementById('plannedChildren_field').value) || 0;
-    const yearsUntilGrowUp = parseInt(document.getElementById('yearsUntilChildrenGrowUp_field').value) || 0;
-    
-    // Get financing options
-    const downPayment = parseFloat(document.getElementById('downPayment_field').value) || (purchasePrice * 0.2);
-    const mortgageInterest = parseFloat(document.getElementById('mortgageInterest_field').value) || 0;
-    const mortgageTerm = parseInt(document.getElementById('mortgageTerm_field').value) || 25;
-    
-    // Get future housing needs
-    const futureSizeNeeded = parseFloat(document.getElementById('futureSizeNeeded_field').value) || 0;
-    const futureUpgradeYear = parseInt(document.getElementById('futureUpgradeYear_field').value) || 0;
-    const futureHomeCost = parseFloat(document.getElementById('futureHomeCost_field').value) || 0;
-    const futureRentCost = parseFloat(document.getElementById('futureRentCost_field').value) || 0;
-    
-    // Get additional costs
-    const maintenanceCost = parseFloat(document.getElementById('maintenanceCost_field').value) || 0;
-    const propertyAppreciationRate = parseFloat(document.getElementById('propertyAppreciationRate').value) || 3.5;
-    const rentIncreaseRate = parseFloat(document.getElementById('rentIncreaseRate').value) || 3;
-    const inflationRate = parseFloat(document.getElementById('inflationRate').value) || 2.5;
-    const sellingCostsRate = parseFloat(document.getElementById('sellingCostsRate').value) || 2.5;
-    const purchaseCostsRate = parseFloat(document.getElementById('purchaseCostsRate').value) || 2;
-    
-    // Define the total simulation period (max of mortgage term and expected stay years)
-    const expectedStayYears = parseInt(document.getElementById('expectedStayYears_field').value) || mortgageTerm;
-    const totalYears = Math.max(mortgageTerm, expectedStayYears);
-    document.getElementById('ownershipYears_field').value = totalYears;
-    
-    // Calculate loan amount and monthly payment
-    const loanAmount = purchasePrice - downPayment;
-    const monthlyPayment = calculateMonthlyPayment(loanAmount, mortgageInterest, mortgageTerm);
-    
-    // Calculate initial purchase costs
-    const initialPurchaseCosts = purchasePrice * (purchaseCostsRate / 100);
-    
-    // Calculate yearly maintenance costs
-    let yearlyMaintenance = purchasePrice * (maintenanceCost / 100);
-    
-    // Arrays to store projection data
-    const yearlyRentCosts = [];
-    const yearlyBuyCosts = [];
-    const cumulativeRentCosts = [];
-    const cumulativeBuyCosts = [];
-    const familySizeProjection = [];
-    const spaceNeededProjection = [];
-    
-    // Initialize totals
-    let totalRentCost = 0;
-    let totalBuyCost = downPayment + initialPurchaseCosts;
-    let futurePropertyValue = purchasePrice;
-    let futurePropertyValue2 = 0; // For the second property if applicable
-    let remainingMortgageBalance = loanAmount;
-    
-    // Clear previous timeline entries
-    clearTimelineEntries();
-    
-    // Add initial timeline entry
-    createTimelineEntry(1, 'بداية المقارنة', 
-      `بدء المقارنة بين خيار الإيجار بقيمة ${formatCurrency(currentRent)} سنوياً وخيار التملك بقيمة ${formatCurrency(purchasePrice)} مع دفعة مقدمة ${formatCurrency(downPayment)}.`, 
-      'fas fa-flag');
-    
-    // Start of year-by-year simulation
-    for (let year = 1; year <= totalYears; year++) {
-      // Calculate family size for this year
-      let familySize = currentFamilySize;
-      // Add planned children when they arrive
-      if (year >= 2 && year <= 1 + plannedChildren) {
-        familySize++;
-      }
-      familySizeProjection.push(familySize);
-      
-      // Calculate required space for this year
-      const adults = Math.min(familySize, 2); // Assume at most 2 adults
-      let smallChildren = 0, bigChildren = 0;
-      
-      // Children grow from small to big at the yearsUntilGrowUp mark
-      if (year < yearsUntilGrowUp) {
-        smallChildren = Math.max(0, familySize - adults);
-        bigChildren = 0;
-      } else {
-        smallChildren = 0;
-        bigChildren = Math.max(0, familySize - adults);
-      }
-      
-      const spaceNeeded = calculateRequiredSpace(adults, smallChildren, bigChildren);
-      spaceNeededProjection.push(spaceNeeded);
-      
-      // Handle upgrade year if applicable
-      let upgradeEventThisYear = false;
-      if (year === futureUpgradeYear) {
-        upgradeEventThisYear = true;
-        
-        // Add timeline entry for upgrade
-        createTimelineEntry(year, 'الانتقال إلى مسكن أكبر', 
-          `الانتقال إلى مسكن أكبر بمساحة ${futureSizeNeeded} متر مربع وقيمة ${formatCurrency(futureHomeCost)}.`, 
-          'fas fa-home');
-      }
-      
-      // Calculate rent for this year
-      let yearRent;
-      if (year < futureUpgradeYear) {
-        // Before upgrade, use current rent with annual increases
-        yearRent = currentRent * Math.pow(1 + (rentIncreaseRate / 100), year - 1);
-      } else {
-        // After upgrade, use future rent with annual increases
-        yearRent = futureRentCost * Math.pow(1 + (rentIncreaseRate / 100), year - futureUpgradeYear);
-      }
-      
-      // Add moving costs if it's upgrade year
-      if (upgradeEventThisYear) {
-        yearRent += parseFloat(document.getElementById('movingCost_field').value) || 5000;
-      }
-      
-      yearlyRentCosts.push(yearRent);
-      totalRentCost += yearRent;
-      cumulativeRentCosts.push(totalRentCost);
-      
-      // Calculate ownership costs for this year
-      let yearBuy = 0;
-      
-      // Mortgage payments if still within term
-      if (year <= mortgageTerm) {
-        yearBuy += monthlyPayment * 12;
-        
-        // Calculate remaining mortgage at the end of this year
-        remainingMortgageBalance = calculateRemainingMortgage(loanAmount, mortgageInterest, mortgageTerm, year);
-      }
-      
-      // Add maintenance costs
-      yearBuy += yearlyMaintenance;
-      
-      // Add property tax if applicable
-      const propertyTax = parseFloat(document.getElementById('propertyTax_field').value) || 0;
-      yearBuy += propertyTax;
-      
-      // Add utility differences if applicable
-      const utilityDifference = parseFloat(document.getElementById('utilityDifference_field').value) || 0;
-      yearBuy += utilityDifference * 12;
-      
-      // Handle property upgrade if applicable
-      if (upgradeEventThisYear) {
-        // Sell the first property
-        const firstPropertyValueAtSale = purchasePrice * Math.pow(1 + (propertyAppreciationRate / 100), year - 1);
-        const sellingCosts = firstPropertyValueAtSale * (sellingCostsRate / 100);
-        
-        // Net proceeds from first property after paying off mortgage
-        const netProceeds = firstPropertyValueAtSale - sellingCosts - remainingMortgageBalance;
-        
-        // Purchase second property
-        const secondPropertyCosts = futureHomeCost * (purchaseCostsRate / 100);
-        const secondDownPayment = Math.min(netProceeds, futureHomeCost * 0.2); // Use proceeds as down payment, up to 20%
-        const secondLoanAmount = futureHomeCost - secondDownPayment;
-        
-        // New mortgage payment for second property
-        const secondMonthlyPayment = calculateMonthlyPayment(secondLoanAmount, mortgageInterest, mortgageTerm);
-        
-        // Add costs for this upgrade year
-        yearBuy += sellingCosts + secondPropertyCosts;
-        yearBuy += secondMonthlyPayment * (12 - Math.floor(year * 12) % 12); // Partial year of new mortgage
-        
-        // Add moving costs
-        yearBuy += parseFloat(document.getElementById('movingCost_field').value) || 5000;
-        
-        // Set new maintenance costs based on new property value
-        yearlyMaintenance = futureHomeCost * (maintenanceCost / 100);
-        
-        // Track the second property value
-        futurePropertyValue2 = futureHomeCost;
-        
-        // Reset the mortgage calculation for the new property
-        remainingMortgageBalance = secondLoanAmount;
-        
-        // Add timeline entry for mortgage change
-        createTimelineEntry(year, 'تغيير القرض العقاري', 
-          `تسوية القرض الأول والحصول على قرض جديد بمبلغ ${formatCurrency(secondLoanAmount)} وقسط شهري ${formatCurrency(secondMonthlyPayment)}.`, 
-          'fas fa-money-check-alt');
-      }
-      
-      yearlyBuyCosts.push(yearBuy);
-      totalBuyCost += yearBuy;
-      cumulativeBuyCosts.push(totalBuyCost);
-      
-      // Update future property values
-      futurePropertyValue = purchasePrice * Math.pow(1 + (propertyAppreciationRate / 100), year);
-      if (futurePropertyValue2 > 0) {
-        futurePropertyValue2 = futureHomeCost * Math.pow(1 + (propertyAppreciationRate / 100), year - futureUpgradeYear);
-      }
-      
-      // Add significant events to timeline
-      if (year === 5 && !upgradeEventThisYear) {
-        createTimelineEntry(year, 'تقييم مرحلي', 
-          `بعد 5 سنوات: قيمة العقار أصبحت ${formatCurrency(futurePropertyValue)}، والمتبقي من القرض ${formatCurrency(remainingMortgageBalance)}.`, 
-          'fas fa-chart-line');
-      } else if (year === 10 && !upgradeEventThisYear) {
-        createTimelineEntry(year, 'تقييم مرحلي', 
-          `بعد 10 سنوات: قيمة العقار أصبحت ${formatCurrency(futurePropertyValue)}، والمتبقي من القرض ${formatCurrency(remainingMortgageBalance)}.`, 
-          'fas fa-chart-line');
-      } else if (year === mortgageTerm) {
-        createTimelineEntry(year, 'سداد كامل القرض', 
-          `تم سداد كامل القرض العقاري بعد ${mortgageTerm} سنة. قيمة العقار الآن ${formatCurrency(futurePropertyValue2 > 0 ? futurePropertyValue2 : futurePropertyValue)}.`, 
-          'fas fa-check-circle');
-      }
-    }
-    
-    // Final property values at the end of the period
-    const finalPropertyValue = futurePropertyValue2 > 0 ? futurePropertyValue2 : futurePropertyValue;
-    const sellingCosts = finalPropertyValue * (sellingCostsRate / 100);
-    const netAssetValue = finalPropertyValue - sellingCosts;
-    
-    // Net cost after accounting for asset value
-    const netOwnershipCost = totalBuyCost - netAssetValue;
-    
-    // Create charts - use mortgage term for cost charts
-    createCostsChart(mortgageTerm, yearlyRentCosts.slice(0, mortgageTerm), yearlyBuyCosts.slice(0, mortgageTerm));
-    createCumulativeChart(mortgageTerm, cumulativeRentCosts.slice(0, mortgageTerm), cumulativeBuyCosts.slice(0, mortgageTerm));
-    // Family size chart still uses the total period
-    createFamilySizeChart(totalYears, familySizeProjection, spaceNeededProjection, futureUpgradeYear);
-
-    
-    // Determine the better option
-    const betterOption = netOwnershipCost < totalRentCost ? 'التملك' : 'الإيجار';
-    const savingsAmount = Math.abs(netOwnershipCost - totalRentCost);
-    const savingsPercentage = ((Math.max(totalRentCost, netOwnershipCost) - Math.min(totalRentCost, netOwnershipCost)) / Math.max(totalRentCost, netOwnershipCost) * 100).toFixed(1);
-    
-    // Update results
-    document.getElementById('totalOwnership_result').textContent = formatCurrency(totalBuyCost);
-    document.getElementById('totalRent_result').textContent = formatCurrency(totalRentCost);
-    document.getElementById('betterOption_result').textContent = betterOption;
-    
-    // Update detailed comparison results
-    document.getElementById('initialMonthlyOwnership_result').textContent = formatCurrency(monthlyPayment);
-    document.getElementById('initialMonthlyRent_result').textContent = formatCurrency(currentRent / 12);
-    
-    // Initial phase costs
-    const initialPhaseYears = futureUpgradeYear > 0 ? futureUpgradeYear - 1 : totalYears;
-    const initialPhaseOwnership = cumulativeBuyCosts[initialPhaseYears - 1];
-    const initialPhaseRent = cumulativeRentCosts[initialPhaseYears - 1];
-    
-    document.getElementById('initialPhaseOwnership_result').textContent = formatCurrency(initialPhaseOwnership);
-    document.getElementById('initialPhaseRent_result').textContent = formatCurrency(initialPhaseRent);
-    
-    // Upgrade costs and later phase if applicable
-    if (futureUpgradeYear > 0) {
-      // The upgrade costs are the difference between this year's costs and typical annual costs
-      const upgradeCostOwnership = yearlyBuyCosts[futureUpgradeYear - 1] - yearlyBuyCosts[futureUpgradeYear - 2];
-      const upgradeCostRent = yearlyRentCosts[futureUpgradeYear - 1] - yearlyRentCosts[futureUpgradeYear - 2];
-      
-      document.getElementById('upgradeCostOwnership_result').textContent = formatCurrency(upgradeCostOwnership);
-      document.getElementById('upgradeCostRent_result').textContent = formatCurrency(upgradeCostRent);
-      
-      // Later phase monthly costs
-      const laterMonthlyOwnership = yearlyBuyCosts[futureUpgradeYear] / 12;
-      const laterMonthlyRent = yearlyRentCosts[futureUpgradeYear] / 12;
-      
-      document.getElementById('laterMonthlyOwnership_result').textContent = formatCurrency(laterMonthlyOwnership);
-      document.getElementById('laterMonthlyRent_result').textContent = formatCurrency(laterMonthlyRent);
-      
-      // Later phase total costs
-      const laterPhaseOwnership = totalBuyCost - initialPhaseOwnership - upgradeCostOwnership;
-      const laterPhaseRent = totalRentCost - initialPhaseRent - upgradeCostRent;
-      
-      document.getElementById('laterPhaseOwnership_result').textContent = formatCurrency(laterPhaseOwnership);
-      document.getElementById('laterPhaseRent_result').textContent = formatCurrency(laterPhaseRent);
-    } else {
-      // No upgrade scenario
-      document.getElementById('upgradeCostOwnership_result').textContent = '-';
-      document.getElementById('upgradeCostRent_result').textContent = '-';
-      
-      document.getElementById('laterMonthlyOwnership_result').textContent = '-';
-      document.getElementById('laterMonthlyRent_result').textContent = '-';
-      
-      document.getElementById('laterPhaseOwnership_result').textContent = '-';
-      document.getElementById('laterPhaseRent_result').textContent = '-';
-    }
-    
-    // Maintenance and financing costs
-    const totalMaintenanceCosts = totalYears * yearlyMaintenance;
-    const totalFinancingCosts = monthlyPayment * 12 * Math.min(mortgageTerm, totalYears) - loanAmount;
-    
-    document.getElementById('maintenanceCosts_result').textContent = formatCurrency(totalMaintenanceCosts);
-    document.getElementById('financingCosts_result').textContent = formatCurrency(totalFinancingCosts);
-    
-    document.getElementById('finalPropertyValue_result').textContent = formatCurrency(netAssetValue);
-    
-    document.getElementById('netOwnership_result').textContent = formatCurrency(netOwnershipCost);
-    document.getElementById('netRent_result').textContent = formatCurrency(totalRentCost);
-    
-    // Create family insight text
-    let familyInsightText = '';
-    if (plannedChildren > 0) {
-      familyInsightText = `مع نمو عائلتك من ${currentFamilySize} أفراد حالياً إلى ${currentFamilySize + plannedChildren} أفراد خلال السنوات القادمة، ستزداد احتياجاتكم السكنية من ${calculateRequiredSpace(Math.min(currentFamilySize, 2), Math.max(0, currentFamilySize - 2), 0)} متر مربع إلى ${futureSizeNeeded} متر مربع تقريباً.`;
-      
-      if (futureUpgradeYear > 0) {
-        familyInsightText += ` وقد تم تقدير الحاجة للانتقال إلى مسكن أكبر بعد ${futureUpgradeYear} سنوات عندما يحتاج الأطفال لمساحة إضافية.`;
-      }
-    } else {
-      familyInsightText = `مع بقاء حجم عائلتك ثابتاً عند ${currentFamilySize} أفراد، فإن احتياجاتكم السكنية من المتوقع أن تظل في حدود ${calculateRequiredSpace(Math.min(currentFamilySize, 2), 0, Math.max(0, currentFamilySize - 2))} متر مربع.`;
-    }
-    
-    document.getElementById('familyInsight_text').textContent = familyInsightText;
-    
-    // Create recommendation text
-    let recommendationText = '';
-    if (betterOption === 'التملك') {
-      recommendationText = `بناءً على المعطيات المدخلة، فإن خيار <strong>التملك</strong> هو الأفضل مالياً لعائلتك، حيث توفر حوالي ${formatCurrency(savingsAmount)} (${savingsPercentage}%) على مدى ${totalYears} سنة مقارنة بالإيجار. `;
-      
-      if (futureUpgradeYear > 0) {
-        recommendationText += `رغم أنك ستحتاج للانتقال لمسكن أكبر بعد ${futureUpgradeYear} سنوات، إلا أن قيمة العقار الأول ستساعد في تمويل العقار الثاني. `;
-      }
-      
-      recommendationText += `ستمتلك في نهاية المدة أصلاً عقارياً بقيمة صافية ${formatCurrency(netAssetValue)}.`;
-    } else {
-      recommendationText = `بناءً على المعطيات المدخلة، فإن خيار <strong>الإيجار</strong> هو الأفضل مالياً لعائلتك، حيث توفر حوالي ${formatCurrency(savingsAmount)} (${savingsPercentage}%) على مدى ${totalYears} سنة مقارنة بالتملك. `;
-      
-      if (futureUpgradeYear > 0) {
-        recommendationText += `المرونة التي يوفرها الإيجار ستكون مفيدة عند الحاجة للانتقال إلى مسكن أكبر بعد ${futureUpgradeYear} سنوات. `;
-      }
-      
-      recommendationText += `يمكنك استثمار الفرق بين تكلفة التملك والإيجار في مجالات أخرى لتنمية ثروتك.`;
-    }
-    
-    document.getElementById('recommendation_text').innerHTML = recommendationText;
-    
-    // Create final insight text based on family size and financial situation
-    let finalInsightText = '';
-    if (familySizeProjection[totalYears - 1] > currentFamilySize + 1) {
-      finalInsightText = 'مع نمو عائلتك بشكل كبير خلال السنوات القادمة، من المهم التفكير في المرونة واحتياجات المساحة المستقبلية.';
-    } else if (netOwnershipCost > totalRentCost * 1.2) {
-      finalInsightText = 'الفرق المالي كبير جداً لصالح الإيجار، مما يجعله الخيار الأفضل حتى مع اعتبار بناء الثروة العقارية.';
-    } else if (totalRentCost > netOwnershipCost * 1.2) {
-      finalInsightText = 'الفرق المالي كبير جداً لصالح التملك، خاصة مع اعتبار بناء الثروة العقارية على المدى الطويل.';
-    } else {
-      finalInsightText = 'الفرق المالي بين الخيارين ليس كبيراً جداً، لذا يمكنك اتخاذ القرار بناءً على عوامل أخرى غير مالية مثل الاستقرار والتحكم بالمسكن.';
-    }
-    
-    document.getElementById('finalInsight_text').textContent = finalInsightText;
-    
-    // Add a final timeline entry for the end of comparison
-    createTimelineEntry(totalYears, 'نهاية فترة المقارنة', 
-      `بعد ${totalYears} سنوات، الخيار الأفضل مالياً هو ${betterOption} بفارق ${formatCurrency(savingsAmount)} (${savingsPercentage}%).`, 
-      'fas fa-trophy');
-    
-    // Show results section
-    document.getElementById('results').classList.remove('hidden');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-  });
-  
-  // Add final timeline entry button handler
-  document.getElementById('addFinalTimelineEntry').addEventListener('click', function() {
-    const totalYears = parseInt(document.getElementById('ownershipYears_field').value) || 15;
-    const recommendations = document.getElementById('recommendation_text').innerHTML;
-    
-    createTimelineEntry(totalYears, 'التوصية النهائية', 
-      recommendations, 
-      'fas fa-lightbulb');
-      
-    // Scroll to the timeline
-    document.getElementById('timelineEvents').lastElementChild.scrollIntoView({ behavior: 'smooth' });
-  });
-  
-  // Add help tooltips to field labels
-  function addTooltips() {
-    // For current situation section
-    addTooltip('currentRent_field', 'أدخل مبلغ الإيجار السنوي الحالي بالريال السعودي.');
-    addTooltip('previousRent_field', 'أدخل مبلغ الإيجار قبل سنتين للمساعدة في حساب معدل زيادة الإيجار.');
-    addTooltip('currentHome_field', 'اختر نوع السكن الحالي لتحسين دقة المقارنة.');
-    addTooltip('currentArea_field', 'أدخل مساحة المسكن الحالي بالمتر المربع للمساعدة في تحليل احتياجات المساحة المستقبلية.');
-    
-    // For family situation section
-    addTooltip('currentFamilySize_field', 'أدخل عدد أفراد عائلتك حالياً بما في ذلك الأطفال.');
-    addTooltip('plannedChildren_field', 'أدخل عدد الأطفال الذين تخطط لإنجابهم مستقبلاً.');
-    addTooltip('yearsUntilChildrenGrowUp_field', 'أدخل عدد السنوات المتوقعة حتى يصبح الأطفال في سن تتطلب غرف منفصلة (عادة عند بلوغهم 10-12 سنة).');
-    addTooltip('expectedStayYears_field', 'أدخل المدة المتوقعة للبقاء في المسكن بالسنوات. سيتم استخدامها في حساب العائد على الاستثمار.');
-    
-    // For purchase options section
-    addTooltip('purchaseType_field', 'اختر نوع العقار الذي ترغب بشرائه.');
-    addTooltip('purchasePrice_field', 'أدخل السعر المتوقع للعقار الذي ترغب بشرائه.');
-    addTooltip('purchaseArea_field', 'أدخل مساحة العقار المراد شراؤه بالمتر المربع.');
-    addTooltip('propertyLocation_field', 'اختر موقع العقار لتطبيق معدلات النمو والتقدير المناسبة للمنطقة.');
-    
-    // For financing options section
-    addTooltip('downPayment_field', 'أدخل مبلغ الدفعة المقدمة التي يمكنك دفعها.');
-    addTooltip('downPaymentPercent_field', 'أدخل نسبة الدفعة المقدمة من سعر العقار (عادة 20% كحد أدنى).');
-    addTooltip('mortgageInterest_field', 'أدخل معدل الفائدة السنوي على التمويل العقاري.');
-    addTooltip('mortgageTerm_field', 'أدخل مدة التمويل بالسنوات (عادة بين 15-30 سنة).');
-    
-    // For future housing needs section
-    addTooltip('futureSizeNeeded_field', 'سيتم حساب المساحة المطلوبة مستقبلاً بناءً على نمو العائلة، ويمكنك تعديلها حسب احتياجاتك الخاصة.');
-    addTooltip('futureUpgradeYear_field', 'سيتم تقدير السنة التي ستحتاج فيها للانتقال لمسكن أكبر بناءً على نمو العائلة.');
-    addTooltip('futureHomeCost_field', 'سيتم تقدير تكلفة المسكن المستقبلي بناءً على المساحة المطلوبة ومتوسط سعر المتر المربع.');
-    addTooltip('futureRentCost_field', 'سيتم تقدير تكلفة إيجار المسكن المستقبلي بناءً على حجمه وموقعه.');
-    
-    // For additional costs section
-    addTooltip('maintenanceCost_field', 'أدخل تكاليف الصيانة السنوية كنسبة من قيمة العقار (عادة 1-2%).');
-    addTooltip('propertyTax_field', 'أدخل مبلغ الضرائب العقارية السنوية إن وجدت.');
-    addTooltip('utilityDifference_field', 'أدخل الفرق الشهري المتوقع في فواتير الخدمات (كهرباء، ماء، إلخ) بين المسكن الملك والإيجار.');
-    addTooltip('movingCost_field', 'أدخل التكلفة المتوقعة للانتقال من مسكن لآخر.');
-  }
-  
-  // Helper function to add tooltip to a field
-  function addTooltip(fieldId, tooltipText) {
-    const labelElement = document.querySelector(`label[for="${fieldId}"]`);
-    if (labelElement) {
-      // Create help icon
-      const helpIcon = document.createElement('i');
-      helpIcon.className = 'fas fa-question-circle text-gray-400 help-icon ml-1';
-      helpIcon.style.fontSize = '0.8rem';
-      
-      // Create tooltip wrapper
-      const tooltipWrapper = document.createElement('span');
-      tooltipWrapper.className = 'tooltip inline-block';
-      
-      // Create tooltip text element
-      const tooltip = document.createElement('span');
-      tooltip.className = 'tooltiptext';
-      tooltip.textContent = tooltipText;
-      
-      // Assemble tooltip
-      tooltipWrapper.appendChild(helpIcon);
-      tooltipWrapper.appendChild(tooltip);
-      
-      // Add to label
-      labelElement.appendChild(tooltipWrapper);
-    }
-  }
-  
-  // Call function to add tooltips when DOM is loaded
-  document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips
-    addTooltips();
-    
-    // Other initialization
-    updateLocationDefaults();
-    updateFutureSpaceNeeds();
-  });
-</script>
+<script src="family_housing_calculator.js"></script>
 </body>
 </html>
