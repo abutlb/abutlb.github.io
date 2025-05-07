@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستخرج الألوان | Color Extractor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #8b5cf6; /* Purple for moon */
+        }
+        .sun-icon {
+            color: #fbbf24; /* Yellow for sun */
+        }
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+        
+        /* Canvas container styles */
+        #canvas-container {
+            position: relative;
+            overflow: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            cursor: crosshair;
+        }
+        
+        #image-canvas {
+            display: block;
+            max-width: 100%;
+        }
+        
+        /* Color preview box */
+        .color-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        /* Color history item */
+        .color-history-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .color-history-item:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Magnifier */
+        #magnifier {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 3px solid #4361ee;
+            border-radius: 50%;
+            display: none;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        #magnifier-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">مستخرج الألوان</h1>
+                <p class="text-gray-600 dark:text-gray-400">استخرج الألوان من الصور واحصل على أكواد الألوان بسهولة</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch_field" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="picker">
+                    <i class="fas fa-eye-dropper ml-2"></i>مستخرج الألوان
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول
+                </button>
+            </div>
+            
+            <!-- Picker Tab -->
+            <div id="picker-tab" class="tab-content p-6 block">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Left Panel: Upload and Instructions -->
+                    <div class="md:w-1/3 space-y-6">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-upload ml-2"></i>رفع صورة
+                            </h3>
+                            <div class="mb-4">
+                                <input type="file" id="image-upload" accept="image/*" 
+                                    class="w-full text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-400 hover:file:bg-blue-100">
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                يمكنك رفع صور بتنسيقات JPG، PNG، GIF، أو WebP.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-info-circle ml-2"></i>تعليمات
+                            </h3>
+                            <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+                                <li>ارفع صورة باستخدام الزر أعلاه</li>
+                                <li>حرك المؤشر فوق الصورة لمعاينة الألوان</li>
+                                <li>انقر لالتقاط اللون وإضافته إلى سجل الألوان</li>
+                                <li>انسخ كود اللون بالنقر على الزر "نسخ"</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-palette ml-2"></i>اللون المحدد
+                            </h3>
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="color-preview" id="color-preview"></div>
+                                <div>
+                                    <p class="text-gray-700 dark:text-gray-300 font-bold" id="color-hex">#------</p>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm" id="color-rgb">RGB: ---, ---, ---</p>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <button id="copy-hex-btn" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    <i class="fas fa-copy ml-2"></i>نسخ كود اللون
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-history ml-2"></i>سجل الألوان
+                            </h3>
+                            <div id="color-history" class="flex flex-wrap gap-2">
+                                <p class="text-gray-500 dark:text-gray-400 text-sm w-full">الألوان المحددة ستظهر هنا</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Panel: Image Canvas -->
+                    <div class="md:w-2/3">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-image ml-2"></i>الصورة
+                            </h3>
+                            <div id="canvas-container" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center min-h-[300px]">
+                                <div id="upload-prompt" class="text-center p-6">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-5xl mb-4"></i>
+                                    <p class="text-gray-500 dark:text-gray-400">قم برفع صورة للبدء في استخراج الألوان</p>
+                                </div>
+                                <canvas id="image-canvas" class="hidden"></canvas>
+                            </div>
+                            <div id="magnifier">
+                                <canvas id="magnifier-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول مستخرج الألوان</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            مستخرج الألوان هي أداة مصممة لمساعدتك في استخراج الألوان من الصور بسهولة. توفر لك مجموعة من الميزات:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>استخراج أكواد الألوان من أي صورة</li>
+                            <li>عرض قيم الألوان بتنسيق HEX و RGB</li>
+                            <li>مكبر للمساعدة في اختيار البكسل بدقة</li>
+                            <li>حفظ سجل للألوان المستخرجة</li>
+                            <li>نسخ أكواد الألوان بسهولة للاستخدام في مشاريعك</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">كيفية الاستخدام</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>ارفع صورة باستخدام زر "رفع صورة"</li>
+                            <li>حرك المؤشر فوق الصورة لمعاينة الألوان المختلفة</li>
+                            <li>انقر على أي نقطة في الصورة لالتقاط اللون</li>
+                            <li>استخدم زر "نسخ كود اللون" لنسخ كود اللون بتنسيق HEX</li>
+                            <li>يمكنك الرجوع إلى الألوان السابقة من خلال سجل الألوان</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يونيو 2023</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index_tools.html" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2023</span> مستخرج الألوان - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Simple dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dark mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Initialize color picker functionality
+            initColorPicker();
+        });
+        
+        // Color picker functionality
+        function initColorPicker() {
+            const imageUpload = document.getElementById('image-upload');
+            const imageCanvas = document.getElementById('image-canvas');
+            const canvasContainer = document.getElementById('canvas-container');
+            const uploadPrompt = document.getElementById('upload-prompt');
+            const colorPreview = document.getElementById('color-preview');
+            const colorHex = document.getElementById('color-hex');
+            const colorRgb = document.getElementById('color-rgb');
+            const copyHexBtn = document.getElementById('copy-hex-btn');
+            const colorHistory = document.getElementById('color-history');
+            const magnifier = document.getElementById('magnifier');
+            const magnifierCanvas = document.getElementById('magnifier-canvas');
+            
+            let ctx = null;
+            let magnifierCtx = null;
+            let currentColor = null;
+            let colorHistoryArray = [];
+            
+            // Handle image upload
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        // Set canvas dimensions to match image
+                        imageCanvas.width = img.width;
+                        imageCanvas.height = img.height;
+                        
+                        // Get canvas context and draw image
+                        ctx = imageCanvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        
+                        // Show canvas, hide upload prompt
+                        uploadPrompt.classList.add('hidden');
+                        imageCanvas.classList.remove('hidden');
+                        
+                        // Setup magnifier
+                        magnifierCanvas.width = 150;
+                        magnifierCanvas.height = 150;
+                        magnifierCtx = magnifierCanvas.getContext('2d');
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            // Handle mouse move over canvas
+            canvasContainer.addEventListener('mousemove', function(e) {
+                if (!ctx) return;
+                
+                const rect = imageCanvas.getBoundingClientRect();
+                const x = Math.floor((e.clientX - rect.left) * (imageCanvas.width / rect.width));
+                const y = Math.floor((e.clientY - rect.top) * (imageCanvas.height / rect.height));
+                
+                // Make sure coordinates are within canvas bounds
+                if (x >= 0 && x < imageCanvas.width && y >= 0 && y < imageCanvas.height) {
+                    // Get pixel color data
+                    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+                    
+                    // Update current color
+                    currentColor = {
+                        r: pixelData[0],
+                        g: pixelData[1],
+                        b: pixelData[2],
+                        hex: rgbToHex(pixelData[0], pixelData[1], pixelData[2])
+                    };
+                    
+                    // Update color preview
+                    colorPreview.style.backgroundColor = currentColor.hex;
+                    colorHex.textContent = currentColor.hex;
+                    colorRgb.textContent = `RGB: ${currentColor.r}, ${currentColor.g}, ${currentColor.b}`;
+                    
+                    // Enable copy button
+                    copyHexBtn.disabled = false;
+                    
+                    // Update magnifier
+                    updateMagnifier(x, y, e.clientX, e.clientY);
+                    magnifier.style.display = 'block';
+                }
+            });
+            
+            // Hide magnifier when mouse leaves canvas
+            canvasContainer.addEventListener('mouseleave', function() {
+                magnifier.style.display = 'none';
+            });
+            
+            // Handle click to capture color
+            canvasContainer.addEventListener('click', function() {
+                if (!currentColor) return;
+                
+                // Add to color history if not already present
+                if (!colorHistoryArray.includes(currentColor.hex)) {
+                    colorHistoryArray.unshift(currentColor.hex);
+                    
+                    // Limit history to 20 colors
+                    if (colorHistoryArray.length > 20) {
+                        colorHistoryArray.pop();
+                    }
+                    
+                    // Update color history display
+                    updateColorHistory();
+                }
+            });
+            
+            // Copy hex code to clipboard
+            copyHexBtn.addEventListener('click', function() {
+                if (!currentColor) return;
+                
+                navigator.clipboard.writeText(currentColor.hex)
+                    .then(() => {
+                        // Show success feedback
+                        const originalText = copyHexBtn.innerHTML;
+                        copyHexBtn.innerHTML = '<i class="fas fa-check ml-2"></i>تم النسخ!';
+                        
+                        setTimeout(() => {
+                            copyHexBtn.innerHTML = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('فشل نسخ كود اللون. الرجاء المحاولة مرة أخرى.');
+                    });
+            });
+            
+            // Update magnifier
+            function updateMagnifier(x, y, clientX, clientY) {
+                // Position magnifier
+                magnifier.style.left = `${clientX + 20}px`;
+                magnifier.style.top = `${clientY - 75}px`;
+                
+                // Draw zoomed image in magnifier
+                const zoomFactor = 5;
+                const size = 30; // Size of area to zoom
+                
+                // Clear magnifier canvas
+                magnifierCtx.clearRect(0, 0, magnifierCanvas.width, magnifierCanvas.height);
+                
+                // Draw zoomed portion of image
+                magnifierCtx.drawImage(
+                    imageCanvas,
+                    Math.max(0, x - size/2),
+                    Math.max(0, y - size/2),
+                    size,
+                    size,
+                    0,
+                    0,
+                    magnifierCanvas.width,
+                    magnifierCanvas.height
+                );
+                
+                // Draw crosshair
+                magnifierCtx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                magnifierCtx.lineWidth = 2;
+                
+                // Horizontal line
+                magnifierCtx.beginPath();
+                magnifierCtx.moveTo(0, magnifierCanvas.height/2);
+                magnifierCtx.lineTo(magnifierCanvas.width, magnifierCanvas.height/2);
+                magnifierCtx.stroke();
+                
+                // Vertical line
+                magnifierCtx.beginPath();
+                magnifierCtx.moveTo(magnifierCanvas.width/2, 0);
+                magnifierCtx.lineTo(magnifierCanvas.width/2, magnifierCanvas.height);
+                magnifierCtx.stroke();
+            }
+            
+            // Update color history display
+            function updateColorHistory() {
+                colorHistory.innerHTML = '';
+                
+                if (colorHistoryArray.length === 0) {
+                    colorHistory.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm w-full">الألوان المحددة ستظهر هنا</p>';
+                    return;
+                }
+                
+                colorHistoryArray.forEach(hex => {
+                    const colorItem = document.createElement('div');
+                    colorItem.className = 'color-history-item';
+                    colorItem.style.backgroundColor = hex;
+                    colorItem.title = hex;
+                    
+                    // Add click event to select this color
+                    colorItem.addEventListener('click', function() {
+                        // Parse the hex color
+                        const r = parseInt(hex.slice(1, 3), 16);
+                        const g = parseInt(hex.slice(3, 5), 16);
+                        const b = parseInt(hex.slice(5, 7), 16);
+                        
+                        // Update current color
+                        currentColor = {
+                            r: r,
+                            g: g,
+                            b: b,
+                            hex: hex
+                        };
+                        
+                        // Update color preview
+                        colorPreview.style.backgroundColor = currentColor.hex;
+                        colorHex.textContent = currentColor.hex;
+                        colorRgb.textContent = `RGB: ${currentColor.r}, ${currentColor.g}, ${currentColor.b}`;
+                        
+                        // Enable copy button
+                        copyHexBtn.disabled = false;
+                    });
+                    
+                    colorHistory.appendChild(colorItem);
+                });
+            }
+            
+            // Convert RGB to HEX
+            function rgbToHex(r, g, b) {
+                return '#' + [r, g, b].map(x => {
+                    const hex = x.toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                }).join('');
+            }
+        }
+    </script>
+</body>
+</html>
+

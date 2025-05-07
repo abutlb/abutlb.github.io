@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حاسبة الصحة الشاملة | تحليل الوضع الصحي وخارطة طريق للمستقبل</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            },
+            secondary: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            accent: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            },
+            neutral: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Load Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    /* Light mode */
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    
+    /* Dark mode */
+    body.dark {
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    }
+    
+    .glass-card-dark {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(30, 41, 59, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    
+    .tab-btn.active {
+      opacity: 1;
+      border-bottom: 3px solid white;
+    }
+    
+    .toggle-dot {
+      transform: translateX(0);
+    }
+    
+    body.dark .toggle-dot {
+      transform: translateX(24px);
+    }
+    
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 240px;
+      background-color: #1e293b;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -120px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+    }
+    
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #1e293b transparent transparent transparent;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    body.dark .tooltip .tooltiptext {
+      background-color: #475569;
+    }
+    
+    body.dark .tooltip .tooltiptext::after {
+      border-color: #475569 transparent transparent transparent;
+    }
+    
+    /* Progress bar styles */
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #e2e8f0;
+      overflow: hidden;
+    }
+    
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease-in-out;
+    }
+    
+    /* Timeline styles */
+    .timeline-item {
+      position: relative;
+      padding-left: 30px;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #0ea5e9;
+      z-index: 1;
+    }
+    
+    .timeline-connector {
+      position: absolute;
+      left: 5px;
+      top: 12px;
+      width: 2px;
+      height: calc(100% - 12px);
+      background-color: #e2e8f0;
+    }
+    
+    body.dark .timeline-connector {
+      background-color: #334155;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+  <div class="max-w-6xl mx-auto px-4">
+    <!-- Header -->
+    <div class="grid grid-cols-3 items-center mb-8">
+      <!-- Back button (right side in RTL) -->
+      <div class="flex justify-start">
+        <a href="/" class="p-2 bg-primary-100 dark:bg-primary-900 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors">
+          <i class="fas fa-arrow-right text-primary-600 dark:text-primary-300"></i>
+        </a>
+      </div>
+      
+      <!-- Title (centered) -->
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">حاسبة الصحة الشاملة</h1>
+        <p class="text-neutral-600 dark:text-neutral-400">تحليل وضعك الصحي وخارطة طريق لتحقيق أهدافك</p>
+      </div>
+      
+      <!-- Dark mode toggle (left side in RTL) -->
+      <div class="flex justify-end">
+        <div class="relative inline-flex items-center">
+          <label for="themeSwitch_field" class="sr-only">Toggle Dark Mode</label>
+          <input type="checkbox" id="themeSwitch_field" class="sr-only">
+          <div id="themeToggle" class="w-12 h-6 bg-neutral-200 dark:bg-neutral-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+              <i class="fas fa-moon text-primary-500 dark:text-primary-300 text-xs"></i>
+            </div>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+              <i class="fas fa-sun text-accent-500 text-xs"></i>
+            </div>
+            <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-primary-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+      <!-- Tabs -->
+      <div class="flex border-b border-neutral-200 dark:border-neutral-700 bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="calculator">
+          <i class="fas fa-calculator ml-2"></i>الحاسبة
+        </button>
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="roadmap">
+          <i class="fas fa-map-marked-alt ml-2"></i>خارطة الطريق
+        </button>
+        <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+          <i class="fas fa-info-circle ml-2"></i>حول
+        </button>
+      </div>
+      
+      <!-- Calculator Tab -->
+      <div id="calculator-tab" class="tab-content p-6 block">
+        <form id="healthForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Current Health Status Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-heartbeat ml-2"></i>الوضع الصحي الحالي
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="age_field">
+                    العمر
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">عمرك الحالي بالسنوات. يؤثر على معدل الأيض وتوصيات النشاط البدني.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="age_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" max="120" required>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="gender_field">
+                    الجنس
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">يؤثر على حساب مؤشر كتلة الجسم والاحتياجات الغذائية.</span>
+                    </span>
+                  </label>
+                  <select id="gender_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" required>
+                    <option value="">اختر الجنس</option>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="height_field">
+                    الطول (سم)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">طولك بالسنتيمتر. يستخدم لحساب مؤشر كتلة الجسم والوزن المثالي.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="height_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="50" max="250" required>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="weight_field">
+                    الوزن الحالي (كجم)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">وزنك الحالي بالكيلوجرام. يستخدم لحساب مؤشر كتلة الجسم والسعرات الحرارية اليومية.</span>
+                    </span>
+                  </label>
+                  <input type="number" id="weight_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="20" max="300" required>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="activity_level_field">
+                    مستوى النشاط البدني
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">مستوى نشاطك البدني اليومي. يؤثر على احتياجاتك من السعرات الحرارية والتوصيات الصحية.</span>
+                    </span>
+                  </label>
+                  <select id="activity_level_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" required>
+                    <option value="sedentary">خامل (قليل أو معدوم النشاط البدني)</option>
+                    <option value="light">خفيف (تمارين خفيفة 1-3 أيام/أسبوع)</option>
+                    <option value="moderate">متوسط (تمارين متوسطة 3-5 أيام/أسبوع)</option>
+                    <option value="active">نشط (تمارين قوية 6-7 أيام/أسبوع)</option>
+                    <option value="very_active">نشط جداً (تمارين قوية يومياً أو عمل بدني)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Health Metrics Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-stethoscope ml-2"></i>المؤشرات الصحية
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="blood_pressure_field">
+                    ضغط الدم (مم زئبق)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">قياس ضغط الدم بصيغة الانقباضي/الانبساطي. مثال: 120/80</span>
+                    </span>
+                  </label>
+                  <input value="120/80" type="text" id="blood_pressure_field" placeholder="مثال: 120/80" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="resting_heart_rate_field">
+                    معدل ضربات القلب في الراحة (نبضة/دقيقة)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">عدد ضربات قلبك في الدقيقة أثناء الراحة. مؤشر مهم للياقة القلبية.</span>
+                    </span>
+                  </label>
+                  <input value="70" type="number" id="resting_heart_rate_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="40" max="200">
+                </div>
+                
+                <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="blood_sugar_type_field">
+                      نوع فحص السكر
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">اختر نوع فحص السكر الذي تريد إدخال نتائجه.</span>
+                      </span>
+                    </label>
+                    <select id="blood_sugar_type_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                      <option value="fasting">سكر الصيام (FBS)</option>
+                      <option value="random">سكر عشوائي (RBS)</option>
+                      <option value="hba1c">السكر التراكمي (HbA1c)</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="blood_sugar_field">
+                      مستوى السكر في الدم
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">
+                          سكر الصيام (70-100 ملغم/ديسيلتر طبيعي)<br>
+                          سكر عشوائي (أقل من 140 ملغم/ديسيلتر طبيعي)<br>
+                          السكر التراكمي (أقل من 5.7% طبيعي)
+                        </span>
+                      </span>
+                    </label>
+                    <div class="flex">
+                      <input value="85" type="number" id="blood_sugar_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" max="500" step="0.1">
+                      <span id="blood_sugar_unit" class="flex items-center px-4 bg-neutral-100 dark:bg-neutral-600 border-y border-r rounded-r-lg">ملغم/ديسيلتر</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                      الكوليسترول
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">
+                          الكوليسترول الكلي (أقل من 200 ملغم/ديسيلتر مثالي)<br>
+                          الكوليسترول الضار LDL (أقل من 100 ملغم/ديسيلتر مثالي)<br>
+                          الكوليسترول النافع HDL (أعلى من 60 ملغم/ديسيلتر مثالي)
+                        </span>
+                      </span>
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label class="text-sm text-neutral-600 dark:text-neutral-400" for="total_cholesterol_field">الكوليسترول الكلي</label>
+                        <input value="180" type="number" id="total_cholesterol_field" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="100" max="500" placeholder="ملغم/ديسيلتر">
+                      </div>
+                      <div>
+                        <label class="text-sm text-neutral-600 dark:text-neutral-400" for="ldl_cholesterol_field">الكوليسترول الضار (LDL)</label>
+                        <input value="90" type="number" id="ldl_cholesterol_field" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" max="300" placeholder="ملغم/ديسيلتر">
+                      </div>
+                      <div>
+                        <label class="text-sm text-neutral-600 dark:text-neutral-400" for="hdl_cholesterol_field">الكوليسترول النافع (HDL)</label>
+                        <input value="55" type="number" id="hdl_cholesterol_field" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" max="100" placeholder="ملغم/ديسيلتر">
+                      </div>
+                    </div>
+                  </div>
+                  
+              </div>
+            </div>
+            
+            <!-- Lifestyle Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-walking ml-2"></i>نمط الحياة
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="sleep_hours_field">
+                    ساعات النوم اليومية
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">متوسط عدد ساعات نومك يومياً. مهم للصحة العامة والتعافي.</span>
+                    </span>
+                  </label>
+                  <input value="7.5" type="number" id="sleep_hours_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" max="16" step="0.5">
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="water_intake_field">
+                    استهلاك الماء اليومي (لتر)
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">كمية الماء التي تشربها يومياً باللتر. مهم للترطيب والصحة العامة.</span>
+                    </span>
+                  </label>
+                  <input value="2.5" type="number" id="water_intake_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" max="10" step="0.1">
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="stress_level_field">
+                    مستوى التوتر
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">تقييمك لمستوى التوتر اليومي. يؤثر على الصحة العامة والعقلية.</span>
+                    </span>
+                  </label>
+                  <select id="stress_level_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                    <option value="low">منخفض (نادراً ما أشعر بالتوتر)</option>
+                    <option value="moderate" selected>متوسط (أشعر بالتوتر أحياناً)</option>
+                    <option value="high">مرتفع (أشعر بالتوتر غالباً)</option>
+                    <option value="very_high">مرتفع جداً (أشعر بالتوتر باستمرار)</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                    العادات الصحية
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">العادات اليومية التي تؤثر على صحتك العامة.</span>
+                    </span>
+                  </label>
+                  <div class="space-y-2">
+                    <div class="flex items-center">
+                      <input type="checkbox" id="smoking_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="smoking_field" class="mr-2 text-neutral-700 dark:text-neutral-300">أدخن</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="alcohol_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="alcohol_field" class="mr-2 text-neutral-700 dark:text-neutral-300">أتناول الكحول</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="meditation_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="meditation_field" class="mr-2 text-neutral-700 dark:text-neutral-300">أمارس التأمل أو اليوجا</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="balanced_diet_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="balanced_diet_field" class="mr-2 text-neutral-700 dark:text-neutral-300">أتبع نظام غذائي متوازن</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Diet Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-utensils ml-2"></i>النظام الغذائي
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="diet_type_field">
+                    نوع النظام الغذائي
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">نوع النظام الغذائي الذي تتبعه حالياً.</span>
+                    </span>
+                  </label>
+                  <select id="diet_type_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                    <option value="omnivore">متنوع (نباتي وحيواني)</option>
+                    <option value="vegetarian">نباتي</option>
+                    <option value="vegan">نباتي صرف</option>
+                    <option value="keto">كيتو</option>
+                    <option value="paleo">باليو</option>
+                    <option value="mediterranean">متوسطي</option>
+                    <option value="other">آخر</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="meals_per_day_field">
+                    عدد الوجبات اليومية
+                    <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">متوسط عدد الوجبات التي تتناولها يومياً.</span>
+                      </span>
+                    </label>
+                    <input value="3" type="number" id="meals_per_day_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" max="10">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                      مجموعات الطعام المستهلكة بانتظام
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">مجموعات الطعام التي تتناولها بانتظام (3+ مرات أسبوعياً).</span>
+                      </span>
+                    </label>
+                    <div class="space-y-2">
+                      <div class="flex items-center">
+                        <input type="checkbox" id="fruits_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="fruits_field" class="mr-2 text-neutral-700 dark:text-neutral-300">الفواكه</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="vegetables_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="vegetables_field" class="mr-2 text-neutral-700 dark:text-neutral-300">الخضروات</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="grains_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="grains_field" class="mr-2 text-neutral-700 dark:text-neutral-300">الحبوب الكاملة</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="protein_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="protein_field" class="mr-2 text-neutral-700 dark:text-neutral-300">البروتينات (لحوم، بقوليات)</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="dairy_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="dairy_field" class="mr-2 text-neutral-700 dark:text-neutral-300">منتجات الألبان</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="processed_food_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="processed_food_field" class="mr-2 text-neutral-700 dark:text-neutral-300">الأطعمة المصنعة</label>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="daily_calories_field">
+                      السعرات الحرارية اليومية (إذا كنت تتبعها)
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">متوسط السعرات الحرارية التي تستهلكها يومياً، إذا كنت تتبعها.</span>
+                      </span>
+                    </label>
+                    <input type="number" id="daily_calories_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="500" max="5000">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Health Goals Section -->
+              <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+                <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                  <i class="fas fa-bullseye ml-2"></i>الأهداف الصحية
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="primary_goal_field">
+                      الهدف الرئيسي
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">هدفك الصحي الرئيسي الذي تسعى لتحقيقه.</span>
+                      </span>
+                    </label>
+                    <select id="primary_goal_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" required>
+                      <option value="">اختر هدفك الرئيسي</option>
+                      <option value="weight_loss">فقدان الوزن</option>
+                      <option value="weight_gain">زيادة الوزن</option>
+                      <option value="muscle_gain">بناء العضلات</option>
+                      <option value="improve_fitness">تحسين اللياقة البدنية</option>
+                      <option value="improve_health">تحسين الصحة العامة</option>
+                      <option value="reduce_stress">تقليل التوتر</option>
+                      <option value="better_sleep">تحسين النوم</option>
+                      <option value="manage_condition">إدارة حالة صحية</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="target_weight_field">
+                      الوزن المستهدف (كجم)
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">الوزن الذي تهدف للوصول إليه، إذا كان هدفك متعلق بالوزن.</span>
+                      </span>
+                    </label>
+                    <input type="number" id="target_weight_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="30" max="200">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="target_timeframe_field">
+                      الإطار الزمني المستهدف (أشهر)
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">المدة التي تهدف لتحقيق هدفك خلالها بالأشهر.</span>
+                      </span>
+                    </label>
+                    <input type="number" id="target_timeframe_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="1" max="60">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                      أهداف إضافية
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">أهداف صحية إضافية تسعى لتحقيقها.</span>
+                      </span>
+                    </label>
+                    <div class="space-y-2">
+                      <div class="flex items-center">
+                        <input type="checkbox" id="improve_diet_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="improve_diet_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تحسين النظام الغذائي</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="increase_activity_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="increase_activity_field" class="mr-2 text-neutral-700 dark:text-neutral-300">زيادة النشاط البدني</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="quit_smoking_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="quit_smoking_field" class="mr-2 text-neutral-700 dark:text-neutral-300">الإقلاع عن التدخين</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="reduce_alcohol_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="reduce_alcohol_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تقليل استهلاك الكحول</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input type="checkbox" id="improve_mental_health_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="improve_mental_health_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تحسين الصحة النفسية</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Exercise Section -->
+              <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+                <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                  <i class="fas fa-dumbbell ml-2"></i>التمارين الرياضية
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="exercise_frequency_field">
+                      عدد مرات التمرين أسبوعياً
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">عدد المرات التي تمارس فيها التمارين الرياضية أسبوعياً.</span>
+                      </span>
+                    </label>
+                    <input value="3" type="number" id="exercise_frequency_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" max="14">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="exercise_duration_field">
+                      متوسط مدة التمرين (دقيقة)
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">متوسط مدة جلسة التمرين الواحدة بالدقائق.</span>
+                      </span>
+                    </label>
+                    <input value="30" type="number" id="exercise_duration_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" min="0" max="300">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                      أنواع التمارين المفضلة
+                      <span class="tooltip">
+                        <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                        <span class="tooltiptext">أنواع التمارين التي تفضل ممارستها أو ترغب في ممارستها.</span>
+                      </span>
+                    </label>
+                    <div class="space-y-2">
+                      <div class="flex items-center">
+                        <input type="checkbox" id="cardio_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="cardio_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تمارين القلب (جري، سباحة، دراجة)</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="strength_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="strength_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تمارين القوة (أوزان، مقاومة)</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="flexibility_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="flexibility_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تمارين المرونة (يوجا، تمدد)</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="hiit_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="hiit_field" class="mr-2 text-neutral-700 dark:text-neutral-300">تمارين عالية الكثافة (HIIT)</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="sports_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="sports_field" class="mr-2 text-neutral-700 dark:text-neutral-300">رياضات (كرة قدم، تنس، الخ)</label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="exercise_intensity_field">
+                    شدة التمارين المعتادة
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">مستوى شدة التمارين التي تمارسها عادة.</span>
+                    </span>
+                  </label>
+                  <select id="exercise_intensity_field" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                    <option value="low">منخفضة (تنفس طبيعي، لا تعرق)</option>
+                    <option value="moderate">متوسطة (تنفس أسرع، تعرق خفيف)</option>
+                    <option value="high">عالية (تنفس ثقيل، تعرق كثير)</option>
+                    <option value="very_high">عالية جداً (تنفس صعب، تعرق غزير)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Medical History Section -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-notes-medical ml-2"></i>التاريخ الطبي
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                    الحالات الصحية الموجودة
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">الحالات الصحية المزمنة أو المستمرة التي تم تشخيصها.</span>
+                    </span>
+                  </label>
+                  <div class="space-y-2">
+                    <div class="flex items-center">
+                      <input type="checkbox" id="diabetes_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="diabetes_field" class="mr-2 text-neutral-700 dark:text-neutral-300">السكري</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="hypertension_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="hypertension_field" class="mr-2 text-neutral-700 dark:text-neutral-300">ارتفاع ضغط الدم</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="heart_disease_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="heart_disease_field" class="mr-2 text-neutral-700 dark:text-neutral-300">أمراض القلب</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="asthma_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="asthma_field" class="mr-2 text-neutral-700 dark:text-neutral-300">الربو</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="thyroid_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="thyroid_field" class="mr-2 text-neutral-700 dark:text-neutral-300">اضطرابات الغدة الدرقية</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input type="checkbox" id="mental_health_field" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      <label for="mental_health_field" class="mr-2 text-neutral-700 dark:text-neutral-300">اضطرابات الصحة النفسية</label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="medications_field">
+                    الأدوية الحالية
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">الأدوية التي تتناولها بانتظام حالياً.</span>
+                    </span>
+                  </label>
+                  <textarea id="medications_field" rows="2" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" placeholder="اكتب الأدوية التي تتناولها حالياً"></textarea>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="allergies_field">
+                    الحساسية
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">أي حساسية غذائية أو دوائية معروفة.</span>
+                    </span>
+                  </label>
+                  <textarea id="allergies_field" rows="2" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" placeholder="اكتب أي حساسية لديك"></textarea>
+                </div>
+                
+                <div>
+                  <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2" for="family_history_field">
+                    التاريخ العائلي
+                    <span class="tooltip">
+                      <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                      <span class="tooltiptext">الحالات الصحية الموجودة في العائلة المباشرة (الوالدين، الإخوة).</span>
+                    </span>
+                  </label>
+                  <textarea id="family_history_field" rows="2" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" placeholder="اكتب التاريخ الصحي العائلي"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-span-full">
+              <button type="button" id="calculateBtn" class="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors shadow-md">
+                <i class="fas fa-calculator ml-2"></i>احسب وضعي الصحي وخارطة الطريق
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Results Section -->
+        <div id="results" class="mt-8 hidden">
+          <h2 class="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-4">نتائج التحليل الصحي</h2>
+          
+          <!-- BMI Results Section -->
+          <div id="bmiResults" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">مؤشر كتلة الجسم (BMI)</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center">
+                  <h4 class="font-bold mb-2">مؤشر كتلة الجسم الحالي</h4>
+                  <div id="current_bmi" class="text-3xl font-bold text-primary-600 dark:text-primary-400"></div>
+                  <div id="bmi_category" class="mt-2 text-lg"></div>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center">
+                  <h4 class="font-bold mb-2">الوزن المثالي</h4>
+                  <div id="ideal_weight" class="text-3xl font-bold text-secondary-600 dark:text-secondary-400"></div>
+                  <div id="weight_difference" class="mt-2 text-lg"></div>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center">
+                  <h4 class="font-bold mb-2">نطاق الوزن الصحي</h4>
+                  <div id="healthy_weight_range" class="text-3xl font-bold text-accent-600 dark:text-accent-400"></div>
+                  <div id="weight_goal" class="mt-2 text-lg"></div>
+                </div>
+              </div>
+              
+              <div class="mt-6">
+                <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-4 mb-2">
+                  <div id="bmi_indicator" class="h-4 rounded-full relative">
+                    <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white px-2 py-1 rounded text-xs">
+                      <span id="bmi_value">25</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex justify-between text-xs text-neutral-600 dark:text-neutral-400">
+                  <span>نقص وزن<br>&lt;18.5</span>
+                  <span>وزن طبيعي<br>18.5-24.9</span>
+                  <span>زيادة وزن<br>25-29.9</span>
+                  <span>سمنة<br>&gt;30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Metabolic Results Section -->
+          <div id="metabolicResults" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">التمثيل الغذائي والسعرات الحرارية</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">معدل الأيض الأساسي (BMR)</h4>
+                  <div id="bmr_value" class="text-2xl font-bold text-primary-600 dark:text-primary-400"></div>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2">السعرات الحرارية التي يحتاجها جسمك للحفاظ على وظائفه الأساسية في حالة الراحة التامة.</p>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">إجمالي السعرات الحرارية اليومية (TDEE)</h4>
+                  <div id="tdee_value" class="text-2xl font-bold text-secondary-600 dark:text-secondary-400"></div>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2">إجمالي السعرات الحرارية التي يحرقها جسمك يومياً بناءً على مستوى نشاطك.</p>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">السعرات المطلوبة لتحقيق هدفك</h4>
+                  <div id="target_calories" class="text-2xl font-bold text-accent-600 dark:text-accent-400"></div>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2">السعرات الحرارية اليومية الموصى بها لتحقيق هدفك الصحي.</p>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">توزيع العناصر الغذائية المقترح</h4>
+                  <div class="grid grid-cols-3 gap-2 mt-3">
+                    <div class="text-center">
+                      <div class="text-lg font-bold text-primary-600 dark:text-primary-400" id="protein_percent">30%</div>
+                      <div class="text-sm text-neutral-600 dark:text-neutral-400">بروتين</div>
+                      <div class="text-sm font-bold" id="protein_grams">150g</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-lg font-bold text-secondary-600 dark:text-secondary-400" id="carbs_percent">40%</div>
+                      <div class="text-sm text-neutral-600 dark:text-neutral-400">كربوهيدرات</div>
+                      <div class="text-sm font-bold" id="carbs_grams">200g</div>
+                    </div>
+                    <div class="text-center">
+                      <div class="text-lg font-bold text-accent-600 dark:text-accent-400" id="fat_percent">30%</div>
+                      <div class="text-sm text-neutral-600 dark:text-neutral-400">دهون</div>
+                      <div class="text-sm font-bold" id="fat_grams">67g</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Health Assessment Section -->
+          <div id="healthAssessment" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">تقييم الحالة الصحية</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-bold mb-2 flex items-center">
+                      <i class="fas fa-heart text-primary-500 ml-2"></i>
+                      صحة القلب والأوعية الدموية
+                    </h4>
+                    <div class="progress-bar">
+                      <div id="cardiovascular_score" class="progress-bar-fill bg-primary-500" style="width: 75%"></div>
+                    </div>
+                    <p id="cardiovascular_assessment" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold mb-2 flex items-center">
+                      <i class="fas fa-dumbbell text-secondary-500 ml-2"></i>
+                      اللياقة البدنية
+                    </h4>
+                    <div class="progress-bar">
+                      <div id="fitness_score" class="progress-bar-fill bg-secondary-500" style="width: 60%"></div>
+                    </div>
+                    <p id="fitness_assessment" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold mb-2 flex items-center">
+                      <i class="fas fa-utensils text-accent-500 ml-2"></i>
+                      التغذية
+                    </h4>
+                    <div class="progress-bar">
+                      <div id="nutrition_score" class="progress-bar-fill bg-accent-500" style="width: 80%"></div>
+                    </div>
+                    <p id="nutrition_assessment" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-bold mb-2 flex items-center">
+                      <i class="fas fa-brain text-primary-500 ml-2"></i>
+                      الصحة النفسية
+                    </h4>
+                    <div class="progress-bar">
+                      <div id="mental_score" class="progress-bar-fill bg-primary-500" style="width: 65%"></div>
+                    </div>
+                    <p id="mental_assessment" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold mb-2 flex items-center">
+                      <i class="fas fa-bed text-secondary-500 ml-2"></i>
+                      النوم والراحة
+                    </h4>
+                    <div class="progress-bar">
+                      <div id="sleep_score" class="progress-bar-fill bg-secondary-500" style="width: 50%"></div>
+                    </div>
+                    <p id="sleep_assessment" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold mb-2 flex items-center">
+                      <i class="fas fa-tint text-accent-500 ml-2"></i>
+                      الترطيب
+                    </h4>
+                    <div class="progress-bar">
+                      <div id="hydration_score" class="progress-bar-fill bg-accent-500" style="width: 70%"></div>
+                    </div>
+                    <p id="hydration_assessment" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"></p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                <h4 class="font-bold mb-2 flex items-center">
+                  <i class="fas fa-chart-line text-primary-500 ml-2"></i>
+                  التقييم العام
+                </h4>
+                <div class="progress-bar">
+                  <div id="overall_score" class="progress-bar-fill bg-gradient-to-r from-primary-500 to-secondary-500" style="width: 72%"></div>
+                </div>
+                <p id="overall_assessment" class="mt-2 text-neutral-700 dark:text-neutral-300"></p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recommendation Box -->
+          <div id="recommendation" class="mb-8 p-4 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg border-r-4 border-secondary-500">
+            <div class="flex items-start">
+              <div class="p-2 bg-secondary-100 dark:bg-secondary-800/50 rounded-full ml-3 mt-1">
+                <i class="fas fa-lightbulb text-secondary-600 dark:text-secondary-300"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-secondary-800 dark:text-secondary-300 mb-1">التوصية الرئيسية</h3>
+                <p id="main_recommendation" class="text-neutral-700 dark:text-neutral-300"></p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Weight Management Plan -->
+          <div id="weightManagementPlan" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">خطة إدارة الوزن</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-4">المسار المتوقع للوزن</h4>
+                  <div class="h-64">
+                    <canvas id="weightChart"></canvas>
+                  </div>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">تفاصيل الخطة</h4>
+                  <div class="space-y-4">
+                    <div>
+                      <div class="flex justify-between">
+                        <span class="text-neutral-600 dark:text-neutral-400">الوزن الحالي:</span>
+                        <span id="current_weight_display" class="font-bold"></span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between">
+                        <span class="text-neutral-600 dark:text-neutral-400">الوزن المستهدف:</span>
+                        <span id="target_weight_display" class="font-bold"></span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between">
+                        <span class="text-neutral-600 dark:text-neutral-400">الفرق:</span>
+                        <span id="weight_diff_display" class="font-bold"></span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between">
+                        <span class="text-neutral-600 dark:text-neutral-400">المدة المتوقعة:</span>
+                        <span id="expected_duration_display" class="font-bold"></span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between">
+                        <span class="text-neutral-600 dark:text-neutral-400">معدل التغيير الأسبوعي الآمن:</span>
+                        <span id="weekly_rate_display" class="font-bold"></span>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between">
+                        <span class="text-neutral-600 dark:text-neutral-400">فرق السعرات اليومي المطلوب:</span>
+                        <span id="calorie_deficit_display" class="font-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Fitness Plan -->
+          <div id="fitnessPlan" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">خطة اللياقة البدنية</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2 flex items-center">
+                    <i class="fas fa-heartbeat text-primary-500 ml-2"></i>
+                    تمارين القلب
+                  </h4>
+                  <ul id="cardio_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2 flex items-center">
+                    <i class="fas fa-dumbbell text-secondary-500 ml-2"></i>
+                    تمارين القوة
+                  </h4>
+                  <ul id="strength_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2 flex items-center">
+                    <i class="fas fa-child text-accent-500 ml-2"></i>
+                    المرونة والتوازن
+                  </h4>
+                  <ul id="flexibility_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                <h4 class="font-bold mb-2">جدول التمارين الأسبوعي المقترح</h4>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-right">
+                    <thead>
+                      <tr class="text-neutral-600 dark:text-neutral-300 border-b dark:border-neutral-700">
+                        <th class="pb-3 font-medium">اليوم</th>
+                        <th class="pb-3 font-medium">نوع التمرين</th>
+                        <th class="pb-3 font-medium">المدة</th>
+                        <th class="pb-3 font-medium">الشدة</th>
+                      </tr>
+                    </thead>
+                    <tbody id="weekly_exercise_plan" class="text-neutral-700 dark:text-neutral-300">
+                      <!-- سيتم ملء هذا الجدول بواسطة JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Nutrition Plan -->
+          <div id="nutritionPlan" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">خطة التغذية</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">توصيات غذائية</h4>
+                  <ul id="nutrition_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">أطعمة موصى بها</h4>
+                  <div class="grid grid-cols-2 gap-4 mt-3">
+                    <div>
+                      <h5 class="font-bold text-primary-600 dark:text-primary-400 mb-2">زيادة تناول</h5>
+                      <ul id="foods_to_increase" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-accent-600 dark:text-accent-400 mb-2">تقليل تناول</h5>
+                      <ul id="foods_to_reduce" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                <h4 class="font-bold mb-2">مثال لخطة وجبات يومية</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                  <div>
+                    <h5 class="font-bold text-primary-600 dark:text-primary-400 mb-2">الإفطار</h5>
+                    <ul id="breakfast_plan" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                    
+                    <h5 class="font-bold text-primary-600 dark:text-primary-400 mb-2 mt-4">الغداء</h5>
+                    <ul id="lunch_plan" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-primary-600 dark:text-primary-400 mb-2">العشاء</h5>
+                    <ul id="dinner_plan" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                    
+                    <h5 class="font-bold text-primary-600 dark:text-primary-400 mb-2 mt-4">وجبات خفيفة</h5>
+                    <ul id="snacks_plan" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Lifestyle Recommendations -->
+          <div id="lifestyleRecommendations" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">توصيات نمط الحياة</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2 flex items-center">
+                    <i class="fas fa-bed text-primary-500 ml-2"></i>
+                    النوم والراحة
+                  </h4>
+                  <ul id="sleep_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2 flex items-center">
+                    <i class="fas fa-brain text-secondary-500 ml-2"></i>
+                    إدارة التوتر
+                  </h4>
+                  <ul id="stress_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2 flex items-center">
+                    <i class="fas fa-tint text-accent-500 ml-2"></i>
+                    الترطيب والعادات اليومية
+                  </h4>
+                  <ul id="hydration_recommendations" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                <h4 class="font-bold mb-2 flex items-center">
+                  <i class="fas fa-calendar-check text-primary-500 ml-2"></i>
+                  عادات صحية للتبني
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                  <div>
+                    <h5 class="font-bold text-primary-600 dark:text-primary-400 mb-2">عادات للبدء بها</h5>
+                    <ul id="habits_to_adopt" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-accent-600 dark:text-accent-400 mb-2">عادات للتخلص منها</h5>
+                    <ul id="habits_to_reduce" class="space-y-1 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Health Monitoring Plan -->
+          <div id="healthMonitoringPlan" class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">خطة مراقبة الصحة</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">مؤشرات للمراقبة</h4>
+                  <ul id="metrics_to_track" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                  <h4 class="font-bold mb-2">الفحوصات الموصى بها</h4>
+                  <ul id="recommended_checkups" class="mt-3 space-y-2 text-neutral-700 dark:text-neutral-300 list-disc list-inside"></ul>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                <h4 class="font-bold mb-2">جدول المتابعة المقترح</h4>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-right">
+                    <thead>
+                      <tr class="text-neutral-600 dark:text-neutral-300 border-b dark:border-neutral-700">
+                        <th class="pb-3 font-medium">المؤشر</th>
+                        <th class="pb-3 font-medium">تكرار القياس</th>
+                        <th class="pb-3 font-medium">النطاق المستهدف</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tracking_schedule" class="text-neutral-700 dark:text-neutral-300">
+                      <!-- سيتم ملء هذا الجدول بواسطة JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Progress Tracking -->
+          <div class="mb-8 bg-white dark:bg-neutral-800 rounded-xl shadow overflow-hidden">
+            <div class="bg-neutral-50 dark:bg-neutral-700 px-6 py-4">
+              <h3 class="font-bold text-neutral-800 dark:text-neutral-200">تتبع التقدم</h3>
+            </div>
+            <div class="p-6">
+              <p class="text-neutral-700 dark:text-neutral-300 mb-4">
+                لتتبع تقدمك بشكل فعال، يمكنك استخدام الأدوات التالية:
+              </p>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center">
+                  <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-full inline-block mb-2">
+                    <i class="fas fa-weight text-primary-600 dark:text-primary-400 text-xl"></i>
+                  </div>
+                  <h4 class="font-bold">تتبع الوزن</h4>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
+                    قم بوزن نفسك مرة أسبوعياً في نفس الوقت من اليوم وبنفس الظروف.
+                  </p>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center">
+                  <div class="p-3 bg-secondary-100 dark:bg-secondary-900/30 rounded-full inline-block mb-2">
+                    <i class="fas fa-utensils text-secondary-600 dark:text-secondary-400 text-xl"></i>
+                  </div>
+                  <h4 class="font-bold">تتبع الطعام</h4>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
+                    سجل ما تأكله يومياً للتأكد من التزامك بالسعرات والعناصر الغذائية الموصى بها.
+                  </p>
+                </div>
+                
+                <div class="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center">
+                  <div class="p-3 bg-accent-100 dark:bg-accent-900/30 rounded-full inline-block mb-2">
+                    <i class="fas fa-running text-accent-600 dark:text-accent-400 text-xl"></i>
+                  </div>
+                  <h4 class="font-bold">تتبع النشاط</h4>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
+                    سجل تمارينك ونشاطك البدني لضمان الالتزام بخطة اللياقة البدنية.
+                  </p>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border-r-4 border-primary-500">
+                <div class="flex items-start">
+                  <div class="p-2 bg-primary-100 dark:bg-primary-800/50 rounded-full ml-3 mt-1">
+                    <i class="fas fa-lightbulb text-primary-600 dark:text-primary-300"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-primary-800 dark:text-primary-300 mb-1">نصيحة للنجاح</h3>
+                    <p class="text-neutral-700 dark:text-neutral-300">
+                      التغييرات الصغيرة والمستدامة هي مفتاح النجاح على المدى الطويل. ركز على تحسين عاداتك اليومية تدريجياً، واحتفل بكل إنجاز صغير في رحلتك الصحية.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex justify-center">
+            <button id="printResults" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors shadow-md">
+              <i class="fas fa-print ml-2"></i>طباعة النتائج
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Settings Tab -->
+      <div id="settings-tab" class="tab-content p-6 hidden">
+        <h2 class="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-6">إعدادات الحاسبة</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">معاملات الاحتساب</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  صيغة حساب BMR
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">الصيغة المستخدمة لحساب معدل الأيض الأساسي.</span>
+                  </span>
+                </label>
+                <select id="bmr_formula" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                  <option value="mifflin">Mifflin-St Jeor (الأكثر دقة للأشخاص العاديين)</option>
+                  <option value="harris">Harris-Benedict (الأكثر شيوعاً)</option>
+                  <option value="katch">Katch-McArdle (الأفضل إذا كنت تعرف نسبة الدهون)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  معدل فقدان الوزن الآمن (كجم/أسبوع)
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">معدل فقدان الوزن الآمن والصحي أسبوعياً.</span>
+                  </span>
+                </label>
+                <input type="number" id="safe_weight_loss_rate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" value="0.5" min="0.1" max="1" step="0.1">
+              </div>
+              
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  معدل زيادة الوزن الآمن (كجم/أسبوع)
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">معدل زيادة الوزن الآمن والصحي أسبوعياً.</span>
+                  </span>
+                </label>
+                <input type="number" id="safe_weight_gain_rate" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" value="0.25" min="0.1" max="0.5" step="0.05">
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">إعدادات التوصيات</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  توزيع العناصر الغذائية المفضل
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">توزيع العناصر الغذائية المفضل لديك (بروتين، كربوهيدرات، دهون).</span>
+                  </span>
+                </label>
+                <select id="macro_distribution" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                  <option value="balanced">متوازن (30% بروتين، 40% كربوهيدرات، 30% دهون)</option>
+                  <option value="low_carb">قليل الكربوهيدرات (40% بروتين، 20% كربوهيدرات، 40% دهون)</option>
+                  <option value="high_carb">عالي الكربوهيدرات (25% بروتين، 55% كربوهيدرات، 20% دهون)</option>
+                  <option value="keto">كيتو (35% بروتين، 5% كربوهيدرات، 60% دهون)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  مستوى تفصيل التوصيات
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">مستوى تفصيل التوصيات والخطط المقدمة.</span>
+                  </span>
+                </label>
+                <select id="recommendation_detail" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                  <option value="basic">أساسي (توصيات عامة)</option>
+                  <option value="detailed" selected>مفصل (خطط وتوصيات مفصلة)</option>
+                  <option value="expert">خبير (تفاصيل دقيقة وخطط متقدمة)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg">
+            <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">تفضيلات الحاسبة</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  وحدات القياس
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">نظام وحدات القياس المفضل لديك.</span>
+                  </span>
+                </label>
+                <select id="measurement_units" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+                  <option value="metric" selected>متري (كجم، سم)</option>
+                  <option value="imperial">إمبراطوري (رطل، قدم/بوصة)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 font-medium mb-2">
+                  حفظ البيانات محلياً
+                  <span class="tooltip">
+                    <i class="fas fa-question-circle text-xs text-primary-500 mr-1 help-icon"></i>
+                    <span class="tooltiptext">حفظ بياناتك على جهازك لاستخدامها في المرات القادمة.</span>
+                  </span>
+                </label>
+                <div class="flex items-center">
+                  <input type="checkbox" id="save_data_locally" class="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                  <label for="save_data_locally" class="mr-2 text-neutral-700 dark:text-neutral-300">تمكين حفظ البيانات محلياً</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button id="saveSettings" class="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-6 py-3 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors shadow-md">
+            <i class="fas fa-save ml-2"></i>حفظ الإعدادات
+          </button>
+        </div>
+      </div>
+      
+      <!-- About Tab -->
+      <div id="about-tab" class="tab-content p-6 hidden">
+        <h2 class="text-xl font-bold text-neutral-800 dark:text-neutral-200 mb-6">حول حاسبة الصحة واللياقة</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
+            <p class="text-neutral-700 dark:text-neutral-300 mb-4">
+              حاسبة الصحة واللياقة هي أداة شاملة مصممة لمساعدتك في تقييم وضعك الصحي الحالي وتقديم توصيات مخصصة لتحسين صحتك ولياقتك البدنية. تقوم الحاسبة بتحليل:
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-neutral-700 dark:text-neutral-300">
+              <li>مؤشر كتلة الجسم (BMI) ونطاق الوزن الصحي</li>
+              <li>معدل الأيض الأساسي (BMR) واحتياجات السعرات الحرارية</li>
+              <li>تقييم شامل للحالة الصحية بناءً على المعلومات المقدمة</li>
+              <li>خطة مخصصة لإدارة الوزن تتناسب مع أهدافك</li>
+              <li>توصيات للتمارين الرياضية والتغذية ونمط الحياة</li>
+              <li>خطة لمراقبة التقدم وتتبع المؤشرات الصحية الرئيسية</li>
+            </ul>
+          </div>
+          
+          <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
+            <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">كيفية استخدام الحاسبة</h3>
+            <ol class="list-decimal list-inside space-y-2 text-neutral-700 dark:text-neutral-300">
+              <li>أدخل معلوماتك الشخصية (العمر، الطول، الوزن، الخ)</li>
+              <li>أجب عن أسئلة نمط الحياة والنشاط البدني</li>
+              <li>حدد عاداتك الغذائية الحالية</li>
+              <li>اختر أهدافك الصحية واللياقة البدنية</li>
+              <li>أدخل معلومات عن التمارين الرياضية التي تمارسها</li>
+              <li>قدم معلومات عن تاريخك الطبي (اختياري)</li>
+              <li>اضغط على زر "احسب وضعي الصحي وخارطة الطريق" لعرض النتائج</li>
+              <li>راجع التحليل المفصل والتوصيات المخصصة لحالتك</li>
+            </ol>
+          </div>
+          
+          <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
+            <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">ملاحظات هامة</h3>
+            <ul class="list-disc list-inside space-y-2 text-neutral-700 dark:text-neutral-300">
+                <li>هذه الحاسبة تقدم معلومات عامة وليست بديلاً عن استشارة الطبيب أو أخصائي التغذية</li>
+                <li>النتائج تعتمد على دقة البيانات المدخلة والمعادلات العلمية المستخدمة</li>
+                <li>قد تختلف الاحتياجات الفردية بناءً على عوامل غير مدرجة في الحاسبة</li>
+                <li>استشر مختصاً صحياً قبل البدء بأي برنامج غذائي أو رياضي جديد</li>
+                <li>إذا كنت تعاني من حالات صحية مزمنة، فمن المهم جداً استشارة الطبيب قبل إجراء تغييرات كبيرة</li>
+                <li>التغييرات التدريجية والمستدامة هي المفتاح للنجاح على المدى الطويل</li>
+              </ul>
+            </div>
+            
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">المعادلات المستخدمة</h3>
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-bold">مؤشر كتلة الجسم (BMI)</h4>
+                  <p class="text-neutral-700 dark:text-neutral-300">BMI = الوزن (كجم) / (الطول (م))²</p>
+                </div>
+                
+                <div>
+                  <h4 class="font-bold">معادلة Mifflin-St Jeor لحساب BMR</h4>
+                  <p class="text-neutral-700 dark:text-neutral-300">للرجال: BMR = 10 × الوزن (كجم) + 6.25 × الطول (سم) - 5 × العمر (سنوات) + 5</p>
+                  <p class="text-neutral-700 dark:text-neutral-300">للنساء: BMR = 10 × الوزن (كجم) + 6.25 × الطول (سم) - 5 × العمر (سنوات) - 161</p>
+                </div>
+                
+                <div>
+                  <h4 class="font-bold">معادلة Harris-Benedict لحساب BMR</h4>
+                  <p class="text-neutral-700 dark:text-neutral-300">للرجال: BMR = 88.362 + (13.397 × الوزن (كجم)) + (4.799 × الطول (سم)) - (5.677 × العمر (سنوات))</p>
+                  <p class="text-neutral-700 dark:text-neutral-300">للنساء: BMR = 447.593 + (9.247 × الوزن (كجم)) + (3.098 × الطول (سم)) - (4.330 × العمر (سنوات))</p>
+                </div>
+                
+                <div>
+                  <h4 class="font-bold">معادلة Katch-McArdle لحساب BMR</h4>
+                  <p class="text-neutral-700 dark:text-neutral-300">BMR = 370 + (21.6 × كتلة الجسم الخالية من الدهون (كجم))</p>
+                </div>
+                
+                <div>
+                  <h4 class="font-bold">إجمالي السعرات الحرارية اليومية (TDEE)</h4>
+                  <p class="text-neutral-700 dark:text-neutral-300">TDEE = BMR × معامل النشاط البدني</p>
+                  <ul class="list-disc list-inside text-neutral-700 dark:text-neutral-300 text-sm mt-1">
+                    <li>قليل النشاط (مكتبي، قليل التمارين): 1.2</li>
+                    <li>نشاط خفيف (تمارين خفيفة 1-3 أيام/أسبوع): 1.375</li>
+                    <li>نشاط متوسط (تمارين متوسطة 3-5 أيام/أسبوع): 1.55</li>
+                    <li>نشاط عالي (تمارين قوية 6-7 أيام/أسبوع): 1.725</li>
+                    <li>نشاط عالي جداً (تمارين مكثفة، عمل بدني): 1.9</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">تواصل معي</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-neutral-700 rounded-lg hover:shadow-md transition-shadow">
+                  <div class="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30">
+                    <i class="fab fa-twitter text-primary-400"></i>
+                  </div>
+                  <span class="mr-3 text-neutral-700 dark:text-neutral-300">@abutlb</span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank" class="flex items-center p-4 bg-white dark:bg-neutral-700 rounded-lg hover:shadow-md transition-shadow">
+                  <div class="p-2 rounded-full bg-primary-50 dark:bg-primary-900/30">
+                    <i class="fab fa-linkedin-in text-primary-700"></i>
+                  </div>
+                  <span class="mr-3 text-neutral-700 dark:text-neutral-300">LinkedIn</span>
+                </a>
+                
+                <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-neutral-700 rounded-lg hover:shadow-md transition-shadow">
+                  <div class="p-2 rounded-full bg-neutral-50 dark:bg-neutral-800">
+                    <i class="fab fa-github text-neutral-700 dark:text-white"></i>
+                  </div>
+                  <span class="mr-3 text-neutral-700 dark:text-neutral-300">GitHub</span>
+                </a>
+                
+                <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-neutral-700 rounded-lg hover:shadow-md transition-shadow">
+                  <div class="p-2 rounded-full bg-accent-50 dark:bg-accent-900/30">
+                    <i class="fas fa-envelope text-accent-500"></i>
+                  </div>
+                  <span class="mr-3 text-neutral-700 dark:text-neutral-300">Email</span>
+                </a>
+              </div>
+            </div>
+            
+            <!-- Version Info -->
+            <div class="bg-neutral-50 dark:bg-neutral-800 p-6 rounded-lg">
+              <h3 class="text-lg font-bold mb-4 text-primary-600 dark:text-primary-400">معلومات الإصدار</h3>
+              <p class="text-neutral-700 dark:text-neutral-300">الإصدار الحالي: <span class="font-semibold">1.0.0</span></p>
+              <p class="text-neutral-700 dark:text-neutral-300">آخر تحديث: <span id="lastUpdated">مارس 2024</span></p>
+              <p class="text-neutral-700 dark:text-neutral-300 mt-2">ميزات الإصدار الحالي:</p>
+              <ul class="list-disc list-inside space-y-1 text-neutral-700 dark:text-neutral-300 mt-1">
+                <li>حساب مؤشر كتلة الجسم ونطاق الوزن الصحي</li>
+                <li>تقدير معدل الأيض الأساسي واحتياجات السعرات الحرارية</li>
+                <li>تقييم شامل للحالة الصحية</li>
+                <li>خطط مخصصة للتغذية واللياقة البدنية</li>
+                <li>توصيات لنمط حياة صحي</li>
+                <li>خطة لمراقبة المؤشرات الصحية</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-neutral-500 dark:text-neutral-400 text-sm">        
+      <p>© <span id="currentYear">2024</span> - تم التطوير بواسطة عبدالله التويجري</p>
+      <p class="mt-1">جميع التحليلات والتوصيات تقريبية وتهدف للمساعدة في اتخاذ القرار فقط</p>
+    </footer>
+  </div>
+  
+  <script src="js/health_calculator.js"></script>
+  </body>
+  </html>
+  

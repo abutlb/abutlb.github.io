@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد لوحات الألوان | Color Palette Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #8b5cf6; /* Purple for moon */
+        }
+        .sun-icon {
+            color: #fbbf24; /* Yellow for sun */
+        }
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+        
+        /* Color palette styles */
+        .color-swatch {
+            height: 100px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-swatch:hover {
+            transform: translateY(-5px);
+        }
+        
+        .color-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .color-swatch:hover .color-info {
+            transform: translateY(0);
+        }
+        
+        .palette-card {
+            transition: all 0.3s ease;
+        }
+        
+        .palette-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+        }
+        
+        .saved-palette {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .saved-palette:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500">مولد لوحات الألوان</h1>
+                <p class="text-gray-600 dark:text-gray-400">إنشاء مجموعات ألوان متناسقة لمشاريعك التصميمية</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch_field" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-pink-500 to-orange-500 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="generator">
+                    <i class="fas fa-palette ml-2"></i>مولد الألوان
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="saved">
+                    <i class="fas fa-bookmark ml-2"></i>الألوان المحفوظة
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول
+                </button>
+            </div>
+            
+            <!-- Generator Tab -->
+            <div id="generator-tab" class="tab-content p-6 block">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Left Panel: Options -->
+                    <div class="md:col-span-1 space-y-6">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">
+                                <i class="fas fa-sliders-h ml-2"></i>خيارات التوليد
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">طريقة التوليد</label>
+                                    <select id="generation-method" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="random">عشوائي</option>
+                                        <option value="monochromatic">أحادي اللون</option>
+                                        <option value="analogous">متناظر</option>
+                                        <option value="complementary">متكامل</option>
+                                        <option value="triadic">ثلاثي</option>
+                                        <option value="tetradic">رباعي</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">اللون الأساسي</label>
+                                    <div class="flex items-center space-x-4 space-x-reverse">
+                                        <input type="color" id="base-color" value="#FF5733" class="w-16 h-10 rounded-md border border-gray-300 cursor-pointer">
+                                        <input type="text" id="color-hex-input" value="#FF5733" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">عدد الألوان</label>
+                                    <select id="colors-count" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="3">3 ألوان</option>
+                                        <option value="4">4 ألوان</option>
+                                        <option value="5" selected>5 ألوان</option>
+                                        <option value="6">6 ألوان</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                                        درجة التباين: <span id="contrast-value">50%</span>
+                                    </label>
+                                    <input type="range" id="contrast" min="0" max="100" value="50" 
+                                        class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 flex space-x-4 space-x-reverse">
+                                <button id="generate-btn" class="flex-1 py-2 px-4 bg-gradient-to-r from-pink-500 to-orange-500 text-white font-medium rounded-lg hover:opacity-90 transition-colors shadow-md">
+                                    <i class="fas fa-magic ml-2"></i>توليد
+                                </button>
+                                <button id="random-btn" class="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                                    <i class="fas fa-random"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">
+                                <i class="fas fa-save ml-2"></i>حفظ اللوحة
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">اسم اللوحة</label>
+                                    <input type="text" id="palette-name" placeholder="أدخل اسماً للوحة الألوان" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <button id="save-palette-btn" class="w-full py-2 px-4 bg-pink-600 hover:bg-pink-700 text-white font-medium rounded-lg transition-colors">
+                                    <i class="fas fa-bookmark ml-2"></i>حفظ اللوحة
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">
+                                <i class="fas fa-download ml-2"></i>تصدير
+                            </h3>
+                            <div class="space-y-2">
+                                <button id="export-image-btn" class="w-full py-2 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors mb-2">
+                                    <i class="fas fa-image ml-2"></i>تصدير كصورة (PNG)
+                                </button>
+                                <button id="export-css-btn" class="w-full py-2 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors mb-2">
+                                    <i class="fas fa-code ml-2"></i>تصدير كأكواد CSS
+                                </button>
+                                <button id="export-json-btn" class="w-full py-2 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                                    <i class="fas fa-file-code ml-2"></i>تصدير كملف JSON
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Panel: Palette Preview -->
+                    <div class="md:col-span-2">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg h-full">
+                            <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">
+                                <i class="fas fa-eye ml-2"></i>معاينة اللوحة
+                            </h3>
+                            
+                            <!-- Color Palette Display -->
+                            <div id="palette-display" class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-2 rounded-lg overflow-hidden">
+                                <!-- Colors will be generated here -->
+                                <div class="color-swatch" style="background-color: #FF5733;">
+                                    <div class="color-info">
+                                        <div class="text-sm font-bold">#FF5733</div>
+                                        <div class="text-xs">RGB: 255, 87, 51</div>
+                                    </div>
+                                </div>
+                                <div class="color-swatch" style="background-color: #FFC300;">
+                                    <div class="color-info">
+                                        <div class="text-sm font-bold">#FFC300</div>
+                                        <div class="text-xs">RGB: 255, 195, 0</div>
+                                    </div>
+                                </div>
+                                <div class="color-swatch" style="background-color: #36D7B7;">
+                                    <div class="color-info">
+                                        <div class="text-sm font-bold">#36D7B7</div>
+                                        <div class="text-xs">RGB: 54, 215, 183</div>
+                                    </div>
+                                </div>
+                                <div class="color-swatch" style="background-color: #3498DB;">
+                                    <div class="color-info">
+                                        <div class="text-sm font-bold">#3498DB</div>
+                                        <div class="text-xs">RGB: 52, 152, 219</div>
+                                    </div>
+                                </div>
+                                <div class="color-swatch" style="background-color: #9B59B6;">
+                                    <div class="color-info">
+                                        <div class="text-sm font-bold">#9B59B6</div>
+                                        <div class="text-xs">RGB: 155, 89, 182</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preview Sections -->
+                            <div class="space-y-6">
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300">معاينة التطبيق</h4>
+                                
+                                <!-- UI Preview -->
+                                <div id="ui-preview" class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                                    <!-- Header -->
+                                    <div class="p-4" style="background-color: #FF5733;">
+                                        <div class="flex justify-between items-center">
+                                            <div class="text-white font-bold">عنوان التطبيق</div>
+                                            <div class="flex space-x-2 space-x-reverse">
+                                                <button class="p-2 rounded-full" style="background-color: #FFC300;">
+                                                    <i class="fas fa-search text-white text-sm"></i>
+                                                </button>
+                                                <button class="p-2 rounded-full" style="background-color: #FFC300;">
+                                                    <i class="fas fa-bell text-white text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Content -->
+                                    <div class="p-4" style="background-color: #FFFFFF;">
+                                        <div class="mb-4 p-3 rounded-lg" style="background-color: #36D7B7;">
+                                            <div class="text-white font-bold mb-1">عنوان البطاقة</div>
+                                            <div class="text-white text-sm">هذا نص توضيحي لمعاينة كيفية ظهور الألوان في واجهة المستخدم.</div>
+                                        </div>
+                                        
+                                        <div class="flex space-x-2 space-x-reverse mb-4">
+                                            <button class="px-4 py-2 rounded-lg text-white" style="background-color: #3498DB;">زر أساسي</button>
+                                            <button class="px-4 py-2 rounded-lg text-white" style="background-color: #9B59B6;">زر ثانوي</button>
+                                        </div>
+                                        
+                                        <div class="flex space-x-2 space-x-reverse">
+                                            <div class="w-3 h-3 rounded-full" style="background-color: #FF5733;"></div>
+                                            <div class="w-3 h-3 rounded-full" style="background-color: #FFC300;"></div>
+                                            <div class="w-3 h-3 rounded-full" style="background-color: #36D7B7;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Color Harmony Info -->
+                                <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">معلومات التناسق اللوني</h4>
+                                    <p id="harmony-info" class="text-sm text-gray-600 dark:text-gray-400">
+                                        هذه اللوحة تستخدم نظام الألوان المتناسقة، حيث تم اختيار الألوان بناءً على موقعها في عجلة الألوان لإنشاء مظهر متناغم ومتوازن.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Saved Palettes Tab -->
+            <div id="saved-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">لوحات الألوان المحفوظة</h2>
+                
+                <div id="no-saved-palettes" class="text-center py-10">
+                    <i class="fas fa-bookmark text-gray-400 text-5xl mb-4"></i>
+                    <p class="text-gray-500 dark:text-gray-400">لم تقم بحفظ أي لوحات ألوان بعد.</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">قم بإنشاء وحفظ لوحات الألوان من علامة التبويب "مولد الألوان".</p>
+                </div>
+                
+                <div id="saved-palettes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Saved palettes will be displayed here -->
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول مولد لوحات الألوان</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            مولد لوحات الألوان هي أداة مصممة لمساعدتك في إنشاء مجموعات ألوان متناسقة لمشاريعك التصميمية. توفر لك مجموعة من الميزات:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>توليد لوحات ألوان متناسقة باستخدام مختلف طرق التناسق اللوني</li>
+                            <li>تخصيص اللون الأساسي وعدد الألوان ودرجة التباين</li>
+                            <li>معاينة اللوحة في واجهة مستخدم افتراضية</li>
+                            <li>حفظ لوحات الألوان المفضلة لديك للرجوع إليها لاحقًا</li>
+                            <li>تصدير اللوحات بتنسيقات مختلفة (PNG، CSS، JSON)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">طرق التناسق اللوني</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300">أحادي اللون (Monochromatic)</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    يستخدم درجات مختلفة من نفس اللون، مما يخلق مظهرًا متناغمًا وموحدًا.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300">متناظر (Analogous)</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    يستخدم ألوانًا متجاورة على عجلة الألوان، مما يخلق مظهرًا متناغمًا ومتناسقًا.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300">متكامل (Complementary)</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    يستخدم ألوانًا متقابلة على عجلة الألوان، مما يخلق تباينًا قويًا وحيويًا.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300">ثلاثي (Triadic)</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    يستخدم ثلاثة ألوان متباعدة بالتساوي على عجلة الألوان، مما يخلق مظهرًا متوازنًا وحيويًا.
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300">رباعي (Tetradic)</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    يستخدم أربعة ألوان تشكل مستطيلًا على عجلة الألوان، مما يوفر تنوعًا كبيرًا في الألوان.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-pink-600 dark:text-pink-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يونيو 2023</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index_tools.html" class="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2023</span> مولد لوحات الألوان - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <!-- Modal for CSS Export -->
+    <div id="css-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full max-h-[80vh] overflow-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">أكواد CSS</h3>
+                <button id="close-css-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <pre id="css-code" class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-sm text-gray-800 dark:text-gray-300 overflow-x-auto"></pre>
+            </div>
+            <div class="flex justify-end">
+                <button id="copy-css-btn" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-medium rounded-lg transition-colors">
+                    <i class="fas fa-copy ml-2"></i>نسخ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dark mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Initialize color palette functionality
+            initColorPalette();
+        });
+        
+        // Color palette functionality
+        function initColorPalette() {
+            // Elements
+            const baseColor = document.getElementById('base-color');
+            const colorHexInput = document.getElementById('color-hex-input');
+            const colorsCount = document.getElementById('colors-count');
+            const contrast = document.getElementById('contrast');
+            const contrastValue = document.getElementById('contrast-value');
+            const generationMethod = document.getElementById('generation-method');
+            const generateBtn = document.getElementById('generate-btn');
+            const randomBtn = document.getElementById('random-btn');
+            const paletteDisplay = document.getElementById('palette-display');
+            const uiPreview = document.getElementById('ui-preview');
+            const harmonyInfo = document.getElementById('harmony-info');
+            const paletteName = document.getElementById('palette-name');
+            const savePaletteBtn = document.getElementById('save-palette-btn');
+            const exportImageBtn = document.getElementById('export-image-btn');
+            const exportCssBtn = document.getElementById('export-css-btn');
+            const exportJsonBtn = document.getElementById('export-json-btn');
+            const savedPalettesGrid = document.getElementById('saved-palettes-grid');
+            const noSavedPalettes = document.getElementById('no-saved-palettes');
+            const cssModal = document.getElementById('css-modal');
+            const closeCssModal = document.getElementById('close-css-modal');
+            const cssCode = document.getElementById('css-code');
+            const copyCssBtn = document.getElementById('copy-css-btn');
+            
+            // Current palette colors
+            let currentPalette = ['#FF5733', '#FFC300', '#36D7B7', '#3498DB', '#9B59B6'];
+            
+            // Update contrast value display
+            contrast.addEventListener('input', function() {
+                contrastValue.textContent = `${this.value}%`;
+            });
+            
+            // Sync color input and hex input
+            baseColor.addEventListener('input', function() {
+                colorHexInput.value = this.value.toUpperCase();
+            });
+            
+            colorHexInput.addEventListener('input', function() {
+                // Validate hex color format
+                if (/^#[0-9A-F]{6}$/i.test(this.value)) {
+                    baseColor.value = this.value;
+                }
+            });
+            
+            // Generate button click
+            generateBtn.addEventListener('click', function() {
+                generatePalette();
+            });
+            
+            // Random button click
+            randomBtn.addEventListener('click', function() {
+                // Set random base color
+                const randomColor = getRandomColor();
+                baseColor.value = randomColor;
+                colorHexInput.value = randomColor;
+                
+                // Set random generation method
+                const methods = ['random', 'monochromatic', 'analogous', 'complementary', 'triadic', 'tetradic'];
+                generationMethod.value = methods[Math.floor(Math.random() * methods.length)];
+                
+                generatePalette();
+            });
+            
+            // Save palette button click
+            savePaletteBtn.addEventListener('click', function() {
+                savePalette();
+            });
+            
+            // Export buttons
+            exportImageBtn.addEventListener('click', function() {
+                exportAsImage();
+            });
+            
+            exportCssBtn.addEventListener('click', function() {
+                exportAsCSS();
+            });
+            
+            exportJsonBtn.addEventListener('click', function() {
+                exportAsJSON();
+            });
+            
+            // Close CSS modal
+            closeCssModal.addEventListener('click', function() {
+                cssModal.classList.add('hidden');
+            });
+            
+            // Copy CSS button
+            copyCssBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(cssCode.textContent)
+                    .then(() => {
+                        // Show success feedback
+                        const originalText = copyCssBtn.innerHTML;
+                        copyCssBtn.innerHTML = '<i class="fas fa-check ml-2"></i>تم النسخ!';
+                        
+                        setTimeout(() => {
+                            copyCssBtn.innerHTML = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('فشل نسخ الأكواد. الرجاء المحاولة مرة أخرى.');
+                    });
+            });
+            
+            // Generate palette based on current settings
+            function generatePalette() {
+                const method = generationMethod.value;
+                const base = baseColor.value;
+                const count = parseInt(colorsCount.value);
+                const contrastLevel = parseInt(contrast.value);
+                
+                // Generate colors based on method
+                let colors = [];
+                
+                switch (method) {
+                    case 'random':
+                        colors = generateRandomPalette(count);
+                        break;
+                    case 'monochromatic':
+                        colors = generateMonochromaticPalette(base, count, contrastLevel);
+                        break;
+                    case 'analogous':
+                        colors = generateAnalogousPalette(base, count, contrastLevel);
+                        break;
+                    case 'complementary':
+                        colors = generateComplementaryPalette(base, count, contrastLevel);
+                        break;
+                    case 'triadic':
+                        colors = generateTriadicPalette(base, count, contrastLevel);
+                        break;
+                    case 'tetradic':
+                        colors = generateTetradicPalette(base, count, contrastLevel);
+                        break;
+                    default:
+                        colors = generateRandomPalette(count);
+                }
+                
+                // Update current palette
+                currentPalette = colors;
+                
+                // Update palette display
+                updatePaletteDisplay(colors);
+                
+                // Update UI preview
+                updateUIPreview(colors);
+                
+                // Update harmony info
+                updateHarmonyInfo(method);
+            }
+            
+            // Update palette display
+            function updatePaletteDisplay(colors) {
+                paletteDisplay.innerHTML = '';
+                
+                colors.forEach(color => {
+                    const rgb = hexToRgb(color);
+                    
+                    const swatch = document.createElement('div');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = color;
+                    
+                    const info = document.createElement('div');
+                    info.className = 'color-info';
+                    info.innerHTML = `
+                        <div class="text-sm font-bold">${color}</div>
+                        <div class="text-xs">RGB: ${rgb.r}, ${rgb.g}, ${rgb.b}</div>
+                    `;
+                    
+                    // Add click to copy functionality
+                    swatch.addEventListener('click', function() {
+                        navigator.clipboard.writeText(color)
+                            .then(() => {
+                                // Show temporary feedback
+                                const tempFeedback = document.createElement('div');
+                                tempFeedback.className = 'absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center';
+                                tempFeedback.innerHTML = '<div class="text-white font-bold">تم النسخ!</div>';
+                                
+                                swatch.style.position = 'relative';
+                                swatch.appendChild(tempFeedback);
+                                
+                                setTimeout(() => {
+                                    swatch.removeChild(tempFeedback);
+                                }, 1000);
+                            })
+                            .catch(err => console.error('Failed to copy: ', err));
+                    });
+                    
+                    swatch.appendChild(info);
+                    paletteDisplay.appendChild(swatch);
+                });
+            }
+            
+            // Update UI preview
+            function updateUIPreview(colors) {
+                // Header background
+                const header = uiPreview.querySelector('div:first-child');
+                header.style.backgroundColor = colors[0];
+                
+                // Buttons in header
+                const headerButtons = header.querySelectorAll('button');
+                headerButtons.forEach(button => {
+                    button.style.backgroundColor = colors[1];
+                });
+                
+                // Card background
+                const card = uiPreview.querySelectorAll('div')[3];
+                card.style.backgroundColor = colors[2];
+                
+                // Primary button
+                const primaryButton = uiPreview.querySelectorAll('button')[2];
+                primaryButton.style.backgroundColor = colors[3];
+                
+                // Secondary button
+                const secondaryButton = uiPreview.querySelectorAll('button')[3];
+                secondaryButton.style.backgroundColor = colors[4] || colors[0];
+                
+                // Dots
+                const dots = uiPreview.querySelectorAll('div.w-3');
+                dots.forEach((dot, index) => {
+                    if (index < colors.length) {
+                        dot.style.backgroundColor = colors[index];
+                    }
+                });
+            }
+            
+            // Update harmony info
+            function updateHarmonyInfo(method) {
+                let info = '';
+                
+                switch (method) {
+                    case 'random':
+                        info = 'هذه اللوحة تم إنشاؤها بشكل عشوائي، مما يوفر مجموعة متنوعة من الألوان غير المرتبطة بقواعد تناسق محددة.';
+                        break;
+                    case 'monochromatic':
+                    info = 'هذه اللوحة أحادية اللون، حيث تستخدم درجات مختلفة من نفس اللون. هذا النوع من اللوحات يخلق مظهرًا متناغمًا وموحدًا، ويعتبر مثاليًا للتصاميم الأنيقة والبسيطة.';
+                    break;
+                case 'analogous':
+                    info = 'هذه اللوحة متناظرة، حيث تستخدم ألوانًا متجاورة على عجلة الألوان. هذا النوع من اللوحات يخلق مظهرًا متناغمًا ومتناسقًا، ويعتبر مثاليًا للتصاميم الطبيعية والمريحة للعين.';
+                    break;
+                case 'complementary':
+                    info = 'هذه اللوحة متكاملة، حيث تستخدم ألوانًا متقابلة على عجلة الألوان. هذا النوع من اللوحات يخلق تباينًا قويًا وحيويًا، ويعتبر مثاليًا للتصاميم التي تحتاج إلى لفت الانتباه.';
+                    break;
+                case 'triadic':
+                    info = 'هذه اللوحة ثلاثية، حيث تستخدم ثلاثة ألوان متباعدة بالتساوي على عجلة الألوان. هذا النوع من اللوحات يخلق مظهرًا متوازنًا وحيويًا، ويعتبر مثاليًا للتصاميم المرحة والنابضة بالحياة.';
+                    break;
+                case 'tetradic':
+                    info = 'هذه اللوحة رباعية، حيث تستخدم أربعة ألوان تشكل مستطيلًا على عجلة الألوان. هذا النوع من اللوحات يوفر تنوعًا كبيرًا في الألوان، ويعتبر مثاليًا للتصاميم الغنية والمتنوعة.';
+                    break;
+                default:
+                    info = 'هذه اللوحة تم إنشاؤها باستخدام مزيج من الألوان المتناسقة لإنشاء مظهر متوازن وجذاب.';
+            }
+            
+            harmonyInfo.textContent = info;
+        }
+        
+        // Save palette to localStorage
+        function savePalette() {
+            const name = paletteName.value.trim() || `لوحة ${new Date().toLocaleString('ar-SA')}`;
+            
+            // Get existing palettes from localStorage
+            let savedPalettes = JSON.parse(localStorage.getItem('colorPalettes')) || [];
+            
+            // Add new palette
+            savedPalettes.push({
+                name: name,
+                colors: currentPalette,
+                date: new Date().toISOString()
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('colorPalettes', JSON.stringify(savedPalettes));
+            
+            // Show success message
+            alert(`تم حفظ اللوحة "${name}" بنجاح!`);
+            
+            // Clear palette name input
+            paletteName.value = '';
+            
+            // Update saved palettes display
+            loadSavedPalettes();
+        }
+        
+        // Load saved palettes from localStorage
+        function loadSavedPalettes() {
+            const savedPalettes = JSON.parse(localStorage.getItem('colorPalettes')) || [];
+            
+            if (savedPalettes.length === 0) {
+                noSavedPalettes.classList.remove('hidden');
+                savedPalettesGrid.classList.add('hidden');
+                return;
+            }
+            
+            noSavedPalettes.classList.add('hidden');
+            savedPalettesGrid.classList.remove('hidden');
+            
+            // Clear grid
+            savedPalettesGrid.innerHTML = '';
+            
+            // Add palettes to grid
+            savedPalettes.forEach((palette, index) => {
+                const paletteCard = document.createElement('div');
+                paletteCard.className = 'bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md palette-card';
+                
+                // Create color swatches
+                let swatchesHTML = '';
+                palette.colors.forEach(color => {
+                    swatchesHTML += `<div class="h-8" style="background-color: ${color};"></div>`;
+                });
+                
+                // Format date
+                const date = new Date(palette.date);
+                const formattedDate = date.toLocaleDateString('ar-SA');
+                
+                paletteCard.innerHTML = `
+                    <div class="flex flex-col">
+                        <div class="grid grid-cols-${palette.colors.length} gap-0 rounded-t-lg overflow-hidden">
+                            ${swatchesHTML}
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-1">${palette.name}</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">${formattedDate}</p>
+                            <div class="flex justify-between mt-3">
+                                <button class="load-palette-btn text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" data-index="${index}">
+                                    <i class="fas fa-sync-alt ml-1"></i>تحميل
+                                </button>
+                                <button class="delete-palette-btn text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" data-index="${index}">
+                                    <i class="fas fa-trash-alt ml-1"></i>حذف
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                savedPalettesGrid.appendChild(paletteCard);
+            });
+            
+            // Add event listeners to load and delete buttons
+            document.querySelectorAll('.load-palette-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    loadPalette(index);
+                });
+            });
+            
+            document.querySelectorAll('.delete-palette-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    deletePalette(index);
+                });
+            });
+        }
+        
+        // Load a saved palette
+        function loadPalette(index) {
+            const savedPalettes = JSON.parse(localStorage.getItem('colorPalettes')) || [];
+            
+            if (index >= 0 && index < savedPalettes.length) {
+                const palette = savedPalettes[index];
+                
+                // Update current palette
+                currentPalette = palette.colors;
+                
+                // Update base color
+                baseColor.value = palette.colors[0];
+                colorHexInput.value = palette.colors[0];
+                
+                // Update colors count
+                colorsCount.value = Math.min(6, Math.max(3, palette.colors.length));
+                
+                // Update palette display
+                updatePaletteDisplay(palette.colors);
+                
+                // Update UI preview
+                updateUIPreview(palette.colors);
+                
+                // Switch to generator tab
+                document.querySelector('[data-tab="generator"]').click();
+                
+                // Show success message
+                alert(`تم تحميل اللوحة "${palette.name}" بنجاح!`);
+            }
+        }
+        
+        // Delete a saved palette
+        function deletePalette(index) {
+            if (!confirm('هل أنت متأكد من رغبتك في حذف هذه اللوحة؟')) {
+                return;
+            }
+            
+            const savedPalettes = JSON.parse(localStorage.getItem('colorPalettes')) || [];
+            
+            if (index >= 0 && index < savedPalettes.length) {
+                // Remove palette
+                savedPalettes.splice(index, 1);
+                
+                // Save to localStorage
+                localStorage.setItem('colorPalettes', JSON.stringify(savedPalettes));
+                
+                // Update saved palettes display
+                loadSavedPalettes();
+                
+                // Show success message
+                alert('تم حذف اللوحة بنجاح!');
+            }
+        }
+        
+        // Export as image (PNG)
+        function exportAsImage() {
+            // Create a temporary canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = 800;
+            canvas.height = 400;
+            
+            // Fill background
+            ctx.fillStyle = document.documentElement.classList.contains('dark') ? '#1e293b' : '#f8fafc';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw title
+            ctx.font = 'bold 24px Tajawal, sans-serif';
+            ctx.fillStyle = document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b';
+            ctx.textAlign = 'center';
+            ctx.fillText('لوحة الألوان', canvas.width / 2, 50);
+            
+            // Draw color swatches
+            const swatchWidth = canvas.width / currentPalette.length;
+            const swatchHeight = 200;
+            const swatchY = 100;
+            
+            currentPalette.forEach((color, index) => {
+                // Draw swatch
+                ctx.fillStyle = color;
+                ctx.fillRect(index * swatchWidth, swatchY, swatchWidth, swatchHeight);
+                
+                // Draw color code
+                ctx.font = 'bold 16px monospace';
+                ctx.fillStyle = getContrastColor(color);
+                ctx.textAlign = 'center';
+                ctx.fillText(color, (index * swatchWidth) + (swatchWidth / 2), swatchY + swatchHeight - 20);
+                
+                // Draw RGB values
+                const rgb = hexToRgb(color);
+                ctx.font = '14px monospace';
+                ctx.fillText(`RGB: ${rgb.r}, ${rgb.g}, ${rgb.b}`, (index * swatchWidth) + (swatchWidth / 2), swatchY + swatchHeight - 40);
+            });
+            
+            // Draw footer
+            ctx.font = '14px Tajawal, sans-serif';
+            ctx.fillStyle = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b';
+            ctx.fillText('تم إنشاؤها باستخدام مولد لوحات الألوان', canvas.width / 2, canvas.height - 30);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'color-palette.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Export as CSS
+        function exportAsCSS() {
+            let css = '/* لوحة الألوان */\n\n';
+            css += ':root {\n';
+            
+            currentPalette.forEach((color, index) => {
+                const rgb = hexToRgb(color);
+                css += `  --color-${index + 1}: ${color}; /* RGB: ${rgb.r}, ${rgb.g}, ${rgb.b} */\n`;
+            });
+            
+            css += '}\n\n';
+            
+            css += '/* أمثلة على استخدام الألوان */\n';
+            css += '.bg-primary { background-color: var(--color-1); }\n';
+            css += '.bg-secondary { background-color: var(--color-2); }\n';
+            css += '.bg-accent { background-color: var(--color-3); }\n';
+            css += '.text-primary { color: var(--color-1); }\n';
+            css += '.text-secondary { color: var(--color-2); }\n';
+            css += '.text-accent { color: var(--color-3); }\n';
+            
+            // Show in modal
+            cssCode.textContent = css;
+            cssModal.classList.remove('hidden');
+        }
+        
+        // Export as JSON
+        function exportAsJSON() {
+            const palette = {
+                name: paletteName.value.trim() || `لوحة ${new Date().toLocaleString('ar-SA')}`,
+                colors: currentPalette,
+                date: new Date().toISOString()
+            };
+            
+            const json = JSON.stringify(palette, null, 2);
+            
+            // Create download link
+            const blob = new Blob([json], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.download = 'color-palette.json';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+        
+        // Generate random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        // Generate random palette
+        function generateRandomPalette(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                colors.push(getRandomColor());
+            }
+            return colors;
+        }
+        
+        // Generate monochromatic palette
+        function generateMonochromaticPalette(baseColor, count, contrastLevel) {
+            const colors = [baseColor];
+            const hsv = hexToHsv(baseColor);
+            
+            // Calculate step size based on contrast level
+            const satStep = (100 - hsv.s) / (count + 1);
+            const valStep = (100 - hsv.v) / (count + 1);
+            
+            // Adjust step based on contrast level (0-100)
+            const adjustedSatStep = satStep * (contrastLevel / 50);
+            const adjustedValStep = valStep * (contrastLevel / 50);
+            
+            for (let i = 1; i < count; i++) {
+                    // Alternate between adjusting saturation and value
+                    if (i % 2 === 0) {
+                        hsv.s = Math.max(0, Math.min(100, hsv.s - adjustedSatStep * i));
+                    } else {
+                        hsv.v = Math.max(0, Math.min(100, hsv.v - adjustedValStep * i));
+                    }
+                    
+                    colors.push(hsvToHex(hsv.h, hsv.s, hsv.v));
+                }
+                
+                return colors;
+            }
+            
+            // Generate analogous palette
+            function generateAnalogousPalette(baseColor, count, contrastLevel) {
+                const colors = [baseColor];
+                const hsv = hexToHsv(baseColor);
+                
+                // Calculate hue step (30 degrees is standard, adjust based on contrast)
+                const hueStep = 30 * (contrastLevel / 50);
+                
+                // Generate colors on both sides of the base color
+                const halfCount = Math.floor((count - 1) / 2);
+                
+                for (let i = 1; i <= halfCount; i++) {
+                    // Add color with increased hue
+                    const hue1 = (hsv.h + hueStep * i) % 360;
+                    colors.push(hsvToHex(hue1, hsv.s, hsv.v));
+                    
+                    // Add color with decreased hue if we need more colors
+                    if (colors.length < count) {
+                        const hue2 = (hsv.h - hueStep * i + 360) % 360;
+                        colors.push(hsvToHex(hue2, hsv.s, hsv.v));
+                    }
+                }
+                
+                // If we need one more color (for odd counts)
+                if (colors.length < count) {
+                    const hue = (hsv.h + hueStep * (halfCount + 1)) % 360;
+                    colors.push(hsvToHex(hue, hsv.s, hsv.v));
+                }
+                
+                return colors;
+            }
+            
+            // Generate complementary palette
+            function generateComplementaryPalette(baseColor, count, contrastLevel) {
+                const colors = [baseColor];
+                const hsv = hexToHsv(baseColor);
+                
+                // Complementary color (opposite on the color wheel)
+                const compHue = (hsv.h + 180) % 360;
+                
+                // For count = 2, just return base and complement
+                if (count === 2) {
+                    colors.push(hsvToHex(compHue, hsv.s, hsv.v));
+                    return colors;
+                }
+                
+                // For more colors, add variations
+                const variations = count - 2;
+                const halfVariations = Math.floor(variations / 2);
+                
+                // Add variations of the base color
+                for (let i = 1; i <= halfVariations; i++) {
+                    const satFactor = 1 - (i * 0.15 * (contrastLevel / 50));
+                    const valFactor = 1 - (i * 0.1 * (contrastLevel / 50));
+                    
+                    colors.push(hsvToHex(hsv.h, hsv.s * satFactor, hsv.v * valFactor));
+                }
+                
+                // Add the complementary color
+                colors.push(hsvToHex(compHue, hsv.s, hsv.v));
+                
+                // Add variations of the complementary color
+                for (let i = 1; i <= variations - halfVariations; i++) {
+                    const satFactor = 1 - (i * 0.15 * (contrastLevel / 50));
+                    const valFactor = 1 - (i * 0.1 * (contrastLevel / 50));
+                    
+                    colors.push(hsvToHex(compHue, hsv.s * satFactor, hsv.v * valFactor));
+                }
+                
+                return colors;
+            }
+            
+            // Generate triadic palette
+            function generateTriadicPalette(baseColor, count, contrastLevel) {
+                const colors = [baseColor];
+                const hsv = hexToHsv(baseColor);
+                
+                // Triadic colors (120 degrees apart on the color wheel)
+                const triad1 = (hsv.h + 120) % 360;
+                const triad2 = (hsv.h + 240) % 360;
+                
+                // For count = 3, just return the triadic colors
+                if (count === 3) {
+                    colors.push(hsvToHex(triad1, hsv.s, hsv.v));
+                    colors.push(hsvToHex(triad2, hsv.s, hsv.v));
+                    return colors;
+                }
+                
+                // For more colors, distribute them between the triadic points
+                const step = 120 / Math.ceil((count - 1) / 2);
+                
+                for (let i = 1; i < count; i++) {
+                    const angle = (hsv.h + (step * i)) % 360;
+                    
+                    // Adjust saturation and value based on contrast
+                    const contrastFactor = (i % 2) * (contrastLevel / 100);
+                    const newSat = Math.max(0, Math.min(100, hsv.s - (contrastFactor * 20)));
+                    const newVal = Math.max(0, Math.min(100, hsv.v - (contrastFactor * 15)));
+                    
+                    colors.push(hsvToHex(angle, newSat, newVal));
+                }
+                
+                return colors;
+            }
+            
+            // Generate tetradic palette
+            function generateTetradicPalette(baseColor, count, contrastLevel) {
+                const colors = [baseColor];
+                const hsv = hexToHsv(baseColor);
+                
+                // Tetradic colors (90 degrees apart on the color wheel)
+                const tetra1 = (hsv.h + 90) % 360;
+                const tetra2 = (hsv.h + 180) % 360;
+                const tetra3 = (hsv.h + 270) % 360;
+                
+                // For count = 4, just return the tetradic colors
+                if (count === 4) {
+                    colors.push(hsvToHex(tetra1, hsv.s, hsv.v));
+                    colors.push(hsvToHex(tetra2, hsv.s, hsv.v));
+                    colors.push(hsvToHex(tetra3, hsv.s, hsv.v));
+                    return colors;
+                }
+                
+                // For more colors, distribute them between the tetradic points
+                const tetradics = [hsv.h, tetra1, tetra2, tetra3];
+                
+                // Add intermediate colors if needed
+                if (count > 4) {
+                    const extras = count - 4;
+                    for (let i = 0; i < extras; i++) {
+                        // Calculate position between tetradic points
+                        const index = i % 4;
+                        const nextIndex = (index + 1) % 4;
+                        
+                        const hue1 = tetradics[index];
+                        const hue2 = tetradics[nextIndex];
+                        
+                        // Calculate intermediate hue
+                        let intermediateHue;
+                        if (hue1 > hue2 && hue1 - hue2 > 180) {
+                            intermediateHue = (hue1 + (hue2 + 360 - hue1) / 2) % 360;
+                        } else if (hue2 > hue1 && hue2 - hue1 > 180) {
+                            intermediateHue = (hue1 + (hue2 - 360 - hue1) / 2 + 360) % 360;
+                        } else {
+                            intermediateHue = (hue1 + (hue2 - hue1) / 2) % 360;
+                        }
+                        
+                        // Adjust saturation and value based on contrast
+                        const contrastFactor = (contrastLevel / 100);
+                        const newSat = Math.max(0, Math.min(100, hsv.s - (contrastFactor * 15)));
+                        const newVal = Math.max(0, Math.min(100, hsv.v - (contrastFactor * 10)));
+                        
+                        colors.push(hsvToHex(intermediateHue, newSat, newVal));
+                    }
+                } else {
+                    // For fewer colors, select a subset
+                    for (let i = 1; i < count; i++) {
+                        colors.push(hsvToHex(tetradics[i], hsv.s, hsv.v));
+                    }
+                }
+                
+                return colors;
+            }
+            
+            // Convert hex to RGB
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : null;
+            }
+            
+            // Convert RGB to HSV
+            function rgbToHsv(r, g, b) {
+                r /= 255;
+                g /= 255;
+                b /= 255;
+                
+                const max = Math.max(r, g, b);
+                const min = Math.min(r, g, b);
+                let h, s, v = max;
+                
+                const d = max - min;
+                s = max === 0 ? 0 : d / max;
+                
+                if (max === min) {
+                    h = 0; // achromatic
+                } else {
+                    switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                    }
+                    h /= 6;
+                }
+                
+                return {
+                    h: Math.round(h * 360),
+                    s: Math.round(s * 100),
+                    v: Math.round(v * 100)
+                };
+            }
+            
+            // Convert hex to HSV
+            function hexToHsv(hex) {
+                const rgb = hexToRgb(hex);
+                return rgbToHsv(rgb.r, rgb.g, rgb.b);
+            }
+            
+            // Convert HSV to RGB
+            function hsvToRgb(h, s, v) {
+                h /= 360;
+                s /= 100;
+                v /= 100;
+                
+                let r, g, b;
+                
+                const i = Math.floor(h * 6);
+                const f = h * 6 - i;
+                const p = v * (1 - s);
+                const q = v * (1 - f * s);
+                const t = v * (1 - (1 - f) * s);
+                
+                switch (i % 6) {
+                    case 0: r = v; g = t; b = p; break;
+                    case 1: r = q; g = v; b = p; break;
+                    case 2: r = p; g = v; b = t; break;
+                    case 3: r = p; g = q; b = v; break;
+                    case 4: r = t; g = p; b = v; break;
+                    case 5: r = v; g = p; b = q; break;
+                }
+                
+                return {
+                    r: Math.round(r * 255),
+                    g: Math.round(g * 255),
+                    b: Math.round(b * 255)
+                };
+            }
+            
+            // Convert HSV to hex
+            function hsvToHex(h, s, v) {
+                const rgb = hsvToRgb(h, s, v);
+                return rgbToHex(rgb.r, rgb.g, rgb.b);
+            }
+            
+            // Convert RGB to hex
+            function rgbToHex(r, g, b) {
+                return '#' + [r, g, b].map(x => {
+                    const hex = x.toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                }).join('');
+            }
+            
+            // Get contrasting text color (black or white) based on background
+            function getContrastColor(hexColor) {
+                const rgb = hexToRgb(hexColor);
+                const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+                return brightness > 128 ? '#000000' : '#FFFFFF';
+            }
+            
+            // Load saved palettes on page load
+            loadSavedPalettes();
+            
+            // Generate initial palette
+            generatePalette();
+        }
+    </script>
+</body>
+</html>
+

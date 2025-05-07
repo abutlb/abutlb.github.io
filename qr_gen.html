@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR-Gen | مولد رموز QR العصري</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #8b5cf6; /* Purple for moon */
+        }
+        .sun-icon {
+            color: #fbbf24; /* Yellow for sun */
+        }
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">QR-Gen</h1>
+                <p class="text-gray-600 dark:text-gray-400">إنشاء رموز QR مخصصة لموقعك الإلكتروني أو عملك أو استخدامك الشخصي</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch_field" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="generator">
+                    <i class="fas fa-qrcode ml-2"></i>مولد رمز QR
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول
+                </button>
+            </div>
+            
+            <!-- Generator Tab -->
+            <div id="generator-tab" class="tab-content p-6 block">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Options Panel -->
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-pen-to-square ml-2"></i>محتوى رمز QR
+                            </h3>
+                            <div>
+                                <textarea id="qr-text" placeholder="أدخل عنوان URL أو نصًا لرمز QR الخاص بك" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    rows="4"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-palette ml-2"></i>تخصيص رمز QR الخاص بك
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="foreground-color" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">لون المقدمة</label>
+                                    <input type="color" id="foreground-color" value="#000000" 
+                                        class="w-full h-10 rounded-md border border-gray-300 cursor-pointer dark:border-gray-600">
+                                </div>
+                                
+                                <div>
+                                    <label for="background-color" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">لون الخلفية</label>
+                                    <input type="color" id="background-color" value="#FFFFFF" 
+                                        class="w-full h-10 rounded-md border border-gray-300 cursor-pointer dark:border-gray-600">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="corner-radius" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                                    نصف قطر الزاوية: <span id="corner-radius-value">0%</span>
+                                </label>
+                                <input type="range" id="corner-radius" min="0" max="50" value="0" 
+                                    class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="logo-upload" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">إضافة شعار (اختياري)</label>
+                                <input type="file" id="logo-upload" accept="image/*" 
+                                    class="w-full text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-400 hover:file:bg-blue-100">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="error-correction" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">تصحيح الخطأ</label>
+                                <select id="error-correction" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="L">منخفض (7%)</option>
+                                    <option value="M" selected>متوسط (15%) (موصى به)</option>
+                                    <option value="Q">ربعي (25%)</option>
+                                    <option value="H">مرتفع (30%)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="qr-size" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                                    حجم رمز QR: <span id="qr-size-value">8</span>
+                                </label>
+                                <input type="range" id="qr-size" min="5" max="10" value="8" 
+                                    class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                        
+                        <button id="generate-btn" 
+                            class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors shadow-md">
+                            <i class="fas fa-qrcode ml-2"></i>إنشاء رمز QR
+                        </button>
+                    </div>
+                    
+                    <!-- Preview Panel -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg flex flex-col items-center justify-center">
+                        <div id="qr-container" class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md mb-6 flex items-center justify-center min-h-[250px] min-w-[250px]">
+                            <p class="text-gray-400 dark:text-gray-500 text-center">سيظهر رمز QR الخاص بك هنا</p>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-3 justify-center">
+                            <button id="download-png" disabled class="flex items-center gap-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition opacity-70 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fas fa-download ml-2"></i> PNG
+                            </button>
+                            <button id="download-svg" disabled class="flex items-center gap-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition opacity-70 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fas fa-download ml-2"></i> SVG
+                            </button>
+                            <button id="download-pdf" disabled class="flex items-center gap-2 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition opacity-70 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fas fa-download ml-2"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول QR-Gen</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            QR-Gen هي أداة مولدة لرموز QR مصممة لمساعدتك في إنشاء رموز QR مخصصة لموقعك الإلكتروني أو عملك أو استخدامك الشخصي. توفر لك مجموعة من الميزات:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>تخصيص ألوان رمز QR (المقدمة والخلفية)</li>
+                            <li>تعديل نصف قطر زوايا رمز QR</li>
+                            <li>إضافة شعار في وسط رمز QR</li>
+                            <li>اختيار مستوى تصحيح الخطأ المناسب</li>
+                            <li>تحميل رمز QR بتنسيقات متعددة (PNG، SVG، PDF)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">كيفية الاستخدام</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>أدخل النص أو عنوان URL الذي تريد تحويله إلى رمز QR</li>
+                            <li>قم بتخصيص مظهر رمز QR باستخدام الخيارات المتاحة</li>
+                            <li>انقر على زر "إنشاء رمز QR" لتوليد الرمز</li>
+                            <li>قم بتنزيل الرمز بالتنسيق المفضل لديك</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/yourusername" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@yourusername</span>
+                            </a>
+                            
+                            <a href="https://github.com/yourusername" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:your.email@example.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يونيو 2023</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2023</span> QR-Gen - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/qr_gen.js"></script>
+    
+    <script>
+        // Simple dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dark mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>
