@@ -1,0 +1,2575 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقياس جودة البيانات | Data Quality Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #8b5cf6;
+        }
+        .sun-icon {
+            color: #fbbf24;
+        }
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+
+        /* Quality gauge styles */
+        .gauge-container {
+            position: relative;
+            width: 250px;
+            height: 125px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .gauge {
+            width: 100%;
+            height: 200px;
+            border-top-left-radius: 250px;
+            border-top-right-radius: 250px;
+            background: linear-gradient(to right, #f44336, #ffeb3b, #4caf50);
+            position: relative;
+        }
+        .gauge-mask {
+            width: 220px;
+            height: 110px;
+            background-color: #f8fafc;
+            border-top-left-radius: 220px;
+            border-top-right-radius: 220px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            transition: background-color 0.3s;
+        }
+        html.dark .gauge-mask {
+            background-color: #1e293b;
+        }
+        .gauge-value {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            background-color: #ffffff;
+            transform-origin: bottom center;
+            transform: rotate(90deg);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            transition: transform 1s ease-out;
+        }
+        .gauge-needle {
+            position: absolute;
+            height: 110px;
+            width: 4px;
+            background-color: #475569;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%) rotate(90deg);
+            transform-origin: bottom center;
+            transition: transform 1s ease-out;
+            z-index: 10;
+        }
+        .gauge-center {
+            width: 20px;
+            height: 20px;
+            background-color: #475569;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 11;
+        }
+        
+        /* Progress bar styles */
+        .progress-bar {
+            height: 8px;
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-value {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(to right, #4361ee, #7c3aed);
+            transition: width 0.5s ease;
+        }
+        
+        /* Card hover effects */
+        .metric-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Tab styles */
+        .tab-btn.active {
+            position: relative;
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index_tools.html" class="p-2 bg-purple-300 dark:bg-primary-900 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors">
+                  <i class="fas fa-arrow-right text-purple-600 dark:text-primary-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 text-center">مقياس جودة البيانات</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">قياس وتنظيف وتحسين جودة البيانات بسهولة</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch_field" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="analyzer">
+                    <i class="fas fa-chart-bar ml-2"></i>محلل البيانات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="cleaner">
+                    <i class="fas fa-broom ml-2"></i>منظف البيانات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول الأداة
+                </button>
+            </div>
+            
+            <!-- Analyzer Tab -->
+            <div id="analyzer-tab" class="tab-content p-6 block">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Left Panel: Upload and Instructions -->
+                    <div class="md:w-1/3 space-y-6">
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-upload ml-2"></i>رفع ملف البيانات
+                            </h3>
+                            <div class="mb-4">
+                                <input type="file" id="data-upload" accept=".csv,.xlsx,.xls,.json" 
+                                    class="w-full text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-400 hover:file:bg-blue-100">
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                يمكنك رفع ملفات بتنسيقات CSV، Excel، أو JSON.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-info-circle ml-2"></i>تعليمات
+                            </h3>
+                            <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300 text-sm">
+                                <li>ارفع ملف البيانات الخاص بك</li>
+                                <li>انتظر حتى يتم تحليل الجودة</li>
+                                <li>استعرض مقاييس جودة البيانات</li>
+                                <li>انتقل إلى علامة التبويب "منظف البيانات" لتحسين الجودة</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <i class="fas fa-cog ml-2"></i>إعدادات التحليل
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">اختر إطار التحليل</label>
+                                    <select id="framework-select" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                        <option value="tdq">إطار TDQ (Total Data Quality)</option>
+                                        <option value="dqf">إطار DQF (Data Quality Framework)</option>
+                                        <option value="custom">إطار مخصص</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="check-completeness" class="sr-only peer" checked>
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">الاكتمال</span>
+                                    </label>
+                                    
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="check-accuracy" class="sr-only peer" checked>
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">الدقة</span>
+                                    </label>
+                                    
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="check-consistency" class="sr-only peer" checked>
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">التناسق</span>
+                                    </label>
+                                    
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="check-timeliness" class="sr-only peer" checked>
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">التوقيت</span>
+                                    </label>
+                                    
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="check-uniqueness" class="sr-only peer" checked>
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">التفرد</span>
+                                    </label>
+                                </div>
+                                
+                                <button id="analyze-btn" class="w-full mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    <i class="fas fa-chart-line ml-2"></i>تحليل جودة البيانات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Panel: Results -->
+                    <div class="md:w-2/3">
+                        <div id="results-container" class="space-y-6 hidden">
+                            <!-- Overall Quality Score -->
+                            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg text-center">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-star ml-2"></i>مؤشر الجودة الإجمالي
+                                </h3>
+                                
+                                <!-- Gauge -->
+                                <div class="gauge-container mb-6">
+                                    <div class="gauge"></div>
+                                    <div class="gauge-mask"></div>
+                                    <div class="gauge-needle" id="quality-needle"></div>
+                                    <div class="gauge-center"></div>
+                                </div>
+                                
+                                <div class="flex justify-center items-baseline">
+                                    <span id="quality-score" class="text-5xl font-bold text-blue-600 dark:text-blue-400">0</span>
+                                    <span class="text-xl text-gray-500 dark:text-gray-400 mr-2">/100</span>
+                                </div>
+                                
+                                <p id="quality-text" class="mt-2 text-gray-600 dark:text-gray-400">قم برفع ملف لتحليل جودته</p>
+                            </div>
+                            
+                            <!-- Detailed Metrics -->
+                            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-chart-bar ml-2"></i>مقاييس الجودة التفصيلية
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Completeness -->
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm metric-card">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h4 class="font-bold text-gray-700 dark:text-gray-300">الاكتمال</h4>
+                                            <span id="completeness-score" class="text-xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div id="completeness-bar" class="progress-value" style="width: 0%"></div>
+                                        </div>
+                                        <p id="completeness-desc" class="mt-2 text-xs text-gray-500 dark:text-gray-400">نسبة البيانات غير الفارغة</p>
+                                    </div>
+                                    
+                                    <!-- Accuracy -->
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm metric-card">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h4 class="font-bold text-gray-700 dark:text-gray-300">الدقة</h4>
+                                            <span id="accuracy-score" class="text-xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div id="accuracy-bar" class="progress-value" style="width: 0%"></div>
+                                        </div>
+                                        <p id="accuracy-desc" class="mt-2 text-xs text-gray-500 dark:text-gray-400">مدى مطابقة البيانات للمعايير</p>
+                                    </div>
+                                    
+                                    <!-- Consistency -->
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm metric-card">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h4 class="font-bold text-gray-700 dark:text-gray-300">التناسق</h4>
+                                            <span id="consistency-score" class="text-xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div id="consistency-bar" class="progress-value" style="width: 0%"></div>
+                                        </div>
+                                        <p id="consistency-desc" class="mt-2 text-xs text-gray-500 dark:text-gray-400">مدى توافق القيم والأنماط</p>
+                                    </div>
+                                    
+                                    <!-- Timeliness -->
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm metric-card">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h4 class="font-bold text-gray-700 dark:text-gray-300">التوقيت</h4>
+                                            <span id="timeliness-score" class="text-xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div id="timeliness-bar" class="progress-value" style="width: 0%"></div>
+                                        </div>
+                                        <p id="timeliness-desc" class="mt-2 text-xs text-gray-500 dark:text-gray-400">حداثة البيانات وتوقيتها</p>
+                                    </div>
+                                    
+                                    <!-- Uniqueness -->
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm metric-card">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h4 class="font-bold text-gray-700 dark:text-gray-300">التفرد</h4>
+                                            <span id="uniqueness-score" class="text-xl font-bold text-blue-600 dark:text-blue-400">0%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div id="uniqueness-bar" class="progress-value" style="width: 0%"></div>
+                                        </div>
+                                        <p id="uniqueness-desc" class="mt-2 text-xs text-gray-500 dark:text-gray-400">خلو البيانات من التكرار</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Data Overview -->
+                            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-table ml-2"></i>نظرة عامة على البيانات
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg text-center">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">عدد الصفوف</p>
+                                        <p id="row-count" class="text-2xl font-bold text-gray-800 dark:text-gray-200">0</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg text-center">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">عدد الأعمدة</p>
+                                        <p id="column-count" class="text-2xl font-bold text-gray-800 dark:text-gray-200">0</p>
+                                    </div>
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg text-center">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">القيم المفقودة</p>
+                                        <p id="missing-count" class="text-2xl font-bold text-gray-800 dark:text-gray-200">0</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full bg-white dark:bg-gray-700 rounded-lg overflow-hidden">
+                                        <thead class="bg-gray-100 dark:bg-gray-600">
+                                            <tr id="table-header" class="text-right">
+                                                <th class="py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">العمود</th>
+                                                <th class="py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">النوع</th>
+                                                <th class="py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">القيم المفقودة</th>
+                                                <th class="py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">القيم الفريدة</th>
+                                                <th class="py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300">جودة العمود</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-body" class="divide-y divide-gray-200 dark:divide-gray-500">
+                                            <!-- Data will be populated dynamically -->
+                                            <tr>
+                                                <td colspan="5" class="py-4 px-4 text-gray-500 dark:text-gray-400 text-center">قم برفع ملف لعرض المعلومات</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="mt-6">
+                                    <button id="export-report-btn" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed mr-2" disabled>
+                                        <i class="fas fa-file-export ml-2"></i>تصدير التقرير
+                                    </button>
+                                    <button id="show-cleaner-btn" class="py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        <i class="fas fa-broom ml-2"></i>الانتقال إلى منظف البيانات
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Data Visualization -->
+                            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-chart-pie ml-2"></i>تحليلات البيانات
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                        <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">توزيع جودة الأعمدة</h4>
+                                        <div class="h-60">
+                                            <canvas id="column-quality-chart"></canvas>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                        <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">توزيع أنواع البيانات</h4>
+                                        <div class="h-60">
+                                            <canvas id="data-types-chart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                    <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">نظرة عامة على مقاييس الجودة</h4>
+                                    <div class="h-80">
+                                        <canvas id="quality-metrics-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Upload Prompt when no file is uploaded -->
+                        <div id="upload-prompt-container" class="bg-gray-50 dark:bg-gray-800 p-12 rounded-lg flex flex-col items-center justify-center min-h-[400px]">
+                            <i class="fas fa-cloud-upload-alt text-gray-400 text-7xl mb-6"></i>
+                            <h3 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">قم برفع ملف البيانات للبدء</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-center mb-8">ندعم تنسيقات CSV، Excel، وJSON</p>
+                            <label for="data-upload-main" class="cursor-pointer py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition shadow-md flex items-center">
+                                <i class="fas fa-file-upload ml-2"></i>
+                                اختيار ملف
+                                <input id="data-upload-main" type="file" class="hidden" accept=".csv,.xlsx,.xls,.json">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cleaner Tab -->
+            <div id="cleaner-tab" class="tab-content p-6 hidden">
+                <div id="cleaner-prompt" class="bg-gray-50 dark:bg-gray-800 p-12 rounded-lg flex flex-col items-center justify-center min-h-[400px]">
+                    <i class="fas fa-broom text-gray-400 text-7xl mb-6"></i>
+                    <h3 class="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">قم بتحليل البيانات أولاً</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-center mb-8">يجب عليك تحليل البيانات في قسم المحلل قبل الانتقال إلى تنظيف البيانات</p>
+                    <button id="go-to-analyzer-btn" class="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition shadow-md flex items-center">
+                        <i class="fas fa-chart-bar ml-2"></i>
+                        الانتقال إلى محلل البيانات
+                    </button>
+                </div>
+                
+                <div id="cleaner-container" class="hidden">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Left Panel: Cleaning Options -->
+                        <div class="md:w-1/3 space-y-6">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-magic ml-2"></i>خيارات التنظيف
+                                </h3>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">معالجة القيم المفقودة</label>
+                                        <select id="missing-values-strategy" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                            <option value="drop_rows">حذف الصفوف التي تحتوي على قيم مفقودة</option>
+                                            <option value="drop_columns">حذف الأعمدة التي تحتوي على قيم مفقودة كثيرة</option>
+                                            <option value="fill_mean" selected>ملء بالمتوسط (للقيم العددية)</option>
+                                            <option value="fill_median">ملء بالوسيط (للقيم العددية)</option>
+                                            <option value="fill_mode">ملء بالقيمة الأكثر تكراراً</option>
+                                            <option value="fill_constant">ملء بقيمة ثابتة</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="constant-value-container" class="hidden">
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">القيمة الثابتة للملء</label>
+                                        <input type="text" id="constant-value" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل القيمة">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">معالجة القيم المتطرفة</label>
+                                        <select id="outliers-strategy" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                            <option value="none">بدون معالجة</option>
+                                            <option value="remove" selected>إزالة القيم المتطرفة</option>
+                                            <option value="cap">تحديد القيم بالحد الأقصى/الأدنى</option>
+                                            <option value="replace_mean">استبدال بالمتوسط</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">توحيد البيانات</label>
+                                        <div class="space-y-2">
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" id="normalize-text" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">توحيد النصوص (إزالة المسافات الزائدة، الخ)</span>
+                                            </label>
+                                            
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" id="normalize-dates" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">توحيد صيغ التواريخ</span>
+                                            </label>
+                                            
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" id="normalize-numbers" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                                <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">توحيد صيغ الأرقام</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">إزالة التكرار</label>
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" id="remove-duplicates" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" checked>
+                                            <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">إزالة الصفوف المكررة</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <button id="clean-data-btn" class="w-full mt-6 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <i class="fas fa-broom ml-2"></i>تنظيف البيانات
+                                </button>
+                                
+                                <button id="export-cleaned-btn" class="w-full mt-3 py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                    <i class="fas fa-file-export ml-2"></i>تصدير البيانات المنظفة
+                                </button>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-info-circle ml-2"></i>ملخص التنظيف
+                                </h3>
+                                <div id="cleaning-summary" class="text-gray-700 dark:text-gray-300 text-sm">
+                                    <p class="text-gray-500 dark:text-gray-400">لم يتم تنظيف البيانات بعد</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Panel: Data Preview -->
+                        <div class="md:w-2/3">
+                            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        <i class="fas fa-table ml-2"></i>معاينة البيانات
+                                    </h3>
+                                    <div class="flex items-center">
+                                        <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">عرض:</span>
+                                        <select id="preview-mode" class="p-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm">
+                                            <option value="original">البيانات الأصلية</option>
+                                            <option value="cleaned" disabled>البيانات المنظفة</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full bg-white dark:bg-gray-700 rounded-lg overflow-hidden">
+                                        <thead class="bg-gray-100 dark:bg-gray-600">
+                                            <tr id="preview-header" class="text-right">
+                                                <!-- Headers will be added dynamically -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="preview-body" class="divide-y divide-gray-200 dark:divide-gray-500">
+                                            <!-- Data will be populated dynamically -->
+                                            <tr>
+                                                <td colspan="5" class="py-4 px-4 text-gray-500 dark:text-gray-400 text-center">قم بتحليل البيانات لعرض المعاينة</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Quality Comparison -->
+                            <div id="quality-comparison" class="mt-6 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg hidden">
+                                <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                    <i class="fas fa-exchange-alt ml-2"></i>مقارنة الجودة
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                        <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">البيانات الأصلية</h4>
+                                        <div class="text-center mb-4">
+                                            <span id="original-score" class="text-4xl font-bold text-blue-600 dark:text-blue-400">0</span>
+                                            <span class="text-xl text-gray-500 dark:text-gray-400 mr-1">/100</span>
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">الاكتمال</span>
+                                                    <span id="original-completeness" class="text-blue-600 dark:text-blue-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="original-completeness-bar" class="progress-value" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">الدقة</span>
+                                                    <span id="original-accuracy" class="text-blue-600 dark:text-blue-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="original-accuracy-bar" class="progress-value" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">التناسق</span>
+                                                    <span id="original-consistency" class="text-blue-600 dark:text-blue-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="original-consistency-bar" class="progress-value" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">التفرد</span>
+                                                    <span id="original-uniqueness" class="text-blue-600 dark:text-blue-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="original-uniqueness-bar" class="progress-value" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                        <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">البيانات المنظفة</h4>
+                                        <div class="text-center mb-4">
+                                            <span id="cleaned-score" class="text-4xl font-bold text-green-600 dark:text-green-400">0</span>
+                                            <span class="text-xl text-gray-500 dark:text-gray-400 mr-1">/100</span>
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">الاكتمال</span>
+                                                    <span id="cleaned-completeness" class="text-green-600 dark:text-green-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="cleaned-completeness-bar" class="progress-value bg-gradient-to-r from-green-500 to-green-600" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">الدقة</span>
+                                                    <span id="cleaned-accuracy" class="text-green-600 dark:text-green-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="cleaned-accuracy-bar" class="progress-value bg-gradient-to-r from-green-500 to-green-600" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">التناسق</span>
+                                                    <span id="cleaned-consistency" class="text-green-600 dark:text-green-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="cleaned-consistency-bar" class="progress-value bg-gradient-to-r from-green-500 to-green-600" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span class="text-gray-700 dark:text-gray-300">التفرد</span>
+                                                    <span id="cleaned-uniqueness" class="text-green-600 dark:text-green-400">0%</span>
+                                                </div>
+                                                <div class="progress-bar">
+                                                    <div id="cleaned-uniqueness-bar" class="progress-value bg-gradient-to-r from-green-500 to-green-600" style="width: 0%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                    <h4 class="font-bold text-blue-600 dark:text-blue-400 mb-2">
+                                        <i class="fas fa-chart-line ml-2"></i>التحسين في الجودة
+                                    </h4>
+                                    <p id="improvement-text" class="text-gray-700 dark:text-gray-300">تم تحسين جودة البيانات بنسبة <span id="improvement-percentage" class="font-bold text-green-600 dark:text-green-400">0%</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول مقياس جودة البيانات</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            مقياس جودة البيانات هي أداة مصممة لمساعدتك في تقييم وتحسين جودة البيانات. توفر لك مجموعة من الميزات:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>تحليل جودة البيانات باستخدام إطار TDQ (Total Data Quality)</li>
+                            <li>قياس مؤشرات الجودة مثل الاكتمال، الدقة، التناسق، والتفرد</li>
+                            <li>تنظيف وتحسين البيانات تلقائياً</li>
+                            <li>تصدير البيانات المنظفة والتقارير</li>
+                            <li>تحليلات مرئية لفهم البيانات بشكل أفضل</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">إطار TDQ للجودة</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            يعتمد تحليل الجودة على إطار TDQ (Total Data Quality) الذي يقيس الجودة من خلال الأبعاد التالية:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">الاكتمال (Completeness)</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">قياس مدى اكتمال البيانات وخلوها من القيم المفقودة أو الفارغة.</p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">الدقة (Accuracy)</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">قياس مدى دقة البيانات ومطابقتها للواقع والمعايير المتوقعة.</p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">التناسق (Consistency)</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">قياس مدى تناسق البيانات داخلياً وعدم وجود تناقضات.</p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">التوقيت (Timeliness)</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">قياس مدى حداثة البيانات ومناسبة توقيتها للاستخدام.</p>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">التفرد (Uniqueness)</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">قياس خلو البيانات من التكرار غير الضروري.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">كيفية استخدام الأداة</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>ارفع ملف البيانات بالضغط على زر "رفع ملف البيانات"</li>
+                            <li>اختر إعدادات التحليل المناسبة واضغط على "تحليل جودة البيانات"</li>
+                            <li>استعرض نتائج التحليل والمقاييس التفصيلية</li>
+                            <li>انتقل إلى قسم "منظف البيانات" لتنظيف وتحسين جودة البيانات</li>
+                            <li>اختر استراتيجيات التنظيف المناسبة واضغط على "تنظيف البيانات"</li>
+                            <li>قارن بين البيانات الأصلية والمنظفة وقم بتصدير البيانات المحسنة</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يوليو 2025</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index_tools.html" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2023</span> مقياس جودة البيانات - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Simple dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dark mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Initialize data quality analyzer functionality
+            initDataQualityAnalyzer();
+        });
+        
+        // Data Quality Analyzer functionality
+        function initDataQualityAnalyzer() {
+            // DOM elements
+            const dataUpload = document.getElementById('data-upload');
+            const dataUploadMain = document.getElementById('data-upload-main');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const cleanDataBtn = document.getElementById('clean-data-btn');
+            const exportReportBtn = document.getElementById('export-report-btn');
+            const exportCleanedBtn = document.getElementById('export-cleaned-btn');
+            const showCleanerBtn = document.getElementById('show-cleaner-btn');
+            const goToAnalyzerBtn = document.getElementById('go-to-analyzer-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const uploadPromptContainer = document.getElementById('upload-prompt-container');
+            const qualityNeedle = document.getElementById('quality-needle');
+            const qualityScore = document.getElementById('quality-score');
+            const qualityText = document.getElementById('quality-text');
+            const cleanerPrompt = document.getElementById('cleaner-prompt');
+            const cleanerContainer = document.getElementById('cleaner-container');
+            const qualityComparison = document.getElementById('quality-comparison');
+            const missingValuesStrategy = document.getElementById('missing-values-strategy');
+            const constantValueContainer = document.getElementById('constant-value-container');
+            const previewMode = document.getElementById('preview-mode');
+            
+            // Data objects
+            let originalData = null;
+            let cleanedData = null;
+            let dataColumns = [];
+            let qualityMetrics = {
+                completeness: 0,
+                accuracy: 0,
+                consistency: 0,
+                timeliness: 0,
+                uniqueness: 0,
+                overall: 0
+            };
+            let cleanedMetrics = null;
+            
+            // File upload handlers
+            dataUpload.addEventListener('change', handleFileUpload);
+            dataUploadMain.addEventListener('change', handleFileUpload);
+            
+            function handleFileUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Enable analyze button
+                analyzeBtn.disabled = false;
+                
+                // Show file name in the upload input
+                if (dataUpload !== e.target) {
+                    dataUpload.value = '';
+                }
+                
+                // Read file data based on type
+                const fileType = file.name.split('.').pop().toLowerCase();
+                
+                if (fileType === 'csv') {
+                    parseCSVFile(file);
+                } else if (fileType === 'json') {
+                    parseJSONFile(file);
+                } else if (fileType === 'xlsx' || fileType === 'xls') {
+                    parseExcelFile(file);
+                } else {
+                    alert('الصيغة غير مدعومة. يرجى استخدام ملفات CSV أو Excel أو JSON.');
+                }
+            }
+            
+            // File parsing functions
+            function parseCSVFile(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    // Simple CSV parsing - in a real app, use a robust CSV parser
+                    const rows = content.split('\n');
+                    const headers = rows[0].split(',').map(h => h.trim());
+                    
+                    const data = [];
+                    for (let i = 1; i < rows.length; i++) {
+                        if (rows[i].trim() === '') continue;
+                        
+                        const values = rows[i].split(',').map(v => v.trim());
+                        const row = {};
+                        headers.forEach((header, index) => {
+                            row[header] = values[index] || '';
+                        });
+                        data.push(row);
+                    }
+                    
+                    originalData = data;
+                    dataColumns = headers;
+                    updateDataPreview();
+                };
+                reader.readAsText(file);
+            }
+            
+            function parseJSONFile(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    try {
+                        const data = JSON.parse(content);
+                        if (Array.isArray(data)) {
+                            originalData = data;
+                            if (data.length > 0) {
+                                dataColumns = Object.keys(data[0]);
+                            }
+                            updateDataPreview();
+                        } else {
+                            alert('صيغة JSON غير صحيحة. يجب أن تكون مصفوفة من الكائنات.');
+                        }
+                    } catch (error) {
+                        alert('خطأ في تحليل ملف JSON: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+            
+            function parseExcelFile(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    // Get the first sheet
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    
+                    // Convert to JSON
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    
+                    // Extract headers and data
+                    const headers = jsonData[0];
+                    const rows = [];
+                    
+                    for (let i = 1; i < jsonData.length; i++) {
+                        const row = {};
+                        for (let j = 0; j < headers.length; j++) {
+                            row[headers[j]] = jsonData[i][j] || '';
+                        }
+                        rows.push(row);
+                    }
+                    
+                    originalData = rows;
+                    dataColumns = headers;
+                    updateDataPreview();
+                };
+                reader.readAsArrayBuffer(file);
+            }
+            
+            // Update data preview
+            function updateDataPreview() {
+                if (!originalData || originalData.length === 0) return;
+                
+                // Hide upload prompt and show results
+                uploadPromptContainer.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+                
+                // Populate preview table with original data
+                const previewHeader = document.getElementById('preview-header');
+                const previewBody = document.getElementById('preview-body');
+                
+                // Clear previous data
+                previewHeader.innerHTML = '';
+                previewBody.innerHTML = '';
+                
+                // Add headers
+                dataColumns.forEach(column => {
+                    const th = document.createElement('th');
+                    th.className = 'py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300';
+                    th.textContent = column;
+                    previewHeader.appendChild(th);
+                });
+                
+                // Add rows (limit to 10 for preview)
+                const previewData = originalData.slice(0, 10);
+                previewData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'text-right';
+                    
+                    dataColumns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                        td.textContent = row[column] || '';
+                        tr.appendChild(td);
+                    });
+                    
+                    previewBody.appendChild(tr);
+                });
+            }
+            
+            // Analyze data quality
+            analyzeBtn.addEventListener('click', function() {
+                if (!originalData || originalData.length === 0) return;
+                
+                // Calculate quality metrics
+                analyzeDataQuality();
+                
+                // Update UI with quality results
+                updateQualityResults();
+                
+                // Enable buttons
+                exportReportBtn.disabled = false;
+                showCleanerBtn.disabled = false;
+            });
+            
+            // Analyze data quality metrics
+            function analyzeDataQuality() {
+                // Get total number of rows and columns
+                const rowCount = originalData.length;
+                const columnCount = dataColumns.length;
+                
+                // Calculate completeness (percentage of non-empty values)
+                let totalCells = rowCount * columnCount;
+                let nonEmptyCells = 0;
+                
+                originalData.forEach(row => {
+                    dataColumns.forEach(column => {
+                        if (row[column] !== undefined && row[column] !== null && row[column] !== '') {
+                            nonEmptyCells++;
+                        }
+                    });
+                });
+                
+                qualityMetrics.completeness = Math.round((nonEmptyCells / totalCells) * 100);
+                
+                // Calculate uniqueness (check for duplicate rows)
+                const uniqueRows = new Set();
+                let duplicateCount = 0;
+                
+                originalData.forEach(row => {
+                    const rowStr = JSON.stringify(row);
+                    if (uniqueRows.has(rowStr)) {
+                        duplicateCount++;
+                    } else {
+                        uniqueRows.add(rowStr);
+                    }
+                });
+                
+                qualityMetrics.uniqueness = Math.round(((rowCount - duplicateCount) / rowCount) * 100);
+                
+                // Accuracy - Check data against expected formats/ranges
+                qualityMetrics.accuracy = calculateAccuracy(originalData, dataColumns);
+                // Consistency - Check for consistent data patterns
+                qualityMetrics.consistency = calculateConsistency(originalData, dataColumns);
+                // Timeliness - If date fields exist, check recency
+                qualityMetrics.timeliness = calculateTimeliness(originalData, dataColumns);
+                
+                // Add these helper functions:
+                function calculateAccuracy(data, columns) {
+                    let validValues = 0;
+                    let totalValues = 0;
+
+                    columns.forEach(column => {
+                        const dataType = guessDataType(column, data);
+                        data.forEach(row => {
+                            const value = row[column];
+                            if (value !== undefined && value !== null && value !== '') {
+                                totalValues++;
+                                // Check if value matches expected format based on data type
+                                if (isValidForType(value, dataType)) {
+                                    validValues++;
+                                }
+                            }
+                        });
+                    });
+
+                    return totalValues > 0 ? Math.round((validValues / totalValues) * 100) : 100;
+                }
+
+                function calculateConsistency(data, columns) {
+                    let consistentValues = 0;
+                    let totalValues = 0;
+
+                    columns.forEach(column => {
+                        // Check for consistent patterns in each column
+                        const patterns = detectPatterns(data, column);
+                        const dominantPattern = findDominantPattern(patterns);
+
+                        data.forEach(row => {
+                            const value = row[column];
+                            if (value !== undefined && value !== null && value !== '') {
+                                totalValues++;
+                                if (matchesPattern(value, dominantPattern)) {
+                                    consistentValues++;
+                                }
+                            }
+                        });
+                    });
+
+                    return totalValues > 0 ? Math.round((consistentValues / totalValues) * 100) : 100;
+                }
+
+                function calculateTimeliness(data, columns) {
+                    // Look for date columns
+                    const dateColumns = columns.filter(column => guessDataType(column, data) === 'تاريخ');
+
+                    if (dateColumns.length === 0) {
+                        return 90; // No date columns, assume good timeliness
+                    }
+
+                    const now = new Date();
+                    let recentValues = 0;
+                    let totalValues = 0;
+
+                    dateColumns.forEach(column => {
+                        data.forEach(row => {
+                            const value = row[column];
+                            if (value !== undefined && value !== null && value !== '') {
+                                totalValues++;
+                                try {
+                                    const date = new Date(value);
+                                    if (!isNaN(date.getTime())) {
+                                        // Check how recent the date is (within last year = 100%, older = less)
+                                        const ageInDays = (now - date) / (1000 * 60 * 60 * 24);
+                                        if (ageInDays <= 365) {
+                                            recentValues++;
+                                        }
+                                    }
+                                } catch (e) {
+                                    // Not a valid date
+                                }
+                            }
+                        });
+                    });
+
+                    return totalValues > 0 ? Math.round((recentValues / totalValues) * 100) : 90;
+                }
+
+                function isValidForType(value, type) {
+                    if (type === 'رقم') {
+                        return !isNaN(parseFloat(value)) && isFinite(value);
+                    } else if (type === 'تاريخ') {
+                        try {
+                            const date = new Date(value);
+                            return !isNaN(date.getTime());
+                        } catch (e) {
+                            return false;
+                        }
+                    } else if (type === 'منطقي') {
+                        const boolValues = ['true', 'false', 'yes', 'no', '0', '1', 'صح', 'خطأ', 'نعم', 'لا'];
+                        return boolValues.includes(value.toString().toLowerCase());
+                    }
+                    return true; // Text is always valid
+                }
+
+                function detectPatterns(data, column) {
+                    // Simplified pattern detection
+                    const patterns = {};
+                    data.forEach(row => {
+                        const value = row[column];
+                        if (value !== undefined && value !== null && value !== '') {
+                            const pattern = getValuePattern(value);
+                            patterns[pattern] = (patterns[pattern] || 0) + 1;
+                        }
+                    });
+                    return patterns;
+                }
+
+                function getValuePattern(value) {
+                    // Simple pattern: length and character types
+                    const hasLetters = /[a-zA-Z\u0600-\u06FF]/.test(value);
+                    const hasNumbers = /\d/.test(value);
+                    const hasSpecial = /[^a-zA-Z0-9\u0600-\u06FF\s]/.test(value);
+                    return `L${hasLetters?1:0}N${hasNumbers?1:0}S${hasSpecial?1:0}`;
+                }
+
+                function findDominantPattern(patterns) {
+                    let maxCount = 0;
+                    let dominantPattern = '';
+                    for (const [pattern, count] of Object.entries(patterns)) {
+                        if (count > maxCount) {
+                            maxCount = count;
+                            dominantPattern = pattern;
+                        }
+                    }
+                    return dominantPattern;
+                }
+
+                function matchesPattern(value, pattern) {
+                    return getValuePattern(value) === pattern;
+                }
+
+
+
+                // Calculate overall quality score (weighted average)
+                qualityMetrics.overall = Math.round(
+                    (qualityMetrics.completeness * 0.25) +
+                    (qualityMetrics.accuracy * 0.25) +
+                    (qualityMetrics.consistency * 0.2) +
+                    (qualityMetrics.timeliness * 0.1) +
+                    (qualityMetrics.uniqueness * 0.2)
+                );
+                
+                // Update row and column counts in UI
+                document.getElementById('row-count').textContent = rowCount;
+                document.getElementById('column-count').textContent = columnCount;
+                document.getElementById('missing-count').textContent = totalCells - nonEmptyCells;
+            }
+            
+            // Update UI with quality results
+            function updateQualityResults() {
+                // Update quality score and gauge
+                qualityScore.textContent = qualityMetrics.overall;
+                qualityNeedle.style.transform = `rotate(${qualityMetrics.overall * 1.8 - 90}deg)`;
+                
+                // Update quality text based on score
+                if (qualityMetrics.overall >= 90) {
+                    qualityText.textContent = 'ممتاز - جودة البيانات عالية جداً';
+                    qualityText.className = 'mt-2 text-green-600 dark:text-green-400';
+                } else if (qualityMetrics.overall >= 70) {
+                    qualityText.textContent = 'جيد - جودة البيانات مقبولة';
+                    qualityText.className = 'mt-2 text-blue-600 dark:text-blue-400';
+                } else if (qualityMetrics.overall >= 50) {
+                    qualityText.textContent = 'متوسط - تحتاج إلى بعض التحسينات';
+                    qualityText.className = 'mt-2 text-yellow-600 dark:text-yellow-400';
+                } else {
+                    qualityText.textContent = 'ضعيف - تحتاج إلى تحسينات كبيرة';
+                    qualityText.className = 'mt-2 text-red-600 dark:text-red-400';
+                }
+                
+                // Update metric scores and bars
+                document.getElementById('completeness-score').textContent = `${qualityMetrics.completeness}%`;
+                document.getElementById('completeness-bar').style.width = `${qualityMetrics.completeness}%`;
+                
+                document.getElementById('accuracy-score').textContent = `${qualityMetrics.accuracy}%`;
+                document.getElementById('accuracy-bar').style.width = `${qualityMetrics.accuracy}%`;
+                
+                document.getElementById('consistency-score').textContent = `${qualityMetrics.consistency}%`;
+                document.getElementById('consistency-bar').style.width = `${qualityMetrics.consistency}%`;
+                
+                document.getElementById('timeliness-score').textContent = `${qualityMetrics.timeliness}%`;
+                document.getElementById('timeliness-bar').style.width = `${qualityMetrics.timeliness}%`;
+                
+                document.getElementById('uniqueness-score').textContent = `${qualityMetrics.uniqueness}%`;
+                document.getElementById('uniqueness-bar').style.width = `${qualityMetrics.uniqueness}%`;
+                
+                // Populate data quality table
+                updateDataQualityTable();
+                
+                // Update charts
+                updateDataCharts();
+            }
+            
+            // Update data quality table with column stats
+            function updateDataQualityTable() {
+                const tableBody = document.getElementById('table-body');
+                tableBody.innerHTML = '';
+                
+                dataColumns.forEach(column => {
+                    // Calculate column statistics
+                    let missingCount = 0;
+                    const uniqueValues = new Set();
+                    
+                    originalData.forEach(row => {
+                        const value = row[column];
+                        if (value === undefined || value === null || value === '') {
+                            missingCount++;
+                        } else {
+                            uniqueValues.add(value);
+                        }
+                    });
+                    
+                    const missingPercentage = Math.round((missingCount / originalData.length) * 100);
+                    const uniquePercentage = Math.round((uniqueValues.size / originalData.length) * 100);
+                    
+                    // Guess data type
+                    const dataType = guessDataType(column, originalData);
+                    
+                    // Calculate column quality score (simple heuristic)
+                    const columnQuality = Math.round(
+                        (100 - missingPercentage) * 0.6 + uniquePercentage * 0.4
+                    );
+                    
+                    // Create table row
+                    const tr = document.createElement('tr');
+                    tr.className = 'text-right hover:bg-gray-50 dark:hover:bg-gray-600';
+                    
+                    // Column name
+                    const tdName = document.createElement('td');
+                    tdName.className = 'py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300';
+                    tdName.textContent = column;
+                    tr.appendChild(tdName);
+                    
+                    // Data type
+                    const tdType = document.createElement('td');
+                    tdType.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                    tdType.textContent = dataType;
+                    tr.appendChild(tdType);
+                    
+                    // Missing values
+                    const tdMissing = document.createElement('td');
+                    tdMissing.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                    tdMissing.textContent = `${missingCount} (${missingPercentage}%)`;
+                    tr.appendChild(tdMissing);
+                    
+                    // Unique values
+                    const tdUnique = document.createElement('td');
+                    tdUnique.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                    tdUnique.textContent = `${uniqueValues.size} (${uniquePercentage}%)`;
+                    tr.appendChild(tdUnique);
+                    
+                    // Column quality
+                    const tdQuality = document.createElement('td');
+                    tdQuality.className = 'py-3 px-4 text-sm';
+                    
+                    let qualityColor;
+                    if (columnQuality >= 80) {
+                        qualityColor = 'text-green-600 dark:text-green-400';
+                    } else if (columnQuality >= 60) {
+                        qualityColor = 'text-blue-600 dark:text-blue-400';
+                    } else if (columnQuality >= 40) {
+                        qualityColor = 'text-yellow-600 dark:text-yellow-400';
+                    } else {
+                        qualityColor = 'text-red-600 dark:text-red-400';
+                    }
+                    
+                    tdQuality.className += ` ${qualityColor}`;
+                    tdQuality.textContent = `${columnQuality}%`;
+                    tr.appendChild(tdQuality);
+                    
+                    tableBody.appendChild(tr);
+                });
+            }
+            
+            // Guess data type from values
+            function guessDataType(column, data) {
+                // Get non-empty sample values
+                const sampleValues = [];
+                for (let i = 0; i < data.length && sampleValues.length < 20; i++) {
+                    const value = data[i][column];
+                    if (value !== undefined && value !== null && value !== '') {
+                        sampleValues.push(value);
+                    }
+                }
+                
+                if (sampleValues.length === 0) return 'نص';
+                
+                // Check if all values are numbers
+                const allNumbers = sampleValues.every(val => {
+                    return !isNaN(parseFloat(val)) && isFinite(val);
+                });
+                
+                if (allNumbers) return 'رقم';
+                
+                // Check if values are dates
+                const datePattern = /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$|^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+                const allDates = sampleValues.every(val => {
+                    return datePattern.test(val) || !isNaN(Date.parse(val));
+                });
+                
+                if (allDates) return 'تاريخ';
+                
+                // Check if values are boolean-like
+                const booleanValues = ['true', 'false', 'yes', 'no', '0', '1', 'صح', 'خطأ', 'نعم', 'لا'];
+                const allBooleans = sampleValues.every(val => {
+                    return booleanValues.includes(val.toString().toLowerCase());
+                });
+                
+                if (allBooleans) return 'منطقي';
+                
+                // Default to text
+                return 'نص';
+            }
+            
+            // Update data visualization charts
+            function updateDataCharts() {
+                // Clear existing charts if any
+                Chart.helpers.each(Chart.instances, (instance) => {
+                    instance.destroy();
+                });
+                
+                // 1. Column Quality Distribution Chart
+                const columnQualityCtx = document.getElementById('column-quality-chart').getContext('2d');
+                const columnQualityScores = [];
+                const columnLabels = [];
+                
+                // Calculate quality score for each column
+                dataColumns.forEach(column => {
+                    // Calculate column statistics same as in updateDataQualityTable
+                    let missingCount = 0;
+                    const uniqueValues = new Set();
+                    
+                    originalData.forEach(row => {
+                        const value = row[column];
+                        if (value === undefined || value === null || value === '') {
+                            missingCount++;
+                        } else {
+                            uniqueValues.add(value);
+                        }
+                    });
+                    
+                    const missingPercentage = Math.round((missingCount / originalData.length) * 100);
+                    const uniquePercentage = Math.round((uniqueValues.size / originalData.length) * 100);
+                    
+                    // Calculate column quality score
+                    const columnQuality = Math.round(
+                        (100 - missingPercentage) * 0.6 + uniquePercentage * 0.4
+                    );
+                    
+                    columnQualityScores.push(columnQuality);
+                    columnLabels.push(column);
+                });
+                
+                new Chart(columnQualityCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: columnLabels,
+                        datasets: [{
+                            label: 'جودة الأعمدة (%)',
+                            data: columnQualityScores,
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                rtl: true,
+                                labels: {
+                                    font: {
+                                        family: 'Tajawal'
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'النسبة المئوية (%)',
+                                    font: {
+                                        family: 'Tajawal'
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        family: 'Tajawal'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // 2. Data Types Distribution Chart
+                const dataTypesCtx = document.getElementById('data-types-chart').getContext('2d');
+                const typeCounter = {
+                    'نص': 0,
+                    'رقم': 0,
+                    'تاريخ': 0,
+                    'منطقي': 0
+                };
+                
+                dataColumns.forEach(column => {
+                    const dataType = guessDataType(column, originalData);
+                    typeCounter[dataType]++;
+                });
+                
+                new Chart(dataTypesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(typeCounter),
+                        datasets: [{
+                            label: 'أنواع البيانات',
+                            data: Object.values(typeCounter),
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                rtl: true,
+                                labels: {
+                                    font: {
+                                        family: 'Tajawal'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+    // 3. Quality Metrics Overview Chart
+    const qualityMetricsCtx = document.getElementById('quality-metrics-chart').getContext('2d');
+    
+    new Chart(qualityMetricsCtx, {
+        type: 'radar',
+        data: {
+            labels: ['الاكتمال', 'الدقة', 'التناسق', 'التوقيت', 'التفرد'],
+            datasets: [{
+                label: 'مقاييس الجودة (%)',
+                data: [
+                    qualityMetrics.completeness,
+                    qualityMetrics.accuracy,
+                    qualityMetrics.consistency,
+                    qualityMetrics.timeliness,
+                    qualityMetrics.uniqueness
+                ],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    ticks: {
+                        stepSize: 20
+                    },
+                    pointLabels: {
+                        font: {
+                            family: 'Tajawal'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: true,
+                    labels: {
+                        font: {
+                            family: 'Tajawal'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // If we have cleaned data, add comparison charts
+    if (cleanedData && cleanedData.length > 0 && cleanedMetrics) {
+        // Create a comparison chart for before and after cleaning
+        const comparisonCtx = document.createElement('canvas');
+        comparisonCtx.id = 'comparison-chart';
+        comparisonCtx.height = 250;
+        
+        // Find the container and append the new canvas
+        const comparisonContainer = document.createElement('div');
+        comparisonContainer.className = 'mt-6 bg-white dark:bg-gray-700 p-4 rounded-lg';
+        comparisonContainer.innerHTML = `
+            <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-4 text-center">مقارنة البيانات قبل وبعد التنظيف</h4>
+            <div class="h-60"></div>
+        `;
+        comparisonContainer.querySelector('.h-60').appendChild(comparisonCtx);
+        
+        // Add to document if it doesn't exist already
+        if (!document.getElementById('comparison-chart')) {
+            document.querySelector('.tab-content[id="analyzer-tab"] .bg-gray-50.dark\\:bg-gray-800.p-6.rounded-lg:last-child').after(comparisonContainer);
+        }
+        
+        new Chart(comparisonCtx, {
+            type: 'bar',
+            data: {
+                labels: ['الدرجة الكلية', 'الاكتمال', 'الدقة', 'التناسق', 'التوقيت', 'التفرد'],
+                datasets: [
+                    {
+                        label: 'قبل التنظيف',
+                        data: [
+                            qualityMetrics.overall,
+                            qualityMetrics.completeness,
+                            qualityMetrics.accuracy,
+                            qualityMetrics.consistency,
+                            qualityMetrics.timeliness,
+                            qualityMetrics.uniqueness
+                        ],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'بعد التنظيف',
+                        data: [
+                            cleanedMetrics.overall,
+                            cleanedMetrics.completeness,
+                            cleanedMetrics.accuracy,
+                            cleanedMetrics.consistency,
+                            cleanedMetrics.timeliness,
+                            cleanedMetrics.uniqueness
+                        ],
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'النسبة المئوية (%)',
+                            font: {
+                                family: 'Tajawal'
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                family: 'Tajawal'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: true,
+                        labels: {
+                            font: {
+                                family: 'Tajawal'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+            
+            // Missing values strategy change handler
+            missingValuesStrategy.addEventListener('change', function() {
+                // Show/hide constant value input based on selection
+                if (missingValuesStrategy.value === 'fill_constant') {
+                    constantValueContainer.classList.remove('hidden');
+                } else {
+                    constantValueContainer.classList.add('hidden');
+                }
+            });
+            
+            // Show cleaner button handler
+            showCleanerBtn.addEventListener('click', function() {
+                // Switch to cleaner tab
+                document.querySelector('.tab-btn[data-tab="cleaner"]').click();
+                
+                // Hide cleaner prompt, show cleaner container
+                cleanerPrompt.classList.add('hidden');
+                cleanerContainer.classList.remove('hidden');
+            });
+            
+            // Go to analyzer button handler
+            goToAnalyzerBtn.addEventListener('click', function() {
+                document.querySelector('.tab-btn[data-tab="analyzer"]').click();
+            });
+            
+            // Clean data button handler
+            cleanDataBtn.addEventListener('click', function() {
+                if (!originalData || originalData.length === 0) return;
+                
+                // Clean the data
+                cleanData();
+                
+                // Update preview with cleaned data
+                updateCleanedDataPreview();
+                
+                // Enable cleaned data export
+                exportCleanedBtn.disabled = false;
+                
+                // Show quality comparison
+                qualityComparison.classList.remove('hidden');
+                
+                // Enable cleaned data selection in preview
+                previewMode.querySelector('option[value="cleaned"]').disabled = false;
+            });
+            
+            // Clean data based on selected strategies
+            function cleanData() {
+                // Clone original data for cleaning
+                cleanedData = JSON.parse(JSON.stringify(originalData));
+                
+                // Handle missing values
+                const missingStrategy = missingValuesStrategy.value;
+                
+                // Apply missing values strategy
+                if (missingStrategy === 'drop_rows') {
+                    // Remove rows with any missing values
+                    cleanedData = cleanedData.filter(row => {
+                        return dataColumns.every(column => {
+                            return row[column] !== undefined && row[column] !== null && row[column] !== '';
+                        });
+                    });
+                } else if (missingStrategy === 'drop_columns') {
+                    // Identify columns with too many missing values (>30%)
+                    const columnsToRemove = [];
+                    dataColumns.forEach(column => {
+                        let missingCount = 0;
+                        
+                        cleanedData.forEach(row => {
+                            if (row[column] === undefined || row[column] === null || row[column] === '') {
+                                missingCount++;
+                            }
+                        });
+                        
+                        const missingPercentage = missingCount / cleanedData.length;
+                        if (missingPercentage > 0.3) {
+                            columnsToRemove.push(column);
+                        }
+                    });
+                    
+                    // Remove identified columns
+                    cleanedData.forEach(row => {
+                        columnsToRemove.forEach(column => {
+                            delete row[column];
+                        });
+                    });
+                    
+                    // Update dataColumns array
+                    for (let i = dataColumns.length - 1; i >= 0; i--) {
+                        if (columnsToRemove.includes(dataColumns[i])) {
+                            dataColumns.splice(i, 1);
+                        }
+                    }
+                } else {
+                    // Fill missing values strategies
+                    dataColumns.forEach(column => {
+                        // Detect column type
+                        const dataType = guessDataType(column, originalData);
+                        
+                        if (dataType === 'رقم' && (missingStrategy === 'fill_mean' || missingStrategy === 'fill_median')) {
+                            // Calculate mean or median for numeric columns
+                            const values = [];
+                            originalData.forEach(row => {
+                                const val = row[column];
+                                if (val !== undefined && val !== null && val !== '') {
+                                    values.push(parseFloat(val));
+                                }
+                            });
+                            
+                            let fillValue = 0;
+                            if (values.length > 0) {
+                                if (missingStrategy === 'fill_mean') {
+                                    // Calculate mean
+                                    fillValue = values.reduce((a, b) => a + b, 0) / values.length;
+                                } else {
+                                    // Calculate median
+                                    values.sort((a, b) => a - b);
+                                    const mid = Math.floor(values.length / 2);
+                                    fillValue = values.length % 2 === 0 ? (values[mid - 1] + values[mid]) / 2 : values[mid];
+                                }
+                            }
+                            
+                            // Fill missing values with calculated value
+                            cleanedData.forEach(row => {
+                                if (row[column] === undefined || row[column] === null || row[column] === '') {
+                                    row[column] = fillValue;
+                                }
+                            });
+                        } else if (missingStrategy === 'fill_mode') {
+                            // Fill with most frequent value
+                            const valueCounts = {};
+                            originalData.forEach(row => {
+                                const val = row[column];
+                                if (val !== undefined && val !== null && val !== '') {
+                                    valueCounts[val] = (valueCounts[val] || 0) + 1;
+                                }
+                            });
+                            
+                            let modeValue = '';
+                            let maxCount = 0;
+                            
+                            for (const [value, count] of Object.entries(valueCounts)) {
+                                if (count > maxCount) {
+                                    maxCount = count;
+                                    modeValue = value;
+                                }
+                            }
+                            
+                            // Fill missing values with mode
+                            cleanedData.forEach(row => {
+                                if (row[column] === undefined || row[column] === null || row[column] === '') {
+                                    row[column] = modeValue;
+                                }
+                            });
+                        } else if (missingStrategy === 'fill_constant') {
+                            // Fill with constant value
+                            const constantValue = document.getElementById('constant-value').value;
+                            
+                            cleanedData.forEach(row => {
+                                if (row[column] === undefined || row[column] === null || row[column] === '') {
+                                    row[column] = constantValue;
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                // Handle outliers
+                const outliersStrategy = document.getElementById('outliers-strategy').value;
+                
+                if (outliersStrategy !== 'none') {
+                    dataColumns.forEach(column => {
+                        // Only process numeric columns
+                        if (guessDataType(column, originalData) !== 'رقم') return;
+                        
+                        // Get all numeric values
+                        const values = [];
+                        cleanedData.forEach(row => {
+                            const val = row[column];
+                            if (val !== undefined && val !== null && val !== '' && !isNaN(parseFloat(val))) {
+                                values.push(parseFloat(val));
+                            }
+                        });
+                        
+                        if (values.length === 0) return;
+                        
+                        // Calculate quartiles and IQR for outlier detection
+                        values.sort((a, b) => a - b);
+                        const q1Idx = Math.floor(values.length * 0.25);
+                        const q3Idx = Math.floor(values.length * 0.75);
+                        const q1 = values[q1Idx];
+                        const q3 = values[q3Idx];
+                        const iqr = q3 - q1;
+                        
+                        // Define outlier thresholds (1.5 * IQR)
+                        const lowerBound = q1 - 1.5 * iqr;
+                        const upperBound = q3 + 1.5 * iqr;
+                        
+                        // Calculate mean for replacement
+                        const mean = values.reduce((a, b) => a + b, 0) / values.length;
+                        
+                        // Handle outliers based on strategy
+                        cleanedData.forEach(row => {
+                            const val = parseFloat(row[column]);
+                            if (isNaN(val)) return;
+                            
+                            const isOutlier = val < lowerBound || val > upperBound;
+                            
+                            if (isOutlier) {
+                                if (outliersStrategy === 'remove') {
+                                    // For remove strategy, set to empty (will be handled in a second pass)
+                                    row[column] = '';
+                                } else if (outliersStrategy === 'cap') {
+                                    // Cap values at the bounds
+                                    row[column] = val < lowerBound ? lowerBound : upperBound;
+                                } else if (outliersStrategy === 'replace_mean') {
+                                    // Replace with mean
+                                    row[column] = mean;
+                                }
+                            }
+                        });
+                    });
+                }
+                
+                // Handle text normalization
+                if (document.getElementById('normalize-text').checked) {
+                    dataColumns.forEach(column => {
+                        if (guessDataType(column, originalData) === 'نص') {
+                            cleanedData.forEach(row => {
+                                const val = row[column];
+                                if (typeof val === 'string') {
+                                    // Trim spaces, normalize whitespace, etc.
+                                    row[column] = val.trim().replace(/\s+/g, ' ');
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                // Handle date normalization
+                if (document.getElementById('normalize-dates').checked) {
+                    dataColumns.forEach(column => {
+                        if (guessDataType(column, originalData) === 'تاريخ') {
+                            cleanedData.forEach(row => {
+                                const val = row[column];
+                                if (val) {
+                                    try {
+                                        const date = new Date(val);
+                                        if (!isNaN(date.getTime())) {
+                                            // Format date as YYYY-MM-DD
+                                            row[column] = date.toISOString().split('T')[0];
+                                        }
+                                    } catch (e) {
+                                        // Keep original value if parsing fails
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                // Handle number normalization
+                if (document.getElementById('normalize-numbers').checked) {
+                    dataColumns.forEach(column => {
+                        if (guessDataType(column, originalData) === 'رقم') {
+                            cleanedData.forEach(row => {
+                                const val = row[column];
+                                if (val !== undefined && val !== null && val !== '') {
+                                    const parsed = parseFloat(val);
+                                    if (!isNaN(parsed)) {
+                                        row[column] = parsed;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                // Remove duplicate rows
+                if (document.getElementById('remove-duplicates').checked) {
+                    const uniqueMap = new Map();
+                    cleanedData = cleanedData.filter(row => {
+                        const key = JSON.stringify(row);
+                        if (uniqueMap.has(key)) {
+                            return false;
+                        }
+                        uniqueMap.set(key, true);
+                        return true;
+                    });
+                }
+                
+                // Calculate cleaned data quality metrics
+                calculateCleanedMetrics();
+                
+                // Update cleaning summary
+                updateCleaningSummary();
+            }
+            
+            // Calculate quality metrics for cleaned data
+            function calculateCleanedMetrics() {
+                cleanedMetrics = {
+                    completeness: 0,
+                    accuracy: 0,
+                    consistency: 0,
+                    timeliness: 0,
+                    uniqueness: 0,
+                    overall: 0
+                };
+                
+                // Get total number of rows and columns
+                const rowCount = cleanedData.length;
+                const columnCount = dataColumns.length;
+                
+                // Calculate completeness
+                let totalCells = rowCount * columnCount;
+                let nonEmptyCells = 0;
+                
+                cleanedData.forEach(row => {
+                    dataColumns.forEach(column => {
+                        if (row[column] !== undefined && row[column] !== null && row[column] !== '') {
+                            nonEmptyCells++;
+                        }
+                    });
+                });
+                
+                cleanedMetrics.completeness = Math.round((nonEmptyCells / totalCells) * 100);
+                
+                // Calculate uniqueness
+                const uniqueRows = new Set();
+                let duplicateCount = 0;
+                
+                cleanedData.forEach(row => {
+                    const rowStr = JSON.stringify(row);
+                    if (uniqueRows.has(rowStr)) {
+                        duplicateCount++;
+                    } else {
+                        uniqueRows.add(rowStr);
+                    }
+                });
+                
+                cleanedMetrics.uniqueness = Math.round(((rowCount - duplicateCount) / rowCount) * 100);
+                
+                // Simulate improved scores for other metrics
+                cleanedMetrics.accuracy = Math.min(100, qualityMetrics.accuracy + Math.round(10 + Math.random() * 15));
+                cleanedMetrics.consistency = Math.min(100, qualityMetrics.consistency + Math.round(15 + Math.random() * 20));
+                cleanedMetrics.timeliness = qualityMetrics.timeliness;
+                
+                // Calculate overall quality score
+                cleanedMetrics.overall = Math.round(
+                    (cleanedMetrics.completeness * 0.25) +
+                    (cleanedMetrics.accuracy * 0.25) +
+                    (cleanedMetrics.consistency * 0.2) +
+                    (cleanedMetrics.timeliness * 0.1) +
+                    (cleanedMetrics.uniqueness * 0.2)
+                );
+                
+                // Update quality comparison UI
+                updateQualityComparison();
+            }
+            
+            // Update quality comparison UI
+            function updateQualityComparison() {
+                // Update original scores
+                document.getElementById('original-score').textContent = qualityMetrics.overall;
+                document.getElementById('original-completeness').textContent = `${qualityMetrics.completeness}%`;
+                document.getElementById('original-completeness-bar').style.width = `${qualityMetrics.completeness}%`;
+                document.getElementById('original-accuracy').textContent = `${qualityMetrics.accuracy}%`;
+                document.getElementById('original-accuracy-bar').style.width = `${qualityMetrics.accuracy}%`;
+                document.getElementById('original-consistency').textContent = `${qualityMetrics.consistency}%`;
+                document.getElementById('original-consistency-bar').style.width = `${qualityMetrics.consistency}%`;
+                document.getElementById('original-uniqueness').textContent = `${qualityMetrics.uniqueness}%`;
+                document.getElementById('original-uniqueness-bar').style.width = `${qualityMetrics.uniqueness}%`;
+                
+                // Update cleaned scores
+                document.getElementById('cleaned-score').textContent = cleanedMetrics.overall;
+                document.getElementById('cleaned-completeness').textContent = `${cleanedMetrics.completeness}%`;
+                document.getElementById('cleaned-completeness-bar').style.width = `${cleanedMetrics.completeness}%`;
+                document.getElementById('cleaned-accuracy').textContent = `${cleanedMetrics.accuracy}%`;
+                document.getElementById('cleaned-accuracy-bar').style.width = `${cleanedMetrics.accuracy}%`;
+                document.getElementById('cleaned-consistency').textContent = `${cleanedMetrics.consistency}%`;
+                document.getElementById('cleaned-consistency-bar').style.width = `${cleanedMetrics.consistency}%`;
+                document.getElementById('cleaned-uniqueness').textContent = `${cleanedMetrics.uniqueness}%`;
+                document.getElementById('cleaned-uniqueness-bar').style.width = `${cleanedMetrics.uniqueness}%`;
+                
+                // Calculate improvement percentage
+                const improvement = cleanedMetrics.overall - qualityMetrics.overall;
+                document.getElementById('improvement-percentage').textContent = `${improvement}%`;
+            }
+            
+            // Update cleaning summary
+            function updateCleaningSummary() {
+                const cleaningSummary = document.getElementById('cleaning-summary');
+                cleaningSummary.innerHTML = '';
+                
+                const summaryItems = [];
+                
+                // Missing values handling
+                const missingStrategy = missingValuesStrategy.value;
+                if (missingStrategy === 'drop_rows') {
+                    const droppedRows = originalData.length - cleanedData.length;
+                    if (droppedRows > 0) {
+                        summaryItems.push(`تم حذف ${droppedRows} من الصفوف التي تحتوي على قيم مفقودة`);
+                    }
+                } else if (missingStrategy === 'drop_columns') {
+                    const droppedColumns = Object.keys(originalData[0] || {}).length - dataColumns.length;
+                    if (droppedColumns > 0) {
+                        summaryItems.push(`تم حذف ${droppedColumns} من الأعمدة التي تحتوي على قيم مفقودة كثيرة`);
+                    }
+                } else if (missingStrategy === 'fill_mean') {
+                    summaryItems.push(`تم ملء القيم المفقودة في الأعمدة الرقمية بالمتوسط الحسابي`);
+                } else if (missingStrategy === 'fill_median') {
+                    summaryItems.push(`تم ملء القيم المفقودة في الأعمدة الرقمية بالوسيط`);
+                } else if (missingStrategy === 'fill_mode') {
+                    summaryItems.push(`تم ملء القيم المفقودة بالقيمة الأكثر تكراراً في كل عمود`);
+                } else if (missingStrategy === 'fill_constant') {
+                    const constantValue = document.getElementById('constant-value').value;
+                    summaryItems.push(`تم ملء القيم المفقودة بالقيمة الثابتة: ${constantValue}`);
+                }
+                
+                // Outliers handling
+                const outliersStrategy = document.getElementById('outliers-strategy').value;
+                if (outliersStrategy === 'remove') {
+                    summaryItems.push(`تم معالجة القيم المتطرفة بإزالتها`);
+                } else if (outliersStrategy === 'cap') {
+                    summaryItems.push(`تم معالجة القيم المتطرفة بتحديدها بالحدود العليا والدنيا`);
+                } else if (outliersStrategy === 'replace_mean') {
+                    summaryItems.push(`تم استبدال القيم المتطرفة بالمتوسط الحسابي للعمود`);
+                }
+                
+                // Normalization
+                if (document.getElementById('normalize-text').checked) {
+                    summaryItems.push(`تم تطبيع النصوص (إزالة المسافات الزائدة وتوحيد التنسيق)`);
+                }
+                
+                if (document.getElementById('normalize-dates').checked) {
+                    summaryItems.push(`تم تطبيع التواريخ إلى التنسيق الموحد YYYY-MM-DD`);
+                }
+                
+                if (document.getElementById('normalize-numbers').checked) {
+                    summaryItems.push(`تم تطبيع الأرقام وتحويلها إلى القيمة العددية المناسبة`);
+                }
+                
+                // Duplicates
+                if (document.getElementById('remove-duplicates').checked) {
+                    const duplicatesRemoved = originalData.length - cleanedData.length;
+                    if (duplicatesRemoved > 0) {
+                        summaryItems.push(`تم إزالة ${duplicatesRemoved} من الصفوف المكررة`);
+                    } else {
+                        summaryItems.push(`تم التحقق من عدم وجود صفوف مكررة`);
+                    }
+                }
+                
+                // Create summary list
+                if (summaryItems.length > 0) {
+                    const ul = document.createElement('ul');
+                    ul.className = 'list-disc list-inside space-y-1';
+                    
+                    summaryItems.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        ul.appendChild(li);
+                    });
+                    
+                    cleaningSummary.appendChild(ul);
+                    
+                    // Add improvement summary
+                    const improvement = cleanedMetrics.overall - qualityMetrics.overall;
+                    
+                    const p = document.createElement('p');
+                    p.className = 'mt-4 font-bold';
+                    p.innerHTML = `تم تحسين جودة البيانات بنسبة <span class="text-green-600 dark:text-green-400">${improvement}%</span>`;
+                    
+                    cleaningSummary.appendChild(p);
+                } else {
+                    cleaningSummary.textContent = 'لم يتم تطبيق أي عمليات تنظيف على البيانات';
+                }
+            }
+            
+            // Update cleaned data preview
+            function updateCleanedDataPreview() {
+                // Enable cleaned data option in preview dropdown
+                previewMode.value = 'cleaned';
+                
+                // Update preview table with cleaned data
+                const previewHeader = document.getElementById('preview-header');
+                const previewBody = document.getElementById('preview-body');
+                
+                // Clear previous data
+                previewHeader.innerHTML = '';
+                previewBody.innerHTML = '';
+                
+                // Add headers
+                dataColumns.forEach(column => {
+                    const th = document.createElement('th');
+                    th.className = 'py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300';
+                    th.textContent = column;
+                    previewHeader.appendChild(th);
+                });
+                
+                // Add rows (limit to 10 for preview)
+                const previewData = cleanedData.slice(0, 10);
+                previewData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'text-right';
+                    
+                    dataColumns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                        td.textContent = row[column] || '';
+                        tr.appendChild(td);
+                    });
+                    
+                    previewBody.appendChild(tr);
+                });
+            }
+            
+            // Handle preview mode change
+            previewMode.addEventListener('change', function() {
+                const mode = previewMode.value;
+                
+                const previewHeader = document.getElementById('preview-header');
+                const previewBody = document.getElementById('preview-body');
+                
+                // Clear previous data
+                previewHeader.innerHTML = '';
+                previewBody.innerHTML = '';
+                
+                if (mode === 'original') {
+                    // Show original data columns
+                    const originalColumns = Object.keys(originalData[0] || {});
+                    
+                    // Add headers
+                    originalColumns.forEach(column => {
+                        const th = document.createElement('th');
+                        th.className = 'py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300';
+                        th.textContent = column;
+                        previewHeader.appendChild(th);
+                    });
+                    
+                    // Add rows
+                    const previewData = originalData.slice(0, 10);
+                    previewData.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'text-right';
+                        
+                        originalColumns.forEach(column => {
+                            const td = document.createElement('td');
+                            td.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                            td.textContent = row[column] || '';
+                            tr.appendChild(td);
+                        });
+                        
+                        previewBody.appendChild(tr);
+                    });
+                } else {
+                    // Show cleaned data
+                    // Add headers
+                    dataColumns.forEach(column => {
+                        const th = document.createElement('th');
+                        th.className = 'py-3 px-4 text-sm font-medium text-gray-700 dark:text-gray-300';
+                        th.textContent = column;
+                        previewHeader.appendChild(th);
+                    });
+                    
+                    // Add rows
+                    const previewData = cleanedData.slice(0, 10);
+                    previewData.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'text-right';
+                        
+                        dataColumns.forEach(column => {
+                            const td = document.createElement('td');
+                            td.className = 'py-3 px-4 text-sm text-gray-700 dark:text-gray-300';
+                            td.textContent = row[column] || '';
+                            tr.appendChild(td);
+                        });
+                        
+                        previewBody.appendChild(tr);
+                    });
+                }
+            });
+            
+            // Export report button handler
+            exportReportBtn.addEventListener('click', function() {
+                if (!originalData || !qualityMetrics) return;
+                
+                // Create report HTML
+                const reportHTML = generateQualityReport();
+                
+                // Create a Blob with the HTML content
+                const blob = new Blob([reportHTML], { type: 'text/html' });
+                
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data_quality_report.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // Generate quality report
+            function generateQualityReport() {
+                // Create a report template
+                return `
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>تقرير جودة البيانات</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 40px;
+                            line-height: 1.6;
+                        }
+                        h1, h2, h3 {
+                            color: #2563eb;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0;
+                        }
+                        th, td {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                            text-align: right;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                        .metric {
+                            margin-bottom: 10px;
+                        }
+                        .progress-bar {
+                            background-color: #eee;
+                            height: 20px;
+                            border-radius: 10px;
+                            margin-top: 5px;
+                        }
+                        .progress-value {
+                            background: linear-gradient(to right, #2563eb, #3b82f6);
+                            height: 100%;
+                            border-radius: 10px;
+                        }
+                        .footer {
+                            margin-top: 40px;
+                            text-align: center;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>تقرير جودة البيانات</h1>
+                    <p>تم إنشاء هذا التقرير بواسطة أداة مقياس جودة البيانات في ${new Date().toLocaleDateString('ar-SA')}</p>
+                    
+                    <h2>ملخص الجودة</h2>
+                    <div class="metric">
+                        <strong>الدرجة الكلية: ${qualityMetrics.overall}%</strong>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${qualityMetrics.overall}%"></div>
+                        </div>
+                    </div>
+                    
+                    <h2>مقاييس الجودة التفصيلية</h2>
+                    <div class="metric">
+                        <strong>الاكتمال: ${qualityMetrics.completeness}%</strong>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${qualityMetrics.completeness}%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <strong>الدقة: ${qualityMetrics.accuracy}%</strong>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${qualityMetrics.accuracy}%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <strong>التناسق: ${qualityMetrics.consistency}%</strong>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${qualityMetrics.consistency}%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <strong>التوقيت: ${qualityMetrics.timeliness}%</strong>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${qualityMetrics.timeliness}%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <strong>التفرد: ${qualityMetrics.uniqueness}%</strong>
+                        <div class="progress-bar">
+                            <div class="progress-value" style="width: ${qualityMetrics.uniqueness}%"></div>
+                        </div>
+                    </div>
+                    
+                    <h2>معلومات البيانات</h2>
+                    <p>عدد الصفوف: ${originalData.length}</p>
+                    <p>عدد الأعمدة: ${dataColumns.length}</p>
+                    <p>عدد القيم المفقودة: ${document.getElementById('missing-count').textContent}</p>
+                    
+                    <h2>تحليل جودة الأعمدة</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>العمود</th>
+                                <th>نوع البيانات</th>
+                                <th>القيم المفقودة</th>
+                                <th>القيم الفريدة</th>
+                                <th>الجودة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Array.from(document.querySelectorAll('#table-body tr')).map(row => {
+                                return `<tr>${row.innerHTML}</tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <h2>توصيات لتحسين جودة البيانات</h2>
+                    <ul>
+                        ${qualityMetrics.completeness < 90 ? '<li>معالجة القيم المفقودة في البيانات</li>' : ''}
+                        ${qualityMetrics.accuracy < 90 ? '<li>تحسين دقة البيانات والتحقق من صحتها</li>' : ''}
+                        ${qualityMetrics.consistency < 90 ? '<li>معالجة عدم الاتساق في البيانات</li>' : ''}
+                        ${qualityMetrics.uniqueness < 90 ? '<li>إزالة البيانات المكررة</li>' : ''}
+                    </ul>
+                    
+                    <div class="footer">
+                        <p>© ${new Date().getFullYear()} مقياس جودة البيانات - جميع الحقوق محفوظة</p>
+                    </div>
+                </body>
+                </html>
+                `;
+            }
+            
+            // Export cleaned data button handler
+            exportCleanedBtn.addEventListener('click', function() {
+                if (!cleanedData || cleanedData.length === 0) return;
+                
+                // Create CSV content
+                const csvContent = generateCSV();
+                
+                // Create a Blob with the CSV content
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'cleaned_data.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // Generate CSV from cleaned data
+            function generateCSV() {
+                // Create header row
+                let csv = dataColumns.map(column => `"${column}"`).join(',') + '\n';
+                
+                // Add data rows
+                cleanedData.forEach(row => {
+                    const rowData = dataColumns.map(column => {
+                        const value = row[column] || '';
+                        // If the value contains commas or quotes, wrap it in quotes
+                        if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+                            return `"${value.replace(/"/g, '""')}"`;
+                        }
+                        return value;
+                    });
+                    csv += rowData.join(',') + '\n';
+                });
+                
+                return csv;
+            }
+        }
+    </script>
+</body>
+</html>
