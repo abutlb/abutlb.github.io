@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد توقيع البريد الإلكتروني | Email Signature Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .signature-preview {
+            border: 1px dashed #cbd5e1;
+            min-height: 150px;
+            transition: all 0.3s;
+        }
+        .dark .signature-preview {
+            border-color: #475569;
+        }
+        .signature-preview:hover {
+            border-color: #94a3b8;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.3s;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        
+        /* Template Selection Styles */
+        .template-option {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .template-option:hover {
+            transform: translateY(-3px);
+        }
+        .template-option.selected {
+            border: 2px solid #0ea5e9;
+        }
+        .dark .template-option.selected {
+            border: 2px solid #38bdf8;
+        }
+        
+        /* For the copied tooltip */
+        .tooltip {
+            position: relative;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #334155;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #334155 transparent transparent transparent;
+        }
+        .dark .tooltip .tooltip-text {
+            background-color: #94a3b8;
+            color: #1e293b;
+        }
+        .dark .tooltip .tooltip-text::after {
+            border-color: #94a3b8 transparent transparent transparent;
+        }
+        
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Custom colors for the color picker */
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .color-dot:hover {
+            transform: scale(1.2);
+        }
+        .color-dot.selected {
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #1e293b;
+        }
+        .dark .color-dot.selected {
+            box-shadow: 0 0 0 2px #f8fafc;
+        }
+        
+        /* Tab navigation styles */
+        .tab-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0ea5e9;
+            transition: width 0.3s ease;
+        }
+        .tab-btn.active::after {
+            width: 100%;
+        }
+        .dark .tab-btn::after {
+            background-color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index_tools.html" class="p-2 bg-teal-100 dark:bg-teal-900 rounded-full hover:bg-teal-200 dark:hover:bg-teal-800 transition-colors">
+                  <i class="fas fa-arrow-right text-teal-600 dark:text-teal-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 text-center">مولد توقيع البريد الإلكتروني</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">إنشاء توقيع احترافي لبريدك الإلكتروني في دقائق</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                <li class="ml-4">
+                    <button class="tab-btn active opacity-100 inline-block p-4 text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300" data-tab="tool">
+                        <i class="fas fa-pen-fancy ml-2"></i>
+                        إنشاء التوقيع
+                    </button>
+                </li>
+                <li class="ml-4">
+                    <button class="tab-btn inline-block p-4 text-gray-500 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400" data-tab="about">
+                        <i class="fas fa-info-circle ml-2"></i>
+                        حول الأداة
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Tab Content -->
+        <div class="tab-content-container">
+            <!-- Tool Tab -->
+            <div id="tool-tab" class="tab-content">
+                <!-- Main Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Left Column: Form & Settings -->
+                    <div class="glass-card rounded-xl p-6 shadow-md">
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                            <i class="fas fa-user-edit ml-2 text-teal-600 dark:text-teal-400"></i>
+                            معلومات التوقيع
+                        </h2>
+                        
+                        <form id="signatureForm" class="space-y-4">
+                            <!-- Personal Information Section -->
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="fullName" class="block text-gray-700 dark:text-gray-300 mb-1">الاسم الكامل <span class="text-red-500">*</span></label>
+                                        <input type="text" id="fullName" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                                    </div>
+                                    <div>
+                                        <label for="jobTitle" class="block text-gray-700 dark:text-gray-300 mb-1">المسمى الوظيفي <span class="text-red-500">*</span></label>
+                                        <input type="text" id="jobTitle" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="company" class="block text-gray-700 dark:text-gray-300 mb-1">الشركة/المؤسسة <span class="text-red-500">*</span></label>
+                                    <input type="text" id="company" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="email" class="block text-gray-700 dark:text-gray-300 mb-1">البريد الإلكتروني <span class="text-red-500">*</span></label>
+                                        <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block text-gray-700 dark:text-gray-300 mb-1">رقم الهاتف <span class="text-red-500">*</span></label>
+                                        <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="website" class="block text-gray-700 dark:text-gray-300 mb-1">الموقع الإلكتروني <span class="text-gray-500 text-sm">(اختياري)</span></label>
+                                    <input type="url" id="website" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="https://example.com">
+                                </div>
+                            </div>
+                            
+                            <!-- Profile Picture Section -->
+                            <div class="pt-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">الصورة الشخصية <span class="text-gray-500 text-sm">(اختياري)</span></label>
+                                <div class="flex items-center">
+                                    <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden mr-4">
+                                        <img id="previewImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23CBD5E1'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Profile" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <label for="profileImage" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md cursor-pointer transition-colors inline-block">
+                                            <i class="fas fa-upload ml-1"></i>
+                                            تحميل صورة
+                                        </label>
+                                        <input type="file" id="profileImage" class="hidden" accept="image/*">
+                                        <button type="button" id="removeImage" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md mr-2 transition-colors hidden">
+                                            <i class="fas fa-times ml-1"></i>
+                                            إزالة
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Social Media Section -->
+                            <div class="pt-4">
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3">روابط التواصل الاجتماعي <span class="text-gray-500 text-sm font-normal">(اختياري)</span></h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="linkedin" class="block text-gray-700 dark:text-gray-300 mb-1">
+                                            <i class="fab fa-linkedin ml-1 text-blue-600"></i>
+                                            لينكد إن
+                                        </label>
+                                        <input type="url" id="linkedin" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="https://linkedin.com/in/username">
+                                    </div>
+                                    <div>
+                                        <label for="twitter" class="block text-gray-700 dark:text-gray-300 mb-1">
+                                            <i class="fab fa-twitter ml-1 text-blue-400"></i>
+                                            تويتر
+                                        </label>
+                                        <input type="url" id="twitter" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="https://twitter.com/username">
+                                    </div>
+                                    <div>
+                                        <label for="facebook" class="block text-gray-700 dark:text-gray-300 mb-1">
+                                            <i class="fab fa-facebook ml-1 text-blue-800"></i>
+                                            فيسبوك
+                                        </label>
+                                        <input type="url" id="facebook" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="https://facebook.com/username">
+                                    </div>
+                                    <div>
+                                        <label for="instagram" class="block text-gray-700 dark:text-gray-300 mb-1">
+                                            <i class="fab fa-instagram ml-1 text-pink-600"></i>
+                                            انستغرام
+                                        </label>
+                                        <input type="url" id="instagram" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="https://instagram.com/username">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Template Selection -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3">اختر قالب التوقيع</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- Simple Template -->
+                                <div class="template-option bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm selected" data-template="simple">
+                                    <div class="h-20 mb-2 flex items-center px-2">
+                                        <div class="w-1 h-16 bg-teal-500 ml-2"></div>
+                                        <div class="mr-2">
+                                            <div class="h-3 w-20 bg-gray-300 dark:bg-gray-600 rounded mb-1"></div>
+                                            <div class="h-2 w-16 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                                            <div class="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-center text-sm text-gray-600 dark:text-gray-400">بسيط</p>
+                                </div>
+                                
+                                <!-- Classic Template -->
+                                <div class="template-option bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm" data-template="classic">
+                                    <div class="h-20 mb-2 flex items-center justify-center px-2">
+                                        <div class="flex flex-col items-center">
+                                            <div class="h-3 w-20 bg-gray-300 dark:bg-gray-600 rounded mb-1"></div>
+                                            <div class="h-2 w-16 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                                            <div class="h-0.5 w-24 bg-teal-500 rounded mb-2"></div>
+                                            <div class="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-center text-sm text-gray-600 dark:text-gray-400">كلاسيكي</p>
+                                </div>
+                                
+                                <!-- Modern Template -->
+                                <div class="template-option bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm" data-template="modern">
+                                    <div class="h-20 mb-2 flex items-center px-2">
+                                        <div class="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center ml-2 text-white text-xs">AB</div>
+                                        <div class="mr-2">
+                                            <div class="h-3 w-20 bg-gray-300 dark:bg-gray-600 rounded mb-1"></div>
+                                            <div class="h-2 w-16 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                                            <div class="h-2 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-center text-sm text-gray-600 dark:text-gray-400">عصري</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Customization Options -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3">تخصيص التوقيع</h3>
+                            
+                            <!-- Color Selection -->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">اللون الأساسي</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <div class="color-dot bg-teal-500 selected" data-color="#14b8a6"></div>
+                                    <div class="color-dot bg-blue-500" data-color="#3b82f6"></div>
+                                    <div class="color-dot bg-purple-500" data-color="#a855f7"></div>
+                                    <div class="color-dot bg-pink-500" data-color="#ec4899"></div>
+                                    <div class="color-dot bg-red-500" data-color="#ef4444"></div>
+                                    <div class="color-dot bg-orange-500" data-color="#f97316"></div>
+                                    <div class="color-dot bg-amber-500" data-color="#f59e0b"></div>
+                                    <div class="color-dot bg-green-500" data-color="#22c55e"></div>
+                                    <div class="color-dot bg-indigo-500" data-color="#6366f1"></div>
+                                    <div class="color-dot bg-gray-700" data-color="#374151"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Font Selection -->
+                            <div class="mb-4">
+                                <label for="fontFamily" class="block text-gray-700 dark:text-gray-300 mb-2">نوع الخط</label>
+                                <select id="fontFamily" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="'Arial', sans-serif">Arial</option>
+                                    <option value="'Helvetica', sans-serif">Helvetica</option>
+                                    <option value="'Tahoma', sans-serif">Tahoma</option>
+                                    <option value="'Verdana', sans-serif">Verdana</option>
+                                    <option value="'Times New Roman', serif">Times New Roman</option>
+                                    <option value="'Georgia', serif">Georgia</option>
+                                    <option value="'Tajawal', sans-serif" selected>Tajawal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: Preview & Export -->
+                    <div class="glass-card rounded-xl p-6 shadow-md">
+                        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                            <i class="fas fa-eye ml-2 text-teal-600 dark:text-teal-400"></i>
+                            معاينة التوقيع
+                        </h2>
+                        
+                        <div class="signature-preview bg-white dark:bg-gray-800 p-6 rounded-lg mb-6">
+                            <div id="signaturePreview" class="fade-in"></div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-3">
+                            <button id="copyHtml" class="tooltip py-2 px-4 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium transition-colors flex items-center">
+                                <i class="fas fa-code ml-2"></i>
+                                نسخ HTML
+                                <span class="tooltip-text">تم النسخ!</span>
+                            </button>
+                            
+                            <button id="copySignature" class="tooltip py-2 px-4 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium transition-colors flex items-center">
+                                <i class="fas fa-copy ml-2"></i>
+                                نسخ التوقيع
+                                <span class="tooltip-text">تم النسخ!</span>
+                            </button>
+                            
+                            <button id="downloadHtml" class="py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white rounded-md font-medium transition-colors flex items-center">
+                                <i class="fas fa-download ml-2"></i>
+                                تحميل HTML
+                            </button>
+                        </div>
+                        
+                        <!-- Instructions -->
+                        <div class="mt-8 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-2">كيفية إضافة التوقيع إلى بريدك الإلكتروني</h3>
+                            <div class="space-y-4 text-sm text-gray-600 dark:text-gray-400">
+                                <div>
+                                    <h4 class="font-bold text-gray-700 dark:text-gray-300">Gmail:</h4>
+                                    <ol class="list-decimal list-inside mr-4 space-y-1">
+                                        <li>انقر على رمز الإعدادات (⚙️) ثم "عرض جميع الإعدادات"</li>
+                                        <li>انتقل إلى قسم "التوقيع"</li>
+                                        <li>انقر على "إنشاء توقيع جديد"</li>
+                                        <li>انسخ التوقيع والصقه في مربع التحرير</li>
+                                        <li>انقر على "حفظ التغييرات" في أسفل الصفحة</li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-700 dark:text-gray-300">Outlook:</h4>
+                                    <ol class="list-decimal list-inside mr-4 space-y-1">
+                                        <li>انقر على "إعدادات" ثم "عرض جميع إعدادات Outlook"</li>
+                                        <li>انتقل إلى "البريد" ثم "تنسيق البريد"</li>
+                                        <li>في قسم "التوقيع"، انقر على "توقيع البريد الإلكتروني"</li>
+                                        <li>انسخ التوقيع والصقه في مربع التحرير</li>
+                                        <li>انقر على "حفظ"</li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-700 dark:text-gray-300">Apple Mail:</h4>
+                                    <ol class="list-decimal list-inside mr-4 space-y-1">
+                                        <li>افتح "تفضيلات Mail"</li>
+                                        <li>انقر على علامة التبويب "التوقيعات"</li>
+                                        <li>انقر على "+" لإضافة توقيع جديد</li>
+                                        <li>انسخ التوقيع والصقه في مربع التحرير</li>
+                                        <li>أغلق نافذة التفضيلات لحفظ التغييرات</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6 flex items-center">
+                    <i class="fas fa-info-circle ml-2 text-teal-600 dark:text-teal-400"></i>
+                    حول مولد توقيع البريد الإلكتروني
+                </h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">نبذة عن الأداة</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">
+                            مولد توقيع البريد الإلكتروني هو أداة مجانية تساعدك على إنشاء توقيعات بريد إلكتروني احترافية بسهولة. يمكنك تخصيص التوقيع باستخدام معلوماتك الشخصية والمهنية، واختيار من بين مجموعة متنوعة من القوالب والألوان.
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            تم تصميم هذه الأداة لتكون سهلة الاستخدام وفعالة، مما يتيح لك إنشاء توقيع احترافي في دقائق معدودة دون الحاجة إلى مهارات تصميم أو برمجة.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">كيفية استخدام الأداة</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-400">
+                            <li>أدخل معلوماتك الشخصية والمهنية في النموذج</li>
+                            <li>قم بتحميل صورتك الشخصية (اختياري)</li>
+                            <li>أضف روابط وسائل التواصل الاجتماعي الخاصة بك (اختياري)</li>
+                            <li>اختر قالب التوقيع المفضل لديك</li>
+                            <li>خصص الألوان ونوع الخط وغيرها من الإعدادات</li>
+                            <li>انسخ التوقيع أو قم بتحميله كملف HTML</li>
+                            <li>أضف التوقيع إلى برنامج البريد الإلكتروني الخاص بك</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">لماذا توقيع البريد الإلكتروني مهم؟</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">الاحترافية</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">يعزز توقيع البريد الإلكتروني المهني صورتك الاحترافية ويعكس هويتك المهنية.</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">سهولة التواصل</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">يوفر للمستلمين طرقًا متعددة للتواصل معك، مما يسهل عملية التواصل.</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">التسويق</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">يمكن استخدام التوقيع كأداة تسويقية لعرض علامتك التجارية أو خدماتك.</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-700 dark:text-gray-300 mb-2">الثقة</h4>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">يبني توقيع البريد الإلكتروني المهني الثقة مع المستلمين ويؤكد مصداقيتك.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يوليو 2025</span></p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">جميع الحقوق محفوظة © <span id="currentYear">2025</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index_tools.html" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="footerYear">2023</span> مولد توقيع البريد الإلكتروني - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        document.getElementById('footerYear').textContent = new Date().getFullYear();
+        
+        // Simple dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dark mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeSwitch').checked = true;
+                document.querySelector('.toggle-dot').style.transform = 'translateX(1.5rem)';
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                toggleDarkMode();
+                document.getElementById('themeSwitch').checked = !document.getElementById('themeSwitch').checked;
+                document.querySelector('.toggle-dot').style.transform = document.getElementById('themeSwitch').checked ? 'translateX(1.5rem)' : 'translateX(0)';
+            });
+            
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Initialize email signature generator
+            initEmailSignatureGenerator();
+        });
+        
+        // Email Signature Generator functionality
+        function initEmailSignatureGenerator() {
+            // DOM elements
+            const signatureForm = document.getElementById('signatureForm');
+            const signaturePreview = document.getElementById('signaturePreview');
+            const profileImage = document.getElementById('profileImage');
+            const previewImage = document.getElementById('previewImage');
+            const removeImage = document.getElementById('removeImage');
+            const copyHtml = document.getElementById('copyHtml');
+            const copySignature = document.getElementById('copySignature');
+            const downloadHtml = document.getElementById('downloadHtml');
+            const colorDots = document.querySelectorAll('.color-dot');
+            const fontFamily = document.getElementById('fontFamily');
+            const templateOptions = document.querySelectorAll('.template-option');
+            
+            // Variables
+            let profileImageData = null;
+            let selectedColor = '#14b8a6'; // Default teal color
+            let selectedTemplate = 'simple'; // Default template
+            
+            // Form input event listeners
+            const formInputs = signatureForm.querySelectorAll('input, select');
+            formInputs.forEach(input => {
+                input.addEventListener('input', updateSignaturePreview);
+            });
+            
+            // Profile image upload
+            profileImage.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileImageData = event.target.result;
+                        previewImage.src = profileImageData;
+                        removeImage.classList.remove('hidden');
+                        updateSignaturePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Remove profile image
+            removeImage.addEventListener('click', function() {
+                profileImageData = null;
+                previewImage.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23CBD5E1'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E";
+                removeImage.classList.add('hidden');
+                profileImage.value = '';
+                updateSignaturePreview();
+            });
+            
+            // Color selection
+            colorDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    // Remove selected class from all dots
+                    colorDots.forEach(d => d.classList.remove('selected'));
+                    // Add selected class to clicked dot
+                    dot.classList.add('selected');
+                    // Update selected color
+                    selectedColor = dot.dataset.color;
+                    updateSignaturePreview();
+                });
+            });
+            
+            // Template selection
+            templateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    templateOptions.forEach(o => o.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                    // Update selected template
+                    selectedTemplate = option.dataset.template;
+                    updateSignaturePreview();
+                });
+            });
+            
+            // Copy HTML button
+            copyHtml.addEventListener('click', function() {
+                const html = generateSignatureHTML();
+                navigator.clipboard.writeText(html).then(() => {
+                    showTooltip(copyHtml);
+                });
+            });
+            
+            // Copy Signature button
+            copySignature.addEventListener('click', function() {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = generateSignatureHTML();
+                
+                // Create a range and selection
+                const range = document.createRange();
+                range.selectNodeContents(tempDiv);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                // Copy the selection
+                document.execCommand('copy');
+                selection.removeAllRanges();
+                
+                showTooltip(copySignature);
+            });
+            
+            // Download HTML button
+            downloadHtml.addEventListener('click', function() {
+                const html = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Email Signature</title>
+                </head>
+                <body>
+                    ${generateSignatureHTML()}
+                </body>
+                </html>
+                `;
+                
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'email_signature.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // Show tooltip function
+            function showTooltip(button) {
+                const tooltip = button.querySelector('.tooltip-text');
+                tooltip.style.visibility = 'visible';
+                tooltip.style.opacity = '1';
+                
+                setTimeout(() => {
+                    tooltip.style.visibility = 'hidden';
+                    tooltip.style.opacity = '0';
+                }, 2000);
+            }
+            
+// Generate signature HTML
+function generateSignatureHTML() {
+    // Get form values
+    const fullName = document.getElementById('fullName').value || 'اسمك الكامل';
+    const jobTitle = document.getElementById('jobTitle').value || 'المسمى الوظيفي';
+    const company = document.getElementById('company').value || 'اسم الشركة';
+    const email = document.getElementById('email').value || 'email@example.com';
+    const phone = document.getElementById('phone').value || '966500000000+';
+    const website = document.getElementById('website').value || '';
+    
+    // Social media links
+    const linkedin = document.getElementById('linkedin').value || '';
+    const twitter = document.getElementById('twitter').value || '';
+    const facebook = document.getElementById('facebook').value || '';
+    const instagram = document.getElementById('instagram').value || '';
+    
+    // Generate social media HTML with improved styling
+    let socialHTML = '';
+    if (linkedin || twitter || facebook || instagram) {
+        socialHTML = `<div style="margin-top: 12px; display: flex; align-items: center;">`;
+        
+        if (linkedin) {
+            socialHTML += `<a href="${linkedin}" style="text-decoration: none; margin-left: 10px; display: inline-block;" target="_blank">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #0077B5; display: flex; align-items: center; justify-content: center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width: 14px; height: 14px; filter: brightness(0) invert(1);">
+                </div>
+            </a>`;
+        }
+        
+        if (twitter) {
+            socialHTML += `<a href="${twitter}" style="text-decoration: none; margin-left: 10px; display: inline-block;" target="_blank">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #1DA1F2; display: flex; align-items: center; justify-content: center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" style="width: 14px; height: 14px; filter: brightness(0) invert(1);">
+                </div>
+            </a>`;
+        }
+        
+        if (facebook) {
+            socialHTML += `<a href="${facebook}" style="text-decoration: none; margin-left: 10px; display: inline-block;" target="_blank">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #1877F2; display: flex; align-items: center; justify-content: center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook" style="width: 14px; height: 14px; filter: brightness(0) invert(1);">
+                </div>
+            </a>`;
+        }
+        
+        if (instagram) {
+            socialHTML += `<a href="${instagram}" style="text-decoration: none; margin-left: 10px; display: inline-block;" target="_blank">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); display: flex; align-items: center; justify-content: center;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram" style="width: 14px; height: 14px; filter: brightness(0) invert(1);">
+                </div>
+            </a>`;
+        }
+        
+        socialHTML += `</div>`;
+    }
+    
+    // Template HTML based on selected template
+    let templateHTML = '';
+    
+    if (selectedTemplate === 'simple') {
+        templateHTML = `
+        <table cellpadding="0" cellspacing="0" style="font-family: ${fontFamily.value}; color: #333; max-width: 500px; border-collapse: collapse;">
+            <tr>
+                <td style="vertical-align: middle; padding: 15px;">
+                    ${profileImageData ? `<img src="${profileImageData}" alt="${fullName}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">` : ''}
+                </td>
+                <td style="vertical-align: top; padding: 0; width: 5px; background-color: ${selectedColor};">
+                    <!-- This cell will automatically expand with content -->
+                </td>
+                <td style="vertical-align: top; padding: 0 15px;">
+                    <div style="margin-bottom: 5px; font-size: 18px; font-weight: bold; color: #333;">${fullName}</div>
+                    <div style="margin-bottom: 5px; font-size: 14px; color: ${selectedColor};">${jobTitle}</div>
+                    <div style="margin-bottom: 10px; font-size: 14px; color: #666;">${company}</div>
+                    
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png" alt="Phone" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="tel:${phone}" style="color: #666; text-decoration: none;">${phone}</a>
+                    </div>
+                    
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3178/3178158.png" alt="Email" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="mailto:${email}" style="color: ${selectedColor}; text-decoration: none;">${email}</a>
+                    </div>
+                    
+                    ${website ? `
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Website" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="${website}" style="color: #666; text-decoration: none;" target="_blank">${website.replace(/^https?:\/\//i, '')}</a>
+                    </div>
+                    ` : ''}
+                    
+                    ${socialHTML}
+                </td>
+            </tr>
+        </table>
+        `;
+    } else if (selectedTemplate === 'classic') {
+        templateHTML = `
+        <table cellpadding="0" cellspacing="0" style="font-family: ${fontFamily.value}; color: #333; max-width: 500px; border-collapse: collapse; text-align: center;">
+            <tr>
+                <td style="padding: 15px; text-align: center;">
+                    ${profileImageData ? `<img src="${profileImageData}" alt="${fullName}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">` : ''}
+                    
+                    <div style="margin-bottom: 5px; font-size: 18px; font-weight: bold; color: #333;">${fullName}</div>
+                    <div style="margin-bottom: 5px; font-size: 14px; color: ${selectedColor};">${jobTitle}</div>
+                    <div style="margin-bottom: 5px; font-size: 14px; color: #666;">${company}</div>
+                    
+                    <div style="width: 50px; height: 2px; background-color: ${selectedColor}; margin: 10px auto;"></div>
+                    
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png" alt="Phone" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="tel:${phone}" style="color: #666; text-decoration: none;">${phone}</a>
+                    </div>
+                    
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3178/3178158.png" alt="Email" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="mailto:${email}" style="color: ${selectedColor}; text-decoration: none;">${email}</a>
+                    </div>
+                    
+                    ${website ? `
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Website" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="${website}" style="color: #666; text-decoration: none;" target="_blank">${website.replace(/^https?:\/\//i, '')}</a>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="display: flex; justify-content: center; margin-top: 10px;">
+                        ${socialHTML}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        `;
+    } else if (selectedTemplate === 'modern') {
+        templateHTML = `
+        <table cellpadding="0" cellspacing="0" style="font-family: ${fontFamily.value}; color: #333; max-width: 500px; border-collapse: collapse;">
+            <tr>
+                <td style="vertical-align: middle; padding: 15px;">
+                    ${profileImageData ? 
+                        `<img src="${profileImageData}" alt="${fullName}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">` : 
+                        `<div style="width: 80px; height: 80px; border-radius: 50%; background-color: ${selectedColor}; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;">${fullName.split(' ').map(n => n[0]).join('')}</div>`
+                    }
+                </td>
+                <td style="vertical-align: top; padding: 0; width: 3px; background-color: ${selectedColor};">
+                    <!-- This cell will automatically expand with content -->
+                </td>
+                <td style="vertical-align: top; padding: 15px;">
+                    <div style="margin-bottom: 5px; font-size: 18px; font-weight: bold; color: #333;">${fullName}</div>
+                    <div style="margin-bottom: 5px; font-size: 14px; color: ${selectedColor};">${jobTitle}</div>
+                    <div style="margin-bottom: 10px; font-size: 14px; color: #666;">${company}</div>
+                    
+                    <div style="display: flex; flex-wrap: wrap;">
+                        <div style="font-size: 13px; margin-left: 15px; margin-bottom: 5px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png" alt="Phone" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                            <a href="tel:${phone}" style="color: #666; text-decoration: none;">${phone}</a>
+                        </div>
+                        
+                        <div style="font-size: 13px; margin-bottom: 5px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3178/3178158.png" alt="Email" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                            <a href="mailto:${email}" style="color: ${selectedColor}; text-decoration: none;">${email}</a>
+                        </div>
+                    </div>
+                    
+                    ${website ? `
+                    <div style="font-size: 13px; margin-bottom: 5px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Website" style="width: 14px; height: 14px; margin-left: 5px; vertical-align: middle;">
+                        <a href="${website}" style="color: #666; text-decoration: none;" target="_blank">${website.replace(/^https?:\/\//i, '')}</a>
+                    </div>
+                    ` : ''}
+                    
+                    ${socialHTML}
+                </td>
+            </tr>
+        </table>
+        `;
+    }
+    
+    return templateHTML;
+}
+
+
+
+
+            // Update signature preview
+            function updateSignaturePreview() {
+                const html = generateSignatureHTML();
+                signaturePreview.innerHTML = html;
+            }
+            
+            // Initialize preview with default values
+            updateSignaturePreview();
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بناء الجدول الأسبوعي | Weekly Schedule Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#4f46e5',
+                        accent: '#7c3aed',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #6366f1, #7c3aed) 1;
+        }
+
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #8b5cf6;
+        }
+        .sun-icon {
+            color: #fbbf24;
+        }
+
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+
+        /* Schedule table styles */
+        .schedule-cell {
+            transition: all 0.2s;
+            cursor: pointer;
+            min-height: 80px;
+            position: relative;
+        }
+        .schedule-cell:hover {
+            box-shadow: 0 0 0 2px #6366f1;
+        }
+        
+        /* Event types and colors */
+        .event-work {
+            background-color: rgba(96, 165, 250, 0.3);
+            border-right: 4px solid #3b82f6;
+        }
+        .event-study {
+            background-color: rgba(139, 92, 246, 0.3);
+            border-right: 4px solid #8b5cf6;
+        }
+        .event-exercise {
+            background-color: rgba(34, 197, 94, 0.3);
+            border-right: 4px solid #22c55e;
+        }
+        .event-personal {
+            background-color: rgba(249, 115, 22, 0.3);
+            border-right: 4px solid #f97316;
+        }
+        .event-social {
+            background-color: rgba(236, 72, 153, 0.3);
+            border-right: 4px solid #ec4899;
+        }
+        .event-other {
+            background-color: rgba(100, 116, 139, 0.3);
+            border-right: 4px solid #64748b;
+        }
+
+        /* Dark mode event styles */
+        html.dark .event-work {
+            background-color: rgba(59, 130, 246, 0.3);
+        }
+        html.dark .event-study {
+            background-color: rgba(139, 92, 246, 0.3);
+        }
+        html.dark .event-exercise {
+            background-color: rgba(34, 197, 94, 0.3);
+        }
+        html.dark .event-personal {
+            background-color: rgba(249, 115, 22, 0.3);
+        }
+        html.dark .event-social {
+            background-color: rgba(236, 72, 153, 0.3);
+        }
+        html.dark .event-other {
+            background-color: rgba(100, 116, 139, 0.3);
+        }
+
+        /* Template button styles */
+        .template-button {
+            transition: all 0.2s;
+        }
+        .template-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Animation for saved message */
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .fade-out {
+            animation: fadeOut 2s forwards;
+        }
+
+        /* Custom tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(15, 23, 42, 0.9) transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index_tools.html" class="p-2 bg-indigo-300 dark:bg-indigo-900 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+                  <i class="fas fa-arrow-right text-indigo-600 dark:text-indigo-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 text-center">بناء الجدول الأسبوعي</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">أنشئ وخصص جدولك الأسبوعي بطريقة سهلة ومرنة</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-indigo-600 to-violet-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="schedule">
+                    <i class="fas fa-calendar-alt ml-2"></i>الجدول الأسبوعي
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="settings">
+                    <i class="fas fa-cog ml-2"></i>الإعدادات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="templates">
+                    <i class="fas fa-clipboard-list ml-2"></i>قوالب جاهزة
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول الأداة
+                </button>
+            </div>
+            
+            <!-- Schedule Tab -->
+            <div id="schedule-tab" class="tab-content p-6 block">
+                <!-- Schedule Controls -->
+                <div class="flex flex-wrap items-center justify-between mb-6">
+                    <div class="mb-4 md:mb-0 flex flex-wrap gap-2">
+                        <button id="saveScheduleBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-save ml-2"></i>حفظ الجدول
+                        </button>
+                        <button id="exportAsImageBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-image ml-2"></i>تصدير كصورة
+                        </button>
+                        <button id="printScheduleBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-print ml-2"></i>طباعة
+                        </button>
+                        <button id="clearScheduleBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt ml-2"></i>مسح الجدول
+                        </button>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <div id="savedMessage" class="hidden text-green-600 dark:text-green-400 font-medium">
+                            <i class="fas fa-check-circle ml-1"></i>تم الحفظ بنجاح
+                        </div>
+                        
+                        <div class="relative">
+                            <input type="text" id="scheduleTitle" placeholder="عنوان الجدول" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" value="جدولي الأسبوعي">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event Type Legend -->
+                <div class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                    <h3 class="text-lg font-bold mb-3 text-indigo-600 dark:text-indigo-400">أنواع الأنشطة</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">عمل</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-purple-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">دراسة</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">رياضة</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-orange-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">شخصي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-pink-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">اجتماعي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-gray-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">أخرى</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Weekly Schedule Table -->
+                <div id="scheduleContainer" class="bg-white dark:bg-gray-800 p-4 rounded-lg overflow-x-auto">
+                    <table id="scheduleTable" class="w-full border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-24"></th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الأحد</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الاثنين</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الثلاثاء</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الأربعاء</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الخميس</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الجمعة</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">السبت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleBody">
+                            <!-- Schedule will be generated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content p-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Time Settings -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">إعدادات الوقت</h3>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">وقت البداية</label>
+                            <select id="startTime" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <option value="5">5:00 صباحاً</option>
+                                <option value="6">6:00 صباحاً</option>
+                                <option value="7">7:00 صباحاً</option>
+                                <option value="8" selected>8:00 صباحاً</option>
+                                <option value="9">9:00 صباحاً</option>
+                                <option value="10">10:00 صباحاً</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">وقت النهاية</label>
+                            <select id="endTime" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <option value="17">5:00 مساءً</option>
+                                <option value="18">6:00 مساءً</option>
+                                <option value="19">7:00 مساءً</option>
+                                <option value="20">8:00 مساءً</option>
+                                <option value="21">9:00 مساءً</option>
+                                <option value="22" selected>10:00 مساءً</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">الفاصل الزمني</label>
+                            <select id="timeInterval" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <option value="30">30 دقيقة</option>
+                                <option value="60" selected>ساعة واحدة</option>
+                                <option value="120">ساعتان</option>
+                            </select>
+                        </div>
+                        
+                        <button id="applyTimeSettings" class="w-full mt-4 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition">
+                            <i class="fas fa-check ml-2"></i>تطبيق الإعدادات
+                        </button>
+                    </div>
+                    
+                    <!-- Display Settings -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">إعدادات العرض</h3>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">اتجاه الجدول</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="border border-gray-300 dark:border-gray-600 rounded-lg p-3 flex items-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <input type="radio" name="layoutDirection" value="vertical" checked class="ml-2">
+                                    <span class="text-gray-700 dark:text-gray-300">أفقي (أيام في الأعلى)</span>
+                                </label>
+                                <label class="border border-gray-300 dark:border-gray-600 rounded-lg p-3 flex items-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <input type="radio" name="layoutDirection" value="horizontal" class="ml-2">
+                                    <span class="text-gray-700 dark:text-gray-300">عمودي (أيام على الجانب)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="showWeekends" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                                <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">إظهار عطلة نهاية الأسبوع</span>
+                            </label>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="compactView" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                                <span class="mr-3 text-sm font-medium text-gray-700 dark:text-gray-300">عرض مختصر</span>
+                            </label>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-300 mb-2">نمط الخلفية</label>
+                            <select id="cellStyle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <option value="solid" selected>لون ثابت</option>
+                                <option value="gradient">تدرج لوني</option>
+                                <option value="stripe">مخطط</option>
+                            </select>
+                        </div>
+                        
+                        <button id="applyDisplaySettings" class="w-full mt-4 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition">
+                            <i class="fas fa-check ml-2"></i>تطبيق الإعدادات
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+                        <!-- Templates Tab -->
+                        <div id="templates-tab" class="tab-content p-6 hidden">
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">قوالب جاهزة</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Work-focused Template -->
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300 border border-gray-100 dark:border-gray-700">
+                                    <div class="mb-4">
+                                        <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">جدول العمل المكثف</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">مناسب للمهنيين مع التركيز على ساعات العمل</p>
+                                    </div>
+                                    
+                                    <div class="h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/10 to-indigo-600/20 dark:from-blue-800/30 dark:to-indigo-900/40 flex items-center justify-center">
+                                        <i class="fas fa-briefcase text-6xl text-indigo-600 dark:text-indigo-400 opacity-80"></i>
+                                    </div>
+                                    
+                                    <button class="template-button w-full py-2 px-4 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-medium rounded-lg transition-all flex items-center justify-center group" data-template="work">
+                                        <i class="fas fa-check ml-2"></i>تطبيق القالب
+                                        <i class="fas fa-arrow-right mr-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Study-focused Template -->
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300 border border-gray-100 dark:border-gray-700">
+                                    <div class="mb-4">
+                                        <h3 class="text-lg font-bold text-purple-600 dark:text-purple-400">جدول الدراسة المنظم</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">مثالي للطلاب والباحثين مع وقت مخصص للمذاكرة</p>
+                                    </div>
+                                    
+                                    <div class="h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-600/20 dark:from-purple-800/30 dark:to-pink-900/40 flex items-center justify-center">
+                                        <i class="fas fa-book-open text-6xl text-purple-600 dark:text-purple-400 opacity-80"></i>
+                                    </div>
+                                    
+                                    <button class="template-button w-full py-2 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium rounded-lg transition-all flex items-center justify-center group" data-template="study">
+                                        <i class="fas fa-check ml-2"></i>تطبيق القالب
+                                        <i class="fas fa-arrow-right mr-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Balanced Template -->
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300 border border-gray-100 dark:border-gray-700">
+                                    <div class="mb-4">
+                                        <h3 class="text-lg font-bold text-blue-600 dark:text-blue-400">جدول متوازن</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">توازن بين العمل والحياة الشخصية والترفيه</p>
+                                    </div>
+                                    
+                                    <div class="h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/10 to-teal-600/20 dark:from-blue-800/30 dark:to-teal-900/40 flex items-center justify-center">
+                                        <i class="fas fa-balance-scale text-6xl text-blue-600 dark:text-blue-400 opacity-80"></i>
+                                    </div>
+                                    
+                                    <button class="template-button w-full py-2 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all flex items-center justify-center group" data-template="balanced">
+                                        <i class="fas fa-check ml-2"></i>تطبيق القالب
+                                        <i class="fas fa-arrow-right mr-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Fitness-focused Template -->
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300 border border-gray-100 dark:border-gray-700">
+                                    <div class="mb-4">
+                                        <h3 class="text-lg font-bold text-green-600 dark:text-green-400">جدول اللياقة البدنية</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">مع تركيز على التمارين الرياضية والتغذية</p>
+                                    </div>
+                                    
+                                    <div class="h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-green-500/10 to-lime-600/20 dark:from-green-800/30 dark:to-lime-900/40 flex items-center justify-center">
+                                        <i class="fas fa-dumbbell text-6xl text-green-600 dark:text-green-400 opacity-80"></i>
+                                    </div>
+                                    
+                                    <button class="template-button w-full py-2 px-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium rounded-lg transition-all flex items-center justify-center group" data-template="fitness">
+                                        <i class="fas fa-check ml-2"></i>تطبيق القالب
+                                        <i class="fas fa-arrow-right mr-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Social-focused Template -->
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300 border border-gray-100 dark:border-gray-700">
+                                    <div class="mb-4">
+                                        <h3 class="text-lg font-bold text-pink-600 dark:text-pink-400">جدول اجتماعي</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">مع وقت مخصص للأنشطة الاجتماعية والأصدقاء</p>
+                                    </div>
+                                    
+                                    <div class="h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-pink-500/10 to-red-600/20 dark:from-pink-800/30 dark:to-red-900/40 flex items-center justify-center">
+                                        <i class="fas fa-users text-6xl text-pink-600 dark:text-pink-400 opacity-80"></i>
+                                    </div>
+                                    
+                                    <button class="template-button w-full py-2 px-4 bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 text-white font-medium rounded-lg transition-all flex items-center justify-center group" data-template="social">
+                                        <i class="fas fa-check ml-2"></i>تطبيق القالب
+                                        <i class="fas fa-arrow-right mr-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Empty/Clean Template -->
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 duration-300 border border-gray-100 dark:border-gray-700">
+                                    <div class="mb-4">
+                                        <h3 class="text-lg font-bold text-gray-600 dark:text-gray-400">جدول فارغ</h3>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm">البدء بجدول فارغ تماماً</p>
+                                    </div>
+                                    
+                                    <div class="h-40 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-gray-500/10 to-gray-600/20 dark:from-gray-700/30 dark:to-gray-800/40 flex items-center justify-center">
+                                        <i class="fas fa-file text-6xl text-gray-600 dark:text-gray-400 opacity-80"></i>
+                                    </div>
+                                    
+                                    <button class="template-button w-full py-2 px-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium rounded-lg transition-all flex items-center justify-center group" data-template="empty">
+                                        <i class="fas fa-check ml-2"></i>تطبيق القالب
+                                        <i class="fas fa-arrow-right mr-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+            
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول أداة بناء الجدول الأسبوعي</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            أداة بناء الجدول الأسبوعي هي أداة مصممة لمساعدتك في تنظيم وقتك بشكل أفضل. توفر لك مجموعة من الميزات:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>إنشاء جدول أسبوعي مخصص بسهولة</li>
+                            <li>إمكانية تحديد الأنشطة والمهام حسب الأيام والساعات</li>
+                            <li>تلوين الأنشطة حسب نوعها (عمل، دراسة، رياضة، إلخ)</li>
+                            <li>حفظ الجدول واستعادته في أي وقت</li>
+                            <li>تصدير الجدول كصورة أو طباعته</li>
+                            <li>قوالب جاهزة للبدء السريع</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">كيفية استخدام الأداة</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>اختر قالباً جاهزاً أو ابدأ بجدول فارغ</li>
+                            <li>انقر على أي خلية في الجدول لإضافة نشاط جديد</li>
+                            <li>حدد نوع النشاط ووقته وأضف وصفاً له</li>
+                            <li>استخدم زر "حفظ الجدول" لحفظ الجدول للمرات القادمة</li>
+                            <li>يمكنك تعديل إعدادات الجدول من قسم "الإعدادات"</li>
+                            <li>استخدم زر "تصدير كصورة" أو "طباعة" لمشاركة الجدول</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-indigo-600 dark:text-indigo-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يوليو 2025</span></p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">جميع الحقوق محفوظة © <span id="currentYear">2025</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index_tools.html" class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">إضافة نشاط جديد</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="eventForm">
+                <input type="hidden" id="eventDay" value="">
+                <input type="hidden" id="eventTime" value="">
+                
+                <div class="mb-4">
+                    <label for="eventTitle" class="block text-gray-700 dark:text-gray-300 mb-2">عنوان النشاط</label>
+                    <input type="text" id="eventTitle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل عنوان النشاط" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="eventType" class="block text-gray-700 dark:text-gray-300 mb-2">نوع النشاط</label>
+                    <select id="eventType" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <option value="work">عمل</option>
+                        <option value="study">دراسة</option>
+                        <option value="exercise">رياضة</option>
+                        <option value="personal">شخصي</option>
+                        <option value="social">اجتماعي</option>
+                        <option value="other">أخرى</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="eventDescription" class="block text-gray-700 dark:text-gray-300 mb-2">وصف النشاط</label>
+                    <textarea id="eventDescription" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل وصفاً مختصراً (اختياري)" rows="3"></textarea>
+                </div>
+                
+                <div class="flex items-center justify-between mt-6">
+                    <button type="button" id="deleteEvent" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition hidden">
+                        <i class="fas fa-trash-alt ml-2"></i>حذف
+                    </button>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" id="cancelEvent" class="py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                            إلغاء
+                        </button>
+                        <button type="submit" class="py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
+                            <i class="fas fa-save ml-2"></i>حفظ
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2023</span> بناء الجدول الأسبوعي - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Initialize schedule data structure
+        let scheduleData = {};
+        let currentCell = null;
+        let isEditMode = false;
+        
+        // Get schedule configuration
+        let scheduleConfig = {
+            startTime: 8, // 8 AM
+            endTime: 22,  // 10 PM
+            timeInterval: 60, // 1 hour
+            showWeekends: true,
+            layoutDirection: 'vertical',
+            compactView: false,
+            cellStyle: 'solid'
+        };
+        
+        // Load saved configuration and schedule from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or use system preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Load saved schedule if available
+            const savedSchedule = localStorage.getItem('scheduleData');
+            if (savedSchedule) {
+                scheduleData = JSON.parse(savedSchedule);
+            }
+            
+            // Load saved config if available
+            const savedConfig = localStorage.getItem('scheduleConfig');
+            if (savedConfig) {
+                scheduleConfig = JSON.parse(savedConfig);
+                
+                // Update UI to match saved config
+                document.getElementById('startTime').value = scheduleConfig.startTime;
+                document.getElementById('endTime').value = scheduleConfig.endTime;
+                document.getElementById('timeInterval').value = scheduleConfig.timeInterval;
+                document.getElementById('showWeekends').checked = scheduleConfig.showWeekends;
+                document.getElementById('compactView').checked = scheduleConfig.compactView;
+                document.getElementById('cellStyle').value = scheduleConfig.cellStyle;
+                
+                // Set layout direction radio button
+                document.querySelector(`input[name="layoutDirection"][value="${scheduleConfig.layoutDirection}"]`).checked = true;
+            }
+            
+            // Generate schedule table
+            generateScheduleTable();
+            
+            // Add event listeners
+            setupEventListeners();
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+        
+        // Setup event listeners for all interactive elements
+        function setupEventListeners() {
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                });
+            });
+            
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Save schedule button
+            document.getElementById('saveScheduleBtn').addEventListener('click', saveSchedule);
+            
+            // Export as image button
+            document.getElementById('exportAsImageBtn').addEventListener('click', exportAsImage);
+            
+            // Print schedule button
+            document.getElementById('printScheduleBtn').addEventListener('click', printSchedule);
+            
+            // Clear schedule button
+            document.getElementById('clearScheduleBtn').addEventListener('click', clearSchedule);
+            
+            // Apply time settings
+            document.getElementById('applyTimeSettings').addEventListener('click', applyTimeSettings);
+            
+            // Apply display settings
+            document.getElementById('applyDisplaySettings').addEventListener('click', applyDisplaySettings);
+            
+            // Event modal form submission
+            document.getElementById('eventForm').addEventListener('submit', saveEvent);
+            
+            // Close modal buttons
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelEvent').addEventListener('click', closeModal);
+            
+            // Delete event button
+            document.getElementById('deleteEvent').addEventListener('click', deleteEvent);
+            
+            // Template buttons
+            document.querySelectorAll('.template-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    applyTemplate(button.dataset.template);
+                });
+            });
+        }
+        
+
+        function generateScheduleTable() {
+            const scheduleBody = document.getElementById('scheduleBody');
+            const tableHeader = document.querySelector('#scheduleTable thead tr');
+            
+            // Clear existing table before rebuilding
+            scheduleBody.innerHTML = '';
+            tableHeader.innerHTML = '';
+            
+            // Calculate time slots
+            const timeSlots = [];
+            for (let hour = scheduleConfig.startTime; hour <= scheduleConfig.endTime; hour++) {
+                if (scheduleConfig.timeInterval === 30) {
+                    timeSlots.push({ hour, minute: 0 });
+                    timeSlots.push({ hour, minute: 30 });
+                } else if (scheduleConfig.timeInterval === 60) {
+                    timeSlots.push({ hour, minute: 0 });
+                } else if (scheduleConfig.timeInterval === 120) {
+                    if (hour % 2 === scheduleConfig.startTime % 2) {
+                        timeSlots.push({ hour, minute: 0 });
+                    }
+                }
+            }
+            
+            // Days of the week
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const daysArabic = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            
+            // Filter days based on config
+            const displayDays = scheduleConfig.showWeekends ? days : days.slice(0, 5);
+            const displayDaysArabic = scheduleConfig.showWeekends ? daysArabic : daysArabic.slice(0, 5);
+            
+            // First set up the table header based on layout direction
+            if (scheduleConfig.layoutDirection === 'vertical') {
+                // Vertical layout - days as columns
+                // Add empty corner cell
+                const cornerCell = document.createElement('th');
+                cornerCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-24';
+                tableHeader.appendChild(cornerCell);
+                
+                // Add day cells to header
+                displayDaysArabic.forEach(day => {
+                    const dayCell = document.createElement('th');
+                    dayCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+                    dayCell.textContent = day;
+                    tableHeader.appendChild(dayCell);
+                });
+            } else {
+                // Horizontal layout - days as rows
+                // Add empty corner cell
+                const cornerCell = document.createElement('th');
+                cornerCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-24';
+                tableHeader.appendChild(cornerCell);
+                
+                // Add time cells to header
+                timeSlots.forEach(timeSlot => {
+                    const timeCell = document.createElement('th');
+                    timeCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+                    timeCell.textContent = formatTime(timeSlot.hour, timeSlot.minute);
+                    tableHeader.appendChild(timeCell);
+                });
+            }
+            
+            // Generate table based on layout direction
+            if (scheduleConfig.layoutDirection === 'vertical') {
+                // Vertical layout (days as columns)
+                timeSlots.forEach((timeSlot, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Time column
+                    const timeCell = document.createElement('td');
+                    timeCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-center font-medium';
+                    timeCell.textContent = formatTime(timeSlot.hour, timeSlot.minute);
+                    row.appendChild(timeCell);
+                    
+                    // Day columns
+                    displayDays.forEach((day, dayIndex) => {
+                        const cell = document.createElement('td');
+                        cell.className = 'schedule-cell p-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300';
+                        
+                        // Add data attributes for identifying the cell
+                        cell.dataset.day = day;
+                        cell.dataset.time = `${timeSlot.hour}:${timeSlot.minute}`;
+                        
+                        // Apply weekend styling if necessary
+                        if ((dayIndex === 0 || dayIndex === 6) && scheduleConfig.showWeekends) {
+                            cell.classList.add('bg-gray-50', 'dark:bg-gray-700/50');
+                        }
+                        
+                        // Apply compact view if enabled
+                        if (scheduleConfig.compactView) {
+                            cell.classList.add('py-1');
+                        } else {
+                            cell.classList.add('py-3');
+                        }
+                        
+                        // Apply cell style
+                        if (scheduleConfig.cellStyle === 'gradient') {
+                            cell.classList.add('bg-gradient-to-r', 'from-white', 'to-gray-50', 'dark:from-gray-800', 'dark:to-gray-700');
+                        } else if (scheduleConfig.cellStyle === 'stripe') {
+                            if (index % 2 === 0) {
+                                cell.classList.add('bg-gray-50', 'dark:bg-gray-700/50');
+                            }
+                        }
+                        
+                        // Check if there's an event for this cell
+                        const eventKey = `${day}-${timeSlot.hour}:${timeSlot.minute}`;
+                        if (scheduleData[eventKey]) {
+                            const event = scheduleData[eventKey];
+                            
+                            // Create event element
+                            cell.classList.add(`event-${event.type}`);
+                            
+                            const eventContent = document.createElement('div');
+                            eventContent.className = 'h-full flex flex-col';
+                            
+                            const eventTitle = document.createElement('div');
+                            eventTitle.className = 'font-bold';
+                            eventTitle.textContent = event.title;
+                            eventContent.appendChild(eventTitle);
+                            
+                            if (event.description) {
+                                const eventDescription = document.createElement('div');
+                                eventDescription.className = 'text-xs mt-1 opacity-80';
+                                eventDescription.textContent = event.description;
+                                eventContent.appendChild(eventDescription);
+                            }
+                            
+                            cell.appendChild(eventContent);
+                        }
+                        
+                        // Add click event listener
+                        cell.addEventListener('click', () => openEventModal(cell));
+                        
+                        row.appendChild(cell);
+                    });
+                    
+                    scheduleBody.appendChild(row);
+                });
+            } else {
+                // Horizontal layout (days as rows)
+                displayDays.forEach((day, dayIndex) => {
+                    const row = document.createElement('tr');
+                    
+                    // Day column
+                    const dayCell = document.createElement('td');
+                    dayCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-center font-medium';
+                    dayCell.textContent = displayDaysArabic[dayIndex];
+                    row.appendChild(dayCell);
+                    
+                    // Time columns
+                    timeSlots.forEach((timeSlot, index) => {
+                        const cell = document.createElement('td');
+                        cell.className = 'schedule-cell p-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300';
+                        
+                        // Add data attributes for identifying the cell
+                        cell.dataset.day = day;
+                        cell.dataset.time = `${timeSlot.hour}:${timeSlot.minute}`;
+                        
+                        // Apply weekend styling if necessary
+                        if ((dayIndex === 0 || dayIndex === 6) && scheduleConfig.showWeekends) {
+                            cell.classList.add('bg-gray-50', 'dark:bg-gray-700/50');
+                        }
+                        
+                        // Apply compact view if enabled
+                        if (scheduleConfig.compactView) {
+                            cell.classList.add('py-1');
+                        } else {
+                            cell.classList.add('py-3');
+                        }
+                        
+                        // Apply cell style
+                        if (scheduleConfig.cellStyle === 'gradient') {
+                            cell.classList.add('bg-gradient-to-r', 'from-white', 'to-gray-50', 'dark:from-gray-800', 'dark:to-gray-700');
+                        } else if (scheduleConfig.cellStyle === 'stripe') {
+                            if (index % 2 === 0) {
+                                cell.classList.add('bg-gray-50', 'dark:bg-gray-700/50');
+                            }
+                        }
+                        
+                        // Check if there's an event for this cell
+                        const eventKey = `${day}-${timeSlot.hour}:${timeSlot.minute}`;
+                        if (scheduleData[eventKey]) {
+                            const event = scheduleData[eventKey];
+                            
+                            // Create event element
+                            cell.classList.add(`event-${event.type}`);
+                            
+                            const eventContent = document.createElement('div');
+                            eventContent.className = 'h-full flex flex-col';
+                            
+                            const eventTitle = document.createElement('div');
+                            eventTitle.className = 'font-bold';
+                            eventTitle.textContent = event.title;
+                            eventContent.appendChild(eventTitle);
+                            
+                            if (event.description) {
+                                const eventDescription = document.createElement('div');
+                                eventDescription.className = 'text-xs mt-1 opacity-80';
+                                eventDescription.textContent = event.description;
+                                eventContent.appendChild(eventDescription);
+                            }
+                            
+                            cell.appendChild(eventContent);
+                        }
+                        
+                        // Add click event listener
+                        cell.addEventListener('click', () => openEventModal(cell));
+                        
+                        row.appendChild(cell);
+                    });
+                    
+                    scheduleBody.appendChild(row);
+                });
+            }
+        }
+        
+
+        
+        // Format time to 12-hour format with AM/PM
+        function formatTime(hour, minute) {
+            const period = hour >= 12 ? 'م' : 'ص';
+            const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+            return `${displayHour}:${minute === 0 ? '00' : minute} ${period}`;
+        }
+        
+        // Open the event modal for a specific cell
+        function openEventModal(cell) {
+            currentCell = cell;
+            const modal = document.getElementById('eventModal');
+            const form = document.getElementById('eventForm');
+            const deleteBtn = document.getElementById('deleteEvent');
+            
+            // Set event day and time from cell data attributes
+            document.getElementById('eventDay').value = cell.dataset.day;
+            document.getElementById('eventTime').value = cell.dataset.time;
+            
+            // Check if there's an existing event for this cell
+            const eventKey = `${cell.dataset.day}-${cell.dataset.time}`;
+            const existingEvent = scheduleData[eventKey];
+            
+            if (existingEvent) {
+                // Edit mode
+                isEditMode = true;
+                document.getElementById('eventTitle').value = existingEvent.title;
+                document.getElementById('eventType').value = existingEvent.type;
+                document.getElementById('eventDescription').value = existingEvent.description;
+                deleteBtn.classList.remove('hidden');
+            } else {
+                // Create mode
+                isEditMode = false;
+                form.reset();
+                deleteBtn.classList.add('hidden');
+            }
+            
+            // Show the modal
+            modal.classList.remove('hidden');
+        }
+        
+        // Close the event modal
+        function closeModal() {
+            document.getElementById('eventModal').classList.add('hidden');
+        }
+        
+        // Save event from the modal form
+        function saveEvent(e) {
+            e.preventDefault();
+            
+            const day = document.getElementById('eventDay').value;
+            const time = document.getElementById('eventTime').value;
+            const title = document.getElementById('eventTitle').value;
+            const type = document.getElementById('eventType').value;
+            const description = document.getElementById('eventDescription').value;
+            
+            // Create event object
+            const event = {
+                title,
+                type,
+                description
+            };
+            
+            // Save to schedule data
+            const eventKey = `${day}-${time}`;
+            scheduleData[eventKey] = event;
+            
+            // Save to localStorage
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+            
+            // Close modal
+            closeModal();
+            
+            // Regenerate schedule table
+            generateScheduleTable();
+            
+            // Show saved message
+            showSavedMessage();
+        }
+        
+        // Delete an event
+        function deleteEvent() {
+            if (!currentCell) return;
+            
+            const day = currentCell.dataset.day;
+            const time = currentCell.dataset.time;
+            const eventKey = `${day}-${time}`;
+            
+            // Remove from schedule data
+            delete scheduleData[eventKey];
+            
+            // Save to localStorage
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+            
+            // Close modal
+            closeModal();
+            
+            // Regenerate schedule table
+            generateScheduleTable();
+            
+            // Show saved message
+            showSavedMessage();
+        }
+        
+        // Save the entire schedule to localStorage
+        function saveSchedule() {
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+            localStorage.setItem('scheduleConfig', JSON.stringify(scheduleConfig));
+            
+            // Save schedule title
+            localStorage.setItem('scheduleTitle', document.getElementById('scheduleTitle').value);
+            
+            // Show saved message
+            showSavedMessage();
+        }
+        
+        // Show a temporary saved message
+        function showSavedMessage() {
+            const savedMessage = document.getElementById('savedMessage');
+            savedMessage.classList.remove('hidden', 'fade-out');
+            savedMessage.classList.add('block');
+            
+            // Add fade-out class after a short delay
+            setTimeout(() => {
+                savedMessage.classList.add('fade-out');
+                
+                // Hide message after animation completes
+                setTimeout(() => {
+                    savedMessage.classList.add('hidden');
+                    savedMessage.classList.remove('block');
+                }, 2000);
+            }, 100);
+        }
+        
+        // Export schedule as an image
+        function exportAsImage() {
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            const title = document.getElementById('scheduleTitle').value || 'جدولي الأسبوعي';
+            
+            // Create a clone of the schedule to capture
+            const clone = scheduleContainer.cloneNode(true);
+            clone.style.padding = '20px';
+            clone.style.backgroundColor = document.documentElement.classList.contains('dark') ? '#1e293b' : 'white';
+            clone.style.borderRadius = '0';
+            
+            // Add title to the cloned element
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = title;
+            titleElement.style.textAlign = 'center';
+            titleElement.style.marginBottom = '15px';
+            titleElement.style.color = document.documentElement.classList.contains('dark') ? 'white' : 'black';
+            titleElement.style.fontFamily = 'Tajawal, sans-serif';
+            titleElement.style.fontSize = '18px';
+            
+            clone.insertBefore(titleElement, clone.firstChild);
+            
+            // Style the clone for better image
+            clone.querySelectorAll('td, th').forEach(cell => {
+                cell.style.borderColor = document.documentElement.classList.contains('dark') ? '#4b5563' : '#e5e7eb';
+            });
+            
+            // Temporarily append to body but hidden
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            document.body.appendChild(clone);
+            
+            // Use html2canvas to create image
+            html2canvas(clone, {
+                backgroundColor: document.documentElement.classList.contains('dark') ? '#1e293b' : 'white',
+                scale: 2
+            }).then(canvas => {
+                // Convert to image and download
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `${title.replace(/\s+/g, '_')}.png`;
+                link.href = imgData;
+                link.click();
+                
+                // Remove clone
+                document.body.removeChild(clone);
+            });
+        }
+        
+        // Print the schedule
+        function printSchedule() {
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            const title = document.getElementById('scheduleTitle').value || 'جدولي الأسبوعي';
+            
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            
+            // Create print HTML
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html dir="rtl">
+                <head>
+                    <title>${title}</title>
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+                        body {
+                            font-family: 'Tajawal', sans-serif;
+                            padding: 20px;
+                        }
+                        h1 {
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        th, td {
+                            border: 1px solid #e5e7eb;
+                            padding: 8px;
+                            text-align: right;
+                        }
+                        th {
+                            background-color: #f3f4f6;
+                        }
+                        .event-work {
+                            background-color: rgba(96, 165, 250, 0.3);
+                            border-right: 4px solid #3b82f6;
+                        }
+                        .event-study {
+                            background-color: rgba(139, 92, 246, 0.3);
+                            border-right: 4px solid #8b5cf6;
+                        }
+                        .event-exercise {
+                            background-color: rgba(34, 197, 94, 0.3);
+                            border-right: 4px solid #22c55e;
+                        }
+                        .event-personal {
+                            background-color: rgba(249, 115, 22, 0.3);
+                            border-right: 4px solid #f97316;
+                        }
+                        .event-social {
+                            background-color: rgba(236, 72, 153, 0.3);
+                            border-right: 4px solid #ec4899;
+                        }
+                        .event-other {
+                            background-color: rgba(100, 116, 139, 0.3);
+                            border-right: 4px solid #64748b;
+                        }
+                        .legend {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 15px;
+                            margin-bottom: 20px;
+                        }
+                        .legend-item {
+                            display: flex;
+                            align-items: center;
+                        }
+                        .legend-color {
+                            width: 15px;
+                            height: 15px;
+                            margin-left: 5px;
+                            border-radius: 2px;
+                        }
+                        @media print {
+                            @page {
+                                size: landscape;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>${title}</h1>
+                    
+                    <div class="legend">
+                        <div class="legend-item"><div class="legend-color" style="background-color: #3b82f6;"></div>عمل</div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: #8b5cf6;"></div>دراسة</div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: #22c55e;"></div>رياضة</div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: #f97316;"></div>شخصي</div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: #ec4899;"></div>اجتماعي</div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: #64748b;"></div>أخرى</div>
+                    </div>
+                    
+                    ${scheduleContainer.innerHTML}
+                </body>
+                </html>
+            `);
+            
+            // Trigger print dialog
+            printWindow.document.close();
+            printWindow.focus();
+            
+            // Give a moment for styles to load
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        }
+        
+        // Clear the entire schedule
+        function clearSchedule() {
+            // Confirm before clearing
+            if (confirm('هل أنت متأكد من رغبتك في مسح الجدول بالكامل؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                scheduleData = {};
+                localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+                generateScheduleTable();
+            }
+        }
+        
+        // Apply time settings
+        function applyTimeSettings() {
+            // Get values from form
+            scheduleConfig.startTime = parseInt(document.getElementById('startTime').value);
+            scheduleConfig.endTime = parseInt(document.getElementById('endTime').value);
+            scheduleConfig.timeInterval = parseInt(document.getElementById('timeInterval').value);
+            
+            // Validate settings
+            if (scheduleConfig.startTime >= scheduleConfig.endTime) {
+                alert('يجب أن يكون وقت البداية قبل وقت النهاية');
+                return;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('scheduleConfig', JSON.stringify(scheduleConfig));
+            
+            // Regenerate schedule table
+            generateScheduleTable();
+            
+            // Show saved message
+            showSavedMessage();
+        }
+        
+        // Apply display settings
+        function applyDisplaySettings() {
+            // Get values from form
+            scheduleConfig.layoutDirection = document.querySelector('input[name="layoutDirection"]:checked').value;
+            scheduleConfig.showWeekends = document.getElementById('showWeekends').checked;
+            scheduleConfig.compactView = document.getElementById('compactView').checked;
+            scheduleConfig.cellStyle = document.getElementById('cellStyle').value;
+            
+            // Save to localStorage
+            localStorage.setItem('scheduleConfig', JSON.stringify(scheduleConfig));
+            
+            // Regenerate schedule table
+            generateScheduleTable();
+            
+            // Show saved message
+            showSavedMessage();
+        }
+        
+        // Toggle dark mode
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Apply a template to the schedule
+        function applyTemplate(templateName) {
+            // Confirm before replacing current schedule
+            if (Object.keys(scheduleData).length > 0) {
+                if (!confirm('سيؤدي تطبيق القالب إلى استبدال الجدول الحالي. هل أنت متأكد من المتابعة؟')) {
+                    return;
+                }
+            }
+            
+            // Clear current schedule
+            scheduleData = {};
+            
+            // Apply selected template
+            switch (templateName) {
+                case 'work':
+                    applyWorkTemplate();
+                    break;
+                case 'study':
+                    applyStudyTemplate();
+                    break;
+                case 'balanced':
+                    applyBalancedTemplate();
+                    break;
+                case 'fitness':
+                    applyFitnessTemplate();
+                    break;
+                case 'social':
+                    applySocialTemplate();
+                    break;
+                case 'empty':
+                    // Just leave the schedule empty
+                    break;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+            
+            // Regenerate schedule table
+            generateScheduleTable();
+            
+            // Show saved message
+            showSavedMessage();
+        }
+        
+        // Apply work-focused template
+        function applyWorkTemplate() {
+            // Monday to Friday work schedule
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            
+            // Add typical work day events
+            days.forEach(day => {
+                // Morning planning
+                scheduleData[`${day}-8:0`] = {
+                    title: 'تخطيط اليوم',
+                    type: 'work',
+                    description: 'مراجعة البريد والمهام'
+                };
+                
+                // Work blocks
+                for (let hour = 9; hour <= 12; hour++) {
+                    scheduleData[`${day}-${hour}:0`] = {
+                        title: 'عمل محوري',
+                        type: 'work',
+                        description: 'العمل على المشاريع الرئيسية'
+                    };
+                }
+                
+                // Lunch break
+                scheduleData[`${day}-13:0`] = {
+                    title: 'استراحة الغداء',
+                    type: 'personal',
+                    description: ''
+                };
+                
+                // Afternoon work
+                for (let hour = 14; hour <= 16; hour++) {
+                    scheduleData[`${day}-${hour}:0`] = {
+                        title: 'اجتماعات ومهام',
+                        type: 'work',
+                        description: 'اجتماعات ومتابعة المشاريع'
+                    };
+                }
+                
+                // End of day review
+                scheduleData[`${day}-17:0`] = {
+                    title: 'مراجعة اليوم',
+                    type: 'work',
+                    description: 'تلخيص الإنجازات والتخطيط للغد'
+                };
+            });
+            
+            // Add some personal time in evenings
+            days.forEach(day => {
+                scheduleData[`${day}-18:0`] = {
+                    title: 'وقت شخصي',
+                    type: 'personal',
+                    description: 'استراحة واسترخاء'
+                };
+                
+                scheduleData[`${day}-20:0`] = {
+                    title: 'هواية أو تعلم',
+                    type: 'personal',
+                    description: 'تطوير مهارات شخصية'
+                };
+            });
+            
+            // Weekend activities
+            scheduleData[`Saturday-10:0`] = {
+                title: 'المهام الشخصية',
+                type: 'personal',
+                description: 'إنجاز المهام المؤجلة'
+            };
+            
+            scheduleData[`Sunday-18:0`] = {
+                title: 'التحضير للأسبوع',
+                type: 'work',
+                description: 'مراجعة خطة الأسبوع القادم'
+            };
+        }
+        
+        // Apply study-focused template
+        function applyStudyTemplate() {
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            // Morning studies
+            days.forEach(day => {
+                scheduleData[`${day}-8:0`] = {
+                    title: 'تخطيط يومي',
+                    type: 'study',
+                    description: 'تحديد أهداف اليوم'
+                };
+                
+                // Study blocks vary by day
+                if (['Monday', 'Wednesday', 'Friday'].includes(day)) {
+                    scheduleData[`${day}-9:0`] = {
+                        title: 'محاضرة',
+                        type: 'study',
+                        description: 'حضور المحاضرات'
+                    };
+                    
+                    scheduleData[`${day}-11:0`] = {
+                        title: 'مذاكرة',
+                        type: 'study',
+                        description: 'مراجعة المحاضرات'
+                    };
+                } else {
+                    scheduleData[`${day}-9:0`] = {
+                        title: 'مذاكرة',
+                        type: 'study',
+                        description: 'دراسة المواد الصعبة'
+                    };
+                }
+                
+                // Lunch break
+                scheduleData[`${day}-13:0`] = {
+                    title: 'استراحة الغداء',
+                    type: 'personal',
+                    description: ''
+                };
+                
+                // Afternoon schedule varies by day
+                if (['Tuesday', 'Thursday'].includes(day)) {
+                    scheduleData[`${day}-14:0`] = {
+                        title: 'محاضرة',
+                        type: 'study',
+                        description: 'حضور المحاضرات'
+                    };
+                    
+                    scheduleData[`${day}-16:0`] = {
+                        title: 'مجموعة دراسية',
+                        type: 'study',
+                        description: 'العمل مع زملاء الدراسة'
+                    };
+                } else if (day === 'Saturday') {
+                    scheduleData[`${day}-14:0`] = {
+                        title: 'مراجعة شاملة',
+                        type: 'study',
+                        description: 'مراجعة مواد الأسبوع'
+                    };
+                } else if (day === 'Sunday') {
+                    scheduleData[`${day}-14:0`] = {
+                        title: 'التحضير للأسبوع',
+                        type: 'study',
+                        description: 'قراءة المواد المقبلة'
+                    };
+                } else {
+                    scheduleData[`${day}-14:0`] = {
+                        title: 'مذاكرة',
+                        type: 'study',
+                        description: 'استكمال الواجبات'
+                    };
+                    
+                    scheduleData[`${day}-16:0`] = {
+                        title: 'مراجعة',
+                        type: 'study',
+                        description: 'مراجعة الملاحظات'
+                    };
+                }
+                
+                // Evening activities
+                if (!['Friday', 'Saturday'].includes(day)) {
+                    scheduleData[`${day}-18:0`] = {
+                        title: 'استراحة',
+                        type: 'personal',
+                        description: 'وقت للاسترخاء'
+                    };
+                    
+                    scheduleData[`${day}-20:0`] = {
+                        title: 'مذاكرة خفيفة',
+                        type: 'study',
+                        description: 'مراجعة ما تم دراسته'
+                    };
+                } else {
+                    scheduleData[`${day}-18:0`] = {
+                        title: 'وقت اجتماعي',
+                        type: 'social',
+                        description: 'قضاء وقت مع الأصدقاء أو العائلة'
+                    };
+                }
+            });
+            
+            // Add some exercise
+            scheduleData[`Monday-17:0`] = {
+                title: 'تمرين رياضي',
+                type: 'exercise',
+                description: 'تمارين خفيفة'
+            };
+            
+            scheduleData[`Thursday-17:0`] = {
+                title: 'تمرين رياضي',
+                type: 'exercise',
+                description: 'تمارين خفيفة'
+            };
+        }
+        
+        // Apply balanced template
+        function applyBalancedTemplate() {
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            // Weekday mornings
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
+                scheduleData[`${day}-8:0`] = {
+                    title: 'تخطيط اليوم',
+                    type: 'work',
+                    description: 'تنظيم وتخطيط'
+                };
+                
+                scheduleData[`${day}-9:0`] = {
+                    title: 'عمل/دراسة',
+                    type: day === 'Monday' || day === 'Wednesday' ? 'work' : 'study',
+                    description: 'التركيز على المهام الأساسية'
+                };
+                
+                scheduleData[`${day}-11:0`] = {
+                    title: 'استراحة نشطة',
+                    type: 'personal',
+                    description: 'تمدد وحركة خفيفة'
+                };
+                
+                scheduleData[`${day}-12:0`] = {
+                    title: 'عمل/دراسة',
+                    type: day === 'Tuesday' || day === 'Thursday' ? 'work' : 'study',
+                    description: 'استكمال المهام'
+                };
+                
+                scheduleData[`${day}-14:0`] = {
+                    title: 'استراحة الغداء',
+                    type: 'personal',
+                    description: 'وجبة متوازنة'
+                };
+            });
+            
+            // Weekday afternoons with variety
+            ['Monday', 'Wednesday', 'Friday'].forEach(day => {
+                scheduleData[`${day}-15:0`] = {
+                    title: 'عمل/دراسة',
+                    type: 'work',
+                    description: 'مهام أقل أولوية'
+                };
+                
+                scheduleData[`${day}-17:0`] = {
+                    title: 'تمرين رياضي',
+                    type: 'exercise',
+                    description: 'تمارين متوسطة الشدة'
+                };
+            });
+            
+            ['Tuesday', 'Thursday'].forEach(day => {
+                scheduleData[`${day}-15:0`] = {
+                    title: 'عمل/دراسة',
+                    type: 'study',
+                    description: 'التركيز على تنمية المهارات'
+                };
+                
+                scheduleData[`${day}-17:0`] = {
+                    title: 'نشاط اجتماعي',
+                    type: 'social',
+                    description: 'لقاء مع أصدقاء أو زملاء'
+                };
+            });
+            
+            // Evenings with personal time
+            days.forEach(day => {
+                if (!['Friday', 'Saturday'].includes(day)) {
+                    scheduleData[`${day}-19:0`] = {
+                        title: 'عشاء',
+                        type: 'personal',
+                        description: ''
+                    };
+                    
+                    scheduleData[`${day}-20:0`] = {
+                        title: 'وقت شخصي',
+                        type: 'personal',
+                        description: 'هوايات أو قراءة'
+                    };
+                } else {
+                    scheduleData[`${day}-19:0`] = {
+                        title: 'خروج اجتماعي',
+                        type: 'social',
+                        description: 'قضاء وقت مع الأصدقاء'
+                    };
+                }
+            });
+            
+            // Weekend activities
+            scheduleData[`Saturday-10:0`] = {
+                title: 'تمرين صباحي',
+                type: 'exercise',
+                description: 'تمارين مكثفة'
+            };
+            
+            scheduleData[`Saturday-12:0`] = {
+                title: 'مهام منزلية',
+                type: 'personal',
+                description: 'تنظيم وترتيب'
+            };
+            
+            scheduleData[`Saturday-15:0`] = {
+                title: 'نشاط ترفيهي',
+                type: 'social',
+                description: 'استمتاع ومرح'
+            };
+            
+            scheduleData[`Sunday-10:0`] = {
+                title: 'استرخاء',
+                type: 'personal',
+                description: 'تأمل وهدوء'
+            };
+            
+            scheduleData[`Sunday-14:0`] = {
+                title: 'قراءة وتعلم',
+                type: 'study',
+                description: 'تنمية ذاتية'
+            };
+            
+            scheduleData[`Sunday-18:0`] = {
+                title: 'التحضير للأسبوع',
+                type: 'work',
+                description: 'تخطيط الأسبوع المقبل'
+            };
+        }
+        
+        // Apply fitness-focused template
+        function applyFitnessTemplate() {
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            // Daily morning routine
+            days.forEach(day => {
+                scheduleData[`${day}-6:0`] = {
+                    title: 'تمرين صباحي',
+                    type: 'exercise',
+                    description: 'تمارين خفيفة وإطالة'
+                };
+                
+                scheduleData[`${day}-7:0`] = {
+                    title: 'إفطار صحي',
+                    type: 'personal',
+                    description: 'وجبة متوازنة عالية البروتين'
+                };
+            });
+            
+            // Work/study during the day with fitness focus
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
+                scheduleData[`${day}-9:0`] = {
+                    title: 'عمل/دراسة',
+                    type: 'work',
+                    description: 'مهام اليوم الرئيسية'
+                };
+                
+                scheduleData[`${day}-11:0`] = {
+                    title: 'استراحة نشطة',
+                    type: 'exercise',
+                    description: 'مشي سريع أو تمارين خفيفة'
+                };
+                
+                scheduleData[`${day}-12:0`] = {
+                    title: 'غداء صحي',
+                    type: 'personal',
+                    description: 'وجبة غنية بالخضروات والبروتين'
+                };
+                
+                scheduleData[`${day}-13:0`] = {
+                    title: 'عمل/دراسة',
+                    type: 'work',
+                    description: 'استكمال مهام اليوم'
+                };
+            });
+            
+            // Different workout types on different days
+            scheduleData[`Monday-17:0`] = {
+                title: 'تمارين القوة',
+                type: 'exercise',
+                description: 'تركيز على الجزء العلوي من الجسم'
+            };
+            
+            scheduleData[`Tuesday-17:0`] = {
+                title: 'تدريب قلبي',
+                type: 'exercise',
+                description: 'جري أو سباحة'
+            };
+            
+            scheduleData[`Wednesday-17:0`] = {
+                title: 'يوم راحة نشطة',
+                type: 'exercise',
+                description: 'تمشية أو يوجا خفيفة'
+            };
+            
+            scheduleData[`Thursday-17:0`] = {
+                title: 'تمارين القوة',
+                type: 'exercise',
+                description: 'تركيز على القسم السفلي من الجسم'
+            };
+            
+            scheduleData[`Friday-17:0`] = {
+                title: 'تدريب متنوع',
+                type: 'exercise',
+                description: 'تمارين تبادلية أو رياضة جماعية'
+            };
+            
+            scheduleData[`Saturday-10:0`] = {
+                title: 'تمرين طويل',
+                type: 'exercise',
+                description: 'تدريب طويل للتحمل'
+            };
+            
+            scheduleData[`Sunday-16:0`] = {
+                title: 'يوجا واسترخاء',
+                type: 'exercise',
+                description: 'تمدد استرخاء واستشفاء'
+            };
+            
+            // Evening routine
+            days.forEach(day => {
+                scheduleData[`${day}-19:0`] = {
+                    title: 'عشاء صحي',
+                    type: 'personal',
+                    description: 'وجبة متوازنة خفيفة'
+                };
+                
+                scheduleData[`${day}-21:0`] = {
+                    title: 'تحضير لليوم التالي',
+                    type: 'personal',
+                    description: 'تخطيط وجبات وملابس التمرين'
+                };
+            });
+            
+            // Add some social activities
+            scheduleData[`Wednesday-19:0`] = {
+                title: 'لقاء مع أصدقاء',
+                type: 'social',
+                description: 'نشاط اجتماعي صحي'
+            };
+            
+            scheduleData[`Saturday-18:0`] = {
+                title: 'نشاط اجتماعي',
+                type: 'social',
+                description: 'خروجة مع الأصدقاء'
+            };
+        }
+        
+        // Apply social-focused template
+        function applySocialTemplate() {
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            // Weekday mornings with work/study
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
+                scheduleData[`${day}-9:0`] = {
+                    title: 'عمل/دراسة',
+                    type: 'work',
+                    description: 'مهام اليوم الرئيسية'
+                };
+                
+                scheduleData[`${day}-12:0`] = {
+                    title: 'غداء مع زملاء',
+                    type: 'social',
+                    description: 'تواصل خلال استراحة الغداء'
+                };
+                
+                scheduleData[`${day}-13:0`] = {
+                    title: 'عمل/دراسة',
+                    type: 'work',
+                    description: 'استكمال مهام اليوم'
+                };
+            });
+            
+            // Social evenings on different days
+            scheduleData[`Monday-18:0`] = {
+                title: 'عشاء مع العائلة',
+                type: 'social',
+                description: 'وقت مخصص للعائلة'
+            };
+            
+            scheduleData[`Tuesday-18:0`] = {
+                title: 'فصل تعليمي جماعي',
+                type: 'social',
+                description: 'دروس أو ورشة عمل'
+            };
+            
+            scheduleData[`Wednesday-18:0`] = {
+                title: 'رياضة جماعية',
+                type: 'social',
+                description: 'كرة قدم/سلة مع الأصدقاء'
+            };
+            
+            scheduleData[`Thursday-18:0`] = {
+                title: 'خروجة للعشاء',
+                type: 'social',
+                description: 'مع الأصدقاء أو الزملاء'
+            };
+            
+            scheduleData[`Friday-18:0`] = {
+                title: 'سهرة اجتماعية',
+                type: 'social',
+                description: 'لقاء مع الأصدقاء'
+            };
+            
+            // Weekend activities
+            scheduleData[`Saturday-10:0`] = {
+                title: 'تمرين جماعي',
+                type: 'exercise',
+                description: 'نشاط رياضي مع الأصدقاء'
+            };
+            
+            scheduleData[`Saturday-14:0`] = {
+                title: 'نزهة/رحلة',
+                type: 'social',
+                description: 'قضاء وقت خارج المنزل'
+            };
+            
+            scheduleData[`Saturday-19:0`] = {
+                title: 'حفلة أو تجمع',
+                type: 'social',
+                description: 'لقاء اجتماعي موسع'
+            };
+            
+            scheduleData[`Sunday-11:0`] = {
+                title: 'فطور متأخر',
+                type: 'social',
+                description: 'مع الأصدقاء أو العائلة'
+            };
+            
+            scheduleData[`Sunday-15:0`] = {
+                title: 'وقت شخصي',
+                type: 'personal',
+                description: 'استرخاء واستعداد للأسبوع'
+            };
+            
+            scheduleData[`Sunday-19:0`] = {
+                title: 'عشاء عائلي',
+                type: 'social',
+                description: 'ختام الأسبوع مع العائلة'
+            };
+            
+            // Add some personal time for balance
+            ['Monday', 'Wednesday', 'Friday'].forEach(day => {
+                scheduleData[`${day}-16:0`] = {
+                    title: 'وقت شخصي',
+                    type: 'personal',
+                    description: 'هوايات أو استرخاء'
+                };
+            });
+            
+            ['Tuesday', 'Thursday'].forEach(day => {
+                scheduleData[`${day}-16:0`] = {
+                    title: 'تعلم مهارة جديدة',
+                    type: 'study',
+                    description: 'تطوير ذاتي'
+                };
+            });
+        }
+        
+        // Load schedule title if saved
+        const savedTitle = localStorage.getItem('scheduleTitle');
+        if (savedTitle) {
+            document.getElementById('scheduleTitle').value = savedTitle;
+        }
+        
+        // Add styles for event types
+        const eventStyles = document.createElement('style');
+        eventStyles.textContent = `
+            .event-work {
+                background-color: rgba(96, 165, 250, 0.3);
+                border-right: 4px solid #3b82f6;
+            }
+            .event-study {
+                background-color: rgba(139, 92, 246, 0.3);
+                border-right: 4px solid #8b5cf6;
+            }
+            .event-exercise {
+                background-color: rgba(34, 197, 94, 0.3);
+                border-right: 4px solid #22c55e;
+            }
+            .event-personal {
+                background-color: rgba(249, 115, 22, 0.3);
+                border-right: 4px solid #f97316;
+            }
+            .event-social {
+                background-color: rgba(236, 72, 153, 0.3);
+                border-right: 4px solid #ec4899;
+            }
+            .event-other {
+                background-color: rgba(100, 116, 139, 0.3);
+                border-right: 4px solid #64748b;
+            }
+            
+            .dark .event-work {
+                background-color: rgba(96, 165, 250, 0.2);
+            }
+            .dark .event-study {
+                background-color: rgba(139, 92, 246, 0.2);
+            }
+            .dark .event-exercise {
+                background-color: rgba(34, 197, 94, 0.2);
+            }
+            .dark .event-personal {
+                background-color: rgba(249, 115, 22, 0.2);
+            }
+            .dark .event-social {
+                background-color: rgba(236, 72, 153, 0.2);
+            }
+            .dark .event-other {
+                background-color: rgba(100, 116, 139, 0.2);
+            }
+        `;
+        document.head.appendChild(eventStyles);
+        
+        // Load html2canvas library dynamically for image export
+        function loadHtml2Canvas() {
+            return new Promise((resolve, reject) => {
+                if (window.html2canvas) {
+                    resolve(window.html2canvas);
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                script.onload = () => resolve(window.html2canvas);
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+        
+        // Preload html2canvas
+        loadHtml2Canvas().catch(console.error);
+    </script>
+</body>
+</html>
