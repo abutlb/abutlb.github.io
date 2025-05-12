@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مُخطط إنتاج المحتوى | Content Calendar Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6', // violet-500
+                        secondary: '#6366f1', // indigo-500
+                        accent: '#ec4899', // pink-500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #8b5cf6, #ec4899) 1;
+        }
+
+        /* Theme toggle styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #8b5cf6;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+
+        /* Calendar styles */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        
+        .calendar-day {
+            min-height: 120px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-day:hover {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+        }
+        
+        .calendar-day.empty {
+            background-color: rgba(241, 245, 249, 0.5);
+        }
+        
+        .calendar-day.today {
+            border: 2px solid #8b5cf6;
+        }
+
+        /* Post type indicators */
+        .post-image {
+            border-right: 3px solid #3b82f6;
+        }
+        
+        .post-video {
+            border-right: 3px solid #ef4444;
+        }
+        
+        .post-text {
+            border-right: 3px solid #10b981;
+        }
+        
+        .post-link {
+            border-right: 3px solid #f59e0b;
+        }
+        
+        /* Post item styles */
+        .post-item {
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .post-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Post category colors */
+        .category-educational {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-bottom: 2px solid #3b82f6;
+        }
+        
+        .category-motivational {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-bottom: 2px solid #8b5cf6;
+        }
+        
+        .category-entertainment {
+            background-color: rgba(236, 72, 153, 0.1);
+            border-bottom: 2px solid #ec4899;
+        }
+        
+        .category-ad {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-bottom: 2px solid #f59e0b;
+        }
+        
+        .category-challenge {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-bottom: 2px solid #ef4444;
+        }
+        
+        .category-quote {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-bottom: 2px solid #10b981;
+        }
+        
+        /* Animation for saved message */
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .fade-out {
+            animation: fadeOut 2s forwards;
+        }
+        
+        /* Custom tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(15, 23, 42, 0.9) transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index_tools.html" class="p-2 bg-violet-300 dark:bg-violet-900 rounded-full hover:bg-violet-200 dark:hover:bg-violet-800 transition-colors">
+                  <i class="fas fa-arrow-right text-violet-600 dark:text-violet-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-pink-600 text-center">مُخطط إنتاج المحتوى</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">نظّم محتواك بسهولة عبر مختلف المنصات</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-violet-600 to-pink-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="calendar">
+                    <i class="fas fa-calendar-alt ml-2"></i>التقويم
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="analytics">
+                    <i class="fas fa-chart-pie ml-2"></i>التحليلات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="settings">
+                    <i class="fas fa-cog ml-2"></i>الإعدادات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول الأداة
+                </button>
+            </div>
+            
+            <!-- Calendar Tab -->
+            <div id="calendar-tab" class="tab-content p-6 block">
+                <!-- Calendar Controls -->
+                <div class="flex flex-wrap items-center justify-between mb-6">
+                    <div class="mb-4 md:mb-0 flex flex-wrap gap-2">
+                        <button id="addPostBtn" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-plus ml-2"></i>إضافة منشور
+                        </button>
+                        <button id="printCalendarBtn" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-print ml-2"></i>طباعة التقويم
+                        </button>
+                        <button id="exportCalendarBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-file-export ml-2"></i>تصدير البيانات
+                        </button>
+                        <button id="importCalendarBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-file-import ml-2"></i>استيراد البيانات
+                        </button>
+                        <button id="checkReadinessBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                            <i class="fas fa-check-circle ml-2"></i>تحقق من الجاهزية
+                        </button>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <div id="savedMessage" class="hidden text-green-600 dark:text-green-400 font-medium">
+                            <i class="fas fa-check-circle ml-1"></i>تم الحفظ بنجاح
+                        </div>
+                        
+                        <div class="relative">
+                            <input type="month" id="calendarMonth" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Platform Filter -->
+                <div class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <div class="font-bold text-gray-700 dark:text-gray-300">المنصة:</div>
+                        
+                        <select id="platformFilter" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <option value="all">جميع المنصات</option>
+                            <option value="telegram">تيليجرام</option>
+                            <option value="twitter">تويتر</option>
+                            <option value="instagram">إنستغرام</option>
+                            <option value="youtube">يوتيوب</option>
+                            <option value="facebook">فيسبوك</option>
+                            <option value="tiktok">تيك توك</option>
+                            <option value="linkedin">لينكد إن</option>
+                        </select>
+                        
+                        <select id="contentTypeFilter" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <option value="all">جميع أنواع المحتوى</option>
+                            <option value="image">صورة</option>
+                            <option value="video">فيديو</option>
+                            <option value="text">نص</option>
+                            <option value="link">رابط</option>
+                        </select>
+                        
+                        <select id="categoryFilter" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <option value="all">جميع التصنيفات</option>
+                            <option value="educational">تعليمي</option>
+                            <option value="motivational">تحفيزي</option>
+                            <option value="entertainment">ترفيهي</option>
+                            <option value="ad">إعلان</option>
+                            <option value="challenge">تحدي</option>
+                            <option value="quote">اقتباس</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Calendar and Sidebar Container -->
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Calendar Grid -->
+                    <div class="w-full md:w-3/4 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">
+                            <div class="flex items-center justify-between">
+                                <span id="calendarTitle">مايو 2023</span>
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <div class="flex items-center">
+                                        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-1 px-2 rounded-full mr-1">المنشورات:</span>
+                                        <span id="totalPostCount" class="text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 py-1 px-2 rounded-full">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </h3>
+                        
+                        <!-- Weekday Headers -->
+                        <div class="calendar-grid mb-2">
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">الأحد</div>
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">الإثنين</div>
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">الثلاثاء</div>
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">الأربعاء</div>
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">الخميس</div>
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">الجمعة</div>
+                            <div class="text-center py-2 font-medium text-gray-700 dark:text-gray-300">السبت</div>
+                        </div>
+                        
+                        <!-- Calendar Days -->
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="w-full md:w-1/4 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">نظرة عامة</h3>
+                        
+                        <!-- Distribution by Platform -->
+                        <div class="mb-6">
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">توزيع المنصات</h4>
+                            <div class="w-full h-48">
+                                <canvas id="platformChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Distribution by Content Type -->
+                        <div class="mb-6">
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">أنواع المحتوى</h4>
+                            <div class="w-full h-48">
+                                <canvas id="contentTypeChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Distribution by Category -->
+                        <div class="mb-6">
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">التصنيفات</h4>
+                            <div class="w-full h-48">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Daily Distribution -->
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">التوزيع اليومي</h4>
+                            <div class="w-full h-48">
+                                <canvas id="dailyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analytics Tab -->
+            <div id="analytics-tab" class="tab-content p-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Content Balance -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">توازن المحتوى</h3>
+                        <div class="mb-4">
+                            <p class="text-gray-700 dark:text-gray-300 mb-2">تحليل توازن المحتوى الخاص بك عبر المنصات والتصنيفات المختلفة.</p>
+                            <div class="w-full h-64">
+                                <canvas id="contentBalanceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Planning Health -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">صحة خطة المحتوى</h3>
+                        <div id="contentHealthScore" class="text-center mb-4">
+                            <div class="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">85%</div>
+                            <p class="text-gray-700 dark:text-gray-300">جيد جداً</p>
+                        </div>
+                        <div class="space-y-3 mb-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-700 dark:text-gray-300">تنوع المحتوى</span>
+                                    <span class="text-gray-700 dark:text-gray-300">90%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                    <div class="h-2 bg-violet-500 rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-700 dark:text-gray-300">تغطية أيام الأسبوع</span>
+                                    <span class="text-gray-700 dark:text-gray-300">85%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                    <div class="h-2 bg-violet-500 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-700 dark:text-gray-300">توازن التصنيفات</span>
+                                    <span class="text-gray-700 dark:text-gray-300">70%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                    <div class="h-2 bg-violet-500 rounded-full" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-violet-50 dark:bg-violet-900/30 p-3 rounded-lg">
+                            <h4 class="font-medium text-violet-700 dark:text-violet-300 mb-2">توصيات لتحسين الخطة</h4>
+                            <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                                <li>أضف المزيد من المحتوى التعليمي ليوم الخميس</li>
+                                <li>زِد تنوع المحتوى على منصة تويتر</li>
+                                <li>حاول تخصيص محتوى للأيام الخالية في نهاية الشهر</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content p-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Display Settings -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">إعدادات العرض</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <label class="text-gray-700 dark:text-gray-300">الوضع المظلم</label>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="darkModeToggle" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-violet-300 dark:peer-focus:ring-violet-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <label class="text-gray-700 dark:text-gray-300">عرض أيام الشهر الماضي والقادم</label>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="adjacentMonthsToggle" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-violet-300 dark:peer-focus:ring-violet-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <label class="text-gray-700 dark:text-gray-300">عرض الرسوم البيانية في الشريط الجانبي</label>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="showChartsToggle" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-violet-300 dark:peer-focus:ring-violet-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">طريقة عرض المنشورات</label>
+                                <select id="postViewStyle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="detailed">تفصيلية (مع الأيقونات والألوان)</option>
+                                    <option value="compact">مختصرة (العناوين فقط)</option>
+                                    <option value="icon">أيقونات فقط</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">اليوم الأول في الأسبوع</label>
+                                <select id="firstDayOfWeek" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="sunday">الأحد</option>
+                                    <option value="monday">الإثنين</option>
+                                    <option value="saturday">السبت</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Management -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">إدارة البيانات</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <button id="exportDataBtn" class="w-full py-2 px-4 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-lg transition flex items-center justify-center">
+                                    <i class="fas fa-download ml-2"></i>تصدير جميع البيانات
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">تصدير جميع المنشورات والإعدادات كملف JSON</p>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center">
+                                    <input type="file" id="importDataFile" class="hidden" accept=".json">
+                                    <button id="importDataBtn" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition flex items-center justify-center">
+                                        <i class="fas fa-upload ml-2"></i>استيراد البيانات
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">استيراد البيانات من ملف JSON تم تصديره مسبقاً</p>
+                            </div>
+                            
+                            <div class="pt-2">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">خيارات الاستيراد</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="importOption" value="merge" class="ml-2 text-violet-600" checked>
+                                        <span class="text-gray-700 dark:text-gray-300">دمج مع البيانات الحالية</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="importOption" value="replace" class="ml-2 text-violet-600">
+                                        <span class="text-gray-700 dark:text-gray-300">استبدال البيانات الحالية</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                                <button id="clearDataBtn" class="w-full py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition flex items-center justify-center">
+                                    <i class="fas fa-trash-alt ml-2"></i>مسح جميع البيانات
+                                </button>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">حذف جميع المنشورات. لا يمكن التراجع عن هذا الإجراء!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول أداة مُخطط إنتاج المحتوى</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            مُخطط إنتاج المحتوى هو أداة مصممة لمساعدة منشئي المحتوى على تنظيم وجدولة محتواهم عبر مختلف المنصات الاجتماعية. تساعدك الأداة على التخطيط المسبق وضمان تنوع المحتوى وتوازنه، مما يؤدي إلى استراتيجية محتوى أكثر فعالية.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>تنظيم المحتوى بتنسيق تقويم شهري</li>
+                            <li>دعم لمختلف المنصات الاجتماعية</li>
+                            <li>تصنيف المحتوى وفق أنواع وفئات مختلفة</li>
+                            <li>تتبع توزيع المحتوى عبر الرسوم البيانية التحليلية</li>
+                            <li>تصدير واستيراد خطة المحتوى للنسخ الاحتياطي</li>
+                            <li>طباعة تقويم المحتوى بتنسيق PDF</li>
+                            <li>تحليل توازن المحتوى وتقديم توصيات للتحسين</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">كيفية استخدام الأداة</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>اختر الشهر الذي ترغب في التخطيط له من خلال منتقي الشهر</li>
+                            <li>أضف منشورًا جديدًا بالنقر على زر "إضافة منشور" أو بالنقر مباشرة على اليوم المطلوب في التقويم</li>
+                            <li>حدد المنصة ونوع المحتوى والتصنيف للمنشور</li>
+                            <li>أدخل عنوان المنشور ووصفه وأي روابط ذات صلة</li>
+                            <li>استخدم الرسوم البيانية في الشريط الجانبي لتحليل توزيع المحتوى</li>
+                            <li>تحقق من جاهزية خطتك باستخدام زر "تحقق من الجاهزية" للحصول على توصيات للتحسين</li>
+                            <li>قم بتصدير خطتك كملف PDF أو JSON للمشاركة أو النسخ الاحتياطي</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">تواصل معنا</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                                    <i class="fab fa-twitter text-blue-400"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
+                            </a>
+                            
+                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
+                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
+                            </a>
+                            
+                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-violet-600 dark:text-violet-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يونيو 2023</span></p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">جميع الحقوق محفوظة © <span id="currentYear">2023</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index_tools.html" class="bg-gradient-to-r from-violet-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Post Modal -->
+    <div id="postModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="postModalTitle">إضافة منشور جديد</h3>
+                <button id="closePostModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="postForm">
+                <input type="hidden" id="postId" value="">
+                <input type="hidden" id="postDate" value="">
+                
+                <div class="mb-4">
+                    <label for="postTitle" class="block text-gray-700 dark:text-gray-300 mb-2">عنوان المنشور</label>
+                    <input type="text" id="postTitle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل عنوان المنشور" required>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="postPlatform" class="block text-gray-700 dark:text-gray-300 mb-2">المنصة</label>
+                        <select id="postPlatform" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                            <option value="telegram">تيليجرام</option>
+                            <option value="twitter">تويتر</option>
+                            <option value="instagram">إنستغرام</option>
+                            <option value="youtube">يوتيوب</option>
+                            <option value="facebook">فيسبوك</option>
+                            <option value="tiktok">تيك توك</option>
+                            <option value="linkedin">لينكد إن</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="postContentType" class="block text-gray-700 dark:text-gray-300 mb-2">نوع المحتوى</label>
+                        <select id="postContentType" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                            <option value="image">صورة</option>
+                            <option value="video">فيديو</option>
+                            <option value="text">نص</option>
+                            <option value="link">رابط</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="postCategory" class="block text-gray-700 dark:text-gray-300 mb-2">التصنيف</label>
+                    <select id="postCategory" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <option value="educational">تعليمي</option>
+                        <option value="motivational">تحفيزي</option>
+                        <option value="entertainment">ترفيهي</option>
+                        <option value="ad">إعلان</option>
+                        <option value="challenge">تحدي</option>
+                        <option value="quote">اقتباس</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="postContent" class="block text-gray-700 dark:text-gray-300 mb-2">نص المنشور / وصف الفكرة</label>
+                    <textarea id="postContent" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل وصفاً للمنشور أو نص المحتوى" rows="3"></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="postLink" class="block text-gray-700 dark:text-gray-300 mb-2">الرابط (اختياري)</label>
+                    <input type="url" id="postLink" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="https://example.com">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="postNotes" class="block text-gray-700 dark:text-gray-300 mb-2">ملاحظات خاصة (لن تُنشر)</label>
+                    <textarea id="postNotes" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="ملاحظات لنفسك فقط" rows="2"></textarea>
+                </div>
+                
+                <div class="flex items-center justify-between mt-6">
+                    <button type="button" id="deletePostBtn" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition hidden">
+                        <i class="fas fa-trash-alt ml-2"></i>حذف
+                    </button>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" id="cancelPostBtn" class="py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                            إلغاء
+                        </button>
+                        <button type="submit" class="py-2 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition">
+                            <i class="fas fa-save ml-2"></i>حفظ
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Readiness Check Modal -->
+    <div id="readinessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">تحليل جاهزية المحتوى</h3>
+                <button id="closeReadinessModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="readinessContent" class="mb-4">
+                <!-- Will be filled by JavaScript -->
+                <div class="text-center mb-6">
+                    <div class="inline-block p-4 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 mb-4">
+                        <i class="fas fa-check-circle text-5xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">نسبة الجاهزية: 85%</h4>
+                    <p class="text-gray-600 dark:text-gray-400">خطة محتوى متوازنة بشكل جيد</p>
+                </div>
+                
+                <div class="bg-violet-50 dark:bg-violet-900/30 p-4 rounded-lg mb-4">
+                    <h5 class="font-medium text-gray-800 dark:text-gray-200 mb-2">نقاط القوة:</h5>
+                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                        <li>توزيع متوازن للمحتوى عبر أيام الأسبوع</li>
+                        <li>تنوع جيد في أنواع المحتوى</li>
+                        <li>مزيج مناسب من المحتوى التعليمي والترفيهي</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-amber-50 dark:bg-amber-900/30 p-4 rounded-lg">
+                    <h5 class="font-medium text-gray-800 dark:text-gray-200 mb-2">فرص التحسين:</h5>
+                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                        <li>يمكنك إضافة المزيد من المحتوى في الأسبوع الرابع</li>
+                        <li>زيادة منشورات منصة لينكد إن لتحقيق توازن أفضل</li>
+                        <li>النظر في إضافة المزيد من محتوى الفيديو</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button id="closeReadinessBtn" class="py-2 px-6 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition">
+                    حسناً، شكراً
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="text-center mb-4">
+                <div class="text-red-500 text-5xl mb-4">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2" id="confirmationTitle">تأكيد الحذف</h3>
+                <p class="text-gray-600 dark:text-gray-400" id="confirmationMessage">هل أنت متأكد من رغبتك في حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.</p>
+            </div>
+            
+            <div class="flex items-center justify-center gap-4 mt-6">
+                <button id="confirmCancel" class="py-2 px-6 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                    إلغاء
+                </button>
+                <button id="confirmAction" class="py-2 px-6 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                    تأكيد الحذف
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import File Input (Hidden) -->
+    <input type="file" id="importFileInput" class="hidden" accept=".json">
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="footerYear">2023</span> مُخطط إنتاج المحتوى - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script src="js/content_calendar.js"></script>
+</body>
+</html>
