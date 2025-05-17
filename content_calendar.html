@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -225,6 +226,30 @@
             opacity: 1;
         }
     </style>
+
+    <style>
+        /* Ensure dark mode is applied properly */
+        html.dark {
+            background-color: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+        
+        html.dark body {
+            background-color: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+        
+        /* Force transform for toggle dot */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+        
+        /* Additional dark mode styles to make the change more obvious */
+        html.dark .glass-card {
+            background: rgba(15, 23, 42, 0.75) !important;
+        }
+    </style>
+    
 </head>
 <body class="min-h-screen py-6 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4">
@@ -241,7 +266,7 @@
             </div>
             <div class="flex space-x-3 space-x-reverse items-center">
                 <!-- Theme Toggle Switch -->
-                <div class="relative inline-flex items-center">
+                <!-- <div class="relative inline-flex items-center">
                     <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
                     <input type="checkbox" id="themeSwitch" class="sr-only">
                     <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
@@ -253,7 +278,7 @@
                         </div>
                         <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         
@@ -822,5 +847,36 @@
     </footer>
 
     <script src="js/content_calendar.js"></script>
+    <!-- Add this right before the closing </body> tag -->
+<script>
+    // Debug toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            console.log('Theme toggle found, adding debug event listener');
+            themeToggle.addEventListener('click', function() {
+                console.log('Theme toggle clicked directly');
+                const isDark = document.documentElement.classList.contains('dark');
+                if (isDark) {
+                    document.documentElement.classList.remove('dark');
+                } else {
+                    document.documentElement.classList.add('dark');
+                }
+                // Toggle dot directly
+                const dot = document.querySelector('.toggle-dot');
+                if (dot) {
+                    if (isDark) {
+                        dot.classList.remove('translate-x-6');
+                    } else {
+                        dot.classList.add('translate-x-6');
+                    }
+                }
+            });
+        } else {
+            console.error('Theme toggle not found');
+        }
+    });
+</script>
+
 </body>
 </html>

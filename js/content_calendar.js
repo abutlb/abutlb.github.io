@@ -53,8 +53,36 @@
                         });
                         
                         // Theme switching
-                        document.getElementById('themeToggle').addEventListener('click', () => this.ui.toggleTheme());
-                        
+                        // document.getElementById('themeToggle').addEventListener('click', () => this.ui.toggleTheme());
+                        const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.documentElement.classList.toggle('dark');
+            
+            // Set the toggle dots
+            const toggleDots = document.querySelectorAll('.toggle-dot');
+            toggleDots.forEach(dot => {
+                if (isDark) {
+                    dot.style.transform = 'translateX(0)';
+                } else {
+                    dot.style.transform = 'translateX(1.5rem)';
+                }
+            });
+            
+            // Update settings
+            this.settings.darkMode = !isDark;
+            
+            // Update the settings toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) darkModeToggle.checked = !isDark;
+            
+            // Save settings
+            this.saveSettings();
+            
+            console.log('Header theme toggle clicked, dark mode is now:', !isDark);
+        });
+    }
                         // Calendar month picker
                         document.getElementById('calendarMonth').addEventListener('change', (e) => {
                             const [year, month] = e.target.value.split('-');
@@ -651,29 +679,85 @@
                      }
                      
                      /**
-                      * Toggle dark/light theme
-                      */
-                     toggleTheme() {
-                         this.calendar.settings.darkMode = !this.calendar.settings.darkMode;
-                         this.applyTheme();
-                         this.calendar.saveSettings();
-                     }
-                     
-                     /**
-                      * Apply current theme
-                      */
-                     applyTheme() {
-                         if (this.calendar.settings.darkMode) {
-                             document.documentElement.classList.add('dark');
-                             document.getElementById('darkModeToggle').checked = true;
-                             document.querySelector('.toggle-dot').classList.add('translate-x-6');
-                         } else {
-                             document.documentElement.classList.remove('dark');
-                             document.getElementById('darkModeToggle').checked = false;
-                             document.querySelector('.toggle-dot').classList.remove('translate-x-6');
-                         }
-                     }
-                     
+ * Toggle dark/light theme
+ */
+toggleTheme() {
+    // Toggle the dark class directly on the document element
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    if (isDark) {
+        document.documentElement.classList.remove('dark');
+        this.calendar.settings.darkMode = false;
+    } else {
+        document.documentElement.classList.add('dark');
+        this.calendar.settings.darkMode = true;
+    }
+    
+    // Force the toggle dot to move
+    const toggleDot = document.querySelector('.toggle-dot');
+    if (toggleDot) {
+        if (this.calendar.settings.darkMode) {
+            toggleDot.style.transform = 'translateX(1.5rem)';
+        } else {
+            toggleDot.style.transform = 'translateX(0)';
+        }
+    }
+    
+    // Update both toggle switches
+    const themeSwitch = document.getElementById('themeSwitch');
+    if (themeSwitch) themeSwitch.checked = this.calendar.settings.darkMode;
+    
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) darkModeToggle.checked = this.calendar.settings.darkMode;
+    
+    // Save settings
+    this.calendar.saveSettings();
+    
+    console.log('Theme toggled, dark mode is now:', this.calendar.settings.darkMode);
+}
+
+                    
+                    /**
+                     * Apply current theme
+                     */
+                    applyTheme() {
+                        if (this.calendar.settings.darkMode) {
+                            document.documentElement.classList.add('dark');
+                            
+                            // Update both toggle switches
+                            const themeSwitch = document.getElementById('themeSwitch');
+                            if (themeSwitch) themeSwitch.checked = true;
+                            
+                            const darkModeToggle = document.getElementById('darkModeToggle');
+                            if (darkModeToggle) darkModeToggle.checked = true;
+                            
+                            // Update toggle dot
+                            const toggleDots = document.querySelectorAll('.toggle-dot');
+                            toggleDots.forEach(dot => {
+                                dot.classList.add('translate-x-6');
+                            });
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                            
+                            // Update both toggle switches
+                            const themeSwitch = document.getElementById('themeSwitch');
+                            if (themeSwitch) themeSwitch.checked = false;
+                            
+                            const darkModeToggle = document.getElementById('darkModeToggle');
+                            if (darkModeToggle) darkModeToggle.checked = false;
+                            
+                            // Update toggle dot
+                            const toggleDots = document.querySelectorAll('.toggle-dot');
+                            toggleDots.forEach(dot => {
+                                dot.classList.remove('translate-x-6');
+                            });
+                        }
+                        
+                        // Log for debugging
+                        console.log('Theme applied:', this.calendar.settings.darkMode ? 'dark' : 'light');
+                    }
+
+
                      /**
                       * Open post modal
                       * @param {Object} post The post to edit, or null for a new post
@@ -1267,6 +1351,10 @@
                         
                         // Create or update chart
                         const ctx = document.getElementById('dailyDistributionChart').getContext('2d');
+                        if (!ctx) {
+                            console.warn('Daily distribution chart element not found');
+                            return; // Skip if the element doesn't exist
+                        }
                         
                         if (this.calendar.charts.dailyDistributionChart) {
                             this.calendar.charts.dailyDistributionChart.data = chartData;
