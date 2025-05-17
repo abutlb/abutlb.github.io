@@ -1351,10 +1351,7 @@ toggleTheme() {
                         
                         // Create or update chart
                         const ctx = document.getElementById('dailyDistributionChart').getContext('2d');
-                        if (!ctx) {
-                            console.warn('Daily distribution chart element not found');
-                            return; // Skip if the element doesn't exist
-                        }
+
                         
                         if (this.calendar.charts.dailyDistributionChart) {
                             this.calendar.charts.dailyDistributionChart.data = chartData;
