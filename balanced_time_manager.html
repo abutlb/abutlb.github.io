@@ -1,0 +1,3456 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدير وقتي المتوازن | Balanced Time Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1d4ed8',
+                        accent: '#3b82f6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        info: '#06b6d4'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #2563eb, #3b82f6) 1;
+        }
+
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #3b82f6;
+        }
+        .sun-icon {
+            color: #f59e0b;
+        }
+
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+
+        /* Schedule table styles */
+        .time-cell {
+            transition: all 0.2s;
+            cursor: pointer;
+            min-height: 80px;
+            position: relative;
+        }
+        .time-cell:hover {
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+        
+        /* Activity categories and colors */
+        .activity-health {
+            background-color: rgba(16, 185, 129, 0.3);
+            border-right: 4px solid #10b981;
+        }
+        .activity-family {
+            background-color: rgba(245, 158, 11, 0.3);
+            border-right: 4px solid #f59e0b;
+        }
+        .activity-work {
+            background-color: rgba(59, 130, 246, 0.3);
+            border-right: 4px solid #3b82f6;
+        }
+        .activity-personal {
+            background-color: rgba(139, 92, 246, 0.3);
+            border-right: 4px solid #8b5cf6;
+        }
+        .activity-leisure {
+            background-color: rgba(236, 72, 153, 0.3);
+            border-right: 4px solid #ec4899;
+        }
+        .activity-spiritual {
+            background-color: rgba(79, 70, 229, 0.3);
+            border-right: 4px solid #4f46e5;
+        }
+        .activity-home {
+            background-color: rgba(100, 116, 139, 0.3);
+            border-right: 4px solid #64748b;
+        }
+
+        /* Dark mode activity styles */
+        html.dark .activity-health {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
+        html.dark .activity-family {
+            background-color: rgba(245, 158, 11, 0.2);
+        }
+        html.dark .activity-work {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+        html.dark .activity-personal {
+            background-color: rgba(139, 92, 246, 0.2);
+        }
+        html.dark .activity-leisure {
+            background-color: rgba(236, 72, 153, 0.2);
+        }
+        html.dark .activity-spiritual {
+            background-color: rgba(79, 70, 229, 0.2);
+        }
+        html.dark .activity-home {
+            background-color: rgba(100, 116, 139, 0.2);
+        }
+
+        /* Animation for saved message */
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .fade-out {
+            animation: fadeOut 2s forwards;
+        }
+
+        /* Custom tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(15, 23, 42, 0.9) transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Life wheel styles */
+        .life-wheel-container {
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        /* Time gap styles */
+        .gap-positive {
+            color: #10b981;
+        }
+        .gap-negative {
+            color: #ef4444;
+        }
+        .gap-neutral {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index.html" class="p-2 bg-blue-300 dark:bg-blue-900 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
+                  <i class="fas fa-arrow-right text-blue-600 dark:text-blue-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-sky-500 text-center">مدير وقتي المتوازن</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">أداة لمساعدتك على تحقيق التوازن بين الواقع والطموح في إدارة وقتك</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-blue-300 dark:text-blue-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-blue-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-sky-500 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="timeAudit">
+                    <i class="fas fa-clock ml-2"></i>سجل الوقت الواقعي
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="idealPlanner">
+                    <i class="fas fa-calendar-alt ml-2"></i>جدول الوقت المثالي
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="analysis">
+                    <i class="fas fa-chart-bar ml-2"></i>المقارنة والتحليل
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="lifeWheel">
+                    <i class="fas fa-chart-pie ml-2"></i>عجلة الحياة
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول الأداة
+                </button>
+            </div>
+            
+            <!-- Time Audit Tab -->
+            <div id="timeAudit-tab" class="tab-content p-6 block">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">سجل أنشطتك اليومية الحقيقية</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">سجل كيف تقضي وقتك فعلياً خلال اليوم للحصول على صورة دقيقة عن استخدامك للوقت.</p>
+                    
+                    <div class="flex flex-wrap items-center justify-between mb-4">
+                        <div class="mb-4 md:mb-0">
+                            <button id="addActivityBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-plus ml-2"></i>إضافة نشاط جديد
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="relative">
+                                <label for="auditDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">تاريخ</label>
+                                <input type="date" id="auditDate" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Activity Categories Legend -->
+                <div class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                    <h3 class="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400">مجالات الحياة</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">صحتي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-amber-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">عائلتي وأصدقائي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-blue-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">عملي أو دراستي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-purple-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">نفسي وتطوري</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-pink-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">راحتي وترويحي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-indigo-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">إيماني وروحي</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-gray-500 rounded-sm mr-2"></div>
+                            <span class="text-gray-700 dark:text-gray-300">منزلي ومسؤولياتي</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Time Audit Table -->
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg overflow-x-auto">
+                    <table class="w-full border-collapse mb-4">
+                        <thead>
+                            <tr>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">النشاط</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">من</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">إلى</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">المدة</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">المجال</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody">
+                            <!-- Activities will be added dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="noAuditActivities" class="text-center p-6 text-gray-500 dark:text-gray-400 hidden">
+                        <i class="fas fa-clock text-4xl mb-3 opacity-50"></i>
+                        <p>لم تقم بإضافة أي أنشطة بعد.</p>
+                        <p class="text-sm mt-2">اضغط على "إضافة نشاط جديد" لتسجيل كيف قضيت وقتك خلال اليوم.</p>
+                    </div>
+                </div>
+                
+                <!-- Time Summary Section -->
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">ملخص استخدام الوقت</h3>
+                        <div id="timeSummaryList" class="space-y-2">
+                            <!-- Summary will be added dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400">توزيع وقتك</h3>
+                        <div class="h-64">
+                            <canvas id="timeDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="mt-6 flex justify-end space-x-4 space-x-reverse">
+                    <button id="exportAuditBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                        <i class="fas fa-file-export ml-2"></i>تصدير البيانات
+                    </button>
+                    <button id="clearAuditBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center">
+                        <i class="fas fa-trash-alt ml-2"></i>مسح جميع الأنشطة
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Ideal Planner Tab -->
+            <div id="idealPlanner-tab" class="tab-content p-6 hidden">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">خطط يومك المثالي</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">صمم كيف ترغب في قضاء وقتك بطريقة مثالية ومتوازنة تناسب أهدافك وأولوياتك.</p>
+                    
+                    <div class="flex flex-wrap justify-between items-center mb-6">
+                        <div class="mb-4 md:mb-0 flex flex-wrap gap-2">
+                            <button id="savePlanBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-save ml-2"></i>حفظ الخطة
+                            </button>
+                            <button id="exportPlanBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-file-export ml-2"></i>تصدير كملف
+                            </button>
+                            <button id="clearPlanBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-trash-alt ml-2"></i>مسح الخطة
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div id="savedPlanMessage" class="hidden text-green-600 dark:text-green-400 font-medium">
+                                <i class="fas fa-check-circle ml-1"></i>تم الحفظ بنجاح
+                            </div>
+                            
+                            <div class="relative">
+                                <select id="planDaySelect" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="everyday">خطة يومية عامة</option>
+                                    <option value="weekday">أيام الأسبوع</option>
+                                    <option value="weekend">عطلة نهاية الأسبوع</option>
+                                    <option value="sunday">الأحد</option>
+                                    <option value="monday">الإثنين</option>
+                                    <option value="tuesday">الثلاثاء</option>
+                                    <option value="wednesday">الأربعاء</option>
+                                    <option value="thursday">الخميس</option>
+                                    <option value="friday">الجمعة</option>
+                                    <option value="saturday">السبت</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ideal Planner Time Grid -->
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg overflow-x-auto">
+                    <table id="plannerTable" class="w-full border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-24">الوقت</th>
+                                <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">النشاط المثالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plannerTableBody">
+                            <!-- Time slots will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Ideal Day Summary -->
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">ملخص اليوم المثالي</h3>
+                        <div id="idealSummaryList" class="space-y-2">
+                            <!-- Summary will be added dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400">التوزيع المثالي للوقت</h3>
+                        <div class="h-64">
+                            <canvas id="idealDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template Buttons -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">قوالب جاهزة</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button class="template-btn p-3 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg transition-colors" data-template="balanced">
+                            <i class="fas fa-balance-scale ml-2"></i>متوازن
+                        </button>
+                        <button class="template-btn p-3 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg transition-colors" data-template="productive">
+                            <i class="fas fa-briefcase ml-2"></i>إنتاجي
+                        </button>
+                        <button class="template-btn p-3 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg transition-colors" data-template="wellbeing">
+                            <i class="fas fa-heart ml-2"></i>صحة ورفاهية
+                        </button>
+                        <button class="template-btn p-3 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-lg transition-colors" data-template="learning">
+                            <i class="fas fa-book ml-2"></i>تعلم وتطوير
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analysis Tab -->
+            <div id="analysis-tab" class="tab-content p-6 hidden">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">تحليل الفجوة بين الواقع والمثالي</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">قارن بين كيفية استخدامك الفعلي للوقت وخطتك المثالية لتحديد مجالات التحسين.</p>
+                    
+                    <div class="flex flex-wrap justify-between items-center mb-6">
+                        <div class="mb-4 md:mb-0 flex">
+                            <button id="refreshAnalysisBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-sync-alt ml-2"></i>تحديث التحليل
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="relative">
+                                <select id="analysisDateSelect" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="today">اليوم</option>
+                                    <option value="yesterday">الأمس</option>
+                                    <option value="lastWeek">آخر أسبوع</option>
+                                    <option value="lastMonth">آخر شهر</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Time Gap Analysis -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg mb-6">
+                    <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تحليل الفجوة الزمنية</h3>
+                    
+                    <div id="noAnalysisData" class="text-center p-6 text-gray-500 dark:text-gray-400 hidden">
+                        <i class="fas fa-chart-bar text-4xl mb-3 opacity-50"></i>
+                        <p>لا توجد بيانات كافية للتحليل.</p>
+                        <p class="text-sm mt-2">قم بتسجيل أنشطتك الفعلية وتصميم خطتك المثالية أولاً.</p>
+                    </div>
+                    
+                    <div id="gapAnalysisContent">
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">المجال</th>
+                                        <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الوقت الفعلي</th>
+                                        <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الوقت المثالي</th>
+                                        <th class="p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">الفجوة</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gapAnalysisTableBody">
+                                    <!-- Gap analysis will be added dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Overall Alignment -->
+                        <div class="mt-6">
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">نسبة التوافق الإجمالية:</h4>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4">
+                                <div id="alignmentPercentage" class="bg-blue-600 h-4 rounded-full" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                <span>0%</span>
+                                <span>50%</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comparison Charts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400">مقارنة التوزيع</h3>
+                        <div class="h-64">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">اقتراحات للتحسين</h3>
+                        <div id="suggestionsContainer" class="space-y-3">
+                            <!-- Suggestions will be added dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Life Wheel Tab -->
+            <div id="lifeWheel-tab" class="tab-content p-6 hidden">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">عجلة الحياة المتوازنة</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">عرض مرئي لتوزيع وقتك بين مجالات الحياة المختلفة ومدى توازنك الحالي.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400 text-center">عجلة توازن حياتك الحالية</h3>
+                        
+                        <div class="life-wheel-container">
+                            <canvas id="actualLifeWheel" height="400"></canvas>
+                        </div>
+                        
+                        <div class="mt-4 text-center text-gray-600 dark:text-gray-400 text-sm">
+                            بناءً على استخدامك الفعلي للوقت
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400 text-center">عجلة توازن حياتك المثالية</h3>
+                        
+                        <div class="life-wheel-container">
+                            <canvas id="idealLifeWheel" height="400"></canvas>
+                        </div>
+                        
+                        <div class="mt-4 text-center text-gray-600 dark:text-gray-400 text-sm">
+                            بناءً على خطتك المثالية للوقت
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Life Balance Analysis -->
+                <div class="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg">
+                    <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">تحليل التوازن الحياتي</h3>
+                    
+                    <div id="balanceAnalysisContent" class="space-y-4">
+                        <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">مؤشر التوازن العام</h4>
+                            <div id="balanceIndex" class="text-blue-700 dark:text-blue-400"></div>
+                        </div>
+                        
+                        <div id="wheelAnalysisList" class="space-y-3">
+                            <!-- Analysis will be added dynamically -->
+                        </div>
+                        
+                        <div class="p-4 bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-lg mt-6">
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">توصيات لتحسين التوازن</h4>
+                            <div id="balanceSuggestions" class="space-y-2 text-gray-700 dark:text-gray-300">
+                                <!-- Suggestions will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="mt-6 flex justify-end">
+                    <button id="exportWheelBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                        <i class="fas fa-file-export ml-2"></i>تصدير عجلة الحياة
+                    </button>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول أداة مدير وقتي المتوازن</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            مدير وقتي المتوازن هي أداة مصممة لمساعدتك في إدارة وقتك بطريقة متوازنة وعملية. تجمع بين:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>تسجيل استخدامك الحقيقي للوقت (الواقع)</li>
+                            <li>بناء نموذج جدولك المثالي (النية)</li>
+                            <li>تحليل الفجوة بين الواقع والمثالي</li>
+                            <li>قياس مدى التوازن بين مجالات الحياة المختلفة</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">كيفية استخدام الأداة</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>ابدأ بتسجيل أنشطتك الفعلية في قسم "سجل الوقت الواقعي"</li>
+                            <li>صمم جدولك المثالي في قسم "جدول الوقت المثالي"</li>
+                            <li>استخدم قسم "المقارنة والتحليل" لرؤية الفجوة بين الواقع والمثالي</li>
+                            <li>راجع "عجلة الحياة" لاكتشاف مدى توازن وقتك بين مجالات حياتك المختلفة</li>
+                            <li>اعمل بالتوصيات المقترحة لتحسين توازنك الحياتي تدريجياً</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">مجالات الحياة السبعة</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                <div class="p-2 rounded-full bg-green-100 dark:bg-green-800 mr-3">
+                                    <i class="fas fa-heartbeat text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-green-700 dark:text-green-400">صحتي</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">التمارين، النوم، التغذية، العناية بالنفس</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                                <div class="p-2 rounded-full bg-amber-100 dark:bg-amber-800 mr-3">
+                                    <i class="fas fa-users text-amber-600 dark:text-amber-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-amber-700 dark:text-amber-400">عائلتي وأصدقائي</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">الوقت مع العائلة، الأصدقاء، العلاقات الاجتماعية</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-800 mr-3">
+                                    <i class="fas fa-briefcase text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-blue-700 dark:text-blue-400">عملي أو دراستي</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">العمل، الدراسة، المهنة، الإنتاجية</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                <div class="p-2 rounded-full bg-purple-100 dark:bg-purple-800 mr-3">
+                                    <i class="fas fa-brain text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-purple-700 dark:text-purple-400">نفسي وتطوري</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">التعلم، النمو الشخصي، تطوير المهارات</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-pink-50 dark:bg-pink-900/20 rounded-lg">
+                                <div class="p-2 rounded-full bg-pink-100 dark:bg-pink-800 mr-3">
+                                    <i class="fas fa-gamepad text-pink-600 dark:text-pink-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-pink-700 dark:text-pink-400">راحتي وترويحي</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">الهوايات، الترفيه، الاسترخاء، المتعة</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+                                <div class="p-2 rounded-full bg-indigo-100 dark:bg-indigo-800 mr-3">
+                                    <i class="fas fa-pray text-indigo-600 dark:text-indigo-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-indigo-700 dark:text-indigo-400">إيماني وروحي</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">العبادة، التأمل، القيم، المعنى في الحياة</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <div class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 mr-3">
+                                    <i class="fas fa-home text-gray-600 dark:text-gray-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-700 dark:text-gray-400">منزلي ومسؤولياتي</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">الأعمال المنزلية، تنظيم الحياة، المسؤوليات</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">خصوصية البيانات</h3>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            جميع بياناتك تخزن محلياً على جهازك فقط (LocalStorage) ولا يتم إرسالها إلى أي خادم. 
+                            يمكنك حذف كل البيانات المخزنة من خلال مسح بيانات المتصفح لهذا الموقع.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">معلومات الإصدار</h3>
+                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">جميع الحقوق محفوظة © <span id="currentYear">2023</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index.html" class="bg-gradient-to-r from-blue-600 to-sky-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Add Activity Modal -->
+    <div id="addActivityModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">إضافة نشاط جديد</h3>
+                <button class="closeModal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addActivityForm">
+                <input type="hidden" id="editActivityId" value="">
+                
+                <div class="mb-4">
+                    <label for="activityName" class="block text-gray-700 dark:text-gray-300 mb-2">اسم النشاط</label>
+                    <input type="text" id="activityName" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="ماذا كنت تفعل؟" required>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="activityStartTime" class="block text-gray-700 dark:text-gray-300 mb-2">من</label>
+                        <input type="time" id="activityStartTime" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                    </div>
+                    <div>
+                        <label for="activityEndTime" class="block text-gray-700 dark:text-gray-300 mb-2">إلى</label>
+                        <input type="time" id="activityEndTime" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="activityCategory" class="block text-gray-700 dark:text-gray-300 mb-2">المجال</label>
+                    <select id="activityCategory" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                        <option value="health">صحتي</option>
+                        <option value="family">عائلتي وأصدقائي</option>
+                        <option value="work">عملي أو دراستي</option>
+                        <option value="personal">نفسي وتطوري</option>
+                        <option value="leisure">راحتي وترويحي</option>
+                        <option value="spiritual">إيماني وروحي</option>
+                        <option value="home">منزلي ومسؤولياتي</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="activityNotes" class="block text-gray-700 dark:text-gray-300 mb-2">ملاحظات (اختياري)</label>
+                    <textarea id="activityNotes" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أي تفاصيل إضافية؟" rows="2"></textarea>
+                </div>
+                
+                <div class="flex items-center justify-between mt-6">
+                    <button type="button" id="deleteActivityBtn" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition hidden">
+                        <i class="fas fa-trash-alt ml-2"></i>حذف
+                    </button>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" class="closeModal py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                            إلغاء
+                        </button>
+                        <button type="submit" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                            <i class="fas fa-save ml-2"></i>حفظ
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Plan Activity Modal -->
+    <div id="planActivityModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">تخطيط النشاط</h3>
+                <button class="closeModal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="planActivityForm">
+                <input type="hidden" id="planTimeSlot" value="">
+                
+                <div class="mb-4">
+                    <label for="planActivityName" class="block text-gray-700 dark:text-gray-300 mb-2">اسم النشاط</label>
+                    <input type="text" id="planActivityName" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="ماذا تخطط أن تفعل؟" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="planActivityCategory" class="block text-gray-700 dark:text-gray-300 mb-2">المجال</label>
+                    <select id="planActivityCategory" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" required>
+                        <option value="health">صحتي</option>
+                        <option value="family">عائلتي وأصدقائي</option>
+                        <option value="work">عملي أو دراستي</option>
+                        <option value="personal">نفسي وتطوري</option>
+                        <option value="leisure">راحتي وترويحي</option>
+                        <option value="spiritual">إيماني وروحي</option>
+                        <option value="home">منزلي ومسؤولياتي</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="planActivityNotes" class="block text-gray-700 dark:text-gray-300 mb-2">ملاحظات (اختياري)</label>
+                    <textarea id="planActivityNotes" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أي تفاصيل إضافية؟" rows="2"></textarea>
+                </div>
+                
+                <div class="flex items-center justify-between mt-6">
+                    <button type="button" id="clearPlanActivityBtn" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition hidden">
+                        <i class="fas fa-trash-alt ml-2"></i>مسح
+                    </button>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" class="closeModal py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                            إلغاء
+                        </button>
+                        <button type="submit" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                            <i class="fas fa-save ml-2"></i>حفظ
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Message Toast -->
+    <div id="successToast" class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="successToastMessage">تم الحفظ بنجاح</span>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2" id="confirmationTitle">تأكيد العملية</h3>
+                <p class="text-gray-600 dark:text-gray-400" id="confirmationMessage">هل أنت متأكد أنك تريد المتابعة؟</p>
+            </div>
+            
+            <div class="flex justify-end gap-2 mt-6">
+                <button id="cancelConfirmationBtn" class="py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                    إلغاء
+                </button>
+                <button id="confirmBtn" class="py-2 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                    تأكيد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">
+        <p>© <span id="footerYear">2023</span> مدير وقتي المتوازن - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Initialize data structures
+        let actualActivities = [];
+        let idealPlans = {
+            everyday: {},
+            weekday: {},
+            weekend: {},
+            sunday: {},
+            monday: {},
+            tuesday: {},
+            wednesday: {},
+            thursday: {},
+            friday: {},
+            saturday: {}
+        };
+        
+        // Define life categories
+        const lifeCategories = {
+            health: {
+                name: 'صحتي',
+                color: '#10b981',
+                bgColor: 'rgba(16, 185, 129, 0.3)',
+                darkBgColor: 'rgba(16, 185, 129, 0.2)',
+                icon: 'fas fa-heartbeat'
+            },
+            family: {
+                name: 'عائلتي وأصدقائي',
+                color: '#f59e0b',
+                bgColor: 'rgba(245, 158, 11, 0.3)',
+                darkBgColor: 'rgba(245, 158, 11, 0.2)',
+                icon: 'fas fa-users'
+            },
+            work: {
+                name: 'عملي أو دراستي',
+                color: '#3b82f6',
+                bgColor: 'rgba(59, 130, 246, 0.3)',
+                darkBgColor: 'rgba(59, 130, 246, 0.2)',
+                icon: 'fas fa-briefcase'
+            },
+            personal: {
+                name: 'نفسي وتطوري',
+                color: '#8b5cf6',
+                bgColor: 'rgba(139, 92, 246, 0.3)',
+                darkBgColor: 'rgba(139, 92, 246, 0.2)',
+                icon: 'fas fa-brain'
+            },
+            leisure: {
+                name: 'راحتي وترويحي',
+                color: '#ec4899',
+                bgColor: 'rgba(236, 72, 153, 0.3)',
+                darkBgColor: 'rgba(236, 72, 153, 0.2)',
+                icon: 'fas fa-gamepad'
+            },
+            spiritual: {
+                name: 'إيماني وروحي',
+                color: '#4f46e5',
+                bgColor: 'rgba(79, 70, 229, 0.3)',
+                darkBgColor: 'rgba(79, 70, 229, 0.2)',
+                icon: 'fas fa-pray'
+            },
+            home: {
+                name: 'منزلي ومسؤولياتي',
+                color: '#64748b',
+                bgColor: 'rgba(100, 116, 139, 0.3)',
+                darkBgColor: 'rgba(100, 116, 139, 0.2)',
+                icon: 'fas fa-home'
+            }
+        };
+        
+        // DOM loaded event listener
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize current date on the audit tab
+            const today = new Date();
+            document.getElementById('auditDate').valueAsDate = today;
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Load saved data
+            loadSavedData();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Generate the time planner table
+            generatePlannerTable();
+            
+            // Render initial data
+            renderActivitiesTable();
+            updateTimeSummary();
+            renderTimeDistributionChart();
+            updateLifeWheels();
+            
+            // Set current year in footer
+            const currentYear = new Date().getFullYear();
+            document.getElementById('currentYear').textContent = currentYear;
+            document.getElementById('footerYear').textContent = currentYear;
+        });
+        
+        // Setup event listeners for all interactive elements
+        function setupEventListeners() {
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and hide all contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'opacity-100'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Add active class to clicked button and show corresponding content
+                    button.classList.add('active', 'opacity-100');
+                    document.getElementById(`${button.dataset.tab}-tab`).classList.remove('hidden');
+                    
+                    // Refresh charts when switching to related tabs
+                    if (button.dataset.tab === 'timeAudit') {
+                        renderTimeDistributionChart();
+                    } else if (button.dataset.tab === 'idealPlanner') {
+                        renderIdealDistributionChart();
+                    } else if (button.dataset.tab === 'analysis') {
+                        updateGapAnalysis();
+                    } else if (button.dataset.tab === 'lifeWheel') {
+                        updateLifeWheels();
+                    }
+                });
+            });
+            
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Add activity button
+            document.getElementById('addActivityBtn').addEventListener('click', () => {
+                document.getElementById('editActivityId').value = '';
+                document.getElementById('deleteActivityBtn').classList.add('hidden');
+                document.getElementById('addActivityForm').reset();
+                
+                // Set default times
+                const now = new Date();
+                const hour = now.getHours().toString().padStart(2, '0');
+                const minute = now.getMinutes().toString().padStart(2, '0');
+                document.getElementById('activityStartTime').value = `${hour}:${minute}`;
+                
+                document.getElementById('addActivityModal').classList.remove('hidden');
+            });
+            
+            // Activity form submission
+            document.getElementById('addActivityForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveActivity();
+            });
+            
+            // Delete activity button
+            document.getElementById('deleteActivityBtn').addEventListener('click', deleteActivity);
+            
+            // Plan activity form submission
+            document.getElementById('planActivityForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                savePlanActivity();
+            });
+            
+            // Clear plan activity button
+            document.getElementById('clearPlanActivityBtn').addEventListener('click', clearPlanActivity);
+            
+            // Close modals
+            document.querySelectorAll('.closeModal').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('addActivityModal').classList.add('hidden');
+                    document.getElementById('planActivityModal').classList.add('hidden');
+                });
+            });
+            
+            // Plan day selection change
+            document.getElementById('planDaySelect').addEventListener('change', function() {
+                const selectedDay = this.value;
+                loadPlanForDay(selectedDay);
+            });
+            
+            // Save plan button
+            document.getElementById('savePlanBtn').addEventListener('click', savePlan);
+            
+            // Export plan button
+            document.getElementById('exportPlanBtn').addEventListener('click', exportPlan);
+            
+            // Clear plan button
+            document.getElementById('clearPlanBtn').addEventListener('click', () => {
+                showConfirmation(
+                    'مسح الخطة',
+                    'هل أنت متأكد من رغبتك في مسح الخطة الحالية بالكامل؟',
+                    clearPlan
+                );
+            });
+            
+            // Clear audit button
+            document.getElementById('clearAuditBtn').addEventListener('click', () => {
+                showConfirmation(
+                    'مسح سجل الأنشطة',
+                    'هل أنت متأكد من رغبتك في مسح جميع الأنشطة المسجلة؟',
+                    clearAudit
+                );
+            });
+            
+            // Export audit button
+            document.getElementById('exportAuditBtn').addEventListener('click', exportAudit);
+            
+            // Refresh analysis button
+            document.getElementById('refreshAnalysisBtn').addEventListener('click', updateGapAnalysis);
+            
+            // Export wheel button
+            document.getElementById('exportWheelBtn').addEventListener('click', exportLifeWheel);
+            
+            // Confirmation modal buttons
+            document.getElementById('cancelConfirmationBtn').addEventListener('click', () => {
+                document.getElementById('confirmationModal').classList.add('hidden');
+            });
+            
+            // Template buttons
+            document.querySelectorAll('.template-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    applyTemplate(btn.dataset.template);
+                });
+            });
+            
+            // Analysis date selection
+            document.getElementById('analysisDateSelect').addEventListener('change', updateGapAnalysis);
+        }
+        
+        // Toggle dark mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+            
+            // Update all charts with new theme
+            renderTimeDistributionChart();
+            renderIdealDistributionChart();
+            updateGapAnalysis();
+            updateLifeWheels();
+        }
+        
+        // Load saved data from localStorage
+        function loadSavedData() {
+            const savedActivities = localStorage.getItem('actualActivities');
+            if (savedActivities) {
+                actualActivities = JSON.parse(savedActivities);
+            }
+            
+            const savedPlans = localStorage.getItem('idealPlans');
+            if (savedPlans) {
+                idealPlans = JSON.parse(savedPlans);
+            }
+            
+            // Load the default plan (everyday)
+            loadPlanForDay('everyday');
+        }
+        
+        // Save activity from the form
+        function saveActivity() {
+            const editId = document.getElementById('editActivityId').value;
+            const name = document.getElementById('activityName').value;
+            const startTime = document.getElementById('activityStartTime').value;
+            const endTime = document.getElementById('activityEndTime').value;
+            const category = document.getElementById('activityCategory').value;
+            const notes = document.getElementById('activityNotes').value;
+            const date = document.getElementById('auditDate').value;
+            
+            // Calculate duration in minutes
+            const [startHour, startMinute] = startTime.split(':').map(Number);
+            const [endHour, endMinute] = endTime.split(':').map(Number);
+            
+            let durationMinutes;
+            if (endHour < startHour) {
+                // Handle overnight activities
+                durationMinutes = (24 * 60) - (startHour * 60 + startMinute) + (endHour * 60 + endMinute);
+            } else {
+                durationMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+            }
+            
+            // Validate time input
+            if (durationMinutes <= 0) {
+                alert('الرجاء التأكد من أن وقت النهاية أكبر من وقت البداية');
+                return;
+            }
+            
+            const activity = {
+                id: editId || Date.now().toString(),
+                name,
+                startTime,
+                endTime,
+                durationMinutes,
+                category,
+                notes,
+                date
+            };
+            
+            if (editId) {
+                // Edit existing activity
+                const index = actualActivities.findIndex(act => act.id === editId);
+                if (index !== -1) {
+                    actualActivities[index] = activity;
+                }
+            } else {
+                // Add new activity
+                actualActivities.push(activity);
+            }
+            
+            // Sort activities by start time
+            actualActivities.sort((a, b) => {
+                if (a.date !== b.date) {
+                    return new Date(a.date) - new Date(b.date);
+                }
+                return a.startTime.localeCompare(b.startTime);
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('actualActivities', JSON.stringify(actualActivities));
+            
+            // Close modal and update UI
+            document.getElementById('addActivityModal').classList.add('hidden');
+            renderActivitiesTable();
+            updateTimeSummary();
+            renderTimeDistributionChart();
+            
+            // Show success message
+            showToast('تم حفظ النشاط بنجاح');
+        }
+        
+        // Delete an activity
+        function deleteActivity() {
+            const editId = document.getElementById('editActivityId').value;
+            if (!editId) return;
+            
+            const index = actualActivities.findIndex(act => act.id === editId);
+            if (index !== -1) {
+                actualActivities.splice(index, 1);
+                
+                // Save to localStorage
+                localStorage.setItem('actualActivities', JSON.stringify(actualActivities));
+                
+                // Close modal and update UI
+                document.getElementById('addActivityModal').classList.add('hidden');
+                renderActivitiesTable();
+                updateTimeSummary();
+                renderTimeDistributionChart();
+                
+                // Show success message
+                showToast('تم حذف النشاط بنجاح');
+            }
+        }
+        
+        // Clear all activities
+        function clearAudit() {
+            actualActivities = [];
+            localStorage.setItem('actualActivities', JSON.stringify(actualActivities));
+            
+            renderActivitiesTable();
+            updateTimeSummary();
+            renderTimeDistributionChart();
+            
+            // Close confirmation modal
+            document.getElementById('confirmationModal').classList.add('hidden');
+            
+            // Show success message
+            showToast('تم مسح جميع الأنشطة بنجاح');
+        }
+        
+        // Render activities table
+        function renderActivitiesTable() {
+            const tableBody = document.getElementById('auditTableBody');
+            const noActivitiesMsg = document.getElementById('noAuditActivities');
+            const selectedDate = document.getElementById('auditDate').value;
+            
+            // Filter activities for the selected date
+            const dateActivities = actualActivities.filter(activity => activity.date === selectedDate);
+            
+            if (dateActivities.length === 0) {
+                tableBody.innerHTML = '';
+                noActivitiesMsg.classList.remove('hidden');
+                return;
+            }
+            
+            noActivitiesMsg.classList.add('hidden');
+            
+            // Create table rows
+            tableBody.innerHTML = '';
+            dateActivities.forEach(activity => {
+                const row = document.createElement('tr');
+                const category = lifeCategories[activity.category];
+                
+                // Format duration
+                const hours = Math.floor(activity.durationMinutes / 60);
+                const minutes = activity.durationMinutes % 60;
+                const durationText = `${hours > 0 ? hours + ' ساعة' : ''} ${minutes > 0 ? minutes + ' دقيقة' : ''}`.trim();
+                
+                row.innerHTML = `
+                    <td class="p-2 border border-gray-300 dark:border-gray-700">
+                        <div class="flex items-center">
+                            <div class="w-2 h-10 mr-2" style="background-color: ${category.color}"></div>
+                            <div>
+                                <div class="font-medium">${activity.name}</div>
+                                ${activity.notes ? `<div class="text-xs text-gray-500 dark:text-gray-400">${activity.notes}</div>` : ''}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">${activity.startTime}</td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">${activity.endTime}</td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">${durationText}</td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">
+                        <span class="px-2 py-1 rounded-full text-xs" style="background-color: ${document.documentElement.classList.contains('dark') ? category.darkBgColor : category.bgColor}; color: ${category.color}">
+                            ${category.name}
+                        </span>
+                    </td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">
+                        <button class="edit-activity-btn text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mx-1" data-id="${activity.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-activity-btn text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 mx-1" data-id="${activity.id}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to edit and delete buttons
+            document.querySelectorAll('.edit-activity-btn').forEach(btn => {
+                btn.addEventListener('click', () => editActivity(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-activity-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const activityId = btn.dataset.id;
+                    const activity = actualActivities.find(a => a.id === activityId);
+                    
+                    showConfirmation(
+                        'حذف النشاط',
+                        `هل أنت متأكد من رغبتك في حذف نشاط "${activity.name}"؟`,
+                        () => {
+                            const index = actualActivities.findIndex(a => a.id === activityId);
+                            if (index !== -1) {
+                                actualActivities.splice(index, 1);
+                                localStorage.setItem('actualActivities', JSON.stringify(actualActivities));
+                                renderActivitiesTable();
+                                updateTimeSummary();
+                                renderTimeDistributionChart();
+                                document.getElementById('confirmationModal').classList.add('hidden');
+                                showToast('تم حذف النشاط بنجاح');
+                            }
+                        }
+                    );
+                });
+            });
+        }
+        
+        // Edit an existing activity
+        function editActivity(activityId) {
+            const activity = actualActivities.find(a => a.id === activityId);
+            if (!activity) return;
+            
+            document.getElementById('editActivityId').value = activity.id;
+            document.getElementById('activityName').value = activity.name;
+            document.getElementById('activityStartTime').value = activity.startTime;
+            document.getElementById('activityEndTime').value = activity.endTime;
+            document.getElementById('activityCategory').value = activity.category;
+            document.getElementById('activityNotes').value = activity.notes || '';
+            
+            // Show delete button in edit mode
+            document.getElementById('deleteActivityBtn').classList.remove('hidden');
+            
+            // Show modal
+            document.getElementById('addActivityModal').classList.remove('hidden');
+        }
+        
+        // Update time summary
+        function updateTimeSummary() {
+            const summaryList = document.getElementById('timeSummaryList');
+            const selectedDate = document.getElementById('auditDate').value;
+            
+            // Filter activities for the selected date
+            const dateActivities = actualActivities.filter(activity => activity.date === selectedDate);
+            
+            // Group by category and calculate total duration
+            const categorySummary = {};
+            let totalMinutes = 0;
+            
+            dateActivities.forEach(activity => {
+                if (!categorySummary[activity.category]) {
+                    categorySummary[activity.category] = 0;
+                }
+                categorySummary[activity.category] += activity.durationMinutes;
+                totalMinutes += activity.durationMinutes;
+            });
+            
+            // Clear the summary list
+            summaryList.innerHTML = '';
+            
+            // Add total time
+            const totalHours = Math.floor(totalMinutes / 60);
+            const remainingMinutes = totalMinutes % 60;
+            
+            const totalItem = document.createElement('div');
+            totalItem.className = 'flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded';
+            totalItem.innerHTML = `
+                <span class="font-bold">إجمالي الوقت المسجل:</span>
+                <span class="font-bold">${totalHours} ساعة ${remainingMinutes > 0 ? ' و ' + remainingMinutes + ' دقيقة' : ''}</span>
+            `;
+            summaryList.appendChild(totalItem);
+            
+            // If no activities
+            if (totalMinutes === 0) {
+                const noDataItem = document.createElement('div');
+                noDataItem.className = 'text-center p-2 text-gray-500 dark:text-gray-400';
+                noDataItem.textContent = 'لم يتم تسجيل أي أنشطة لهذا اليوم.';
+                summaryList.appendChild(noDataItem);
+                return;
+            }
+            
+            // Add category summaries
+            Object.keys(categorySummary).forEach(category => {
+                const categoryMinutes = categorySummary[category];
+                const categoryHours = Math.floor(categoryMinutes / 60);
+                const categoryRemainingMinutes = categoryMinutes % 60;
+                const percentage = Math.round((categoryMinutes / totalMinutes) * 100);
+                
+                const categoryItem = document.createElement('div');
+                categoryItem.className = 'mt-2';
+                
+                const categoryInfo = lifeCategories[category];
+                
+                categoryItem.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-sm mr-2" style="background-color: ${categoryInfo.color}"></div>
+                            <span>${categoryInfo.name}</span>
+                        </div>
+                        <div class="text-sm">
+                            ${categoryHours > 0 ? categoryHours + ' ساعة' : ''} 
+                            ${categoryRemainingMinutes > 0 ? categoryRemainingMinutes + ' دقيقة' : ''}
+                            (${percentage}%)
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                        <div class="h-2.5 rounded-full" style="width: ${percentage}%; background-color: ${categoryInfo.color}"></div>
+                    </div>
+                `;
+                
+                summaryList.appendChild(categoryItem);
+            });
+        }
+        
+        // Render time distribution chart
+        function renderTimeDistributionChart() {
+            const ctx = document.getElementById('timeDistributionChart').getContext('2d');
+            const selectedDate = document.getElementById('auditDate').value;
+            
+            // Filter activities for the selected date
+            const dateActivities = actualActivities.filter(activity => activity.date === selectedDate);
+            
+            // Group by category and calculate total duration
+            const categorySummary = {};
+            let totalMinutes = 0;
+            
+            dateActivities.forEach(activity => {
+                if (!categorySummary[activity.category]) {
+                    categorySummary[activity.category] = 0;
+                }
+                categorySummary[activity.category] += activity.durationMinutes;
+                totalMinutes += activity.durationMinutes;
+            });
+            
+            // Prepare data for chart
+            const labels = [];
+            const data = [];
+            const backgroundColors = [];
+            
+            Object.keys(lifeCategories).forEach(category => {
+                const categoryInfo = lifeCategories[category];
+                labels.push(categoryInfo.name);
+                data.push(categorySummary[category] || 0);
+                backgroundColors.push(categoryInfo.color);
+            });
+            
+            // If there's an existing chart, destroy it
+            if (window.timeDistributionChart) {
+                window.timeDistributionChart.destroy();
+            }
+            
+            // Create chart
+            window.timeDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const minutes = context.raw;
+                                    const hours = Math.floor(minutes / 60);
+                                    const mins = minutes % 60;
+                                    const percentage = Math.round((minutes / totalMinutes) * 100) || 0;
+                                    
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                        if (hours > 0) {
+                                            label += hours + ' ساعة ';
+                                        }
+                                        if (mins > 0) {
+                                            label += mins + ' دقيقة';
+                                        }
+                                        label += ` (${percentage}%)`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Generate planner table
+        function generatePlannerTable() {
+            const plannerTable = document.getElementById('plannerTable');
+            const plannerTableBody = document.getElementById('plannerTableBody');
+            plannerTableBody.innerHTML = '';
+            
+            // Create time slots from 5 AM to 12 AM in 30-minute increments
+            for (let hour = 5; hour < 24; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const row = document.createElement('tr');
+                    
+                    // Time column
+                    const timeCell = document.createElement('td');
+                    timeCell.className = 'p-2 border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-center';
+                    
+                    const period = hour >= 12 ? 'م' : 'ص';
+                    const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+                    timeCell.textContent = `${displayHour}:${minute === 0 ? '00' : minute} ${period}`;
+                    
+                    row.appendChild(timeCell);
+                    
+                    // Plan cell
+                    const planCell = document.createElement('td');
+                    planCell.className = 'plan-cell p-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 cursor-pointer min-h-[60px] relative';
+                    planCell.dataset.time = `${hour}:${minute}`;
+                    
+                    // Add event listener to open plan activity modal
+                    planCell.addEventListener('click', () => openPlanActivityModal(planCell));
+                    
+                    row.appendChild(planCell);
+                    plannerTableBody.appendChild(row);
+                }
+            }
+        }
+        
+        // Load plan for a specific day
+        function loadPlanForDay(day) {
+            document.querySelectorAll('.plan-cell').forEach(cell => {
+                const timeSlot = cell.dataset.time;
+                cell.innerHTML = '';
+                cell.className = 'plan-cell p-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 cursor-pointer min-h-[60px] relative';
+                
+                // Check if there's a plan for this time slot
+                const activityKey = `${day}-${timeSlot}`;
+                if (idealPlans[day] && idealPlans[day][timeSlot]) {
+                    const activity = idealPlans[day][timeSlot];
+                    const category = lifeCategories[activity.category];
+                    
+                    cell.classList.add(`bg-${activity.category}-50`, `dark:bg-${activity.category}-900/20`);
+                    
+                    // Create activity element
+                    const activityElement = document.createElement('div');
+                    activityElement.className = 'h-full flex flex-col';
+                    activityElement.style.borderRight = `4px solid ${category.color}`;
+                    
+                    const activityTitle = document.createElement('div');
+                    activityTitle.className = 'font-bold';
+                    activityTitle.textContent = activity.name;
+                    activityElement.appendChild(activityTitle);
+                    
+                    if (activity.notes) {
+                        const activityNotes = document.createElement('div');
+                        activityNotes.className = 'text-xs mt-1 text-gray-500 dark:text-gray-400';
+                        activityNotes.textContent = activity.notes;
+                        activityElement.appendChild(activityNotes);
+                    }
+                    
+                    // Add category indicator
+                    const categoryIndicator = document.createElement('div');
+                    categoryIndicator.className = 'absolute bottom-1 right-1 text-xs flex items-center';
+                    categoryIndicator.innerHTML = `<i class="${category.icon}" style="color: ${category.color}"></i>`;
+                    
+                    cell.appendChild(activityElement);
+                    cell.appendChild(categoryIndicator);
+                }
+            });
+            
+            renderIdealDistributionChart();
+        }
+        
+        // Open plan activity modal
+        function openPlanActivityModal(cell) {
+            const timeSlot = cell.dataset.time;
+            const day = document.getElementById('planDaySelect').value;
+            
+            document.getElementById('planTimeSlot').value = timeSlot;
+            
+            // Check if there's an existing plan for this time slot
+            const hasPlan = idealPlans[day] && idealPlans[day][timeSlot];
+            
+            if (hasPlan) {
+                const activity = idealPlans[day][timeSlot];
+                document.getElementById('planActivityName').value = activity.name;
+                document.getElementById('planActivityCategory').value = activity.category;
+                document.getElementById('planActivityNotes').value = activity.notes || '';
+                document.getElementById('clearPlanActivityBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('planActivityForm').reset();
+                document.getElementById('clearPlanActivityBtn').classList.add('hidden');
+            }
+            
+            document.getElementById('planActivityModal').classList.remove('hidden');
+        }
+        
+        // Save plan activity
+        function savePlanActivity() {
+            const timeSlot = document.getElementById('planTimeSlot').value;
+            const name = document.getElementById('planActivityName').value;
+            const category = document.getElementById('planActivityCategory').value;
+            const notes = document.getElementById('planActivityNotes').value;
+            const day = document.getElementById('planDaySelect').value;
+            
+            // Ensure day object exists
+            if (!idealPlans[day]) {
+                idealPlans[day] = {};
+            }
+            
+            // Save activity
+            idealPlans[day][timeSlot] = {
+                name,
+                category,
+                notes
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            
+            // Close modal and update UI
+            document.getElementById('planActivityModal').classList.add('hidden');
+            loadPlanForDay(day);
+            
+            // Show success message
+            showToast('تم حفظ النشاط المخطط بنجاح');
+        }
+        
+        // Clear plan activity
+        function clearPlanActivity() {
+            const timeSlot = document.getElementById('planTimeSlot').value;
+            const day = document.getElementById('planDaySelect').value;
+            
+            if (idealPlans[day] && idealPlans[day][timeSlot]) {
+                delete idealPlans[day][timeSlot];
+                
+                // Save to localStorage
+                localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+                
+                // Close modal and update UI
+                document.getElementById('planActivityModal').classList.add('hidden');
+                loadPlanForDay(day);
+                
+                // Show success message
+                showToast('تم مسح النشاط المخطط بنجاح');
+            }
+        }
+        
+        // Save entire plan
+        function savePlan() {
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            showToast('تم حفظ الخطة المثالية بنجاح');
+        }
+        
+        // Clear entire plan
+        function clearPlan() {
+            const day = document.getElementById('planDaySelect').value;
+            idealPlans[day] = {};
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            loadPlanForDay(day);
+            document.getElementById('confirmationModal').classList.add('hidden');
+            showToast('تم مسح خطة اليوم بنجاح');
+        }
+        
+        // Render ideal distribution chart
+        function renderIdealDistributionChart() {
+            const ctx = document.getElementById('idealDistributionChart').getContext('2d');
+            const day = document.getElementById('planDaySelect').value;
+            
+            // Calculate category durations
+            const categorySummary = {};
+            let totalMinutes = 0;
+            
+            if (idealPlans[day]) {
+                Object.keys(idealPlans[day]).forEach(timeSlot => {
+                    const activity = idealPlans[day][timeSlot];
+                    const category = activity.category;
+                    
+                    if (!categorySummary[category]) {
+                        categorySummary[category] = 0;
+                    }
+                    
+                    // Each time slot is 30 minutes
+                    categorySummary[category] += 30;
+                    totalMinutes += 30;
+                });
+            }
+            
+            // Prepare data for chart
+            const labels = [];
+            const data = [];
+            const backgroundColors = [];
+            
+            Object.keys(lifeCategories).forEach(category => {
+                const categoryInfo = lifeCategories[category];
+                labels.push(categoryInfo.name);
+                data.push(categorySummary[category] || 0);
+                backgroundColors.push(categoryInfo.color);
+            });
+            
+            // If there's an existing chart, destroy it
+            if (window.idealDistributionChart) {
+                window.idealDistributionChart.destroy();
+            }
+            
+            // Create chart
+            window.idealDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const minutes = context.raw;
+                                    const hours = Math.floor(minutes / 60);
+                                    const mins = minutes % 60;
+                                    const percentage = Math.round((minutes / totalMinutes) * 100) || 0;
+                                    
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                        if (hours > 0) {
+                                            label += hours + ' ساعة ';
+                                        }
+                                        if (mins > 0) {
+                                            label += mins + ' دقيقة';
+                                        }
+                                        label += ` (${percentage}%)`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update gap analysis
+        function updateGapAnalysis() {
+            const analysisDateSelect = document.getElementById('analysisDateSelect');
+            const selectedPeriod = analysisDateSelect.value;
+            
+            // Get actual activities based on selected period
+            let filteredActivities = [];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedPeriod === 'today') {
+                const dateStr = today.toISOString().split('T')[0];
+                filteredActivities = actualActivities.filter(activity => activity.date === dateStr);
+            } else if (selectedPeriod === 'yesterday') {
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                const dateStr = yesterday.toISOString().split('T')[0];
+                filteredActivities = actualActivities.filter(activity => activity.date === dateStr);
+            } else if (selectedPeriod === 'lastWeek') {
+                const oneWeekAgo = new Date(today);
+                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                filteredActivities = actualActivities.filter(activity => {
+                    const activityDate = new Date(activity.date);
+                    return activityDate >= oneWeekAgo && activityDate <= today;
+                });
+            } else if (selectedPeriod === 'lastMonth') {
+                const oneMonthAgo = new Date(today);
+                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                filteredActivities = actualActivities.filter(activity => {
+                    const activityDate = new Date(activity.date);
+                    return activityDate >= oneMonthAgo && activityDate <= today;
+                });
+            }
+            
+            // Calculate actual time by category
+            const actualCategorySummary = {};
+            filteredActivities.forEach(activity => {
+                if (!actualCategorySummary[activity.category]) {
+                    actualCategorySummary[activity.category] = 0;
+                }
+                actualCategorySummary[activity.category] += activity.durationMinutes;
+            });
+            
+            // Calculate ideal time by category from everyday plan (as a baseline)
+            const idealCategorySummary = {};
+            let totalIdealMinutes = 0;
+            
+            if (idealPlans['everyday']) {
+                Object.keys(idealPlans['everyday']).forEach(timeSlot => {
+                    const activity = idealPlans['everyday'][timeSlot];
+                    const category = activity.category;
+                    
+                    if (!idealCategorySummary[category]) {
+                        idealCategorySummary[category] = 0;
+                    }
+                    
+                    // Each time slot is 30 minutes
+                    idealCategorySummary[category] += 30;
+                    totalIdealMinutes += 30;
+                });
+            }
+            
+            // Calculate gaps and generate table rows
+            const gapAnalysisTableBody = document.getElementById('gapAnalysisTableBody');
+            gapAnalysisTableBody.innerHTML = '';
+            
+            let totalActualMinutes = 0;
+            let totalAlignmentScore = 0;
+            let categoryCount = 0;
+            
+            Object.keys(lifeCategories).forEach(category => {
+                const categoryInfo = lifeCategories[category];
+                const actualMinutes = actualCategorySummary[category] || 0;
+                const idealMinutes = idealCategorySummary[category] || 0;
+                
+                totalActualMinutes += actualMinutes;
+                
+                // Skip categories with no ideal or actual time
+                if (idealMinutes === 0 && actualMinutes === 0) return;
+                
+                // Calculate percentage of alignment
+                let alignmentPercentage = 0;
+                if (idealMinutes > 0) {
+                    if (actualMinutes > idealMinutes) {
+                        alignmentPercentage = 100 - Math.min(100, Math.round(((actualMinutes - idealMinutes) / idealMinutes) * 100));
+                    } else {
+                        alignmentPercentage = Math.round((actualMinutes / idealMinutes) * 100);
+                    }
+                }
+                
+                // Add to total alignment score for average
+                totalAlignmentScore += alignmentPercentage;
+                categoryCount++;
+                
+                // Format times
+                const actualHours = Math.floor(actualMinutes / 60);
+                const actualRemainingMinutes = actualMinutes % 60;
+                const actualTimeText = `${actualHours > 0 ? actualHours + ' ساعة' : ''} ${actualRemainingMinutes > 0 ? actualRemainingMinutes + ' دقيقة' : ''}`.trim() || '0 دقيقة';
+                
+                const idealHours = Math.floor(idealMinutes / 60);
+                const idealRemainingMinutes = idealMinutes % 60;
+                const idealTimeText = `${idealHours > 0 ? idealHours + ' ساعة' : ''} ${idealRemainingMinutes > 0 ? idealRemainingMinutes + ' دقيقة' : ''}`.trim() || '0 دقيقة';
+                
+                // Create row
+                const row = document.createElement('tr');
+                
+                // Determine alignment color
+                let alignmentColor = '#22c55e'; // Green for good alignment
+                if (alignmentPercentage < 50) {
+                    alignmentColor = '#ef4444'; // Red for poor alignment
+                } else if (alignmentPercentage < 80) {
+                    alignmentColor = '#f59e0b'; // Amber for moderate alignment
+                }
+                
+                row.innerHTML = `
+                    <td class="p-2 border border-gray-300 dark:border-gray-700">
+                        <div class="flex items-center">
+                            <div class="w-3 h-10 mr-2" style="background-color: ${categoryInfo.color}"></div>
+                            <span>${categoryInfo.name}</span>
+                        </div>
+                    </td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">${actualTimeText}</td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">${idealTimeText}</td>
+                    <td class="p-2 border border-gray-300 dark:border-gray-700 text-center">
+                        <div class="inline-flex items-center">
+                            <div class="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mr-2">
+                                <div class="h-2.5 rounded-full" style="width: ${alignmentPercentage}%; background-color: ${alignmentColor}"></div>
+                            </div>
+                            <span style="color: ${alignmentColor}">${alignmentPercentage}%</span>
+                        </div>
+                    </td>
+                `;
+                
+                gapAnalysisTableBody.appendChild(row);
+            });
+            
+            // Update overall alignment score
+            const averageAlignment = categoryCount > 0 ? Math.round(totalAlignmentScore / categoryCount) : 0;
+            
+            let alignmentText = 'ضعيف';
+            let alignmentColor = '#ef4444';
+            
+            if (averageAlignment >= 80) {
+                alignmentText = 'ممتاز';
+                alignmentColor = '#22c55e';
+            } else if (averageAlignment >= 60) {
+                alignmentText = 'جيد';
+                alignmentColor = '#3b82f6';
+            } else if (averageAlignment >= 40) {
+                alignmentText = 'متوسط';
+                alignmentColor = '#f59e0b';
+            }
+            
+            document.getElementById('overallAlignmentScore').textContent = `${averageAlignment}%`;
+            document.getElementById('overallAlignmentText').textContent = alignmentText;
+            document.getElementById('overallAlignmentScore').style.color = alignmentColor;
+            document.getElementById('overallAlignmentText').style.color = alignmentColor;
+            
+            // Update gap analysis chart
+            renderGapAnalysisChart(actualCategorySummary, idealCategorySummary);
+        }
+        
+        // Render gap analysis chart
+        function renderGapAnalysisChart(actualCategorySummary, idealCategorySummary) {
+            const ctx = document.getElementById('gapAnalysisChart').getContext('2d');
+            
+            // Prepare data for chart
+            const labels = [];
+            const actualData = [];
+            const idealData = [];
+            const backgroundColors = [];
+            
+            Object.keys(lifeCategories).forEach(category => {
+                // Skip categories with no ideal or actual time
+                if ((idealCategorySummary[category] || 0) === 0 && (actualCategorySummary[category] || 0) === 0) return;
+                
+                const categoryInfo = lifeCategories[category];
+                labels.push(categoryInfo.name);
+                actualData.push(actualCategorySummary[category] || 0);
+                idealData.push(idealCategorySummary[category] || 0);
+                backgroundColors.push(categoryInfo.color);
+            });
+            
+            // If there's an existing chart, destroy it
+            if (window.gapAnalysisChart) {
+                window.gapAnalysisChart.destroy();
+            }
+            
+            // Create chart
+            window.gapAnalysisChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'الوقت الفعلي',
+                            data: actualData,
+                            backgroundColor: backgroundColors.map(color => color + '80'), // Add transparency
+                            borderColor: backgroundColors,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'الوقت المثالي',
+                            data: idealData,
+                            backgroundColor: 'rgba(0, 0, 0, 0)', // Transparent
+                            borderColor: backgroundColors,
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            type: 'line',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'الوقت (دقائق)',
+                                color: document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b'
+                            },
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') ? '#e2e8f0' : '#1e293b'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const minutes = context.raw;
+                                    const hours = Math.floor(minutes / 60);
+                                    const mins = minutes % 60;
+                                    
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                        if (hours > 0) {
+                                            label += hours + ' ساعة ';
+                                        }
+                                        if (mins > 0) {
+                                            label += mins + ' دقيقة';
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update life wheels
+        function updateLifeWheels() {
+            // Calculate ideal category percentages
+            const idealCategorySummary = {};
+            let totalIdealMinutes = 0;
+            
+            if (idealPlans['everyday']) {
+                Object.keys(idealPlans['everyday']).forEach(timeSlot => {
+                    const activity = idealPlans['everyday'][timeSlot];
+                    const category = activity.category;
+                    
+                    if (!idealCategorySummary[category]) {
+                        idealCategorySummary[category] = 0;
+                    }
+                    
+                    // Each time slot is 30 minutes
+                    idealCategorySummary[category] += 30;
+                    totalIdealMinutes += 30;
+                });
+            }
+            
+            // Calculate actual category percentages (from last week)
+            const actualCategorySummary = {};
+            let totalActualMinutes = 0;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const oneWeekAgo = new Date(today);
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            
+            const filteredActivities = actualActivities.filter(activity => {
+                const activityDate = new Date(activity.date);
+                return activityDate >= oneWeekAgo && activityDate <= today;
+            });
+            
+            filteredActivities.forEach(activity => {
+                if (!actualCategorySummary[activity.category]) {
+                    actualCategorySummary[activity.category] = 0;
+                }
+                actualCategorySummary[activity.category] += activity.durationMinutes;
+                totalActualMinutes += activity.durationMinutes;
+            });
+            
+            // Render the wheel charts
+            renderLifeWheel('actualLifeWheel', actualCategorySummary, totalActualMinutes, 'الحالي');
+            renderLifeWheel('idealLifeWheel', idealCategorySummary, totalIdealMinutes, 'المثالي');
+        }
+        
+        // Render life wheel chart
+        function renderLifeWheel(canvasId, categorySummary, totalMinutes, label) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            // Prepare data for radar chart
+            const data = [];
+            const backgroundColors = [];
+            const borderColors = [];
+            
+            // Make sure all categories have a value (even if 0)
+            Object.keys(lifeCategories).forEach(category => {
+                const categoryInfo = lifeCategories[category];
+                const minutes = categorySummary[category] || 0;
+                const percentage = totalMinutes > 0 ? Math.round((minutes / totalMinutes) * 100) : 0;
+                
+                data.push(percentage);
+                backgroundColors.push(categoryInfo.color + '40'); // Light transparency
+                borderColors.push(categoryInfo.color);
+            });
+            
+            // Get category names for labels
+            const labels = Object.values(lifeCategories).map(info => info.name);
+            
+            // If there's an existing chart, destroy it
+            if (window[canvasId + 'Chart']) {
+                window[canvasId + 'Chart'].destroy();
+            }
+            
+            // Create radar chart
+            window[canvasId + 'Chart'] = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: document.documentElement.classList.contains('dark') 
+                            ? 'rgba(59, 130, 246, 0.2)' // Light blue in dark mode
+                            : 'rgba(59, 130, 246, 0.2)', // Light blue in light mode
+                        borderColor: document.documentElement.classList.contains('dark')
+                            ? '#3b82f6' // Blue in dark mode
+                            : '#3b82f6', // Blue in light mode
+                        borderWidth: 2,
+                        pointBackgroundColor: borderColors,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: borderColors,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: document.documentElement.classList.contains('dark') 
+                                    ? 'rgba(255, 255, 255, 0.1)' 
+                                    : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: document.documentElement.classList.contains('dark') 
+                                    ? 'rgba(255, 255, 255, 0.1)' 
+                                    : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                color: document.documentElement.classList.contains('dark') 
+                                    ? '#e2e8f0' 
+                                    : '#1e293b',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: {
+                                stepSize: 20,
+                                color: document.documentElement.classList.contains('dark') 
+                                    ? 'rgba(255, 255, 255, 0.5)' 
+                                    : 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: document.documentElement.classList.contains('dark') 
+                                    ? '#e2e8f0' 
+                                    : '#1e293b'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Export audit data as CSV
+        function exportAudit() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Add header row
+            csvContent += "التاريخ,النشاط,الوقت من,الوقت إلى,المدة,المجال,ملاحظات\n";
+            
+            // Add activity rows
+            actualActivities.forEach(activity => {
+                const categoryName = lifeCategories[activity.category].name;
+                const duration = Math.floor(activity.durationMinutes / 60) + ":" + 
+                (activity.durationMinutes % 60).toString().padStart(2, '0');
+                
+                csvContent += `${activity.date},${activity.name},${activity.startTime},${activity.endTime},${duration},${categoryName},${activity.notes.replace(/,/g, ';')}\n`;
+            });
+            
+            // Create download link and trigger download
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "time_audit_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('تم تصدير بيانات الأنشطة بنجاح');
+        }
+        
+        // Export plan as CSV
+        function exportPlan() {
+            const day = document.getElementById('planDaySelect').value;
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Add header row
+            csvContent += "اليوم,الوقت,النشاط,المجال,ملاحظات\n";
+            
+            // Add plan rows
+            if (idealPlans[day]) {
+                Object.keys(idealPlans[day]).sort().forEach(timeSlot => {
+                    const activity = idealPlans[day][timeSlot];
+                    const categoryName = lifeCategories[activity.category].name;
+                    
+                    csvContent += `${day},${timeSlot},${activity.name},${categoryName},${activity.notes.replace(/,/g, ';')}\n`;
+                });
+            }
+            
+            // Create download link and trigger download
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `ideal_plan_${day}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('تم تصدير الخطة المثالية بنجاح');
+        }
+        
+        // Export life wheel as image
+        function exportLifeWheel() {
+            // Create a temporary container to hold both wheels side by side
+            const container = document.createElement('div');
+            container.style.width = '800px';
+            container.style.height = '400px';
+            container.style.display = 'flex';
+            container.style.backgroundColor = document.documentElement.classList.contains('dark') ? '#1e293b' : 'white';
+            container.style.padding = '20px';
+            container.style.fontFamily = 'Tajawal, sans-serif';
+            
+            // Create title
+            const title = document.createElement('div');
+            title.style.position = 'absolute';
+            title.style.top = '10px';
+            title.style.width = '100%';
+            title.style.textAlign = 'center';
+            title.style.fontSize = '18px';
+            title.style.fontWeight = 'bold';
+            title.style.color = document.documentElement.classList.contains('dark') ? 'white' : 'black';
+            title.textContent = 'عجلة الحياة: المقارنة بين الحالي والمثالي';
+            container.appendChild(title);
+            
+            // Get the canvas elements
+            const actualCanvas = document.getElementById('actualLifeWheel');
+            const idealCanvas = document.getElementById('idealLifeWheel');
+            
+            // Temporarily append container to body (hidden)
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            document.body.appendChild(container);
+            
+            // Use html2canvas to capture the image
+            html2canvas(document.getElementById('lifeWheelCharts')).then(canvas => {
+                // Convert to image and download
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'life_wheel.png';
+                link.href = imgData;
+                link.click();
+                
+                // Remove temporary elements
+                document.body.removeChild(container);
+                
+                showToast('تم تصدير عجلة الحياة بنجاح');
+            });
+        }
+        
+        // Apply template to ideal plan
+        function applyTemplate(templateName) {
+            // Confirm before replacing current plan
+            showConfirmation(
+                'تطبيق القالب',
+                'سيؤدي تطبيق هذا القالب إلى استبدال الخطة الحالية. هل تريد المتابعة؟',
+                () => {
+                    const day = document.getElementById('planDaySelect').value;
+                    
+                    // Clear current plan for this day
+                    idealPlans[day] = {};
+                    
+                    // Apply selected template
+                    switch (templateName) {
+                        case 'balanced':
+                            applyBalancedTemplate(day);
+                            break;
+                        case 'work':
+                            applyWorkFocusedTemplate(day);
+                            break;
+                        case 'family':
+                            applyFamilyFocusedTemplate(day);
+                            break;
+                        case 'personal':
+                            applyPersonalGrowthTemplate(day);
+                            break;
+                        case 'health':
+                            applyHealthFocusedTemplate(day);
+                            break;
+                    }
+                    
+                    // Save to localStorage
+                    localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+                    
+                    // Update UI
+                    loadPlanForDay(day);
+                    document.getElementById('confirmationModal').classList.add('hidden');
+                    showToast('تم تطبيق القالب بنجاح');
+                }
+            );
+        }
+        
+        // Apply balanced template
+        function applyBalancedTemplate(day) {
+            // Morning routine
+            idealPlans[day]['6:0'] = {
+                name: 'استيقاظ وتأمل',
+                category: 'spiritual',
+                notes: 'بداية يوم هادئة مع التأمل'
+            };
+            
+            idealPlans[day]['6:30'] = {
+                name: 'تمارين صباحية',
+                category: 'health',
+                notes: 'تمارين خفيفة لتنشيط الجسم'
+            };
+            
+            idealPlans[day]['7:0'] = {
+                name: 'إفطار وتحضير',
+                category: 'health',
+                notes: 'وجبة متوازنة والتحضير لليوم'
+            };
+            
+            // Work/study time
+            for (let hour = 8; hour < 12; hour++) {
+                idealPlans[day][`${hour}:0`] = {
+                    name: 'عمل/دراسة محوري',
+                    category: 'work',
+                    notes: 'العمل على المهام ذات الأولوية'
+                };
+                
+                idealPlans[day][`${hour}:30`] = {
+                    name: 'عمل/دراسة محوري',
+                    category: 'work',
+                    notes: 'العمل على المهام ذات الأولوية'
+                };
+            }
+            
+            // Midday break
+            idealPlans[day]['12:0'] = {
+                name: 'استراحة الغداء',
+                category: 'health',
+                notes: 'غداء صحي واستراحة'
+            };
+            
+            idealPlans[day]['12:30'] = {
+                name: 'مشي خفيف',
+                category: 'health',
+                notes: 'تنشيط الدورة الدموية'
+            };
+            
+            // Afternoon productivity
+            for (let hour = 13; hour < 16; hour++) {
+                idealPlans[day][`${hour}:0`] = {
+                    name: 'عمل/دراسة',
+                    category: 'work',
+                    notes: 'استكمال مهام اليوم'
+                };
+                
+                idealPlans[day][`${hour}:30`] = {
+                    name: 'عمل/دراسة',
+                    category: 'work',
+                    notes: 'استكمال مهام اليوم'
+                };
+            }
+            
+            // Personal time
+            idealPlans[day]['16:0'] = {
+                name: 'قراءة/تعلم',
+                category: 'personal',
+                notes: 'تطوير مهارات شخصية'
+            };
+            
+            idealPlans[day]['16:30'] = {
+                name: 'قراءة/تعلم',
+                category: 'personal',
+                notes: 'تطوير مهارات شخصية'
+            };
+            
+            // Exercise
+            idealPlans[day]['17:0'] = {
+                name: 'تمرين رياضي',
+                category: 'health',
+                notes: 'نشاط بدني مكثف'
+            };
+            
+            idealPlans[day]['17:30'] = {
+                name: 'تمرين رياضي',
+                category: 'health',
+                notes: 'نشاط بدني مكثف'
+            };
+            
+            // Family time
+            idealPlans[day]['18:0'] = {
+                name: 'وقت العائلة',
+                category: 'family',
+                notes: 'تواصل مع العائلة'
+            };
+            
+            idealPlans[day]['18:30'] = {
+                name: 'وقت العائلة',
+                category: 'family',
+                notes: 'تواصل مع العائلة'
+            };
+            
+            idealPlans[day]['19:0'] = {
+                name: 'عشاء مع العائلة',
+                category: 'family',
+                notes: 'وجبة مشتركة'
+            };
+            
+            // Evening routine
+            idealPlans[day]['20:0'] = {
+                name: 'هواية/ترفيه',
+                category: 'leisure',
+                notes: 'وقت للاستمتاع'
+            };
+            
+            idealPlans[day]['20:30'] = {
+                name: 'هواية/ترفيه',
+                category: 'leisure',
+                notes: 'وقت للاستمتاع'
+            };
+            
+            idealPlans[day]['21:0'] = {
+                name: 'تلخيص اليوم',
+                category: 'personal',
+                notes: 'تقييم اليوم والتخطيط للغد'
+            };
+            
+            idealPlans[day]['21:30'] = {
+                name: 'روتين المساء والاسترخاء',
+                category: 'personal',
+                notes: 'الاستعداد للنوم'
+            };
+            
+            idealPlans[day]['22:0'] = {
+                name: 'قراءة والنوم',
+                category: 'personal',
+                notes: 'قراءة خفيفة قبل النوم'
+            };
+        }
+        
+        // Apply work-focused template
+        function applyWorkFocusedTemplate(day) {
+            // Morning routine
+            idealPlans[day]['6:0'] = {
+                name: 'استيقاظ',
+                category: 'personal',
+                notes: 'بداية يوم نشيطة'
+            };
+            
+            idealPlans[day]['6:30'] = {
+                name: 'تحضير سريع',
+                category: 'home',
+                notes: 'الاستعداد لليوم'
+            };
+            
+            idealPlans[day]['7:0'] = {
+                name: 'إفطار سريع',
+                category: 'health',
+                notes: 'وجبة خفيفة'
+            };
+            
+            // Intensive work time
+            for (let hour = 7; hour < 12; hour++) {
+                idealPlans[day][`${hour}:30`] = {
+                    name: 'عمل إنتاجي',
+                    category: 'work',
+                    notes: 'التركيز على الإنتاجية العالية'
+                };
+                
+                if (hour !== 7) {
+                    idealPlans[day][`${hour}:0`] = {
+                        name: 'عمل إنتاجي',
+                        category: 'work',
+                        notes: 'التركيز على الإنتاجية العالية'
+                    };
+                }
+            }
+            
+            // Lunch break
+            idealPlans[day]['12:0'] = {
+                name: 'استراحة قصيرة',
+                category: 'health',
+                notes: 'غداء سريع'
+            };
+            
+            // Afternoon work
+            for (let hour = 12; hour < 18; hour++) {
+                if (hour !== 12) {
+                    idealPlans[day][`${hour}:0`] = {
+                        name: 'عمل/اجتماعات',
+                        category: 'work',
+                        notes: 'العمل على المشاريع والتواصل'
+                    };
+                }
+                
+                idealPlans[day][`${hour}:30`] = {
+                    name: 'عمل/اجتماعات',
+                    category: 'work',
+                    notes: 'العمل على المشاريع والتواصل'
+                };
+            }
+            
+            // Evening recovery
+            idealPlans[day]['18:0'] = {
+                name: 'عشاء',
+                category: 'health',
+                notes: 'وجبة العشاء'
+            };
+            
+            idealPlans[day]['18:30'] = {
+                name: 'استراحة قصيرة',
+                category: 'leisure',
+                notes: 'وقت للاسترخاء'
+            };
+            
+            // Evening work
+            idealPlans[day]['19:0'] = {
+                name: 'مراجعة العمل',
+                category: 'work',
+                notes: 'مراجعة اليوم وتخطيط الغد'
+            };
+            
+            idealPlans[day]['19:30'] = {
+                name: 'تعلم مهني',
+                category: 'work',
+                notes: 'تطوير المهارات المهنية'
+            };
+            
+            idealPlans[day]['20:0'] = {
+                name: 'تعلم مهني',
+                category: 'work',
+                notes: 'تطوير المهارات المهنية'
+            };
+            
+            // Winding down
+            idealPlans[day]['20:30'] = {
+                name: 'بريد إلكتروني وتنظيم',
+                category: 'work',
+                notes: 'الرد على الرسائل وتنظيم العمل'
+            };
+            
+            idealPlans[day]['21:0'] = {
+                name: 'وقت شخصي قصير',
+                category: 'personal',
+                notes: 'استرخاء قبل النوم'
+            };
+            
+            idealPlans[day]['21:30'] = {
+                name: 'تحضير للنوم',
+                category: 'personal',
+                notes: 'روتين المساء'
+            };
+            
+            idealPlans[day]['22:0'] = {
+                name: 'النوم',
+                category: 'health',
+                notes: 'الحصول على قسط كافٍ من الراحة'
+            };
+        }
+        
+        // Apply family-focused template
+        function applyFamilyFocusedTemplate(day) {
+            // Morning routine
+            idealPlans[day]['6:0'] = {
+                name: 'استيقاظ',
+                category: 'personal',
+                notes: 'بداية اليوم'
+            };
+            
+            idealPlans[day]['6:30'] = {
+                name: 'تحضير الإفطار',
+                category: 'family',
+                notes: 'تحضير وجبة صحية للعائلة'
+            };
+            
+            idealPlans[day]['7:0'] = {
+                name: 'إفطار عائلي',
+                category: 'family',
+                notes: 'وقت جودة مع العائلة'
+            };
+            
+            idealPlans[day]['7:30'] = {
+                name: 'تجهيز الأبناء',
+                category: 'family',
+                notes: 'مساعدة الأبناء للمدرسة'
+            };
+            
+            // Work hours (reduced)
+            for (let hour = 8; hour < 14; hour++) {
+                idealPlans[day][`${hour}:0`] = {
+                    name: 'عمل',
+                    category: 'work',
+                    notes: 'العمل بكفاءة خلال ساعات محددة'
+                };
+                
+                idealPlans[day][`${hour}:30`] = {
+                    name: 'عمل',
+                    category: 'work',
+                    notes: 'العمل بكفاءة خلال ساعات محددة'
+                };
+            }
+            
+            // Afternoon family time
+            idealPlans[day]['14:0'] = {
+                name: 'استقبال الأبناء',
+                category: 'family',
+                notes: 'الترحيب بالأبناء من المدرسة'
+            };
+            
+            idealPlans[day]['14:30'] = {
+                name: 'غداء عائلي',
+                category: 'family',
+                notes: 'وجبة مع العائلة'
+            };
+            
+            idealPlans[day]['15:0'] = {
+                name: 'مساعدة في الواجبات',
+                category: 'family',
+                notes: 'دعم الأبناء في التعلم'
+            };
+            
+            idealPlans[day]['15:30'] = {
+                name: 'مساعدة في الواجبات',
+                category: 'family',
+                notes: 'دعم الأبناء في التعلم'
+            };
+            
+            // Personal maintenance
+            idealPlans[day]['16:0'] = {
+                name: 'وقت نشاط مع الأبناء',
+                category: 'family',
+                notes: 'لعب أو قراءة مع الأطفال'
+            };
+            
+            idealPlans[day]['16:30'] = {
+                name: 'وقت نشاط مع الأبناء',
+                category: 'family',
+                notes: 'لعب أو قراءة مع الأطفال'
+            };
+            
+            idealPlans[day]['17:0'] = {
+                name: 'تمارين مع العائلة',
+                category: 'health',
+                notes: 'نشاط بدني عائلي'
+            };
+            
+            idealPlans[day]['17:30'] = {
+                name: 'تمارين مع العائلة',
+                category: 'health',
+                notes: 'نشاط بدني عائلي'
+            };
+            
+            // Evening family time
+            idealPlans[day]['18:0'] = {
+                name: 'تحضير العشاء',
+                category: 'family',
+                notes: 'تحضير وجبة صحية'
+            };
+            
+            idealPlans[day]['18:30'] = {
+                name: 'عشاء عائلي',
+                category: 'family',
+                notes: 'وقت مشاركة ومحادثة'
+            };
+            
+            idealPlans[day]['19:0'] = {
+                name: 'مشاهدة فيلم عائلي',
+                category: 'leisure',
+                notes: 'ترفيه مع العائلة'
+            };
+            
+            idealPlans[day]['19:30'] = {
+                name: 'مشاهدة فيلم عائلي',
+                category: 'leisure',
+                notes: 'ترفيه مع العائلة'
+            };
+            
+            // Evening routine
+            idealPlans[day]['20:0'] = {
+                name: 'تجهيز الأطفال للنوم',
+                category: 'family',
+                notes: 'روتين النوم للأطفال'
+            };
+            
+            idealPlans[day]['20:30'] = {
+                name: 'قراءة للأطفال',
+                category: 'family',
+                notes: 'وقت هادئ مع الأطفال'
+            };
+            
+            idealPlans[day]['21:0'] = {
+                name: 'وقت الزوجين',
+                category: 'social',
+                notes: 'وقت للتواصل مع الشريك'
+            };
+            
+            idealPlans[day]['21:30'] = {
+                name: 'وقت الزوجين',
+                category: 'social',
+                notes: 'وقت للتواصل مع الشريك'
+            };
+            
+            idealPlans[day]['22:0'] = {
+                name: 'تحضير للنوم',
+                category: 'personal',
+                notes: 'روتين المساء والنوم'
+            };
+        }
+        
+        // Apply personal growth template
+        function applyPersonalGrowthTemplate(day) {
+            // Morning routine
+            idealPlans[day]['5:0'] = {
+                name: 'استيقاظ مبكر',
+                category: 'personal',
+                notes: 'بداية يوم هادئة'
+            };
+            
+            idealPlans[day]['5:30'] = {
+                name: 'تأمل وكتابة يوميات',
+                category: 'spiritual',
+                notes: 'تأمل وتخطيط اليوم'
+            };
+            
+            idealPlans[day]['6:0'] = {
+                name: 'قراءة تنموية',
+                category: 'personal',
+                notes: 'قراءة كتب التطوير الذاتي'
+            };
+            
+            idealPlans[day]['6:30'] = {
+                name: 'تمارين صباحية',
+                category: 'health',
+                notes: 'نشاط بدني لتنشيط الجسم'
+            };
+            
+            idealPlans[day]['7:0'] = {
+                name: 'إفطار صحي',
+                category: 'health',
+                notes: 'وجبة متوازنة'
+            };
+            
+            // Work hours
+            for (let hour = 8; hour < 13; hour++) {
+                idealPlans[day][`${hour}:0`] = {
+                    name: 'عمل/دراسة',
+                    category: 'work',
+                    notes: 'التركيز على المهام الإنتاجية'
+                };
+                
+                idealPlans[day][`${hour}:30`] = {
+                    name: 'عمل/دراسة',
+                    category: 'work',
+                    notes: 'التركيز على المهام الإنتاجية'
+                };
+            }
+            
+            // Midday break
+            idealPlans[day]['13:0'] = {
+                name: 'غداء صحي',
+                category: 'health',
+                notes: 'وجبة متوازنة'
+            };
+            
+            idealPlans[day]['13:30'] = {
+                name: 'مشي قصير',
+                category: 'health',
+                notes: 'تجديد الطاقة'
+            };
+            
+            // Afternoon activities
+            idealPlans[day]['14:0'] = {
+                name: 'عمل/دراسة',
+                category: 'work',
+                notes: 'استكمال مهام اليوم'
+            };
+            
+            idealPlans[day]['14:30'] = {
+                name: 'عمل/دراسة',
+                category: 'work',
+                notes: 'استكمال مهام اليوم'
+            };
+            
+            idealPlans[day]['15:0'] = {
+                name: 'تعلم مهارة جديدة',
+                category: 'personal',
+                notes: 'دورة أو كتاب في مجال جديد'
+            };
+            
+            idealPlans[day]['15:30'] = {
+                name: 'تعلم مهارة جديدة',
+                category: 'personal',
+                notes: 'دورة أو كتاب في مجال جديد'
+            };
+            
+            idealPlans[day]['16:0'] = {
+                name: 'تعلم مهارة جديدة',
+                category: 'personal',
+                notes: 'دورة أو كتاب في مجال جديد'
+            };
+            
+            idealPlans[day]['16:30'] = {
+                name: 'تعلم مهارة جديدة',
+                category: 'personal',
+                notes: 'دورة أو كتاب في مجال جديد'
+            };
+            
+            // Evening activities
+            idealPlans[day]['17:0'] = {
+                name: 'تمرين رياضي مكثف',
+                category: 'health',
+                notes: 'نشاط بدني لتقوية الجسم'
+            };
+            
+            idealPlans[day]['17:30'] = {
+                name: 'تمرين رياضي مكثف',
+                category: 'health',
+                notes: 'نشاط بدني لتقوية الجسم'
+            };
+            
+            idealPlans[day]['18:0'] = {
+                name: 'استحمام واسترخاء',
+                category: 'personal',
+                notes: 'وقت للراحة'
+            };
+            
+            idealPlans[day]['18:30'] = {
+                name: 'عشاء صحي',
+                category: 'health',
+                notes: 'وجبة خفيفة ومغذية'
+            };
+            
+            idealPlans[day]['19:0'] = {
+                name: 'وقت اجتماعي',
+                category: 'social',
+                notes: 'التواصل مع الأصدقاء أو العائلة'
+            };
+            
+            idealPlans[day]['19:30'] = {
+                name: 'وقت اجتماعي',
+                category: 'social',
+                notes: 'التواصل مع الأصدقاء أو العائلة'
+            };
+            
+            idealPlans[day]['20:0'] = {
+                name: 'هواية إبداعية',
+                category: 'leisure',
+                notes: 'رسم، موسيقى، كتابة'
+            };
+            
+            idealPlans[day]['20:30'] = {
+                name: 'هواية إبداعية',
+                category: 'leisure',
+                notes: 'رسم، موسيقى، كتابة'
+            };
+            
+            idealPlans[day]['21:0'] = {
+                name: 'تلخيص اليوم',
+                category: 'personal',
+                notes: 'مراجعة الإنجازات والتعلم'
+            };
+            
+            idealPlans[day]['21:30'] = {
+                name: 'قراءة قبل النوم',
+                category: 'personal',
+                notes: 'قراءة كتاب ملهم'
+            };
+            
+            idealPlans[day]['22:0'] = {
+                name: 'تأمل والنوم',
+                category: 'spiritual',
+                notes: 'تهدئة العقل والاستعداد للنوم'
+            };
+        }
+        
+        // Apply health-focused template
+        function applyHealthFocusedTemplate(day) {
+            // Morning routine
+            idealPlans[day]['5:0'] = {
+                name: 'استيقاظ',
+                category: 'health',
+                notes: 'بداية مبكرة'
+            };
+            
+            idealPlans[day]['5:30'] = {
+                name: 'ماء وتمدد',
+                category: 'health',
+                notes: 'ترطيب الجسم وتنشيط العضلات'
+            };
+            
+            idealPlans[day]['6:0'] = {
+                name: 'تمرين صباحي',
+                category: 'health',
+                notes: 'جري أو تمارين هوائية'
+            };
+            
+            idealPlans[day]['6:30'] = {
+                name: 'تمرين صباحي',
+                category: 'health',
+                notes: 'جري أو تمارين هوائية'
+            };
+            
+            idealPlans[day]['7:0'] = {
+                name: 'إفطار غني بالبروتين',
+                category: 'health',
+                notes: 'وجبة متوازنة غنية بالبروتين'
+            };
+            
+            idealPlans[day]['7:30'] = {
+                name: 'تحضير وتخطيط',
+                category: 'personal',
+                notes: 'الاستعداد لليوم'
+            };
+            
+            // Morning work with health breaks
+            for (let hour = 8; hour < 12; hour++) {
+                idealPlans[day][`${hour}:0`] = {
+                    name: 'عمل/دراسة',
+                    category: 'work',
+                    notes: 'مع الحفاظ على وضعية صحية'
+                };
+                
+                if (hour % 2 === 0) {
+                    idealPlans[day][`${hour}:30`] = {
+                        name: 'استراحة نشطة',
+                        category: 'health',
+                        notes: 'تمدد وحركة لمدة 10 دقائق'
+                    };
+                } else {
+                    idealPlans[day][`${hour}:30`] = {
+                        name: 'عمل/دراسة',
+                        category: 'work',
+                        notes: 'مع الحفاظ على وضعية صحية'
+                    };
+                }
+            }
+            
+            // Midday activities
+            idealPlans[day]['12:0'] = {
+                name: 'مشي في الهواء الطلق',
+                category: 'health',
+                notes: 'التعرض للشمس والهواء النقي'
+            };
+            
+            idealPlans[day]['12:30'] = {
+                name: 'غداء صحي',
+                category: 'health',
+                notes: 'وجبة غنية بالخضروات'
+            };
+            
+            idealPlans[day]['13:0'] = {
+                name: 'استراحة هادئة',
+                category: 'health',
+                notes: 'تأمل قصير أو تنفس عميق'
+            };
+            
+            // Afternoon with health focus
+            idealPlans[day]['13:30'] = {
+                name: 'عمل/دراسة',
+                category: 'work',
+                notes: 'مهام خفيفة'
+            };
+            
+            idealPlans[day]['14:0'] = {
+                name: 'عمل/دراسة',
+                category: 'work',
+                notes: 'مهام خفيفة'
+            };
+            
+            idealPlans[day]['14:30'] = {
+                name: 'شرب الماء وتمدد',
+                category: 'health',
+                notes: 'ترطيب واستراحة قصيرة'
+            };
+            
+            idealPlans[day]['15:0'] = {
+                name: 'عمل/دراسة',
+                category: 'work',
+                notes: 'اختتام مهام اليوم'
+            };
+            
+            idealPlans[day]['15:30'] = {
+                name: 'عمل/دراسة',
+                category: 'work',
+                notes: 'اختتام مهام اليوم'
+            };
+            
+            // Evening fitness focus
+            idealPlans[day]['16:0'] = {
+                name: 'استراحة وتحضير',
+                category: 'personal',
+                notes: 'استراحة قبل التمرين'
+            };
+            
+            idealPlans[day]['16:30'] = {
+                name: 'تمرين مكثف',
+                category: 'health',
+                notes: 'تمارين القوة أو اللياقة'
+            };
+            
+            idealPlans[day]['17:0'] = {
+                name: 'تمرين مكثف',
+                category: 'health',
+                notes: 'تمارين القوة أو اللياقة'
+            };
+            
+            idealPlans[day]['17:30'] = {
+                name: 'تمرين مكثف',
+                category: 'health',
+                notes: 'تمارين القوة أو اللياقة'
+            };
+            
+            idealPlans[day]['18:0'] = {
+                name: 'استحمام وتعافي',
+                category: 'health',
+                notes: 'تبريد العضلات'
+            };
+            
+            // Evening routine
+            idealPlans[day]['18:30'] = {
+                name: 'تحضير العشاء',
+                category: 'health',
+                notes: 'وجبة مغذية'
+            };
+            
+            idealPlans[day]['19:0'] = {
+                name: 'عشاء صحي',
+                category: 'health',
+                notes: 'وجبة مغذية وخفيفة'
+            };
+            
+            idealPlans[day]['19:30'] = {
+                name: 'وقت عائلي',
+                category: 'family',
+                notes: 'تواصل مع الأحباء'
+            };
+            
+            idealPlans[day]['20:0'] = {
+                name: 'وقت عائلي',
+                category: 'family',
+                notes: 'تواصل مع الأحباء'
+            };
+            
+            idealPlans[day]['20:30'] = {
+                name: 'تمدد واسترخاء',
+                category: 'health',
+                notes: 'يوغا خفيفة أو تمدد'
+            };
+            
+            idealPlans[day]['21:0'] = {
+                name: 'تحضير للنوم',
+                category: 'health',
+                notes: 'روتين مسائي هادئ'
+            };
+            
+            idealPlans[day]['21:30'] = {
+                name: 'قراءة والنوم',
+                category: 'personal',
+                notes: 'النوم المبكر للتعافي'
+            };
+        }
+        
+        // Copy day plan to another day
+        function copyDayPlan(sourceDay, targetDay) {
+            if (!idealPlans[sourceDay]) {
+                showToast('لا توجد خطة في اليوم المصدر');
+                return;
+            }
+            
+            idealPlans[targetDay] = JSON.parse(JSON.stringify(idealPlans[sourceDay]));
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            showToast(`تم نسخ خطة ${sourceDay} إلى ${targetDay} بنجاح`);
+            
+            // Update UI if the current day is the target
+            const currentDay = document.getElementById('planDaySelect').value;
+            if (currentDay === targetDay) {
+                loadPlanForDay(targetDay);
+            }
+        }
+        
+        // Copy day plan to all weekdays
+        function copyToWeekdays() {
+            const sourceDay = document.getElementById('planDaySelect').value;
+            
+            if (!idealPlans[sourceDay]) {
+                showToast('لا توجد خطة في اليوم المصدر');
+                return;
+            }
+            
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
+                if (day !== sourceDay) {
+                    idealPlans[day] = JSON.parse(JSON.stringify(idealPlans[sourceDay]));
+                }
+            });
+            
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            showToast('تم نسخ الخطة إلى جميع أيام الأسبوع بنجاح');
+        }
+        
+        // Copy day plan to weekend
+        function copyToWeekend() {
+            const sourceDay = document.getElementById('planDaySelect').value;
+            
+            if (!idealPlans[sourceDay]) {
+                showToast('لا توجد خطة في اليوم المصدر');
+                return;
+            }
+            
+            ['Saturday', 'Sunday'].forEach(day => {
+                if (day !== sourceDay) {
+                    idealPlans[day] = JSON.parse(JSON.stringify(idealPlans[sourceDay]));
+                }
+            });
+            
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            showToast('تم نسخ الخطة إلى عطلة نهاية الأسبوع بنجاح');
+        }
+        
+        // Copy day plan to all days
+        function copyToAllDays() {
+            const sourceDay = document.getElementById('planDaySelect').value;
+            
+            if (!idealPlans[sourceDay]) {
+                showToast('لا توجد خطة في اليوم المصدر');
+                return;
+            }
+            
+            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'everyday'].forEach(day => {
+                if (day !== sourceDay) {
+                    idealPlans[day] = JSON.parse(JSON.stringify(idealPlans[sourceDay]));
+                }
+            });
+            
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            showToast('تم نسخ الخطة إلى جميع الأيام بنجاح');
+        }
+        
+        // Set Everyday as default template
+        function setDayAsDefault() {
+            const sourceDay = document.getElementById('planDaySelect').value;
+            
+            if (!idealPlans[sourceDay]) {
+                showToast('لا توجد خطة في اليوم المصدر');
+                return;
+            }
+            
+            idealPlans['everyday'] = JSON.parse(JSON.stringify(idealPlans[sourceDay]));
+            localStorage.setItem('idealPlans', JSON.stringify(idealPlans));
+            showToast('تم تعيين هذه الخطة كقالب افتراضي بنجاح');
+        }
+        
+        // Show confirmation dialog
+        function showConfirmation(title, message, confirmCallback) {
+            document.getElementById('confirmationTitle').textContent = title;
+            document.getElementById('confirmationMessage').textContent = message;
+            
+            // Set up confirmation button
+            const confirmBtn = document.getElementById('confirmBtn');
+            confirmBtn.onclick = confirmCallback;
+            
+            // Show modal
+            document.getElementById('confirmationModal').classList.remove('hidden');
+        }
+        
+        // Show toast message
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('opacity-0');
+                }, 500);
+            }, 3000);
+        }
+        
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Update charts for dark mode if they exist
+            updateChartsForTheme();
+        }
+        
+        // Update all charts for current theme
+        function updateChartsForTheme() {
+            // Refresh all charts with new theme colors
+            if (window.timeDistributionChart) {
+                renderTimeDistributionChart();
+            }
+            
+            if (window.idealDistributionChart) {
+                renderIdealDistributionChart();
+            }
+            
+            if (window.gapAnalysisChart) {
+                updateGapAnalysis();
+            }
+            
+            if (window.actualLifeWheelChart || window.idealLifeWheelChart) {
+                updateLifeWheels();
+            }
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.classList.remove('text-indigo-600', 'dark:text-indigo-400', 'border-indigo-600', 'dark:border-indigo-400');
+                        btn.classList.add('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.remove('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                    button.classList.add('text-indigo-600', 'dark:text-indigo-400', 'border-indigo-600', 'dark:border-indigo-400');
+                    
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+                    
+                    // Special actions for specific tabs
+                    if (tabId === 'analysis') {
+                        updateGapAnalysis();
+                        updateLifeWheels();
+                    } else if (tabId === 'track') {
+                        document.getElementById('activityDate').valueAsDate = new Date();
+                        renderTimeDistributionChart();
+                    } else if (tabId === 'plan') {
+                        loadPlanForDay(document.getElementById('planDaySelect').value);
+                    }
+                });
+            });
+            
+            // Activity form submission
+            document.getElementById('activityForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveActivity();
+            });
+            
+            // Plan activity form submission
+            document.getElementById('planActivityForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                savePlanActivity();
+            });
+            
+            // Plan day selection change
+            document.getElementById('planDaySelect').addEventListener('change', function() {
+                loadPlanForDay(this.value);
+            });
+            
+            // Analysis date selection change
+            document.getElementById('analysisDateSelect').addEventListener('change', function() {
+                updateGapAnalysis();
+            });
+            
+            // Clear plan button
+            document.getElementById('clearPlanBtn').addEventListener('click', function() {
+                showConfirmation(
+                    'مسح الخطة',
+                    'هل أنت متأكد من رغبتك في مسح خطة اليوم الحالي؟',
+                    clearPlan
+                );
+            });
+            // Template buttons
+            document.querySelectorAll('.template-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    applyTemplate(this.getAttribute('data-template'));
+                });
+            });
+            
+            // Copy day buttons
+            document.getElementById('copyToWeekdaysBtn').addEventListener('click', copyToWeekdays);
+            document.getElementById('copyToWeekendBtn').addEventListener('click', copyToWeekend);
+            document.getElementById('copyToAllDaysBtn').addEventListener('click', copyToAllDays);
+            document.getElementById('setAsDefaultBtn').addEventListener('click', setDayAsDefault);
+            
+            // Export buttons
+            document.getElementById('exportAuditBtn').addEventListener('click', exportAudit);
+            document.getElementById('exportPlanBtn').addEventListener('click', exportPlan);
+            document.getElementById('exportLifeWheelBtn').addEventListener('click', exportLifeWheel);
+            
+            // Close buttons for modals
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal');
+                    document.getElementById(modalId).classList.add('hidden');
+                });
+            });
+            
+            // Cancel buttons for modals
+            document.querySelectorAll('.cancel-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal');
+                    document.getElementById(modalId).classList.add('hidden');
+                });
+            });
+        }
+        
+        // Initialize app
+        function initApp() {
+            // Load data from localStorage
+            loadData();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Set default active tab
+            document.querySelector('.tab-btn[data-tab="track"]').click();
+            
+            // Set date inputs to today
+            document.getElementById('activityDate').valueAsDate = new Date();
+            
+            // Render initial charts
+            renderTimeDistributionChart();
+            
+            // Update copyright year
+            document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+            
+            // Check for theme preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+        
+        // Call init when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
