@@ -384,8 +384,19 @@
 عنوان IPv6 مختصر: 2001:db8::1
 الرمز البريدي: 12345
 الرمز البريدي الأمريكي: 12345-6789
-رمز بريدي بريطاني: SW1A 1AA</textarea>
+رمز بريدي بريطاني: SW1A 1AA
 
+[2023-05-15 08:12:34] [INFO] User admin logged in successfully from IP 192.168.1.5
+[2023-05-15 08:15:21] [ERROR] Database connection failed: timeout after 30s
+[2023-05-15 08:16:45] [WARNING] CPU usage above 80% for 5 minutes
+[2023-05-15 09:23:11] [DEBUG] Request parameters: {"user_id": 12345, "action": "update_profile"}
+[2023-05-16 12:34:56] [CRITICAL] Security breach detected from IP 203.0.113.42 - multiple failed login attempts
+192.168.1.15 - john [16/May/2023:13:55:36 -0700] "GET /admin/index.php HTTP/1.1" 200 2326 "http://example.com/login.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+203.0.113.42 - - [16/May/2023:14:12:53 -0700] "POST /api/login HTTP/1.1" 401 1420 "-" "Mozilla/5.0 (compatible; Bot/1.0)"
+May 17 07:12:49 webserver systemd[1]: apache2.service: Failed with result 'exit-code'.
+2023-05-17T08:23:15.352Z INFO [AppServer] Application started successfully on port 3000
+2023-05-17T09:45:32.128Z ERROR [PaymentService] Payment failed for order #12458: Invalid credit card number
+                            </textarea>
                         </div>
                     </div>
                     
@@ -439,21 +450,11 @@
                             </div>
 
                             
-                            <div class="mt-4 flex justify-end">
+                            <!-- <div class="mt-4 flex justify-end">
                                 <button id="exportResultsBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
                                     <i class="fas fa-file-export ml-2"></i>تصدير النتائج
                                 </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Match History -->
-                <div class="mt-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-bold mb-3 text-indigo-600 dark:text-indigo-400">سجل التعبيرات السابقة</h3>
-                    <div id="historyList" class="space-y-2">
-                        <div class="text-gray-500 dark:text-gray-400 italic">
-                            ستظهر هنا التعبيرات النمطية التي استخدمتها سابقاً...
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -700,12 +701,6 @@
                                 </div>
                             </div>
                             
-                            <div class="mt-3">
-                                <div class="text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">تفسير التعبير:</div>
-                                <div id="liveExplanation" class="bg-white dark:bg-gray-800 p-3 rounded-lg text-gray-700 dark:text-gray-300 text-sm border border-gray-200 dark:border-gray-600">
-                                    سيظهر هنا تفسير للتعبير النمطي...
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -840,64 +835,66 @@
                         </div>
                     </div>
                     
-                    <!-- Username Pattern -->
-                    <div class="regex-category-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 mr-3">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">اسم مستخدم</h3>
-                        </div>
-                        
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                            يطابق أسماء المستخدمين من 3-16 حرف تتكون من حروف وأرقام وشرطات
-                        </p>
-                        
-                        <div class="code-block mb-4 text-sm">
-                            <span class="regex-anchor">^</span><span class="regex-character-class">[a-zA-Z0-9]</span><span class="regex-character-class">[a-zA-Z0-9_-]{2,15}</span><span class="regex-anchor">$</span>
-                        </div>
-                        
-                        <div class="flex space-x-2 space-x-reverse mt-2">
-                            <button class="copy-pattern-btn px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 text-sm" data-pattern="[a-zA-Z][a-zA-Z0-9_]{2,19}" onclick="copyToClipboard(this.getAttribute('data-pattern')); showToast('تم نسخ التعبير النمطي', 'success');">
-                                <i class="fas fa-copy ml-1"></i>
-                                نسخ
-                            </button>
-                            <button class="apply-pattern-btn px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-800/40 text-sm" data-pattern="[a-zA-Z][a-zA-Z0-9_]{2,19}" onclick="applyPatternAndTest(this.getAttribute('data-pattern')); showToast('تم تطبيق التعبير النمطي', 'success');">
-                                <i class="fas fa-check ml-1"></i>
-                                تطبيق
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Strong Password Pattern -->
-                    <div class="regex-category-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all">
-                        <div class="flex items-center mb-4">
-                            <div class="w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400 mr-3">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">كلمة مرور قوية</h3>
-                        </div>
-                        
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                            يطابق كلمات المرور القوية التي تحتوي حرف كبير وصغير ورقم ورمز
-                        </p>
-                        
-                        <div class="code-block mb-4 text-sm">
-                            <span class="regex-anchor">^</span><span class="regex-character-class">(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])</span><span class="regex-character-class">[A-Za-z\d@$!%*?&]{8,}</span><span class="regex-anchor">$</span>
-                        </div>
-                        
-                        <div class="flex space-x-2 space-x-reverse mt-2">
-                            <button class="copy-pattern-btn px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 text-sm" data-pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" onclick="copyToClipboard(this.getAttribute('data-pattern')); showToast('تم نسخ التعبير النمطي', 'success');">
-                                <i class="fas fa-copy ml-1"></i>
-                                نسخ 
-                            </button>
-                            <button class="apply-pattern-btn px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-800/40 text-sm" data-pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" onclick="applyPatternAndTest(this.getAttribute('data-pattern')); showToast('تم تطبيق التعبير النمطي', 'success');">
-                                <i class="fas fa-check ml-1"></i>
-                                تطبيق 
-                            </button>
-                        </div>
-                    </div>
-                    
+<!-- Time (HH:MM:SS) Pattern - Simplified -->
+<div class="regex-category-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all">
+    <div class="flex items-center mb-4">
+        <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3">
+            <i class="fas fa-clock"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">وقت (HH:MM:SS)</h3>
+    </div>
+    
+    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        يطابق الأوقات بصيغة ساعة:دقيقة:ثانية مثل 13:45:30
+    </p>
+    
+    <div class="code-block mb-4 text-sm">
+        <span class="regex-character-class">\d{1,2}:\d{2}(:\d{2})?</span>
+    </div>
+    
+    <div class="flex space-x-2 space-x-reverse mt-2">
+        <button class="copy-pattern-btn px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 text-sm" data-pattern="\d{1,2}:\d{2}(:\d{2})?" onclick="copyToClipboard(this.getAttribute('data-pattern')); showToast('تم نسخ التعبير النمطي', 'success');">
+            <i class="fas fa-copy ml-1"></i>
+            نسخ 
+        </button>
+        <button class="apply-pattern-btn px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-800/40 text-sm" data-pattern="\d{1,2}:\d{2}(:\d{2})?" onclick="applyPatternAndTest(this.getAttribute('data-pattern')); showToast('تم تطبيق التعبير النمطي', 'success');">
+            <i class="fas fa-check ml-1"></i>
+            تطبيق
+        </button>
+    </div>
+</div>
+
+<!-- DateTime Pattern - Simplified -->
+<div class="regex-category-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all">
+    <div class="flex items-center mb-4">
+        <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-3">
+            <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">تاريخ ووقت</h3>
+    </div>
+    
+    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        يطابق التاريخ والوقت معاً مثل 2023-11-30 13:45:30
+    </p>
+    
+    <div class="code-block mb-4 text-sm">
+        <span class="regex-character-class">\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2})?</span>
+    </div>
+    
+    <div class="flex space-x-2 space-x-reverse mt-2">
+        <button class="copy-pattern-btn px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800/40 text-sm" data-pattern="\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2})?" onclick="copyToClipboard(this.getAttribute('data-pattern')); showToast('تم نسخ التعبير النمطي', 'success');">
+            <i class="fas fa-copy ml-1"></i>
+            نسخ 
+        </button>
+        <button class="apply-pattern-btn px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-800/40 text-sm" data-pattern="\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2})?" onclick="applyPatternAndTest(this.getAttribute('data-pattern')); showToast('تم تطبيق التعبير النمطي', 'success');">
+            <i class="fas fa-check ml-1"></i>
+            تطبيق
+        </button>
+    </div>
+</div>
+
+
+
                     <!-- National ID Pattern -->
                     <div class="regex-category-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all">
                         <div class="flex items-center mb-4">
@@ -1074,24 +1071,6 @@
 
                 </div>
                 
-                <!-- Custom Patterns Section -->
-                <div class="mt-8">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">تعبيراتي المحفوظة</h3>
-                        <button id="clearSavedPatternsBtn" class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/40 text-sm">
-                            <i class="fas fa-trash-alt ml-1"></i>
-                            مسح الكل
-                        </button>
-                    </div>
-                    
-                    <div id="savedPatterns" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="text-gray-500 dark:text-gray-400 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
-                            <i class="fas fa-bookmark mb-2 text-xl"></i>
-                            <p>لم تقم بحفظ أي تعبيرات حتى الآن.</p>
-                            <p class="text-sm mt-2">يمكنك حفظ التعبيرات المفضلة لديك من خلال زر الحفظ عند إنشاء تعبير جديد.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
             
                         <!-- About Tab -->
