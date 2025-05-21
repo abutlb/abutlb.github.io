@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محلل النصوص المفتوحة | Open Text Field Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#dc2626', // crimson red
+                        secondary: '#b91c1c', // darker red
+                        accent: '#991b1b', // even darker red
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #dc2626, #991b1b) 1;
+        }
+
+        /* Custom colors for dark mode toggle */
+        .moon-icon {
+            color: #f87171;
+        }
+        .sun-icon {
+            color: #fbbf24;
+        }
+
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #991b1b;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+
+        /* Animation for saved message */
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .fade-out {
+            animation: fadeOut 2s forwards;
+        }
+
+        /* Custom tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(15, 23, 42, 0.9) transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Category card styles */
+        .category-card {
+            transition: all 0.3s;
+        }
+        .category-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Word highlight styles */
+        .word-highlight {
+            background-color: rgba(220, 38, 38, 0.2);
+            border-radius: 2px;
+            padding: 1px 0;
+        }
+        
+        /* Code blocks styling */
+        .code-block {
+            background-color: rgba(30, 41, 59, 0.8);
+            border-radius: 6px;
+            padding: 10px 15px;
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.5;
+        }
+        html.dark .code-block {
+            background-color: rgba(15, 23, 42, 0.7);
+        }
+        
+        /* Component styling */
+        .component-button {
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .component-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 7px rgba(0,0,0,0.1);
+        }
+        
+        /* Badge styling */
+        .component-badge {
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        /* Canvas container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Table styles */
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .analysis-table th {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: #991b1b;
+            padding: 10px;
+            text-align: right;
+            font-weight: 600;
+        }
+        .analysis-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .analysis-table tr:hover {
+            background-color: rgba(220, 38, 38, 0.05);
+        }
+        html.dark .analysis-table th {
+            background-color: rgba(220, 38, 38, 0.2);
+            color: #f87171;
+        }
+        html.dark .analysis-table td {
+            border-bottom: 1px solid #374151;
+        }
+        html.dark .analysis-table tr:hover {
+            background-color: rgba(220, 38, 38, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index.html" class="p-2 bg-red-300 dark:bg-red-900 rounded-full hover:bg-red-200 dark:hover:bg-red-800 transition-colors">
+                  <i class="fas fa-arrow-right text-red-600 dark:text-red-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800 text-center">محلل النصوص المفتوحة</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">محلل النصوص والتعليقات المفتوحة من ملفات CSV</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-red-300 dark:text-red-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-red-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-600 to-red-800 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="input">
+                    <i class="fas fa-file-import ml-2"></i>استيراد البيانات
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="analysis">
+                    <i class="fas fa-chart-bar ml-2"></i>تحليل النصوص
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="themes">
+                    <i class="fas fa-tags ml-2"></i>التصنيف الموضوعي
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-info-circle ml-2"></i>حول الأداة
+                </button>
+            </div>
+            
+            <!-- Input Data Tab -->
+            <div id="input-tab" class="tab-content p-6 block">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Input Section -->
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">استيراد البيانات</h3>
+
+                            <!-- Upload CSV Section -->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">تحميل ملف CSV:</label>
+                                <div class="flex flex-col items-center justify-center w-full h-32 px-4 transition bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-red-400 dark:hover:border-red-500 focus:outline-none">
+                                    <span class="flex items-center space-x-2 space-x-reverse">
+                                        <i class="fas fa-upload text-gray-500 dark:text-gray-400"></i>
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">
+                                            اسحب الملف هنا أو اضغط للتحميل
+                                        </span>
+                                    </span>
+                                    <input id="csvFileInput" type="file" accept=".csv" class="hidden" />
+                                </div>
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    * يجب أن يكون ملف CSV بترميز UTF-8 ويحتوي على عمود للنص المفتوح
+                                </p>
+                            </div>
+
+                            <!-- OR Divider -->
+                            <div class="relative flex py-4 items-center">
+                                <div class="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+                                <span class="flex-shrink mx-4 text-gray-500 dark:text-gray-400">أو</span>
+                                <div class="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+                            </div>
+
+                            <!-- Manual Input Section -->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">أدخل النصوص يدويًا (نص واحد لكل سطر):</label>
+                                <textarea id="manualInput" rows="8" 
+                                    class="block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                    placeholder="أدخل النصوص المراد تحليلها هنا، كل سطر يمثل نصًا واحدًا..."></textarea>
+                            </div>
+                            
+                            <!-- Controls and options -->
+                            <div class="flex justify-between mt-4">
+                                <div class="space-x-2 space-x-reverse flex">
+                                    <div class="tooltip">
+                                        <button id="clearInputBtn" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        <span class="tooltip-text">مسح البيانات</span>
+                                    </div>
+                                    <div class="tooltip">
+                                        <button id="exampleDataBtn" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded">
+                                            <i class="fas fa-vial"></i>
+                                        </button>
+                                        <span class="tooltip-text">استخدام بيانات تجريبية</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">إعدادات التحليل</h3>
+                            
+                            <!-- CSV Column Selection -->
+                            <div id="columnSelectionContainer" class="mb-4 hidden">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">اختر عمود النص المراد تحليله:</label>
+                                <select id="columnSelector" class="block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="">-- يرجى اختيار عمود --</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Analysis Options -->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">خيارات التحليل:</label>
+                                <div class="space-y-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" id="removeStopwords" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" checked>
+                                        <span class="mr-2 text-gray-700 dark:text-gray-300">إزالة الكلمات الشائعة (مثل: في، من، على)</span>
+                                    </label>
+                                    
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" id="normalizeText" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" checked>
+                                        <span class="mr-2 text-gray-700 dark:text-gray-300">توحيد أشكال الحروف العربية</span>
+                                    </label>
+                                    
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" id="sentimentAnalysis" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" checked>
+                                        <span class="mr-2 text-gray-700 dark:text-gray-300">تحليل المشاعر (إيجابي/سلبي)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Frequent Word Count -->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">عدد الكلمات الأكثر تكرارًا:</label>
+                                <input type="number" id="topWordsCount" min="5" max="50" value="20" class="block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            </div>
+                            
+                            <div class="flex justify-end mt-4">
+                                <button id="analyzeBtn" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center">
+                                    <i class="fas fa-chart-line ml-2"></i>
+                                    تحليل البيانات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preview Section -->
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm h-full">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-lg font-bold text-red-600 dark:text-red-400">معاينة البيانات</h3>
+                                <div id="dataCount" class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-full text-sm">
+                                    0 سجلات
+                                </div>
+                            </div>
+                            
+                            <div id="dataPreview" class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg text-gray-700 dark:text-gray-300 mb-3 relative min-h-[200px] overflow-y-auto">
+                                <div class="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                    <div class="text-center">
+                                        <i class="fas fa-file-alt text-2xl mb-2"></i>
+                                        <p>قم بتحميل ملف CSV أو أدخل بيانات لرؤية المعاينة هنا...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-medium text-gray-700 dark:text-gray-300">ملاحظات</h4>
+                                    <div class="tooltip mr-2">
+                                        <i class="fas fa-question-circle text-red-400 cursor-help"></i>
+                                        <div class="tooltip-text w-64 text-right">
+                                            معلومات مفيدة حول البيانات المستوردة
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-50 dark:bg-gray-800/50 p-2 rounded mb-3 text-xs text-gray-600 dark:text-gray-400">
+                                    <p><i class="fas fa-info-circle ml-1"></i> تأكد من أن البيانات تحتوي على نصوص باللغة العربية.</p>
+                                    <p><i class="fas fa-info-circle ml-1"></i> قد تستغرق عملية التحليل وقتًا أطول للملفات الكبيرة.</p>
+                                </div>
+                                
+                                <div id="dataStatistics" class="text-sm text-gray-700 dark:text-gray-300">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="p-2 bg-red-50 dark:bg-red-900/10 rounded">
+                                            <span class="text-gray-600 dark:text-gray-400">عدد السجلات:</span>
+                                            <span id="recordsCount" class="font-bold text-red-600 dark:text-red-400 mr-1">0</span>
+                                        </div>
+                                        <div class="p-2 bg-red-50 dark:bg-red-900/10 rounded">
+                                            <span class="text-gray-600 dark:text-gray-400">متوسط طول النص:</span>
+                                            <span id="avgLength" class="font-bold text-red-600 dark:text-red-400 mr-1">0</span>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">كلمة</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analysis Tab -->
+            <div id="analysis-tab" class="tab-content p-6 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Text Analysis Results -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">النتائج الإحصائية</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
+                                    <div class="text-4xl font-bold text-red-600 dark:text-red-400 mb-1" id="totalRecords">0</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">إجمالي السجلات</div>
+                                </div>
+                                
+                                <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
+                                    <div class="text-4xl font-bold text-red-600 dark:text-red-400 mb-1" id="totalWords">0</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">إجمالي الكلمات</div>
+                                </div>
+                                
+                                <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
+                                    <div class="text-4xl font-bold text-red-600 dark:text-red-400 mb-1" id="uniqueWords">0</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">الكلمات الفريدة</div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Top Words -->
+                                <div>
+                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">أكثر الكلمات تكرارًا</h4>
+                                    <div class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg max-h-96 overflow-y-auto">
+                                        <table class="w-full text-sm" id="topWordsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-right py-2 px-2 border-b border-gray-200 dark:border-gray-600">الكلمة</th>
+                                                    <th class="text-left py-2 px-2 border-b border-gray-200 dark:border-gray-600">التكرار</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-2 px-2 text-gray-500 dark:text-gray-400 text-center" colspan="2">لا توجد بيانات للعرض</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Similar Comments -->
+                                <div>
+                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">التعليقات المتكررة</h4>
+                                    <div class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg max-h-96 overflow-y-auto">
+                                        <table class="w-full text-sm" id="repeatedCommentsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-right py-2 px-2 border-b border-gray-200 dark:border-gray-600">التعليق</th>
+                                                    <th class="text-left py-2 px-2 border-b border-gray-200 dark:border-gray-600">التكرار</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="py-2 px-2 text-gray-500 dark:text-gray-400 text-center" colspan="2">لا توجد بيانات للعرض</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Word Cloud Visualization -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">سحابة الكلمات</h3>
+                            <div class="chart-container">
+                                <canvas id="wordCloudChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sentiment Analysis -->
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">تحليل المشاعر</h3>
+                            
+                            <div class="chart-container mb-4">
+                                <canvas id="sentimentChart"></canvas>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
+                                    <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1" id="positiveCount">0</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">تعليقات إيجابية</div>
+                                </div>
+                                
+                                <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg text-center">
+                                    <div class="text-2xl font-bold text-red-600 dark:text-red-400 mb-1" id="negativeCount">0</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">تعليقات سلبية</div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">أكثر العبارات السلبية</h4>
+                            <div class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg max-h-48 overflow-y-auto">
+                                <ul class="space-y-1 text-sm" id="negativeExpressionsList">
+                                    <li class="text-gray-500 dark:text-gray-400 text-center">لا توجد بيانات للعرض</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Length Distribution -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">توزيع طول التعليقات</h3>
+                            
+                            <div class="chart-container">
+                                <canvas id="lengthDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Export Controls -->
+                <div class="flex justify-end mt-6">
+                    <button id="exportCSVBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                        <i class="fas fa-file-csv ml-2"></i>تصدير كملف CSV
+                    </button>
+                    <button id="exportPDFBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center mr-3">
+                        <i class="fas fa-file-pdf ml-2"></i>تصدير كملف PDF
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Themes Tab -->
+            <div id="themes-tab" class="tab-content p-6 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Theme Distribution -->
+                    <div class="lg:col-span-1 space-y-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">توزيع المواضيع</h3>
+                            
+                            <div class="chart-container mb-4">
+                                <canvas id="themeDistributionChart"></canvas>
+                            </div>
+                            
+                            <div class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg">
+                                <table class="w-full text-sm" id="themeDistributionTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-right py-2 px-2 border-b border-gray-200 dark:border-gray-600">الموضوع</th>
+                                            <th class="text-left py-2 px-2 border-b border-gray-200 dark:border-gray-600">النسبة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-2 px-2 text-gray-500 dark:text-gray-400 text-center" colspan="2">لا توجد بيانات للعرض</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Theme Details -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">تفاصيل المواضيع</h3>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 dark:text-gray-300 mb-2">اختر موضوعًا للتفاصيل:</label>
+                                <select id="themeSelector" class="block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                    <option value="">-- اختر موضوعًا --</option>
+                                    <option value="السعر">السعر</option>
+                                    <option value="الخدمة">الخدمة</option>
+                                    <option value="السرعة">السرعة</option>
+                                    <option value="الجودة">الجودة</option>
+                                </select>
+                            </div>
+                            
+                            <div id="themeDetails" class="bg-gray-100 dark:bg-gray-700/50 p-4 rounded-lg mb-4 min-h-[100px]">
+                                <div class="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
+                                    <p>اختر موضوعًا لعرض التفاصيل</p>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">أمثلة على التعليقات</h4>
+                            <div class="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg max-h-80 overflow-y-auto">
+                                <table class="analysis-table" id="themeCommentsTable">
+                                    <thead>
+                                        <tr>
+                                            <th width="70%">التعليق</th>
+                                            <th width="15%">الطول</th>
+                                            <th width="15%">المشاعر</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-2 px-2 text-gray-500 dark:text-gray-400 text-center" colspan="3">لا توجد بيانات للعرض</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Keyword Association -->
+                        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">الكلمات المرتبطة بالمواضيع</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">كلمات تصف السعر</h4>
+                                    <div class="bg-red-50 dark:bg-red-900/10 p-3 rounded-lg">
+                                        <div class="flex flex-wrap gap-2" id="priceKeywords">
+                                            <span class="px-2 py-1 bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300 rounded text-sm">غالي</span>
+                                            <span class="px-2 py-1 bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300 rounded text-sm">رخيص</span>
+                                            <span class="px-2 py-1 bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300 rounded text-sm">مناسب</span>
+                                            <span class="px-2 py-1 bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300 rounded text-sm">مكلف</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">كلمات تصف الخدمة</h4>
+                                    <div class="bg-blue-50 dark:bg-blue-900/10 p-3 rounded-lg">
+                                        <div class="flex flex-wrap gap-2" id="serviceKeywords">
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-800/30 text-blue-700 dark:text-blue-300 rounded text-sm">ممتازة</span>
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-800/30 text-blue-700 dark:text-blue-300 rounded text-sm">سيئة</span>
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-800/30 text-blue-700 dark:text-blue-300 rounded text-sm">احترافية</span>
+                                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-800/30 text-blue-700 dark:text-blue-300 rounded text-sm">ضعيفة</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <div class="max-w-4xl mx-auto space-y-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                        <h2 class="text-xl font-bold text-red-600 dark:text-red-400 mb-4">عن أداة تحليل النصوص المفتوحة</h2>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            أداة تحليل النصوص المفتوحة هي أداة متكاملة تساعدك على تحليل واستخراج المعلومات والإحصاءات من حقول النصوص المفتوحة مثل التعليقات والملاحظات وأسباب الرفض ورسائل العملاء. 
+                            تم تطوير هذه الأداة لتبسيط عملية استخراج المعلومات المفيدة من البيانات النصية للمديرين والمحللين وكل من يتعامل مع بيانات المستخدمين.
+                        </p>
+                        
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200 mt-6 mb-3">ميزات الأداة</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                            <li>تحليل النصوص العربية من ملفات CSV أو الإدخال اليدوي</li>
+                            <li>استخراج الإحصاءات الأساسية للنصوص (العدد، المتوسط، التكرار)</li>
+                            <li>تصنيف التعليقات حسب المواضيع الرئيسية</li>
+                            <li>تحليل النصوص العربية من ملفات CSV أو الإدخال اليدوي</li>
+                            <li>استخراج الإحصاءات الأساسية للنصوص (العدد، المتوسط، التكرار)</li>
+                            <li>تصنيف التعليقات حسب المواضيع الرئيسية</li>
+                            <li>تحليل المشاعر وكشف التعليقات السلبية</li>
+                            <li>عرض النتائج بشكل مرئي باستخدام الرسوم البيانية</li>
+                            <li>تصدير البيانات المحللة إلى ملفات CSV أو PDF</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-bold text-red-600 dark:text-red-400 mb-4">كيفية استخدام الأداة</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="border-r-4 border-red-500 dark:border-red-400 pr-4">
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2">استيراد البيانات</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    استخدم تبويب "استيراد البيانات" لتحميل ملف CSV أو إدخال البيانات يدويًا.
+                                    بعد ذلك، اختر عمود النص المراد تحليله إذا كنت قد قمت بتحميل ملف CSV.
+                                </p>
+                            </div>
+                            
+                            <div class="border-r-4 border-green-500 dark:border-green-400 pr-4">
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2">تحليل النصوص</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    في تبويب "تحليل النصوص"، يمكنك رؤية الإحصاءات العامة والكلمات الأكثر شيوعًا والتعليقات المتكررة.
+                                    كما يمكنك مشاهدة سحابة الكلمات وتوزيع طول التعليقات.
+                                </p>
+                            </div>
+                            
+                            <div class="border-r-4 border-purple-500 dark:border-purple-400 pr-4">
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2">التصنيف الموضوعي</h4>
+                                <p class="text-gray-700 dark:text-gray-300">
+                                    تبويب "التصنيف الموضوعي" يعرض توزيع التعليقات حسب المواضيع الرئيسية.
+                                    يمكنك اختيار موضوع معين لمشاهدة التفاصيل والأمثلة على التعليقات المرتبطة به.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-bold text-red-600 dark:text-red-400 mb-4">الفئات الموضوعية</h3>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-right text-sm text-gray-700 dark:text-gray-300">
+                                <thead class="bg-gray-100 dark:bg-gray-700 text-xs">
+                                    <tr>
+                                        <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">الفئة</th>
+                                        <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">الكلمات المفتاحية</th>
+                                        <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">مثال</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600 font-medium text-red-600 dark:text-red-400">السعر</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">السعر، غالي، رخيص، تكلفة، مرتفع</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">"السعر غالي جدًا مقارنة بالخدمة المقدمة"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600 font-medium text-red-600 dark:text-red-400">الخدمة</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">الخدمة، الموظف، تعامل، استقبال</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">"كان تعامل الموظفين ممتازًا"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600 font-medium text-red-600 dark:text-red-400">السرعة</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">بطيء، تأخير، انتظار، تحميل</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">"التطبيق بطيء جدًا في تحميل البيانات"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600 font-medium text-red-600 dark:text-red-400">الجودة</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">جودة، ممتاز، سيء، أفضل، أسوأ</td>
+                                        <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-600">"جودة المنتج أقل من المتوقع"</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-bold text-red-600 dark:text-red-400 mb-4">التكنولوجيات المستخدمة</h3>
+                        
+                        <ul class="space-y-3">
+                            <li class="flex items-center">
+                                <i class="fas fa-file-csv text-red-500 dark:text-red-400 ml-2"></i>
+                                <span class="text-gray-700 dark:text-gray-300"><strong>PapaParse:</strong> لتحليل ملفات CSV</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-palette text-red-500 dark:text-red-400 ml-2"></i>
+                                <span class="text-gray-700 dark:text-gray-300"><strong>TailwindCSS:</strong> لتصميم واجهة المستخدم</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-chart-bar text-red-500 dark:text-red-400 ml-2"></i>
+                                <span class="text-gray-700 dark:text-gray-300"><strong>Chart.js:</strong> لإنشاء الرسوم البيانية</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-cloud text-red-500 dark:text-red-400 ml-2"></i>
+                                <span class="text-gray-700 dark:text-gray-300"><strong>D3-Cloud:</strong> لإنشاء سحابة الكلمات</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm pb-8">        
+            <p>© <span id="currentYear">2023</span> محلل النصوص المفتوحة - جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <!-- Custom Dialogs -->
+    <!-- Save Report Modal -->
+    <div id="saveReportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md mx-4 relative">
+            <button id="closeSaveReportModal" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">حفظ التقرير</h3>
+            
+            <form id="saveReportForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 mb-2">عنوان التقرير:</label>
+                    <input type="text" id="reportTitle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل عنوانًا للتقرير...">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 mb-2">وصف التقرير:</label>
+                    <textarea id="reportDescription" rows="3" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل وصفًا مختصرًا للتقرير..."></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-300 mb-2">تضمين:</label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="includeWordCloud" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" checked>
+                            <span class="mr-2 text-gray-700 dark:text-gray-300">سحابة الكلمات</span>
+                        </label>
+                        
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="includeThemeAnalysis" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" checked>
+                            <span class="mr-2 text-gray-700 dark:text-gray-300">تحليل المواضيع</span>
+                        </label>
+                        
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" id="includeSentimentAnalysis" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" checked>
+                            <span class="mr-2 text-gray-700 dark:text-gray-300">تحليل المشاعر</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button type="button" id="cancelSaveReport" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                        تصدير
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Component -->
+    <div id="toast" class="fixed bottom-4 right-4 px-4 py-2 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-20 z-50 hidden"></div>
+
+    <!-- Script tag placeholder - we'll create the JavaScript in a separate file -->
+    <script src="js/text-analyzer.js"></script>
+</body>
+</html>
