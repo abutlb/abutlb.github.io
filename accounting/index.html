@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - الصفحة الرئيسية</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-l from-blue-900 to-blue-700 text-white">
+    <div class="container mx-auto px-6 py-16 md:py-24">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 md:pr-8">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">المحاسبة من الصفر للمطورين</h1>
+          <p class="text-xl md:text-2xl mb-8 text-blue-100">تعلم أساسيات المحاسبة بطريقة مبسطة وعملية مصممة خصيصًا للمبرمجين والمطورين</p>
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 sm:space-x-reverse">
+            <a href="lesson1.html" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+              <i class="fas fa-play-circle ml-2"></i>
+              ابدأ التعلم الآن
+            </a>
+            <a href="#lessons" class="inline-flex justify-center items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <i class="fas fa-list-ol ml-2"></i>
+              استعرض الدروس
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2 mt-10 md:mt-0">
+          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="المحاسبة للمطورين" class="rounded-lg shadow-xl">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">لماذا هذه الدورة مهمة للمطورين؟</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="p-6 border border-gray-200 rounded-lg text-center hover:shadow-lg transition-shadow">
+          <div class="bg-blue-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-code text-blue-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">مصممة للمبرمجين</h3>
+          <p class="text-gray-600">شرح المفاهيم المحاسبية بلغة وأمثلة يفهمها المطورون، مع ربطها بالمفاهيم البرمجية المألوفة</p>
+        </div>
+        
+        <div class="p-6 border border-gray-200 rounded-lg text-center hover:shadow-lg transition-shadow">
+          <div class="bg-green-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-project-diagram text-green-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">بناء أنظمة مالية</h3>
+          <p class="text-gray-600">تساعدك على فهم كيفية تصميم وبناء البرمجيات المالية والمحاسبية بشكل صحيح من الأساس</p>
+        </div>
+        
+        <div class="p-6 border border-gray-200 rounded-lg text-center hover:shadow-lg transition-shadow">
+          <div class="bg-purple-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-chart-line text-purple-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">تطبيقات عملية</h3>
+          <p class="text-gray-600">أمثلة واقعية وتطبيقات عملية مركزة على المنظمات غير الربحية والمشاريع الناشئة</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Course Structure Section -->
+  <section id="lessons" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">محتوى الدورة</h2>
+      <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">تتكون الدورة من 12 درسًا تغطي أساسيات المحاسبة بشكل تدريجي، بدءًا من المفاهيم الأساسية وصولاً إلى التطبيقات العملية</p>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Lesson 1 -->
+        <a href="lesson1.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">١</span>
+              <h3 class="text-white font-bold text-lg">مقدمة المحاسبة المالية</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">تعريف المحاسبة، أهدافها، وأنواعها المختلفة، مع التركيز على فهم دور المحاسبة في المنظمات.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">What is Accounting?</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 2 -->
+        <a href="lesson2.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٢</span>
+              <h3 class="text-white font-bold text-lg">المعادلة المحاسبية الأساسية</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">فهم العلاقة بين الأصول والخصوم وصافي الأصول، وكيف تشكل هذه العناصر أساس كل نظام محاسبي.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Accounting Equation</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 3 -->
+        <a href="lesson3.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٣</span>
+              <h3 class="text-white font-bold text-lg">الحسابات المالية وتصنيفاتها</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">تعرف على دليل الحسابات وكيفية تصنيف الحسابات المالية وتنظيمها وفق فئات منطقية.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Chart of Accounts</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 4 -->
+        <a href="lesson4.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٤</span>
+              <h3 class="text-white font-bold text-lg">القيد المحاسبي وطريقة القيد المزدوج</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">تعلم أساسيات القيد المزدوج ومفهوم الجانب المدين والدائن في القيود المحاسبية.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Double-Entry Journal Entry</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 5 -->
+        <a href="lesson5.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٥</span>
+              <h3 class="text-white font-bold text-lg">دفتر اليومية ودفتر الأستاذ</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">فهم الفرق بين دفاتر اليومية والأستاذ وعملية تسجيل وترحيل القيود المحاسبية.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Journal vs General Ledger</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 6 -->
+        <a href="lesson6.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٦</span>
+              <h3 class="text-white font-bold text-lg">التقارير المالية الأساسية</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">تعرف على التقارير المالية الأساسية: الميزانية، قائمة الأنشطة، وقائمة التدفقات النقدية.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Financial Reports</span>
+              <span class="text-sm text-gray-500">Financial Reports</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Lesson 7 -->
+        <a href="lesson7.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٧</span>
+              <h3 class="text-white font-bold text-lg">التبرعات والمنح</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">كيفية تسجيل التبرعات والمنح المختلفة ومعالجتها محاسبيًا في المنظمات غير الربحية.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Donations & Grants</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 8 -->
+        <a href="lesson8.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٨</span>
+              <h3 class="text-white font-bold text-lg">تسجيل المصاريف والمشتريات</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">فهم كيفية تسجيل وتصنيف المصاريف المختلفة وعمليات الشراء في النظام المحاسبي.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Expenses & Procurement</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 9 -->
+        <a href="lesson9.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">٩</span>
+              <h3 class="text-white font-bold text-lg">بناء دليل حسابات لمنظمة غير ربحية</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">تعلم كيفية تصميم وإنشاء دليل حسابات مخصص للمنظمات غير الربحية بطريقة عملية.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Nonprofit COA Design</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 10 -->
+        <a href="lesson10.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">١٠</span>
+              <h3 class="text-white font-bold text-lg">الترحيل والإقفال</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">فهم عمليات الترحيل وإقفال الحسابات في نهاية الفترة المالية وإعداد الحسابات للفترة الجديدة.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Posting & Closing Entries</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 11 -->
+        <a href="lesson11.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">١١</span>
+              <h3 class="text-white font-bold text-lg">الموازنة التقديرية مقابل الفعلية</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">كيفية إعداد الموازنات التقديرية ومقارنتها بالنتائج الفعلية وتحليل الانحرافات وأسبابها.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Budget vs Actual</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- Lesson 12 -->
+        <a href="lesson12.html" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div class="p-1 bg-blue-600">
+            <div class="flex items-center p-3">
+              <span class="bg-white text-blue-600 text-lg rounded-full h-8 w-8 flex items-center justify-center ml-3 font-bold">١٢</span>
+              <h3 class="text-white font-bold text-lg">مراجعة واختبار عملي</h3>
+            </div>
+          </div>
+          <div class="p-5">
+            <p class="text-gray-600 mb-3">مراجعة شاملة للمفاهيم الأساسية مع مشروع عملي تطبيقي يجمع كل ما تم تعلمه في الدورة.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">Practical Review & Mini Project</span>
+              <span class="text-blue-600"><i class="fas fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote Section -->
+  <section class="py-16 bg-blue-900 text-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-3xl mx-auto text-center">
+        <i class="fas fa-quote-right text-4xl text-blue-300 mb-6"></i>
+        <h3 class="text-2xl md:text-3xl font-bold mb-6">"تعلم المحاسبة ليس مجرد فهم الأرقام، بل هو فهم لغة الأعمال التي تمكنك من بناء برمجيات مالية متكاملة."</h3>
+        <p class="text-xl text-blue-200">- من دورة المحاسبة من الصفر للمطورين</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Target Audience Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">هذه الدورة مناسبة لك إذا كنت</h2>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="flex items-start p-6 bg-gray-50 rounded-lg">
+          <div class="bg-green-100 p-3 rounded-full mt-1 ml-4">
+            <i class="fas fa-laptop-code text-green-600"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold mb-2 text-gray-800">مطور برمجيات</h3>
+            <p class="text-gray-600">تعمل على بناء أنظمة إدارة مالية أو محاسبية وتريد فهم الأسس المحاسبية الصحيحة</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start p-6 bg-gray-50 rounded-lg">
+          <div class="bg-blue-100 p-3 rounded-full mt-1 ml-4">
+            <i class="fas fa-database text-blue-600"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold mb-2 text-gray-800">مهندس بيانات</h3>
+            <p class="text-gray-600">تتعامل مع بيانات مالية وتحتاج لفهم العلاقات والمفاهيم الأساسية للنظم المحاسبية</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start p-6 bg-gray-50 rounded-lg">
+          <div class="bg-purple-100 p-3 rounded-full mt-1 ml-4">
+            <i class="fas fa-lightbulb text-purple-600"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold mb-2 text-gray-800">رائد أعمال تقني</h3>
+            <p class="text-gray-600">تدير شركة ناشئة وتريد فهم الجوانب المالية والمحاسبية لإدارة أعمالك بشكل أفضل</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start p-6 bg-gray-50 rounded-lg">
+          <div class="bg-red-100 p-3 rounded-full mt-1 ml-4">
+            <i class="fas fa-users text-red-600"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold mb-2 text-gray-800">مدير منظمة غير ربحية</h3>
+            <p class="text-gray-600">تدير منظمة غير ربحية وتريد تحسين فهمك للنظم المالية والمحاسبية في هذا القطاع</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800">مستعد للبدء في تعلم المحاسبة؟</h2>
+      <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">انضم إلى الآلاف من المطورين الذين طوروا مهاراتهم المالية والمحاسبية لبناء أنظمة أفضل</p>
+      <a href="lesson1.html" class="inline-flex justify-center items-center px-8 py-4 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        ابدأ الدرس الأول مجانًا
+        <i class="fas fa-arrow-left mr-2"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between">
+        <div class="mb-8 md:mb-0">
+          <h3 class="text-2xl font-bold mb-4">المحاسبة من الصفر للمطورين</h3>
+          <p class="text-gray-400 max-w-md">دورة شاملة لتعلم أساسيات المحاسبة بتركيز خاص على المنظمات غير الربحية، مصممة خصيصًا للمطورين وبلغة يفهمونها.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-r-4 border-blue-500 pr-3">روابط سريعة</h4>
+          <nav>
+            <ul class="space-y-2">
+              <li><a href="lesson1.html" class="text-gray-400 hover:text-white transition">الدرس الأول: مقدمة المحاسبة</a></li>
+              <li><a href="lesson2.html" class="text-gray-400 hover:text-white transition">الدرس الثاني: المعادلة المحاسبية</a></li>
+              <li><a href="#lessons" class="text-gray-400 hover:text-white transition">جميع الدروس</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">الأسئلة الشائعة</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">اتصل بنا</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-700 pt-8 mt-8 text-center text-gray-400">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <button id="backToTop" class="fixed bottom-6 left-6 bg-blue-600 text-white rounded-full p-3 hidden shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // Back to top button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('hidden');
+      } else {
+        backToTopButton.classList.add('hidden');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const target = document.querySelector(targetId);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

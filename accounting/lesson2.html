@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - المعادلة المحاسبية</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:relative top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-2">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢</span>
+              <div>
+                <span class="block">مقدمة المحاسبة المالية</span>
+                <span class="text-xs text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢</span>
+              <div>
+                <span class="block">المعادلة المحاسبية الأساسية</span>
+                <span class="text-xs text-blue-200">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٣</span>
+              <div>
+                <span class="block">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-xs text-blue-300">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٤</span>
+              <div>
+                <span class="block">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-xs text-blue-300">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٥</span>
+              <div>
+                <span class="block">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-xs text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٦</span>
+              <div>
+                <span class="block">التقارير المالية الأساسية</span>
+                <span class="text-xs text-blue-300">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٧</span>
+              <div>
+                <span class="block">التبرعات والمنح</span>
+                <span class="text-xs text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٨</span>
+              <div>
+                <span class="block">تسجيل المصاريف والمشتريات</span>
+                <span class="text-xs text-blue-300">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٩</span>
+              <div>
+                <span class="block">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-xs text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson10.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢٠</span>
+              <div>
+                <span class="block">الترحيل والإقفال</span>
+                <span class="text-xs text-blue-300">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢١</span>
+              <div>
+                <span class="block">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-xs text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson12.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢٢</span>
+              <div>
+                <span class="block">مراجعة واختبار عملي</span>
+                <span class="text-xs text-blue-300">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ٢</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson2.html" class="text-blue-600 hover:text-blue-800" aria-current="page">المعادلة المحاسبية الأساسية</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">المعادلة المحاسبية الأساسية</h1>
+        <p class="text-gray-600 mt-2">الأصول، الخصوم، صافي الأصول / حقوق الملكية</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 16.6%"></div>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- First Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-blue-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-info-circle ml-3"></i>
+                ما هي المعادلة المحاسبية؟
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                المعادلة المحاسبية هي الأساس الذي تقوم عليه جميع نظم المحاسبة المالية. تمثل هذه المعادلة العلاقة بين موارد المنشأة (الأصول) والالتزامات (الخصوم) وحقوق الملكية أو صافي الأصول.
+              </p>
+              <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+                <p class="text-xl font-bold text-center mb-3">الأصول = الخصوم + صافي الأصول</p>
+                <p class="text-gray-500 text-center"><em>Assets = Liabilities + Net Assets (Equity)</em></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-list ml-3"></i>
+                عناصر المعادلة المحاسبية
+              </h2>
+            </div>
+            <div class="p-6">
+              <ul class="space-y-6">
+                <li class="flex items-start">
+                  <div class="bg-green-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-landmark text-green-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-1">الأصول (Assets)</h3>
+                    <p class="text-gray-600">هي موارد المنشأة الاقتصادية التي تمتلكها أو تسيطر عليها نتيجة أحداث سابقة ويتوقع أن تتدفق منها منافع اقتصادية مستقبلية. تشمل الأصول:</p>
+                    <ul class="list-disc list-inside mt-2 text-gray-600 pr-4">
+                      <li>النقدية (Cash)</li>
+                      <li>المخزون (Inventory)</li>
+                      <li>المعدات والآلات (Equipment)</li>
+                      <li>المباني والعقارات (Real Estate)</li>
+                      <li>الذمم المدينة (Accounts Receivable)</li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <div class="bg-red-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-file-invoice-dollar text-red-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-1">الخصوم (Liabilities)</h3>
+                    <p class="text-gray-600">هي التزامات حالية على المنشأة ناشئة عن أحداث سابقة، ومن المتوقع أن يترتب على تسويتها تدفق خارج لموارد المنشأة. تشمل الخصوم:</p>
+                    <ul class="list-disc list-inside mt-2 text-gray-600 pr-4">
+                      <li>القروض (Loans)</li>
+                      <li>الذمم الدائنة (Accounts Payable)</li>
+                      <li>الرواتب المستحقة (Accrued Salaries)</li>
+                      <li>الإيرادات المقدمة (Unearned Revenue)</li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <div class="bg-blue-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-balance-scale text-blue-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-1">صافي الأصول (Net Assets / Equity)</h3>
+                    <p class="text-gray-600">تمثل الفرق بين إجمالي الأصول والخصوم، وهي حق الملكية المتبقي في أصول المنشأة بعد خصم جميع التزاماتها. في المنظمات غير الربحية، تُسمى "صافي الأصول" بينما في الشركات الربحية تُسمى "حقوق الملكية".</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-purple-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-calculator ml-3"></i>
+                حاسبة المعادلة المحاسبية
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="mb-4 text-gray-700">
+                جرّب بنفسك! أدخل قيم الأصول والخصوم وسيتم حساب صافي الأصول تلقائيًا.
+              </p>
+              
+              <div class="space-y-4">
+                <div>
+                  <label for="assets" class="block text-gray-700 font-medium mb-2">قيمة الأصول (Assets):</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <i class="fas fa-coins text-gray-400"></i>
+                    </div>
+                    <input type="number" id="assets" 
+                           class="block w-full pr-10 p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                           value="100000">
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="liabilities" class="block text-gray-700 font-medium mb-2">قيمة الخصوم (Liabilities):</label>
+                  <div class="relative">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <i class="fas fa-hand-holding-usd text-gray-400"></i>
+                    </div>
+                    <input type="number" id="liabilities" 
+                           class="block w-full pr-10 p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                           value="40000">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-6">
+                <div class="p-5 bg-blue-50 rounded-lg border-2 border-blue-200">
+                  <h3 class="text-center text-lg font-medium text-gray-700 mb-3">النتيجة:</h3>
+                  <div id="netAssetsResult" class="text-center text-2xl font-bold text-blue-800">
+                    صافي الأصول = 60,000 ريال
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-amber-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-lightbulb ml-3"></i>
+                أمثلة توضيحية
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="space-y-4">
+                <div class="border-r-4 border-amber-500 p-4 bg-amber-50 rounded">
+                  <h3 class="font-bold text-lg text-gray-800 mb-2">مثال ٢: شراء أثاث بقيمة 5,000 ريال بالائتمان:</h3>
+                  <p class="text-gray-700">شراء أثاث بقيمة 5,000 ريال بالائتمان:</p>
+                  <ul class="mt-2 space-y-2 text-gray-600">
+                    <li><i class="fas fa-plus ml-2 text-green-600"></i> زيادة في الأصول (أثاث): 5,000 ريال</li>
+                    <li><i class="fas fa-plus ml-2 text-green-600"></i> زيادة في الخصوم (ذمم دائنة): 5,000 ريال</li>
+                    <li><i class="fas fa-equals ml-2 text-blue-600"></i> المعادلة متوازنة: الأصول زادت والخصوم زادت بنفس القيمة</li>
+                  </ul>
+                </div>
+                
+                <div class="border-r-4 border-amber-500 p-4 bg-amber-50 rounded">
+                  <h3 class="font-bold text-lg text-gray-800 mb-2">مثال ٣: استلام تبرع نقدي بقيمة 20,000 ريال:</h3>
+                  <p class="text-gray-700">استلام تبرع نقدي بقيمة 20,000 ريال:</p>
+                  <ul class="mt-2 space-y-2 text-gray-600">
+                    <li><i class="fas fa-plus ml-2 text-green-600"></i> زيادة في الأصول (نقدية): 20,000 ريال</li>
+                    <li><i class="fas fa-plus ml-2 text-green-600"></i> زيادة في صافي الأصول: 20,000 ريال</li>
+                    <li><i class="fas fa-equals ml-2 text-blue-600"></i> المعادلة متوازنة: الأصول زادت وصافي الأصول زادت بنفس القيمة</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Bottom Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="lesson1.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الدرس السابق: مقدمة المحاسبة المالية
+        </a>
+        <a href="lesson3.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          الدرس التالي: الحسابات المالية وتصنيفاتها
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+    
+    // Calculator functionality
+    const assetsInput = document.getElementById('assets');
+    const liabilitiesInput = document.getElementById('liabilities');
+    const resultDiv = document.getElementById('netAssetsResult');
+    
+    function calculateNetAssets() {
+      const assets = parseFloat(assetsInput.value) || 0;
+      const liabilities = parseFloat(liabilitiesInput.value) || 0;
+      const netAssets = assets - liabilities;
+      
+      // Format with thousand separator
+      const formattedNetAssets = new Intl.NumberFormat('ar-SA').format(netAssets);
+      resultDiv.textContent = `صافي الأصول = ${formattedNetAssets} ريال`;
+      
+      // Change color based on value
+      if (netAssets > 0) {
+        resultDiv.classList.remove('text-red-800');
+        resultDiv.classList.add('text-blue-800');
+      } else if (netAssets < 0) {
+        resultDiv.classList.remove('text-blue-800');
+        resultDiv.classList.add('text-red-800');
+      }
+    }
+    
+    // Calculate on page load
+    calculateNetAssets();
+    
+    // Calculate when inputs change
+    assetsInput.addEventListener('input', calculateNetAssets);
+    liabilitiesInput.addEventListener('input', calculateNetAssets);
+  </script>
+</body>
+</html>

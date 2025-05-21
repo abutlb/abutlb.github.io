@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - القيد المزدوج</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:sticky top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-3 border-b border-blue-600 mb-3">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-1">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١</span>
+              <div>
+                <span class="block text-sm">مقدمة المحاسبة المالية</span>
+                <span class="text-[10px] text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson2.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٢</span>
+              <div>
+                <span class="block text-sm">المعادلة المحاسبية الأساسية</span>
+                <span class="text-[10px] text-blue-300">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson3.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٣</span>
+              <div>
+                <span class="block text-sm">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-[10px] text-blue-300">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson4.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-white text-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٤</span>
+              <div>
+                <span class="block text-sm">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-[10px] text-blue-200">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٥</span>
+              <div>
+                <span class="block text-sm">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-[10px] text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson6.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٦</span>
+              <div>
+                <span class="block text-sm">التقارير المالية الأساسية</span>
+                <span class="text-[10px] text-blue-300">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٧</span>
+              <div>
+                <span class="block text-sm">التبرعات والمنح</span>
+                <span class="text-[10px] text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson8.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٨</span>
+              <div>
+                <span class="block text-sm">تسجيل المصاريف والمشتريات</span>
+                <span class="text-[10px] text-blue-300">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٩</span>
+              <div>
+                <span class="block text-sm">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-[10px] text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson10.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١٠</span>
+              <div>
+                <span class="block text-sm">الترحيل والإقفال</span>
+                <span class="text-[10px] text-blue-300">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١١</span>
+              <div>
+                <span class="block text-sm">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-[10px] text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson12.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١٢</span>
+              <div>
+                <span class="block text-sm">مراجعة واختبار عملي</span>
+                <span class="text-[10px] text-blue-300">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-4 pt-3 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ٤</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson4.html" class="text-blue-600 hover:text-blue-800" aria-current="page">القيد المحاسبي المزدوج</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">القيد المحاسبي المزدوج</h1>
+        <p class="text-gray-600 mt-2">أساس النظام المحاسبي وكيفية تسجيل المعاملات المالية</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 33.3%"></div>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- First Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-blue-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-balance-scale ml-3"></i>
+                ما هو القيد المزدوج؟
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                القيد المزدوج هو أساس النظام المحاسبي، وينص على أنه لكل عملية مالية يجب أن تُسجّل في حسابين على الأقل:
+              </p>
+
+              <div class="flex flex-col md:flex-row gap-4 mb-5">
+                <div class="flex-1 bg-blue-50 p-4 rounded-lg border-r-4 border-blue-500 flex items-center">
+                  <div class="h-10 w-10 bg-blue-500 rounded-full flex items-center justify-center ml-3">
+                    <i class="fas fa-arrow-down text-white"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">الطرف المدين</h3>
+                    <p class="text-gray-600">Debit</p>
+                  </div>
+                </div>
+                <div class="flex-1 bg-blue-50 p-4 rounded-lg border-r-4 border-blue-500 flex items-center">
+                  <div class="h-10 w-10 bg-blue-500 rounded-full flex items-center justify-center ml-3">
+                    <i class="fas fa-arrow-up text-white"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">الطرف الدائن</h3>
+                    <p class="text-gray-600">Credit</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-yellow-50 border-r-4 border-yellow-500 p-4 rounded">
+                <p class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-exclamation-circle text-yellow-500 ml-2"></i>
+                  قاعدة أساسية:
+                </p>
+                <p class="text-gray-700">
+                  يجب أن يكون مجموع القيم في الطرف المدين مساويًا تمامًا لمجموع الطرف الدائن.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-money-bill-wave ml-3"></i>
+                مثال عملي: استلام تبرع نقدي
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3">عند استلام تبرع نقدي بمبلغ 10,000 ريال:</h3>
+                
+                <div class="bg-white border rounded-lg overflow-hidden">
+                  <div class="bg-gray-50 px-4 py-2 border-b">
+                    <p class="font-bold text-gray-700">قيد محاسبي:</p>
+                  </div>
+                  <div class="p-4">
+                    <div class="overflow-x-auto">
+                      <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                          <tr class="bg-gray-50">
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحساب</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">مدين</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">دائن</th>
+                          </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-700">البنك</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-700">10,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-700"></td>
+                          </tr>
+                          <tr class="bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-700">إيرادات التبرعات</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-700"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-700">10,000</td>
+                          </tr>
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-700">المجموع</td>
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-700 border-t">10,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-700 border-t">10,000</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-green-50 p-4 rounded-lg border-r-4 border-green-500">
+                <p class="text-gray-700">
+                  <strong>شرح القيد:</strong> بهذا القيد نُسجّل دخول المال للبنك وزيادة الإيراد بالتوازي.
+                </p>
+                <ul class="mt-2 list-disc list-inside text-gray-700 mr-4">
+                  <li>زيادة في أصل (البنك) = جانب مدين</li>
+                  <li>زيادة في إيراد (التبرعات) = جانب دائن</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-red-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-exclamation-triangle ml-3"></i>
+                ماذا لو لم يتوازن القيد؟
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                إذا لم يتساو المدين مع الدائن، سيؤدي ذلك إلى مشاكل كبيرة في النظام المحاسبي:
+              </p>
+              
+              <div class="space-y-3">
+                <div class="flex items-start">
+                  <div class="bg-red-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-chart-line text-red-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">أخطاء في التقارير المالية</h3>
+                    <p class="text-gray-600 text-sm">ستظهر فروقات في الميزانية وعدم توازن في قائمة المركز المالي</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="bg-red-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-user-shield text-red-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">فقدان الثقة في النظام</h3>
+                    <p class="text-gray-600 text-sm">ستشك الإدارة والمراجعون في دقة البيانات المالية</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="bg-red-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-search text-red-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">صعوبة تتبع الحسابات</h3>
+                    <p class="text-gray-600 text-sm">يصبح من الصعب تتبع مصدر الخطأ كلما زادت المعاملات المالية</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="bg-red-100 rounded-full p-2 mt-1 ml-3">
+                    <i class="fas fa-gavel text-red-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">مشاكل قانونية أو رقابية</h3>
+                    <p class="text-gray-600 text-sm">قد تواجه المنظمة مساءلة من الجهات الرقابية بسبب عدم دقة التقارير</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mt-5">
+                <p class="text-center font-bold text-gray-800">
+                  <i class="fas fa-lightbulb text-yellow-500 ml-2"></i>
+                  نصيحة للمبرمجين:
+                </p>
+                <p class="text-gray-700 text-center">
+                  دائمًا قم ببرمجة آلية التحقق من توازن القيود في أي نظام محاسبي.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-purple-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-book ml-3"></i>
+                قاعدة ذهبية لزيادة الفهم
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-5">
+                لفهم متى نستخدم المدين ومتى نستخدم الدائن، إليك القاعدة الذهبية:
+              </p>
+              
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="px-4 py-3 border text-right">نوع الحساب</th>
+                      <th class="px-4 py-3 border text-right bg-green-50">يزيد في</th>
+                      <th class="px-4 py-3 border text-right bg-red-50">ينقص في</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-3 font-bold text-blue-700">الأصول (Assets)</td>
+                      <td class="border px-4 py-3 bg-green-50">مدين</td>
+                      <td class="border px-4 py-3 bg-red-50">دائن</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                      <td class="border px-4 py-3 font-bold text-red-700">الخصوم (Liabilities)</td>
+                      <td class="border px-4 py-3 bg-green-50">دائن</td>
+                      <td class="border px-4 py-3 bg-red-50">مدين</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-3 font-bold text-purple-700">صافي الأصول</td>
+                      <td class="border px-4 py-3 bg-green-50">دائن</td>
+                      <td class="border px-4 py-3 bg-red-50">مدين</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                      <td class="border px-4 py-3 font-bold text-green-700">الإيرادات</td>
+                      <td class="border px-4 py-3 bg-green-50">دائن</td>
+                      <td class="border px-4 py-3 bg-red-50">مدين</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-3 font-bold text-amber-700">المصروفات</td>
+                      <td class="border px-4 py-3 bg-green-50">مدين</td>
+                      <td class="border px-4 py-3 bg-red-50">دائن</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div class="mt-5 bg-blue-50 p-4 rounded border border-blue-200">
+                <p class="font-bold text-gray-800 mb-2">
+                  <i class="fas fa-info-circle text-blue-500 ml-2"></i>
+                  للتذكر بسهولة:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 mr-4">
+                  <li>ما تملكه أو تصرفه يزيد في <strong class="text-blue-600">المدين</strong> (الأصول والمصروفات)</li>
+                  <li>ما عليك أو تكسبه يزيد في <strong class="text-blue-600">الدائن</strong> (الخصوم والإيرادات)</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Additional Examples Section - Full Width -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-pencil-alt ml-3"></i>
+            أمثلة إضافية للقيد المزدوج
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Example 1 -->
+            <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-indigo-50 px-4 py-3 border-b">
+                <h3 class="font-bold text-gray-800">مثال ١: شراء أثاث للمكتب بقيمة 5,000 ريال نقدًا</h3>
+              </div>
+              <div class="p-4">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">الحساب</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">مدين</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">دائن</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">الأثاث</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">5,000</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">البنك</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">5,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                  <p><strong>التحليل:</strong> زيادة في الأصول (أثاث) ونقص في الأصول (البنك)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Example 2 -->
+            <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-indigo-50 px-4 py-3 border-b">
+                <h3 class="font-bold text-gray-800">مثال ٢: دفع إيجار مقدم لمدة 3 أشهر بمبلغ 15,000 ريال</h3>
+              </div>
+              <div class="p-4">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">الحساب</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">مدين</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">دائن</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">إيجار مدفوع مقدمًا</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">15,000</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">البنك</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">15,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                  <p><strong>التحليل:</strong> زيادة في الأصول (مصروفات مدفوعة مقدمًا) ونقص في الأصول (البنك)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Example 3 -->
+            <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-indigo-50 px-4 py-3 border-b">
+                <h3 class="font-bold text-gray-800">مثال ٣: استلام منحة مقيدة بقيمة 50,000 ريال</h3>
+              </div>
+              <div class="p-4">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">الحساب</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">مدين</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">دائن</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">البنك</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">50,000</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">إيرادات منح مقيدة</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">50,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                  <p><strong>التحليل:</strong> زيادة في الأصول (البنك) وزيادة في الإيرادات (منح مقيدة)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Example 4 -->
+            <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+              <div class="bg-indigo-50 px-4 py-3 border-b">
+                <h3 class="font-bold text-gray-800">مثال ٤: دفع رواتب الموظفين بقيمة 20,000 ريال</h3>
+              </div>
+              <div class="p-4">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr class="bg-gray-50">
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">الحساب</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">مدين</th>
+                        <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">دائن</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">مصروف الرواتب</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">20,000</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">البنك</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700"></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-gray-700">20,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                  <p><strong>التحليل:</strong> زيادة في المصروفات (رواتب) ونقص في الأصول (البنك)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <p class="text-gray-700">
+              <i class="fas fa-lightbulb text-yellow-500 ml-2"></i>
+              <strong>نصيحة للمبرمجين:</strong> عند تصميم نظام محاسبي، تذكر أن كل معاملة يجب أن تُخزن بطريقة تحافظ على توازن الطرف المدين والدائن. يمكن استخدام جدول للمعاملات وجدول منفصل لتفاصيل المعاملة (بنود المدين والدائن).
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Summary Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-gray-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-check-double ml-3"></i>
+            خلاصة الدرس
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+            <p class="text-gray-700 leading-relaxed">
+              القيد المزدوج هو الأساس الذي تقوم عليه المحاسبة المالية الحديثة. فهم هذا المبدأ وتطبيقه بشكل صحيح يضمن سلامة ودقة البيانات المالية للمنظمة، ويعتبر المفتاح لبناء نظام محاسبي قوي وموثوق.
+            </p>
+          </div>
+          
+          <div class="mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">النقاط الرئيسية التي تعلمناها:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">١. مبدأ القيد المزدوج</p>
+                <p class="text-gray-700 text-sm">لكل معاملة مالية جانبان: مدين ودائن، ويجب أن يتساوى مجموعهما.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٢. أهمية توازن القيود</p>
+                <p class="text-gray-700 text-sm">عدم توازن القيود يؤدي لأخطاء في التقارير المالية وفقدان الثقة في النظام.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٣. القاعدة الذهبية</p>
+                <p class="text-gray-700 text-sm">الأصول والمصروفات تزيد في المدين، والخصوم والإيرادات تزيد في الدائن.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٤. تطبيق عملي للقيود</p>
+                <p class="text-gray-700 text-sm">تعلمنا كيفية تسجيل معاملات مختلفة باستخدام القيد المزدوج.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+            <p class="text-center font-bold text-gray-800">
+              في الدرس القادم: سنتعلم كيفية تسجيل القيود في دفتر اليومية وترحيلها إلى دفتر الأستاذ.
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Bottom Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="lesson3.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الدرس السابق: الحسابات المالية وتصنيفاتها
+        </a>
+        <a href="lesson5.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          الدرس التالي: دفتر اليومية ودفتر الأستاذ
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
+

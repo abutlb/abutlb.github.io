@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - تصنيفات الحسابات</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:sticky top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-1">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">١</span>
+              <div>
+                <span class="block text-sm">مقدمة المحاسبة المالية</span>
+                <span class="text-[10px] text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson2.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٢</span>
+              <div>
+                <span class="block text-sm">المعادلة المحاسبية الأساسية</span>
+                <span class="text-[10px] text-blue-300">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson3.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٣</span>
+              <div>
+                <span class="block text-sm">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-[10px] text-blue-200">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson4.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٤</span>
+              <div>
+                <span class="block text-sm">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-[10px] text-blue-300">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٥</span>
+              <div>
+                <span class="block text-sm">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-[10px] text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson6.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٦</span>
+              <div>
+                <span class="block text-sm">التقارير المالية الأساسية</span>
+                <span class="text-[10px] text-blue-300">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٧</span>
+              <div>
+                <span class="block text-sm">التبرعات والمنح</span>
+                <span class="text-[10px] text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson8.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٨</span>
+              <div>
+                <span class="block text-sm">تسجيل المصاريف والمشتريات</span>
+                <span class="text-[10px] text-blue-300">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">٩</span>
+              <div>
+                <span class="block text-sm">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-[10px] text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson10.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">١٠</span>
+              <div>
+                <span class="block text-sm">الترحيل والإقفال</span>
+                <span class="text-[10px] text-blue-300">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">١١</span>
+              <div>
+                <span class="block text-sm">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-[10px] text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson12.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-4 w-4 flex items-center justify-center ml-1.5 text-[10px]">١٢</span>
+              <div>
+                <span class="block text-sm">مراجعة واختبار عملي</span>
+                <span class="text-[10px] text-blue-300">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ٣</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson3.html" class="text-blue-600 hover:text-blue-800" aria-current="page">الحسابات المالية وتصنيفاتها</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">الحسابات المالية وتصنيفاتها</h1>
+        <p class="text-gray-600 mt-2">تعرف على أنواع الحسابات المالية والفرق بينها وكيفية استخدامها</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 25%"></div>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- First Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-blue-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-info-circle ml-3"></i>
+                ما هي الحسابات المالية؟
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                الحساب المالي هو سجل يستخدم لتصنيف وتسجيل نوع محدد من العمليات المالية مثل البنك، الرواتب، التبرعات.
+              </p>
+              <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+                <p class="font-bold text-lg text-gray-800 mb-2">دليل الحسابات (Chart of Accounts)</p>
+                <p class="text-gray-700">هو قائمة منظمة لجميع الحسابات التي تستخدمها المنظمة لتسجيل معاملاتها المالية، مرتبة حسب تصنيف الحساب (أصول، خصوم، إلخ) ومرقمة بشكل منهجي لتسهيل الاستخدام.</p>
+              </div>
+              
+              <div class="mt-5">
+                <p class="text-gray-700 leading-relaxed mb-3">
+                  <strong class="text-blue-700">لماذا نحتاج دليل الحسابات؟</strong>
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li>تنظيم البيانات المالية بطريقة منهجية</li>
+                  <li>تسهيل إعداد التقارير المالية</li>
+                  <li>تسريع عملية البحث عن المعاملات</li>
+                  <li>تحسين دقة التسجيل المحاسبي</li>
+                  <li>ضمان الاتساق في التصنيف المالي</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-list-alt ml-3"></i>
+                التصنيفات الخمسة الأساسية
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="px-4 py-3 border text-right">التصنيف</th>
+                      <th class="px-4 py-3 border text-right">بالإنجليزية</th>
+                      <th class="px-4 py-3 border text-right">طبيعة الحساب</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-3 font-bold text-blue-700">الأصول</td>
+                      <td class="border px-4 py-3">Assets</td>
+                      <td class="border px-4 py-3">ما تملكه المنظمة من موارد</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                      <td class="border px-4 py-3 font-bold text-red-700">الخصوم</td>
+                      <td class="border px-4 py-3">Liabilities</td>
+                      <td class="border px-4 py-3">ما على المنظمة من التزامات</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-3 font-bold text-purple-700">صافي الأصول</td>
+                      <td class="border px-4 py-3">Net Assets</td>
+                      <td class="border px-4 py-3">ما تبقى للمنظمة بعد خصم الالتزامات</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                      <td class="border px-4 py-3 font-bold text-green-700">الإيرادات</td>
+                      <td class="border px-4 py-3">Revenues</td>
+                      <td class="border px-4 py-3">مصادر دخل المنظمة</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-3 font-bold text-amber-700">المصروفات</td>
+                      <td class="border px-4 py-3">Expenses</td>
+                      <td class="border px-4 py-3">ما تنفقه المنظمة</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div class="mt-5 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <p class="text-gray-700 text-sm">
+                  <i class="fas fa-lightbulb text-yellow-500 ml-2"></i>
+                  <strong>ملاحظة:</strong> في المنظمات غير الربحية نستخدم مصطلح "صافي الأصول" بدلاً من "حقوق الملكية" المستخدم في الشركات.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-purple-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-tag ml-3"></i>
+                تفاصيل ترقيم الحسابات
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                يستخدم نظام الترقيم عادة لتنظيم الحسابات ضمن دليل الحسابات، بحيث يتم تخصيص مجموعة أرقام لكل تصنيف رئيسي.
+              </p>
+              
+              <div class="grid grid-cols-1 gap-4 mt-4">
+                <div class="bg-blue-50 p-4 rounded-lg border-r-4 border-blue-500">
+                  <h3 class="font-bold text-blue-700 mb-2">١٠٠٠ - الأصول (Assets)</h3>
+                  <ul class="list-disc list-inside text-gray-700 mr-4">
+                    <li>١١٠٠ - الأصول المتداولة (نقد، بنوك)</li>
+                    <li>١٢٠٠ - الاستثمارات</li>
+                    <li>١٣٠٠ - الذمم المدينة</li>
+                    <li>١٤٠٠ - المخزون</li>
+                    <li>١٥٠٠ - الأصول الثابتة (أجهزة، أثاث، معدات)</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-lg border-r-4 border-red-500">
+                  <h3 class="font-bold text-red-700 mb-2">٢٠٠٠ - الخصوم (Liabilities)</h3>
+                  <ul class="list-disc list-inside text-gray-700 mr-4">
+                    <li>٢١٠٠ - الالتزامات قصيرة الأجل</li>
+                    <li>٢٢٠٠ - الذمم الدائنة</li>
+                    <li>٢٣٠٠ - الرواتب المستحقة</li>
+                    <li>٢٤٠٠ - الضرائب المستحقة</li>
+                    <li>٢٥٠٠ - القروض طويلة الأجل</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border-r-4 border-purple-500">
+                  <h3 class="font-bold text-purple-700 mb-2">٣٠٠٠ - صافي الأصول (Net Assets)</h3>
+                  <ul class="list-disc list-inside text-gray-700 mr-4">
+                    <li>٣١٠٠ - غير مقيدة (بدون قيود)</li>
+                    <li>٣٢٠٠ - مقيدة مؤقتًا (قيود زمنية)</li>
+                    <li>٣٣٠٠ - مقيدة دائمًا (مثل الأوقاف)</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg border-r-4 border-green-500">
+                  <h3 class="font-bold text-green-700 mb-2">٤٠٠٠ - الإيرادات (Revenues)</h3>
+                  <ul class="list-disc list-inside text-gray-700 mr-4">
+                    <li>٤١٠٠ - التبرعات العامة</li>
+                    <li>٤٢٠٠ - المنح</li>
+                    <li>٤٣٠٠ - إيرادات الخدمات</li>
+                    <li>٤٤٠٠ - إيرادات الاستثمار</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-amber-50 p-4 rounded-lg border-r-4 border-amber-500">
+                  <h3 class="font-bold text-amber-700 mb-2">٥٠٠٠ - المصروفات (Expenses)</h3>
+                  <ul class="list-disc list-inside text-gray-700 mr-4">
+                    <li>٥١٠٠ - الرواتب والأجور</li>
+                    <li>٥٢٠٠ - الإيجارات</li>
+                    <li>٥٣٠٠ - المرافق (كهرباء، ماء، اتصالات)</li>
+                    <li>٥٤٠٠ - المصاريف الإدارية</li>
+                    <li>٥٥٠٠ - مصاريف البرامج</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-amber-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-question-circle ml-3"></i>
+                الفرق بين المصروف والخصم
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-col md:flex-row gap-4 mb-4">
+                <div class="flex-1 bg-amber-50 p-4 rounded-lg border-r-4 border-amber-400">
+                  <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                    <i class="fas fa-dollar-sign text-amber-600 ml-2"></i>
+                    المصروف (Expense)
+                  </h3>
+                  <p class="text-gray-700">ما تستهلكه الجهة فعليًا خلال نشاطها، ويظهر في قائمة الأنشطة (قائمة الدخل).</p>
+                  <div class="mt-3 text-sm bg-white p-2 rounded border border-amber-200">
+                    <span class="font-bold">مثال:</span> مصروف رواتب الموظفين المدفوعة
+                  </div>
+                </div>
+                <div class="flex-1 bg-red-50 p-4 rounded-lg border-r-4 border-red-400">
+                  <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                    <i class="fas fa-hand-holding-usd text-red-600 ml-2"></i>
+                    الخصم (Liability)
+                  </h3>
+                  <p class="text-gray-700">ما يجب على الجهة سداده مستقبلًا، ويظهر في قائمة المركز المالي (الميزانية).</p>
+                  <div class="mt-3 text-sm bg-white p-2 rounded border border-red-200">
+                    <span class="font-bold">مثال:</span> رواتب مستحقة لم تُدفع بعد
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-gray-100 p-5 rounded-lg">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">مثال توضيحي:</h3>
+                <div class="bg-white p-4 rounded border">
+                  <h4 class="font-bold text-gray-700 mb-2">سيناريو: رواتب شهر ديسمبر</h4>
+                  
+                  <div class="space-y-4">
+                    <div class="bg-green-50 p-3 rounded border-r-3 border-green-300">
+                      <p class="font-bold">الحالة ١: دفع الراتب مباشرة</p>
+                      <p class="text-gray-700">تسجل كـ <span class="font-bold text-amber-600">مصروف فقط</span></p>
+                      <div class="mt-2 text-sm">
+                        <div class="flex justify-between p-1 bg-gray-50">
+                          <span>من حـ/ مصروف الرواتب</span>
+                          <span>١٠,٠٠٠ ريال</span>
+                        </div>
+                        <div class="flex justify-between p-1">
+                          <span>إلى حـ/ البنك</span>
+                          <span>١٠,٠٠٠ ريال</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-3 rounded border-r-3 border-yellow-300">
+                      <p class="font-bold">الحالة ٢: استحقاق الراتب دون دفعه</p>
+                      <p class="text-gray-700">تسجل كـ <span class="font-bold text-amber-600">مصروف</span> + <span class="font-bold text-red-600">خصم</span> (التزام)</p>
+                      <div class="mt-2 text-sm">
+                        <div class="flex justify-between p-1 bg-gray-50">
+                          <span>من حـ/ مصروف الرواتب</span>
+                          <span>١٠,٠٠٠ ريال</span>
+                        </div>
+                        <div class="flex justify-between p-1">
+                          <span>إلى حـ/ رواتب مستحقة</span>
+                          <span>١٠,٠٠٠ ريال</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-3 rounded border-r-3 border-blue-300">
+                      <p class="font-bold">الحالة ٣: دفع راتب سبق استحقاقه</p>
+                      <p class="text-gray-700">تخفيض <span class="font-bold text-red-600">الخصم</span> (الالتزام) فقط</p>
+                      <div class="mt-2 text-sm">
+                        <div class="flex justify-between p-1 bg-gray-50">
+                          <span>من حـ/ رواتب مستحقة</span>
+                          <span>١٠,٠٠٠ ريال</span>
+                        </div>
+                        <div class="flex justify-between p-1">
+                          <span>إلى حـ/ البنك</span>
+                          <span>١٠,٠٠٠ ريال</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Practical Application Section - Full Width -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-laptop-code ml-3"></i>
+            تطبيق عملي: تصنيف المعاملات
+          </h2>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-6">
+            لنطبق ما تعلمناه بتحديد التصنيف المناسب لمجموعة من المعاملات المالية.
+          </p>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th class="px-4 py-3 border">المعاملة المالية</th>
+                  <th class="px-4 py-3 border">التصنيف</th>
+                  <th class="px-4 py-3 border">التوضيح</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border px-4 py-3">استلام منحة نقدية من مؤسسة مانحة</td>
+                  <td class="border px-4 py-3 font-bold text-green-700">إيراد</td>
+                  <td class="border px-4 py-3">زيادة في الأصول (النقد) وزيادة في الإيرادات</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="border px-4 py-3">شراء أجهزة حاسوب للمكتب</td>
+                  <td class="border px-4 py-3 font-bold text-blue-700">أصول</td>
+                  <td class="border px-4 py-3">زيادة في الأصول (أجهزة) ونقص في الأصول (النقد)</td>
+                </tr>
+                <tr>
+                  <td class="border px-4 py-3">دفع فاتورة الكهرباء</td>
+                  <td class="border px-4 py-3 font-bold text-amber-700">مصروفات</td>
+                  <td class="border px-4 py-3">نقص في الأصول (النقد) وزيادة في المصروفات</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="border px-4 py-3">الحصول على قرض من البنك</td>
+                  <td class="border px-4 py-3 font-bold text-red-700">خصوم</td>
+                  <td class="border px-4 py-3">زيادة في الأصول (النقد) وزيادة في الخصوم (قرض)</td>
+                </tr>
+                <tr>
+                  <td class="border px-4 py-3">تقديم خدمات استشارية وإصدار فاتورة</td>
+                  <td class="border px-4 py-3 font-bold text-green-700">إيراد + أصول</td>
+                  <td class="border px-4 py-3">زيادة في الأصول (ذمم مدينة) وزيادة في الإيرادات</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="border px-4 py-3">استحقاق رواتب الموظفين في نهاية الشهر</td>
+                  <td class="border px-4 py-3 font-bold text-red-700">خصوم + مصروفات</td>
+                  <td class="border px-4 py-3">زيادة في الخصوم (رواتب مستحقة) وزيادة في المصروفات</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <p class="text-gray-700">
+              <i class="fas fa-lightbulb text-yellow-500 ml-2"></i>
+              <strong>نصيحة للمبرمجين:</strong> عند تصميم قاعدة بيانات للنظام المحاسبي، يمكنك إنشاء حقل "نوع الحساب" (Account Type) لتصنيف الحسابات حسب هذه الفئات الخمس، مما يسهل توليد التقارير المالية تلقائيًا.
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Summary Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-gray-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-check-double ml-3"></i>
+            خلاصة الدرس
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+            <p class="text-gray-700 leading-relaxed">
+              في هذا الدرس، تعرفنا على مفهوم الحسابات المالية وتصنيفاتها الخمسة الأساسية. الفهم الجيد لهذه التصنيفات يُعد أساسًا مهمًا لبناء نظام محاسبي سليم، وسيساعدنا لاحقًا عند تعلم القيد المزدوج والتقارير المالية.
+            </p>
+          </div>
+          
+          <div class="mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">النقاط الرئيسية التي تعلمناها:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">١. دليل الحسابات (Chart of Accounts)</p>
+                <p class="text-gray-700 text-sm">قائمة منظمة للحسابات التي تستخدمها المنظمة مرتبة حسب التصنيف ومرقمة بشكل منهجي.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٢. التصنيفات الخمسة للحسابات</p>
+                <p class="text-gray-700 text-sm">الأصول، الخصوم، صافي الأصول، الإيرادات، والمصروفات.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٣. ترقيم الحسابات</p>
+                <p class="text-gray-700 text-sm">نظام ترقيم منهجي يساعد في تنظيم الحسابات وفق تصنيفاتها.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٤. الفرق بين المصروف والخصم</p>
+                <p class="text-gray-700 text-sm">المصروف يمثل استهلاك موارد، بينما الخصم يمثل التزامًا بالدفع مستقبلاً.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Bottom Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="lesson2.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الدرس السابق: المعادلة المحاسبية الأساسية
+        </a>
+        <a href="lesson4.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          الدرس التالي: القيد المحاسبي وطريقة القيد المزدوج
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>

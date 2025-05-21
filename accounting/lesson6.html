@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - التقارير المالية الأساسية</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:sticky top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-3 border-b border-blue-600 mb-3">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-1">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١</span>
+              <div>
+                <span class="block text-sm">مقدمة المحاسبة المالية</span>
+                <span class="text-[10px] text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson2.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٢</span>
+              <div>
+                <span class="block text-sm">المعادلة المحاسبية الأساسية</span>
+                <span class="text-[10px] text-blue-300">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson3.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٣</span>
+              <div>
+                <span class="block text-sm">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-[10px] text-blue-300">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson4.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٤</span>
+              <div>
+                <span class="block text-sm">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-[10px] text-blue-300">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٥</span>
+              <div>
+                <span class="block text-sm">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-[10px] text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson6.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-white text-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٦</span>
+              <div>
+                <span class="block text-sm">التقارير المالية الأساسية</span>
+                <span class="text-[10px] text-blue-200">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٧</span>
+              <div>
+                <span class="block text-sm">التبرعات والمنح</span>
+                <span class="text-[10px] text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson8.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٨</span>
+              <div>
+                <span class="block text-sm">تسجيل المصاريف والمشتريات</span>
+                <span class="text-[10px] text-blue-300">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">٩</span>
+              <div>
+                <span class="block text-sm">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-[10px] text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson10.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١٠</span>
+              <div>
+                <span class="block text-sm">الترحيل والإقفال</span>
+                <span class="text-[10px] text-blue-300">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١١</span>
+              <div>
+                <span class="block text-sm">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-[10px] text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson12.html" class="flex items-center py-1.5 px-2 rounded-lg">
+              <span class="bg-blue-600 text-[10px] rounded-full h-4 w-4 flex items-center justify-center ml-1.5">١٢</span>
+              <div>
+                <span class="block text-sm">مراجعة واختبار عملي</span>
+                <span class="text-[10px] text-blue-300">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-4 pt-3 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ٦</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson6.html" class="text-blue-600 hover:text-blue-800" aria-current="page">التقارير المالية الأساسية</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">التقارير المالية الأساسية</h1>
+        <p class="text-gray-600 mt-2">فهم التقارير المالية الرئيسية وكيفية إعدادها وقراءتها</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 50%"></div>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- First Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-blue-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-file-alt ml-3"></i>
+                مقدمة عن التقارير المالية
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                التقارير المالية هي وثائق تلخص المعلومات المالية للمنظمة خلال فترة زمنية محددة. تهدف هذه التقارير إلى تقديم معلومات مفيدة للمستخدمين مثل الإدارة، المانحين، الجهات الرقابية، وأصحاب المصلحة الآخرين.
+              </p>
+
+              <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-gray-800 mb-2">
+                  أهداف التقارير المالية:
+                </h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li>تقديم صورة واضحة عن الوضع المالي للمنظمة</li>
+                  <li>توفير معلومات حول الأداء المالي والتدفقات النقدية</li>
+                  <li>المساعدة في اتخاذ القرارات الإدارية السليمة</li>
+                  <li>تلبية متطلبات الإفصاح والشفافية</li>
+                  <li>تسهيل المقارنة مع فترات سابقة أو مع منظمات مماثلة</li>
+                </ul>
+              </div>
+              
+              <div class="bg-yellow-50 p-4 rounded-lg border-r-4 border-yellow-400 flex items-start">
+                <div class="text-yellow-500 ml-3 mt-1">
+                  <i class="fas fa-lightbulb text-xl"></i>
+                </div>
+                <p class="text-gray-700">
+                  <strong>ملاحظة للمبرمجين:</strong> عند تصميم نظام محاسبي، يجب مراعاة آلية استخراج هذه التقارير تلقائيًا من قاعدة البيانات بشكل دوري أو عند الطلب.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-landmark ml-3"></i>
+                قائمة المركز المالي
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                  <i class="fas fa-info-circle text-green-600 ml-2"></i>
+                  التعريف:
+                </h3>
+                <p class="text-gray-700">
+                  قائمة المركز المالي (Statement of Financial Position) أو ما يُعرف بالميزانية العمومية (Balance Sheet) هي تقرير يوضح الوضع المالي للمنظمة في لحظة زمنية محددة، وتعكس المعادلة المحاسبية: الأصول = الخصوم + صافي الأصول.
+                </p>
+              </div>
+              
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3">مكونات قائمة المركز المالي:</h3>
+                <div class="space-y-3">
+                  <div class="bg-blue-50 p-3 rounded border-r-3 border-blue-300">
+                    <h4 class="font-bold text-blue-700">١. الأصول (Assets)</h4>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>الأصول المتداولة: النقد والبنوك، الاستثمارات قصيرة الأجل، الذمم المدينة</li>
+                      <li>الأصول الثابتة: المباني، الأراضي، المعدات، الأثاث</li>
+                      <li>الأصول غير الملموسة: حقوق الملكية الفكرية، البرمجيات</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="bg-red-50 p-3 rounded border-r-3 border-red-300">
+                    <h4 class="font-bold text-red-700">٢. الخصوم (Liabilities)</h4>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>الخصوم المتداولة: الذمم الدائنة، المصروفات المستحقة</li>
+                      <li>الخصوم طويلة الأجل: القروض، الرهون العقارية</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="bg-purple-50 p-3 rounded border-r-3 border-purple-300">
+                    <h4 class="font-bold text-purple-700">٣. صافي الأصول (Net Assets)</h4>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>صافي الأصول غير المقيدة</li>
+                      <li>صافي الأصول المقيدة مؤقتًا</li>
+                      <li>صافي الأصول المقيدة دائمًا (مثل الأوقاف)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4">
+                <h3 class="font-bold text-gray-800 mb-3">ملاحظات هامة:</h3>
+                <ul class="list-disc list-inside text-gray-700 mr-4">
+                  <li>يتم ترتيب الأصول حسب سيولتها (من الأكثر سيولة إلى الأقل)</li>
+                  <li>يتم ترتيب الخصوم حسب استحقاقها (من الأقرب استحقاقًا إلى الأبعد)</li>
+                  <li>مجموع الأصول = مجموع الخصوم + صافي الأصول</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-amber-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-chart-line ml-3"></i>
+                قائمة الأنشطة
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                  <i class="fas fa-info-circle text-amber-600 ml-2"></i>
+                  التعريف:
+                </h3>
+                <p class="text-gray-700">
+                  قائمة الأنشطة (Statement of Activities) أو ما يُعرف بقائمة الدخل في الشركات الربحية، هي تقرير يوضح أداء المنظمة المالي خلال فترة زمنية محددة (شهر، ربع سنة، سنة)، وتعرض الإيرادات والمصروفات والتغير في صافي الأصول.
+                </p>
+              </div>
+              
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3">مكونات قائمة الأنشطة:</h3>
+                <div class="space-y-3">
+                  <div class="bg-green-50 p-3 rounded border-r-3 border-green-300">
+                    <h4 class="font-bold text-green-700">١. الإيرادات (Revenues)</h4>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>التبرعات العامة</li>
+                      <li>المنح والهبات</li>
+                      <li>إيرادات الخدمات والأنشطة</li>
+                      <li>عوائد الاستثمارات</li>
+                      <li>العضويات والاشتراكات</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="bg-amber-50 p-3 rounded border-r-3 border-amber-300">
+                    <h4 class="font-bold text-amber-700">٢. المصروفات (Expenses)</h4>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>مصروفات البرامج والأنشطة</li>
+                      <li>المصروفات الإدارية والعمومية</li>
+                      <li>مصروفات جمع التبرعات</li>
+                      <li>الرواتب والأجور</li>
+                      <li>الإيجارات والمرافق</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="bg-blue-50 p-3 rounded border-r-3 border-blue-300">
+                    <h4 class="font-bold text-blue-700">٣. صافي التغير في الأصول</h4>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>الزيادة أو النقص في صافي الأصول غير المقيدة</li>
+                      <li>الزيادة أو النقص في صافي الأصول المقيدة مؤقتًا</li>
+                      <li>الزيادة أو النقص في صافي الأصول المقيدة دائمًا</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-yellow-50 p-4 rounded-lg border-r-4 border-yellow-400 mt-4">
+                <p class="text-gray-700">
+                  <strong>ملاحظة مهمة:</strong> صافي التغير في الأصول = مجموع الإيرادات - مجموع المصروفات 
+                </p>
+                <p class="text-gray-700 mt-2">
+                  إذا كانت النتيجة إيجابية فهذا يعني أن المنظمة حققت "فائضًا" (Surplus)، وإذا كانت سلبية فهذا يعني أنها حققت "عجزًا" (Deficit).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-purple-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-money-bill-wave ml-3"></i>
+                قائمة التدفقات النقدية
+              </h2>
+            </div>
+            <div class="p-6">
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                  <i class="fas fa-info-circle text-purple-600 ml-2"></i>
+                  التعريف:
+                </h3>
+                <p class="text-gray-700">
+                  قائمة التدفقات النقدية (Statement of Cash Flows) هي تقرير يوضح حركة النقد الداخل والخارج للمنظمة خلال فترة زمنية محددة، وكيفية استخدام هذه الأموال.
+                </p>
+              </div>
+              
+              <div class="mb-4">
+                <h3 class="font-bold text-gray-800 mb-3">مكونات قائمة التدفقات النقدية:</h3>
+                <div class="space-y-3">
+                  <div class="bg-blue-50 p-3 rounded border-r-3 border-blue-300">
+                    <h4 class="font-bold text-blue-700">١. الأنشطة التشغيلية</h4>
+                    <p class="text-gray-700 text-sm">التدفقات النقدية المرتبطة بالعمليات الرئيسية للمنظمة مثل:</p>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>استلام التبرعات والمنح</li>
+                      <li>دفع الرواتب والمصروفات التشغيلية</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="bg-green-50 p-3 rounded border-r-3 border-green-300">
+                    <h4 class="font-bold text-green-700">٢. الأنشطة الاستثمارية</h4>
+                    <p class="text-gray-700 text-sm">التدفقات النقدية المرتبطة بشراء أو بيع الأصول طويلة الأجل:</p>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>شراء أو بيع معدات وأجهزة</li>
+                      <li>شراء أو بيع استثمارات</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="bg-red-50 p-3 rounded border-r-3 border-red-300">
+                    <h4 class="font-bold text-red-700">٣. الأنشطة التمويلية</h4>
+                    <p class="text-gray-700 text-sm">التدفقات النقدية المرتبطة بالتمويل طويل الأجل:</p>
+                    <ul class="list-disc list-inside text-gray-700 mr-4 text-sm">
+                      <li>الحصول على قروض أو سدادها</li>
+                      <li>استلام منح لإنشاء أصول ثابتة</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 bg-purple-50 p-4 rounded-lg border-r-4 border-purple-400">
+                <p class="font-bold text-gray-800">أهمية قائمة التدفقات النقدية:</p>
+                <ul class="list-disc list-inside text-gray-700 mr-4 mt-2">
+                  <li>تبين مصادر واستخدامات النقد</li>
+                  <li>توضح قدرة المنظمة على توليد تدفقات نقدية مستقبلية</li>
+                  <li>تساعد في التخطيط المالي وإدارة السيولة</li>
+                  <li>تكشف عن أي مشاكل في السيولة قد لا تظهر في القوائم الأخرى</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Example Financial Report - Full Width -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-file-invoice-dollar ml-3"></i>
+            نموذج تطبيقي: قائمة المركز المالي
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="mb-4">
+            <h3 class="font-bold text-gray-800 mb-4 text-center text-lg">جمعية الخير للتنمية الاجتماعية</h3>
+            <h4 class="font-bold text-gray-600 mb-5 text-center">قائمة المركز المالي كما في 31 ديسمبر 2023م</h4>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border">
+              <tbody>
+                <!-- Assets Section -->
+                <tr class="bg-blue-50">
+                  <td colspan="3" class="px-4 py-3 font-bold text-blue-800 border">الأصول</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 font-medium">الأصول المتداولة:</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 pr-8">نقد في البنك</td>
+                  <td class="px-4 py-2 border text-right">250,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 pr-8">ذمم مدينة</td>
+                  <td class="px-4 py-2 border text-right">50,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 pr-8">مصروفات مدفوعة مقدماً</td>
+                  <td class="px-4 py-2 border text-right">30,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 font-medium">مجموع الأصول المتداولة</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">330,000</td>
+                </tr>
+                
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 font-medium">الأصول غير المتداولة:</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 pr-8">أثاث ومعدات</td>
+                  <td class="px-4 py-2 border text-right">200,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 pr-8">مبنى الجمعية</td>
+                  <td class="px-4 py-2 border text-right">800,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-200 font-medium">مجموع الأصول غير المتداولة</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">1,000,000</td>
+                </tr>
+                <tr class="bg-blue-100">
+                  <td class="px-4 py-2 border border-r-2 border-r-blue-300 font-bold">إجمالي الأصول</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">
+                  <td class="px-4 py-2 border text-right font-bold">1,330,000</td>
+                </tr>
+                
+                <!-- Liabilities Section -->
+                <tr class="bg-red-50">
+                  <td colspan="3" class="px-4 py-3 font-bold text-red-800 border">الخصوم</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 font-medium">الخصوم المتداولة:</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 pr-8">ذمم دائنة</td>
+                  <td class="px-4 py-2 border text-right">45,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 pr-8">مصروفات مستحقة</td>
+                  <td class="px-4 py-2 border text-right">35,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 font-medium">مجموع الخصوم المتداولة</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">80,000</td>
+                </tr>
+                
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 font-medium">الخصوم غير المتداولة:</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 pr-8">قرض طويل الأجل</td>
+                  <td class="px-4 py-2 border text-right">150,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-2 border border-r-2 border-r-red-200 font-medium">مجموع الخصوم غير المتداولة</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">150,000</td>
+                </tr>
+                <tr class="bg-red-100">
+                  <td class="px-4 py-2 border border-r-2 border-r-red-300 font-bold">إجمالي الخصوم</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">230,000</td>
+                </tr>
+                
+                <!-- Net Assets Section -->
+                <tr class="bg-purple-50">
+                  <td colspan="3" class="px-4 py-3 font-bold text-purple-800 border">صافي الأصول</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-purple-200 pr-8">صافي الأصول غير المقيدة</td>
+                  <td class="px-4 py-2 border text-right">650,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-purple-200 pr-8">صافي الأصول المقيدة مؤقتًا</td>
+                  <td class="px-4 py-2 border text-right">350,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border border-r-2 border-r-purple-200 pr-8">صافي الأصول المقيدة دائمًا</td>
+                  <td class="px-4 py-2 border text-right">100,000</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                </tr>
+                <tr class="bg-purple-100">
+                  <td class="px-4 py-2 border border-r-2 border-r-purple-300 font-bold">إجمالي صافي الأصول</td>
+                  <td class="px-4 py-2 border text-right"></td>
+                  <td class="px-4 py-2 border text-right font-bold">1,100,000</td>
+                </tr>
+                
+                <!-- Total Equation Verification -->
+                <tr class="bg-gray-800 text-white">
+                  <td class="px-4 py-3 border font-bold">إجمالي الخصوم + صافي الأصول</td>
+                  <td class="px-4 py-3 border text-right"></td>
+                  <td class="px-4 py-3 border text-right font-bold">1,330,000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+            <p class="text-gray-700">
+              <i class="fas fa-info-circle text-yellow-500 ml-2"></i>
+              <strong>ملاحظات تحليلية:</strong>
+            </p>
+            <ul class="list-disc list-inside text-gray-700 mr-4 mt-2">
+              <li>نسبة السيولة = الأصول المتداولة ÷ الخصوم المتداولة = 330,000 ÷ 80,000 = 4.13 (مؤشر جيد جدًا)</li>
+              <li>نسبة المديونية = إجمالي الخصوم ÷ إجمالي الأصول = 230,000 ÷ 1,330,000 = 17.3% (نسبة منخفضة)</li>
+              <li>نسبة التمويل الذاتي = صافي الأصول ÷ إجمالي الأصول = 1,100,000 ÷ 1,330,000 = 82.7% (مؤشر جيد)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Statement of Activities - Sample -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-chart-bar ml-3"></i>
+            نموذج تطبيقي: قائمة الأنشطة
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="mb-4">
+            <h3 class="font-bold text-gray-800 mb-4 text-center text-lg">جمعية الخير للتنمية الاجتماعية</h3>
+            <h4 class="font-bold text-gray-600 mb-5 text-center">قائمة الأنشطة للسنة المنتهية في 31 ديسمبر 2023م</h4>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border">
+              <thead>
+                <tr class="bg-gray-100">
+                  <th class="px-4 py-2 border text-right">البند</th>
+                  <th class="px-4 py-2 border text-right">غير مقيدة</th>
+                  <th class="px-4 py-2 border text-right">مقيدة مؤقتًا</th>
+                  <th class="px-4 py-2 border text-right">مقيدة دائمًا</th>
+                  <th class="px-4 py-2 border text-right">الإجمالي</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Revenues -->
+                <tr class="bg-green-50">
+                  <td colspan="5" class="px-4 py-2 font-bold text-green-800 border">الإيرادات والدعم</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">تبرعات نقدية</td>
+                  <td class="px-4 py-2 border text-right">400,000</td>
+                  <td class="px-4 py-2 border text-right">200,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">600,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">منح حكومية</td>
+                  <td class="px-4 py-2 border text-right">150,000</td>
+                  <td class="px-4 py-2 border text-right">300,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">450,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">إيرادات أنشطة</td>
+                  <td class="px-4 py-2 border text-right">120,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">120,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">عوائد استثمارات</td>
+                  <td class="px-4 py-2 border text-right">30,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">20,000</td>
+                  <td class="px-4 py-2 border text-right">50,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">الأصول المحررة من القيود</td>
+                  <td class="px-4 py-2 border text-right">250,000</td>
+                  <td class="px-4 py-2 border text-right">(250,000)</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                </tr>
+                <tr class="bg-green-100">
+                  <td class="px-4 py-2 border font-bold">إجمالي الإيرادات والدعم</td>
+                  <td class="px-4 py-2 border text-right font-bold">950,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">250,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">20,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">1,220,000</td>
+                </tr>
+                
+                <!-- Expenses -->
+                <tr class="bg-amber-50">
+                  <td colspan="5" class="px-4 py-2 font-bold text-amber-800 border">المصروفات</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">مصروفات البرامج</td>
+                  <td class="px-4 py-2 border text-right">550,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">550,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">المصروفات الإدارية</td>
+                  <td class="px-4 py-2 border text-right">250,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">250,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">مصروفات جمع التبرعات</td>
+                  <td class="px-4 py-2 border text-right">100,000</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">0</td>
+                  <td class="px-4 py-2 border text-right">100,000</td>
+                </tr>
+                <tr class="bg-amber-100">
+                  <td class="px-4 py-2 border font-bold">إجمالي المصروفات</td>
+                  <td class="px-4 py-2 border text-right font-bold">900,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">0</td>
+                  <td class="px-4 py-2 border text-right font-bold">0</td>
+                  <td class="px-4 py-2 border text-right font-bold">900,000</td>
+                </tr>
+                
+                <!-- Change in Net Assets -->
+                <tr class="bg-blue-50">
+                  <td class="px-4 py-2 border font-bold">التغير في صافي الأصول</td>
+                  <td class="px-4 py-2 border text-right font-bold">50,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">250,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">20,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">320,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2 border">صافي الأصول في بداية السنة</td>
+                  <td class="px-4 py-2 border text-right">600,000</td>
+                  <td class="px-4 py-2 border text-right">100,000</td>
+                  <td class="px-4 py-2 border text-right">80,000</td>
+                  <td class="px-4 py-2 border text-right">780,000</td>
+                </tr>
+                <tr class="bg-blue-100">
+                  <td class="px-4 py-2 border font-bold">صافي الأصول في نهاية السنة</td>
+                  <td class="px-4 py-2 border text-right font-bold">650,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">350,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">100,000</td>
+                  <td class="px-4 py-2 border text-right font-bold">1,100,000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+            <p class="text-gray-700">
+              <i class="fas fa-info-circle text-yellow-500 ml-2"></i>
+              <strong>ملاحظات تحليلية:</strong>
+            </p>
+            <ul class="list-disc list-inside text-gray-700 mr-4 mt-2">
+              <li>نسبة كفاءة البرامج = مصروفات البرامج ÷ إجمالي المصروفات = 550,000 ÷ 900,000 = 61.1% (مؤشر جيد)</li>
+              <li>نسبة المصروفات الإدارية = المصروفات الإدارية ÷ إجمالي المصروفات = 250,000 ÷ 900,000 = 27.8%</li>
+              <li>النمو في صافي الأصول = (صافي الأصول في نهاية السنة - صافي الأصول في بداية السنة) ÷ صافي الأصول في بداية السنة = (1,100,000 - 780,000) ÷ 780,000 = 41%</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Interactive Component -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-calculator ml-3"></i>
+            حاسبة نسب التحليل المالي
+          </h2>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-6">
+            استخدم هذه الحاسبة لحساب المؤشرات المالية الأساسية بناءً على بيانات مؤسستك الخاصة.
+          </p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-gray-800 mb-4">المدخلات:</h3>
+              <div class="space-y-4">
+                <div>
+                  <label for="currentAssets" class="block text-gray-700 font-medium mb-2">الأصول المتداولة:</label>
+                  <input type="number" id="currentAssets" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="330000">
+                </div>
+                <div>
+                  <label for="currentLiabilities" class="block text-gray-700 font-medium mb-2">الخصوم المتداولة:</label>
+                  <input type="number" id="currentLiabilities" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="80000">
+                </div>
+                <div>
+                  <label for="totalAssets" class="block text-gray-700 font-medium mb-2">إجمالي الأصول:</label>
+                  <input type="number" id="totalAssets" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="1330000">
+                </div>
+                <div>
+                  <label for="totalLiabilities" class="block text-gray-700 font-medium mb-2">إجمالي الخصوم:</label>
+                  <input type="number" id="totalLiabilities" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="230000">
+                </div>
+                <div>
+                  <label for="programExpenses" class="block text-gray-700 font-medium mb-2">مصروفات البرامج:</label>
+                  <input type="number" id="programExpenses" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="550000">
+                </div>
+                <div>
+                  <label for="totalExpenses" class="block text-gray-700 font-medium mb-2">إجمالي المصروفات:</label>
+                  <input type="number" id="totalExpenses" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="900000">
+                </div>
+                <button id="calculateRatios" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
+                  حساب النسب المالية
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="font-bold text-gray-800 mb-4">النتائج:</h3>
+              <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                <div class="space-y-6">
+                  <div>
+                    <h4 class="font-bold text-gray-700 mb-2">نسبة السيولة (Current Ratio):</h4>
+                    <div id="liquidityRatio" class="text-2xl font-bold text-blue-600 flex items-center">
+                      <span>4.13</span>
+                      <span class="text-sm text-gray-500 mr-2">مرات</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">كلما ارتفعت النسبة، كلما كانت المنظمة قادرة على مواجهة التزاماتها قصيرة الأجل.</p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-700 mb-2">نسبة المديونية (Debt Ratio):</h4>
+                    <div id="debtRatio" class="text-2xl font-bold text-green-600 flex items-center">
+                      <span>17.3</span>
+                      <span class="text-sm text-gray-500 mr-2">%</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">كلما انخفضت النسبة، كلما كانت المنظمة أقل اعتماداً على الديون.</p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-bold text-gray-700 mb-2">نسبة كفاءة البرامج (Program Efficiency):</h4>
+                    <div id="programEfficiency" class="text-2xl font-bold text-purple-600 flex items-center">
+                      <span>61.1</span>
+                      <span class="text-sm text-gray-500 mr-2">%</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">كلما ارتفعت النسبة، كلما كانت المنظمة تنفق أكثر على برامجها مقارنة بالمصروفات الإدارية.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Notes to Financial Statements -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-gray-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-sticky-note ml-3"></i>
+            الإيضاحات المرفقة بالقوائم المالية
+          </h2>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            الإيضاحات المرفقة بالقوائم المالية (Notes to Financial Statements) هي جزء لا يتجزأ من التقارير المالية، وتوفر معلومات إضافية لا تظهر في القوائم الرئيسية.
+          </p>
+          
+          <div class="bg-blue-50 p-5 rounded-lg border border-blue-200 mb-4">
+            <h3 class="font-bold text-gray-800 mb-3">أهمية الإيضاحات المرفقة:</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+              <li>توفير تفاصيل إضافية حول بنود القوائم المالية</li>
+              <li>شرح السياسات المحاسبية المتبعة</li>
+              <li>توضيح الالتزامات المحتملة والارتباطات</li>
+              <li>تقديم معلومات عن الأطراف ذات العلاقة</li>
+              <li>توضيح الأحداث اللاحقة التي وقعت بعد تاريخ القوائم المالية</li>
+            </ul>
+          </div>
+          
+          <h3 class="font-bold text-gray-800 mb-3">أمثلة على محتوى الإيضاحات:</h3>
+          <div class="space-y-4">
+            <div class="bg-white p-4 rounded-lg border border-gray-200">
+              <h4 class="font-bold text-gray-700 mb-2">١. السياسات المحاسبية المتبعة:</h4>
+              <p class="text-gray-600">مثل طرق الاستهلاك، أسس تقييم المخزون، سياسة الاعتراف بالإيرادات، وغيرها.</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-lg border border-gray-200">
+              <h4 class="font-bold text-gray-700 mb-2">٢. تفاصيل الأصول الثابتة:</h4>
+              <p class="text-gray-600">جدول يوضح التكلفة، مجمع الاستهلاك، صافي القيمة الدفترية، والإضافات والاستبعادات.</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-lg border border-gray-200">
+              <h4 class="font-bold text-gray-700 mb-2">٣. تفاصيل المنح والتبرعات المقيدة:</h4>
+              <p class="text-gray-600">معلومات عن شروط المنح، الغرض منها، ونسب الإنجاز.</p>
+            </div>
+            
+            <div class="bg-white p-4 rounded-lg border border-gray-200">
+              <h4 class="font-bold text-gray-700 mb-2">٤. معلومات عن القروض والالتزامات:</h4>
+              <p class="text-gray-600">تفاصيل حول شروط القروض، مواعيد الاستحقاق، معدلات الفائدة، والضمانات المقدمة.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Summary Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-gray-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-check-double ml-3"></i>
+            خلاصة الدرس
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+            <p class="text-gray-700 leading-relaxed">
+              التقارير المالية هي نافذتك الرئيسية لفهم الوضع المالي للمنظمة وأدائها. يجب على المبرمجين والمطورين فهم مكونات هذه التقارير وأهميتها لتصميم أنظمة محاسبية قادرة على إنتاج هذه التقارير بشكل دقيق ومتوافق مع المعايير المحاسبية.
+            </p>
+          </div>
+          
+          <div class="mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">النقاط الرئيسية التي تعلمناها:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">١. أنواع التقارير المالية الرئيسية</p>
+                <p class="text-gray-700 text-sm">قائمة المركز المالي، قائمة الأنشطة، قائمة التدفقات النقدية.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٢. مكونات قائمة المركز المالي</p>
+                <p class="text-gray-700 text-sm">الأصول، الخصوم، صافي الأصول وتوازن المعادلة المحاسبية.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٣. هيكل قائمة الأنشطة</p>
+                <p class="text-gray-700 text-sm">الإيرادات، المصروفات، والتغير في صافي الأصول بمختلف تصنيفاتها.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٤. أهمية التدفقات النقدية</p>
+                <p class="text-gray-700 text-sm">التمييز بين الأنشطة التشغيلية والاستثمارية والتمويلية.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٥. النسب والمؤشرات المالية</p>
+                <p class="text-gray-700 text-sm">أدوات تحليلية لتقييم الأداء المالي والوضع المالي للمنظمة.</p>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                <p class="font-bold text-blue-700">٦. الإيضاحات المرفقة</p>
+                <p class="text-gray-700 text-sm">معلومات تفصيلية تكمل القوائم المالية وتساعد على فهمها بشكل أفضل.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-200">
+            <p class="text-center font-bold text-gray-800">
+              في الدرس القادم: سنتعلم كيفية معالجة التبرعات والمنح المختلفة محاسبيًا.
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Bottom Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="lesson5.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الدرس السابق: دفتر اليومية ودفتر الأستاذ
+        </a>
+        <a href="lesson7.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          الدرس التالي: التبرعات والمنح
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript for mobile menu toggle and calculator -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+    
+    // Calculator functionality
+    const calculateButton = document.getElementById('calculateRatios');
+    calculateButton.addEventListener('click', calculateFinancialRatios);
+    
+    function calculateFinancialRatios() {
+      // Get input values
+      const currentAssets = parseFloat(document.getElementById('currentAssets').value) || 0;
+      const currentLiabilities = parseFloat(document.getElementById('currentLiabilities').value) || 1; // Avoid division by zero
+      const totalAssets = parseFloat(document.getElementById('totalAssets').value) || 0;
+      const totalLiabilities = parseFloat(document.getElementById('totalLiabilities').value) || 0;
+      const programExpenses = parseFloat(document.getElementById('programExpenses').value) || 0;
+      const totalExpenses = parseFloat(document.getElementById('totalExpenses').value) || 1; // Avoid division by zero
+      
+      // Calculate ratios
+      const liquidityRatio = (currentAssets / currentLiabilities).toFixed(2);
+      const debtRatio = ((totalLiabilities / totalAssets) * 100).toFixed(1);
+      const programEfficiency = ((programExpenses / totalExpenses) * 100).toFixed(1);
+      
+      // Update display
+      document.getElementById('liquidityRatio').querySelector('span').textContent = liquidityRatio;
+      document.getElementById('debtRatio').querySelector('span').textContent = debtRatio;
+      document.getElementById('programEfficiency').querySelector('span').textContent = programEfficiency;
+      
+      // Change color based on values
+      const liquidityElement = document.getElementById('liquidityRatio');
+      if (liquidityRatio < 1) {
+        liquidityElement.classList.remove('text-blue-600', 'text-green-600');
+        liquidityElement.classList.add('text-red-600');
+      } else if (liquidityRatio >= 2) {
+        liquidityElement.classList.remove('text-blue-600', 'text-red-600');
+        liquidityElement.classList.add('text-green-600');
+      } else {
+        liquidityElement.classList.remove('text-red-600', 'text-green-600');
+        liquidityElement.classList.add('text-blue-600');
+      }
+      
+      const debtElement = document.getElementById('debtRatio');
+      if (debtRatio > 50) {
+        debtElement.classList.remove('text-green-600', 'text-blue-600');
+        debtElement.classList.add('text-red-600');
+      } else if (debtRatio < 30) {
+        debtElement.classList.remove('text-red-600', 'text-blue-600');
+        debtElement.classList.add('text-green-600');
+      } else {
+        debtElement.classList.remove('text-red-600', 'text-green-600');
+        debtElement.classList.add('text-blue-600');
+      }
+      
+      const programElement = document.getElementById('programEfficiency');
+      if (programEfficiency > 75) {
+        programElement.classList.remove('text-purple-600', 'text-blue-600');
+        programElement.classList.add('text-green-600');
+      } else if (programEfficiency < 40) {
+        programElement.classList.remove('text-purple-600', 'text-green-600');
+        programElement.classList.add('text-red-600');
+      } else {
+        programElement.classList.remove('text-red-600', 'text-green-600');
+        programElement.classList.add('text-purple-600');
+      }
+    }
+  </script>
+</body>
+</html>
+
