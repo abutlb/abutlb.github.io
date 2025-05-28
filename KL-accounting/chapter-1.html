@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة المتوسطة 1 - الفصل الأول: أساسيات نظرية المحاسبة المالية</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">المحاسبة المتوسطة 1</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 - Current -->
+          <li>
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg bg-blue-500">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block font-medium">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets, Goodwill, Mineral Resources</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value to Non-Current Assets</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Chapter Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الفصل 1</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="chapter-1.html" class="text-blue-600 hover:text-blue-800" aria-current="page">أساسيات نظرية المحاسبة المالية</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">أساسيات نظرية المحاسبة المالية</h1>
+        <p class="text-gray-600 mt-2">Fundamentals of Financial Accounting Theory</p>
+      </div>
+
+      <!-- Chapter Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 10%"></div>
+      </div>
+
+      <!-- Section 1: Introduction to Financial Accounting Theory -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            1. مقدمة في نظرية المحاسبة المالية
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Introduction to Financial Accounting Theory</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Definition and Purpose -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-book-open text-blue-600 ml-2"></i>
+                  تعريف نظرية المحاسبة المالية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  نظرية المحاسبة المالية هي مجموعة من المبادئ والمفاهيم والافتراضات التي توجه عملية إعداد وعرض المعلومات المالية بطريقة منطقية ومتسقة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الأهداف الرئيسية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• توفير إطار مفاهيمي للمحاسبة</li>
+                    <li>• ضمان الاتساق في التطبيق</li>
+                    <li>• تحسين جودة المعلومات المالية</li>
+                    <li>• تسهيل عملية اتخاذ القرارات</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Historical Development -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-history text-green-600 ml-2"></i>
+                  التطور التاريخي
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  تطورت نظرية المحاسبة المالية عبر القرون استجابة لاحتياجات الأعمال المتغيرة والتطورات الاقتصادية.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">المحطات المهمة:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• القيد المزدوج (القرن 15)</li>
+                    <li>• الثورة الصناعية (القرن 18-19)</li>
+                    <li>• تأسيس المعايير المحاسبية (القرن 20)</li>
+                    <li>• العولمة والمعايير الدولية (القرن 21)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Components -->
+          <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-puzzle-piece text-gray-600 ml-2"></i>
+              مكونات نظرية المحاسبة المالية
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="bg-white p-3 rounded border text-center">
+                <i class="fas fa-foundation text-blue-600 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">الافتراضات الأساسية</h4>
+                <p class="text-xs text-gray-600">الوحدة الاقتصادية، الاستمرارية، الفترة المحاسبية</p>
+              </div>
+              <div class="bg-white p-3 rounded border text-center">
+                <i class="fas fa-balance-scale text-green-600 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">المبادئ المحاسبية</h4>
+                <p class="text-xs text-gray-600">الاعتراف، القياس، العرض، الإفصاح</p>
+              </div>
+              <div class="bg-white p-3 rounded border text-center">
+                <i class="fas fa-filter text-purple-600 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">القيود والمحددات</h4>
+                <p class="text-xs text-gray-600">التكلفة مقابل المنفعة، الأهمية النسبية</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Fundamental Assumptions -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-foundation ml-3"></i>
+            2. الافتراضات الأساسية للمحاسبة المالية
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Fundamental Assumptions of Financial Accounting</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Economic Entity Assumption -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-building text-green-600 ml-2"></i>
+                  افتراض الوحدة الاقتصادية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  <span class="font-medium text-green-600">Economic Entity Assumption:</span> 
+                  يفترض أن الشركة كيان منفصل ومستقل عن أصحابها أو إدارتها، ويجب الفصل بين المعاملات الشخصية ومعاملات الشركة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">التطبيقات العملية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• فصل حسابات الشركة عن الحسابات الشخصية للمالكين</li>
+                    <li>• إعداد قوائم مالية منفصلة لكل وحدة اقتصادية</li>
+                    <li>• تسجيل المعاملات من منظور الشركة فقط</li>
+                    <li>• عدم خلط أصول الشركة مع الأصول الشخصية</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Going Concern Assumption -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-infinity text-blue-600 ml-2"></i>
+                  افتراض الاستمرارية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  <span class="font-medium text-blue-600">Going Concern Assumption:</span> 
+                  يفترض أن الشركة ستستمر في العمل في المستقبل المنظور ولن تتوقف أو تصفى أعمالها.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الآثار المحاسبية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• تقييم الأصول بالتكلفة التاريخية وليس بقيمة التصفية</li>
+                    <li>• توزيع تكلفة الأصول على فترات متعددة (الاستهلاك)</li>
+                    <li>• تأجيل الإيرادات والمصروفات للفترات المناسبة</li>
+                    <li>• التخطيط طويل المدى والاستثمارات الرأسمالية</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monetary Unit Assumption -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-coins text-purple-600 ml-2"></i>
+                  افتراض الوحدة النقدية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  <span class="font-medium text-purple-600">Monetary Unit Assumption:</span> 
+                  يفترض أن النقود هي وحدة القياس المناسبة للمعاملات الاقتصادية وأن قيمة النقود مستقرة نسبياً.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الخصائص:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• استخدام عملة واحدة في القوائم المالية</li>
+                    <li>• تجاهل التضخم في المحاسبة التقليدية</li>
+                    <li>• قابلية الجمع والطرح للمبالغ النقدية</li>
+                    <li>• تحويل العملات الأجنبية للعملة الوظيفية</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Time Period Assumption -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-orange-500 p-4 bg-orange-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-calendar-alt text-orange-600 ml-2"></i>
+                  افتراض الفترة المحاسبية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  <span class="font-medium text-orange-600">Time Period Assumption:</span> 
+                  يفترض إمكانية تقسيم حياة الشركة إلى فترات زمنية منتظمة لأغراض إعداد التقارير المالية.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أنواع الفترات:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• السنة المالية (12 شهر)</li>
+                    <li>• الربع السنوي (3 أشهر)</li>
+                    <li>• الشهري (شهر واحد)</li>
+                    <li>• فترات مؤقتة حسب الحاجة</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Accounting Principles -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-balance-scale ml-3"></i>
+            3. المبادئ المحاسبية الأساسية
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Fundamental Accounting Principles</p>
+        </div>
+        <div class="p-6">
+          <!-- Recognition Principle -->
+          <div class="mb-6">
+            <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded mb-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-eye text-purple-600 ml-2"></i>
+                مبدأ الاعتراف (Recognition Principle)
+              </h3>
+              <p class="text-gray-700 mb-3">
+                يحدد متى وكيف يتم الاعتراف بالعناصر في القوائم المالية. يجب أن يكون العنصر قابلاً للقياس بشكل موثوق ومن المحتمل أن يحقق منافع اقتصادية مستقبلية.
+              </p>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">شروط الاعتراف:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• احتمالية تدفق المنافع الاقتصادية</li>
+                    <li>• إمكانية القياس الموثوق</li>
+                    <li>• استيفاء تعريف العنصر</li>
+                    <li>• تجاوز عتبة الأهمية النسبية</li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أمثلة تطبيقية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• الاعتراف بالإيرادات عند تحقق الشروط</li>
+                    <li>• تسجيل الأصول عند الحصول على السيطرة</li>
+                    <li>• إثبات الخصوم عند نشوء الالتزام</li>
+                    <li>• تأجيل الاعتراف حتى استيفاء المعايير</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Measurement Principle -->
+          <div class="mb-6">
+            <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded mb-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-ruler text-indigo-600 ml-2"></i>
+                مبدأ القياس (Measurement Principle)
+              </h3>
+              <p class="text-gray-700 mb-3">
+                يحدد كيفية قياس العناصر المالية وتحديد قيمتها في القوائم المالية. يشمل أسس القياس المختلفة مثل التكلفة التاريخية والقيمة العادلة.
+              </p>
+              <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-white p-3 rounded border text-center">
+                  <i class="fas fa-history text-indigo-600 text-xl mb-2"></i>
+                  <h4 class="font-semibold text-gray-800 mb-1">التكلفة التاريخية</h4>
+                  <p class="text-xs text-gray-600">المبلغ المدفوع أو المستلم عند الحصول على الأصل أو تحمل الالتزام</p>
+                </div>
+                <div class="bg-white p-3 rounded border text-center">
+                  <i class="fas fa-chart-line text-green-600 text-xl mb-2"></i>
+                  <h4 class="font-semibold text-gray-800 mb-1">القيمة العادلة</h4>
+                  <p class="text-xs text-gray-600">السعر المستلم لبيع أصل أو المدفوع لتحويل التزام في معاملة منتظمة</p>
+                </div>
+                <div class="bg-white p-3 rounded border text-center">
+                  <i class="fas fa-calculator text-purple-600 text-xl mb-2"></i>
+                  <h4 class="font-semibold text-gray-800 mb-1">القيمة الحالية</h4>
+                  <p class="text-xs text-gray-600">القيمة المخصومة للتدفقات النقدية المستقبلية</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Quiz -->
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-question-circle text-amber-600 ml-2"></i>
+              اختبر فهمك
+            </h3>
+            <div class="space-y-4">
+              <div class="p-4 bg-white border border-amber-200 rounded-lg">
+                <h4 class="font-bold text-gray-800 mb-3">أي من الافتراضات التالية يبرر استخدام الاستهلاك في المحاسبة؟</h4>
+                <div class="space-y-2">
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="a" class="ml-2">
+                    <span class="text-gray-700">افتراض الوحدة الاقتصادية</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="b" class="ml-2">
+                    <span class="text-gray-700">افتراض الاستمرارية</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="c" class="ml-2">
+                    <span class="text-gray-700">افتراض الوحدة النقدية</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="d" class="ml-2">
+                    <span class="text-gray-700">افتراض الفترة المحاسبية</span>
+                  </label>
+                </div>
+                <div id="quizResult1" class="mt-3 hidden"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Qualitative Characteristics -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-teal-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-star ml-3"></i>
+            4. الخصائص النوعية للمعلومات المالية
+          </h2>
+          <p class="text-teal-100 text-sm mt-1">Qualitative Characteristics of Financial Information</p>
+        </div>
+        <div class="p-6">
+          <!-- Fundamental Characteristics -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">الخصائص الأساسية (Fundamental Characteristics)</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="border-r-4 border-teal-500 p-4 bg-teal-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-bullseye text-teal-600 ml-2"></i>
+                  الملاءمة (Relevance)
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  المعلومات ملائمة إذا كانت قادرة على إحداث فرق في القرارات التي يتخذها المستخدمون.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">مكونات الملاءمة:</h5>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>القيمة التنبؤية:</strong> تساعد في التنبؤ بالنتائج المستقبلية</li>
+                    <li>• <strong>القيمة التأكيدية:</strong> تؤكد أو تصحح التوقعات السابقة</li>
+                    <li>• <strong>الأهمية النسبية:</strong> حجم المعلومة يؤثر على القرارات</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-check-circle text-blue-600 ml-2"></i>
+                  التمثيل الصادق (Faithful Representation)
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  المعلومات تمثل بصدق الظواهر الاقتصادية التي تدعي تمثيلها.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">خصائص التمثيل الصادق:</h5>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>الاكتمال:</strong> تشمل جميع المعلومات الضرورية</li>
+                    <li>• <strong>الحياد:</strong> خالية من التحيز</li>
+                    <li>• <strong>الخلو من الأخطاء:</strong> لا توجد أخطاء في العملية أو الوصف</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhancing Characteristics -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">الخصائص المعززة (Enhancing Characteristics)</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h4 class="font-bold text-gray-800 mb-2">
+                  <i class="fas fa-balance-scale text-gray-600 ml-2"></i>
+                  القابلية للمقارنة (Comparability)
+                </h4>
+                <p class="text-sm text-gray-600">تمكن المستخدمين من تحديد أوجه التشابه والاختلاف بين العناصر</p>
+              </div>
+              
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h4 class="font-bold text-gray-800 mb-2">
+                  <i class="fas fa-search text-gray-600 ml-2"></i>
+                  القابلية للتحقق (Verifiability)
+                </h4>
+                <p class="text-sm text-gray-600">تساعد في ضمان أن المعلومات تمثل بصدق ما تدعي تمثيله</p>
+              </div>
+              
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h4 class="font-bold text-gray-800 mb-2">
+                  <i class="fas fa-clock text-gray-600 ml-2"></i>
+                  التوقيت المناسب (Timeliness)
+                </h4>
+                <p class="text-sm text-gray-600">توفر المعلومات للمتخذين القرارات في الوقت المناسب</p>
+              </div>
+              
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h4 class="font-bold text-gray-800 mb-2">
+                  <i class="fas fa-eye text-gray-600 ml-2"></i>
+                  القابلية للفهم (Understandability)
+                </h4>
+                <p class="text-sm text-gray-600">تصنف وتعرض وتلخص المعلومات بوضوح وإيجاز</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trade-offs and Constraints -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-balance-scale-right text-yellow-600 ml-2"></i>
+              المفاضلات والقيود
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-bold ml-3 mt-1">1</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800 mb-1">التكلفة مقابل المنفعة</h4>
+                    <p class="text-gray-600 text-sm">يجب أن تكون منافع المعلومات أكبر من تكلفة إنتاجها</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-bold ml-3 mt-1">2</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800 mb-1">الملاءمة مقابل التمثيل الصادق</h4>
+                    <p class="text-gray-600 text-sm">قد تتطلب المفاضلة بين سرعة التقرير ودقة المعلومات</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-bold ml-3 mt-1">3</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800 mb-1">التفصيل مقابل التجميع</h4>
+                    <p class="text-gray-600 text-sm">الموازنة بين توفير التفاصيل والحفاظ على وضوح العرض</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start">
+                  <div class="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-bold ml-3 mt-1">4</div>
+                  <div>
+                    <h4 class="font-semibold text-gray-800 mb-1">الحذر مقابل الحياد</h4>
+                    <p class="text-gray-600 text-sm">تجنب المبالغة في التفاؤل مع الحفاظ على عدم التحيز</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Elements of Financial Statements -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-red-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-building ml-3"></i>
+            5. عناصر القوائم المالية
+          </h2>
+          <p class="text-red-100 text-sm mt-1">Elements of Financial Statements</p>
+        </div>
+        <div class="p-6">
+          <!-- Balance Sheet Elements -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">عناصر قائمة المركز المالي</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+              <!-- Assets -->
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-coins text-green-600 ml-2"></i>
+                  الأصول (Assets)
+                </h4>
+                <p class="text-gray-700 mb-3 text-sm">
+                  موارد اقتصادية حالية تسيطر عليها المنشأة نتيجة أحداث ماضية ومن المتوقع أن تحقق منافع اقتصادية مستقبلية.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">أنواع الأصول:</h5>
+                  <ul class="text-xs text-gray-600 space-y-1">
+                    <li>• <strong>أصول متداولة:</strong> النقدية، المخزون، الذمم المدينة</li>
+                    <li>• <strong>أصول غير متداولة:</strong> الممتلكات، المعدات، الاستثمارات</li>
+                    <li>• <strong>أصول ملموسة:</strong> لها وجود مادي</li>
+                    <li>• <strong>أصول غير ملموسة:</strong> براءات الاختراع، الشهرة</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Liabilities -->
+              <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-file-invoice-dollar text-red-600 ml-2"></i>
+                  الخصوم (Liabilities)
+                </h4>
+                <p class="text-gray-700 mb-3 text-sm">
+                  التزامات حالية للمنشأة ناشئة من أحداث ماضية ومن المتوقع أن يؤدي تسويتها إلى تدفق موارد تحمل منافع اقتصادية.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">أنواع الخصوم:</h5>
+                  <ul class="text-xs text-gray-600 space-y-1">
+                    <li>• <strong>خصوم متداولة:</strong> الذمم الدائنة، القروض قصيرة المدى</li>
+                    <li>• <strong>خصوم غير متداولة:</strong> القروض طويلة المدى، السندات</li>
+                    <li>• <strong>مخصصات:</strong> التزامات محتملة</li>
+                    <li>• <strong>التزامات طارئة:</strong> التزامات مشروطة</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Equity -->
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-chart-pie text-blue-600 ml-2"></i>
+                  حقوق الملكية (Equity)
+                </h4>
+                <p class="text-gray-700 mb-3 text-sm">
+                  الحصة المتبقية في أصول المنشأة بعد خصم جميع التزاماتها. تمثل حقوق أصحاب المنشأة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">مكونات حقوق الملكية:</h5>
+                  <ul class="text-xs text-gray-600 space-y-1">
+                    <li>• <strong>رأس المال:</strong> الاستثمار الأولي للمالكين</li>
+                    <li>• <strong>الأرباح المحتجزة:</strong> الأرباح المتراكمة غير الموزعة</li>
+                    <li>• <strong>احتياطيات:</strong> مبالغ مخصصة لأغراض معينة</li>
+                    <li>• <strong>دخل شامل آخر:</strong> تغيرات في القيمة العادلة</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Income Statement Elements -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">عناصر قائمة الدخل</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Income -->
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-arrow-up text-green-600 ml-2"></i>
+                  الدخل (Income)
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  زيادات في المنافع الاقتصادية خلال الفترة المحاسبية في شكل تدفقات داخلة أو تحسينات للأصول أو انخفاضات في الخصوم.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">أنواع الدخل:</h5>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>الإيرادات (Revenue):</strong> من الأنشطة العادية</li>
+                    <li>• <strong>المكاسب (Gains):</strong> من أنشطة أخرى</li>
+                    <li>• <strong>دخل الاستثمارات:</strong> أرباح أسهم، فوائد</li>
+                    <li>• <strong>إيرادات أخرى:</strong> بيع أصول، إيجارات</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Expenses -->
+              <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-arrow-down text-red-600 ml-2"></i>
+                  المصروفات (Expenses)
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  انخفاضات في المنافع الاقتصادية خلال الفترة المحاسبية في شكل تدفقات خارجة أو استنزاف للأصول أو تحمل خصوم.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">أنواع المصروفات:</h5>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>تكلفة البضاعة المباعة:</strong> تكلفة الإنتاج</li>
+                    <li>• <strong>مصروفات التشغيل:</strong> الرواتب، الإيجارات</li>
+                    <li>• <strong>مصروفات التمويل:</strong> فوائد القروض</li>
+                    <li>• <strong>الخسائر:</strong> من أنشطة غير عادية</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accounting Equation -->
+          <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg p-6">
+            <h3 class="text-xl font-bold mb-4 text-center">
+              <i class="fas fa-equals ml-2"></i>
+              المعادلة المحاسبية الأساسية
+            </h3>
+            <div class="text-center">
+              <div class="text-3xl font-bold mb-4">
+                الأصول = الخصوم + حقوق الملكية
+              </div>
+              <div class="text-lg mb-4">
+                Assets = Liabilities + Equity
+              </div>
+              <div class="grid md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-white bg-opacity-20 rounded p-3">
+                  <h4 class="font-semibold mb-2">التوسع في المعادلة:</h4>
+                  <p>الأصول = الخصوم + رأس المال + الإيرادات - المصروفات</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded p-3">
+                  <h4 class="font-semibold mb-2">معادلة الدخل:</h4>
+                  <p>صافي الدخل = الإيرادات - المصروفات</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded p-3">
+                  <h4 class="font-semibold mb-2">معادلة التغير في حقوق الملكية:</h4>
+                  <p>حقوق الملكية النهائية = حقوق الملكية البدائية + صافي الدخل - التوزيعات</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Practical Applications -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-orange-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-cogs ml-3"></i>
+            6. التطبيقات العملية والأمثلة
+          </h2>
+          <p class="text-orange-100 text-sm mt-1">Practical Applications and Examples</p>
+        </div>
+        <div class="p-6">
+          <!-- Case Study -->
+          <div class="mb-6">
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-briefcase text-orange-600 ml-2"></i>
+                دراسة حالة: شركة التقنية المتقدمة
+              </h3>
+              <p class="text-gray-700 mb-4">
+                شركة التقنية المتقدمة هي شركة ناشئة تعمل في مجال تطوير البرمجيات. دعونا نطبق المفاهيم النظرية على عملياتها:
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <div class="bg-white p-4 rounded border">
+                    <h4 class="font-semibold text-gray-800 mb-2">تطبيق الافتراضات:</h4>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                      <li><strong>الوحدة الاقتصادية:</strong> فصل مصروفات الشركة عن المصروفات الشخصية للمؤسسين</li>
+                      <li><strong>الاستمرارية:</strong> استهلاك أجهزة الكمبيوتر على 3 سنوات بدلاً من تسجيلها كمصروف فوري</li>
+                      <li><strong>الوحدة النقدية:</strong> تسجيل جميع المعاملات بالريال السعودي</li>
+                      <li><strong>الفترة المحاسبية:</strong> إعداد تقارير ربع سنوية للمستثمرين</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div class="bg-white p-4 rounded border">
+                    <h4 class="font-semibold text-gray-800 mb-2">تطبيق الخصائص النوعية:</h4>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                      <li><strong>الملاءمة:</strong> تقرير إيرادات الاشتراكات الشهرية بانتظام</li>
+                      <li><strong>التمثيل الصادق:</strong> الإفصاح عن المخاطر التقنية والتنافسية</li>
+                      <li><strong>المقارنة:</strong> استخدام نفس طرق المحاسبة كل فترة</li>
+                      <li><strong>التوقيت المناسب:</strong> إصدار التقارير خلال 30 يوم من نهاية الفترة</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Exercise -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-blue-600 ml-2"></i>
+              تمرين تفاعلي: تحليل المعاملات
+            </h3>
+            <p class="text-gray-700 mb-4">
+              حلل المعاملات التالية وحدد تأثيرها على المعادلة المحاسبية:
+            </p>
+            
+            <div class="space-y-4">
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعاملة 1: استثمار نقدي من المالك بقيمة 100,000 ريال</h4>
+                <div class="grid md:grid-cols-3 gap-4 text-sm">
+                  <div class="text-center">
+                    <div class="font-semibold text-green-600">الأصول (النقدية)</div>
+                    <div class="text-2xl font-bold text-green-600">+100,000</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font-semibold text-gray-600">الخصوم</div>
+                    <div class="text-2xl font-bold text-gray-600">0</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font-semibold text-blue-600">حقوق الملكية (رأس المال)</div>
+                    <div class="text-2xl font-bold text-blue-600">+100,000</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعاملة 2: شراء معدات بقيمة 30,000 ريال نقداً</h4>
+                <div class="grid md:grid-cols-3 gap-4 text-sm">
+                  <div class="text-center">
+                    <div class="font-semibold text-green-600">الأصول</div>
+                    <div class="text-sm text-gray-600">النقدية: -30,000</div>
+                    <div class="text-sm text-gray-600">المعدات: +30,000</div>
+                    <div class="text-lg font-bold text-green-600">صافي: 0</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font-semibold text-gray-600">الخصوم</div>
+                    <div class="text-2xl font-bold text-gray-600">0</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font-semibold text-blue-600">حقوق الملكية</div>
+                    <div class="text-2xl font-bold text-blue-600">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter Summary -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            ملخص الفصل الأول
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">المفاهيم الأساسية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> نظرية المحاسبة المالية توفر الأساس المنطقي للممارسة المحاسبية</li>
+                <li><i class="fas fa-check ml-2"></i> الافتراضات الأساسية تشكل الأسس التي تقوم عليها المحاسبة</li>
+                <li><i class="fas fa-check ml-2"></i> الخصائص النوعية تضمن جودة المعلومات المالية</li>
+                <li><i class="fas fa-check ml-2"></i> عناصر القوائم المالية تمثل اللبنات الأساسية للتقارير المالية</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">المصطلحات المهمة:</h3>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><strong>Economic Entity:</strong> الوحدة الاقتصادية</div>
+                <div><strong>Going Concern:</strong> الاستمرارية</div>
+                <div><strong>Relevance:</strong> الملاءمة</div>
+                <div><strong>Faithful Representation:</strong> التمثيل الصادق</div>
+                <div><strong>Assets:</strong> الأصول</div>
+                <div><strong>Liabilities:</strong> الخصوم</div>
+                <div><strong>Equity:</strong> حقوق الملكية</div>
+                <div><strong>Income:</strong> الدخل</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="index.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          العودة للصفحة الرئيسية
+        </a>
+        <a href="chapter-2.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          الفصل التالي: المعادلة المحاسبية والقيد المزدوج
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+    
+    // Quiz functionality
+    const quizInputs = document.querySelectorAll('input[name="quiz1"]');
+    const quizResult = document.getElementById('quizResult1');
+    
+    quizInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        if (input.value === 'b') {
+          quizResult.classList.remove('hidden');
+          quizResult.innerHTML = `
+            <div class="p-3 bg-green-100 border border-green-300 rounded text-green-800">
+              <i class="fas fa-check-circle ml-2"></i>
+              إجابة صحيحة! افتراض الاستمرارية يبرر توزيع تكلفة الأصول على فترات متعددة من خلال الاستهلاك.
+            </div>
+          `;
+        } else {
+          quizResult.classList.remove('hidden');
+          quizResult.innerHTML = `
+            <div class="p-3 bg-red-100 border border-red-300 rounded text-red-800">
+              <i class="fas fa-times-circle ml-2"></i>
+              إجابة خاطئة. افتراض الاستمرارية هو الذي يبرر استخدام الاستهلاك لأنه يفترض أن الشركة ستستمر في العمل.
+            </div>
+          `;
+        }
+      });
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Progress tracking
+    function updateProgress() {
+      const sections = document.querySelectorAll('section');
+      const progressBar = document.querySelector('.bg-blue-600');
+      
+      let visibleSections = 0;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          visibleSections++;
+        }
+      });
+      
+      const progress = Math.min((visibleSections / sections.length) * 100, 100);
+      if (progressBar) {
+        progressBar.style.width = progress + '%';
+      }
+    }
+    
+    // Update progress on scroll
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('load', updateProgress);
+    
+    // Add animation classes on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Interactive elements
+    document.querySelectorAll('.card-hover').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+        this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+      });
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+          case 'Home':
+            e.preventDefault();
+            window.location.href = 'index.html';
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            const nextLink = document.querySelector('a[href="chapter-2.html"]');
+            if (nextLink) nextLink.click();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            const prevLink = document.querySelector('a[href="index.html"]');
+            if (prevLink) prevLink.click();
+            break;
+        }
+      }
+    });
+    
+    // Print functionality
+    function printChapter() {
+      window.print();
+    }
+    
+    // Add print button if needed
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print ml-2"></i> طباعة الفصل';
+    printButton.className = 'fixed bottom-4 left-4 bg-gray-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition z-50';
+    printButton.onclick = printChapter;
+    document.body.appendChild(printButton);
+    
+    // Local storage for progress
+    function saveProgress() {
+      localStorage.setItem('chapter1_completed', 'true');
+      localStorage.setItem('last_visited', 'chapter-1.html');
+    }
+    
+    // Save progress when user scrolls to bottom
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+        saveProgress();
+      }
+    });
+    
+    // Load saved progress
+    function loadProgress() {
+      const completed = localStorage.getItem('chapter1_completed');
+      if (completed) {
+        const progressBar = document.querySelector('.bg-blue-600');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+        }
+      }
+    }
+    
+    window.addEventListener('load', loadProgress);
+  </script>
+  
+  <!-- Custom CSS for animations -->
+  <style>
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .fixed, #sidebar, #overlay, button {
+        display: none !important;
+      }
+      
+      .bg-gradient-to-r, .bg-gradient-to-b {
+        background: #4f46e5 !important;
+        color: white !important;
+      }
+      
+      section {
+        break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      
+      .grid {
+        display: block !important;
+      }
+      
+      .md\:grid-cols-2 > div,
+      .md\:grid-cols-3 > div {
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .text-3xl {
+        font-size: 1.5rem;
+      }
+      
+      .text-2xl {
+        font-size: 1.25rem;
+      }
+      
+      .text-xl {
+        font-size: 1.125rem;
+      }
+      
+      .grid {
+        gap: 1rem;
+      }
+      
+      .p-6 {
+        padding: 1rem;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+      }
+      
+      .text-gray-700 {
+        color: #d1d5db;
+      }
+      
+      .text-gray-600 {
+        color: #9ca3af;
+      }
+      
+      .border-gray-200 {
+        border-color: #374151;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .focus\:ring-2:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .bg-blue-50 {
+        background-color: #dbeafe;
+      }
+      
+      .bg-green-50 {
+        background-color: #dcfce7;
+      }
+      
+      .bg-red-50 {
+        background-color: #fef2f2;
+      }
+      
+      .border {
+        border-width: 2px;
+      }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .transition,
+      .animate-fade-in {
+        animation: none;
+        transition: none;
+      }
+    }
+  </style>
+</body>
+</html>
