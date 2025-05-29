@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة تحديد الإحداثيات | Coordinate Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee',
+                        secondary: '#3f37c9',
+                        accent: '#4895ef',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .dark-mode {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .glass-card-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        /* Toggle switch styles */
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 44px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        /* Fix for toggle dot in dark mode */
+        html.dark .toggle-dot {
+            transform: translateX(1.5rem) !important;
+        }
+        
+        /* Marker styles */
+        .marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: rgba(255, 0, 0, 0.7);
+            border: 2px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Image container styles */
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background-color: #f3f4f6;
+        }
+        
+        html.dark .image-container {
+            background-color: #1f2937;
+        }
+        
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+        
+        #invoiceImage {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            cursor: crosshair;
+            transition: filter 0.3s, transform 0.3s;
+        }
+        
+        /* Recent image item styles */
+        .recent-image {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 0.375rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .recent-image:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .recent-image.selected {
+            box-shadow: 0 0 0 3px #8b5cf6;
+        }
+        
+        .recent-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .recent-image .remove-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #4b5563;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .recent-image:hover .remove-btn {
+            opacity: 1;
+        }
+        
+        /* Progress bar styles for zoom level */
+        .zoom-slider {
+            height: 4px;
+            background-color: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        html.dark .zoom-slider {
+            background-color: #475569;
+        }
+        
+        .zoom-level {
+            height: 100%;
+            background: linear-gradient(to right, #4361ee, #7c3aed);
+            transition: width 0.2s;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-start">
+                <a href="index.html" class="p-2 bg-purple-300 dark:bg-primary-900 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors">
+                  <i class="fas fa-arrow-right text-purple-600 dark:text-primary-300"></i>
+                </a>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 text-center">أداة تحديد الإحداثيات</h1>
+                <p class="text-gray-600 dark:text-gray-400 text-center">انقر على الصورة لتحديد الإحداثيات المطلوبة</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <!-- Theme Toggle Switch -->
+                <div class="relative inline-flex items-center">
+                    <label for="themeSwitch_field" class="sr-only">تبديل الوضع المظلم</label>
+                    <input type="checkbox" id="themeSwitch_field" class="sr-only">
+                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
+                            <i class="fas fa-moon text-indigo-300 dark:text-indigo-200 text-xs"></i>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
+                            <i class="fas fa-sun text-amber-500 text-xs"></i>
+                        </div>
+                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-indigo-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <div class="flex flex-col md:flex-row gap-8 p-6">
+                <!-- Left Panel: Controls and History -->
+                <div class="md:w-1/3 space-y-6">
+                    <!-- Image Upload Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-upload ml-2"></i>اختيار الصورة
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="w-full">
+                                <label class="block py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center rounded-lg cursor-pointer hover:opacity-90 transition-opacity">
+                                    <i class="fas fa-file-upload ml-2"></i>رفع صورة من جهازك
+                                    <input type="file" id="uploadImage" class="hidden" accept="image/*">
+                                </label>
+                                <div id="selectedFileName" class="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center"></div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">الصور المستخدمة مؤخراً:</h4>
+                                    <button id="clearHistoryBtn" class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                        <i class="fas fa-trash-alt ml-1"></i>مسح السجل
+                                    </button>
+                                </div>
+                                <div id="recentImagesGrid" class="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                    <!-- سيتم ملء هذا القسم ديناميكياً عبر جافاسكريبت -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Information Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-info-circle ml-2"></i>معلومات الصورة
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700 dark:text-gray-300">أبعاد الصورة:</span>
+                                <span id="imageDimensions" class="font-medium text-gray-900 dark:text-gray-100">لم يتم اختيار صورة</span>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700 dark:text-gray-300">مستوى التكبير:</span>
+                                    <span id="zoomLevel" class="font-medium text-gray-900 dark:text-gray-100">100%</span>
+                                </div>
+                                <div class="zoom-slider">
+                                    <div id="zoomLevelBar" class="zoom-level" style="width: 50%;"></div>
+                                </div>
+                                <div class="flex justify-between mt-2">
+                                    <button id="zoomOut" class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button id="zoomReset" class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                        <i class="fas fa-redo-alt"></i>
+                                    </button>
+                                    <button id="zoomIn" class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coordinates Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-map-marker-alt ml-2"></i>الإحداثيات الحالية
+                        </h3>
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4 text-center">
+                            <div id="coordinates" class="text-xl font-bold text-gray-700 dark:text-gray-300">لم يتم التحديد بعد</div>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button id="clearMarkers" class="flex-1 py-2 px-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                                <i class="fas fa-eraser ml-1"></i>مسح العلامات
+                            </button>
+                            <button id="copyCoordinates" class="flex-1 py-2 px-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity">
+                                <i class="fas fa-copy ml-1"></i>نسخ الإحداثيات
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- History Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-history ml-2"></i>سجل الإحداثيات
+                        </h3>
+                        <div id="historyList" class="space-y-2 max-h-60 overflow-y-auto">
+                            <!-- سيتم إضافة العناصر هنا بواسطة جافاسكريبت -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Panel: Image Display -->
+                <div class="md:w-2/3">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-image ml-2"></i>الصورة
+                        </h3>
+                        
+                        <div class="image-container">
+                            <div class="image-wrapper text-center" id="imageWrapper">
+                                <div id="emptyImageState" class="py-20 px-4">
+                                    <div class="text-6xl text-gray-300 dark:text-gray-600 mb-4">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                    <p class="text-gray-500 dark:text-gray-400">يرجى اختيار صورة للبدء</p>
+                                    <button id="uploadImageBtn" class="mt-4 py-2 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity">
+                                        <i class="fas fa-upload ml-2"></i>اختيار صورة
+                                    </button>
+                                </div>
+                                <img src="" id="invoiceImage" class="hidden max-w-full rounded-lg shadow-sm" alt="صورة للتحديد">
+                                <div class="marker" id="marker" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                            <div class="flex items-center text-blue-700 dark:text-blue-300">
+                                <i class="fas fa-lightbulb ml-2"></i>
+                                <p class="text-sm">انقر على الصورة لتحديد الإحداثيات. يمكنك استخدام أزرار التكبير/التصغير للتحكم بحجم الصورة.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Drop Zone -->
+                    <div class="mt-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-6 text-center" id="dropZone">
+                        <div class="text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                            <p>يمكنك أيضاً سحب وإفلات الصور هنا</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Tools Page Button -->
+        <div class="flex justify-center mt-8">
+            <a href="index.html" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
+                <i class="fas fa-arrow-right ml-2"></i>
+                العودة إلى صفحة الأدوات
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
+        <p>© <span id="currentYear">2023</span> أداة تحديد الإحداثيات - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Dark mode toggle function
+        function toggleDarkMode() {
+            // Toggle dark class on html element
+            document.documentElement.classList.toggle('dark');
+            
+            // Toggle dark-mode class on body
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize dark mode on page load
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Add event listener to theme toggle button
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // العناصر الرئيسية في الصفحة
+            const image = document.getElementById("invoiceImage");
+            const marker = document.getElementById("marker");
+            const imageWrapper = document.getElementById("imageWrapper");
+            const emptyImageState = document.getElementById("emptyImageState");
+            const coordinatesDisplay = document.getElementById("coordinates");
+            const imageDimensions = document.getElementById("imageDimensions");
+            const historyList = document.getElementById("historyList");
+            const copyCoordinatesBtn = document.getElementById("copyCoordinates");
+            const clearMarkersBtn = document.getElementById("clearMarkers");
+            const zoomInBtn = document.getElementById("zoomIn");
+            const zoomOutBtn = document.getElementById("zoomOut");
+            const zoomResetBtn = document.getElementById("zoomReset");
+            const uploadImageInput = document.getElementById("uploadImage");
+            const uploadImageBtn = document.getElementById("uploadImageBtn");
+            const selectedFileName = document.getElementById("selectedFileName");
+            const recentImagesGrid = document.getElementById("recentImagesGrid");
+            const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+            const zoomLevelDisplay = document.getElementById("zoomLevel");
+            const zoomLevelBar = document.getElementById("zoomLevelBar");
+            const dropZone = document.getElementById("dropZone");
+            
+            // المتغيرات الأساسية
+            let currentScale = 1;
+            let coordinatesHistory = [];
+            let selectedCoordinates = null;
+            let currentImage = null;
+            let imageHistory = loadImageHistory();
+            
+            // ربط زر اختيار الصورة بحقل الإدخال
+            uploadImageBtn.addEventListener("click", function() {
+                uploadImageInput.click();
+            });
+            
+            // تحميل سجل الصور المستخدمة سابقاً
+            function loadImageHistory() {
+                try {
+                    const history = localStorage.getItem('imageHistory');
+                    return history ? JSON.parse(history) : [];
+                } catch (error) {
+                    console.error('خطأ في تحميل سجل الصور:', error);
+                    return [];
+                }
+            }
+            
+            // حفظ سجل الصور
+            function saveImageHistory() {
+                try {
+                    localStorage.setItem('imageHistory', JSON.stringify(imageHistory));
+                } catch (error) {
+                    console.error('خطأ في حفظ سجل الصور:', error);
+                }
+            }
+            
+            // إضافة صورة إلى سجل الصور المستخدمة
+            function addToImageHistory(src, name) {
+                // التحقق من وجود الصورة في السجل
+                const existingIndex = imageHistory.findIndex(item => item.src === src);
+                
+                // إذا كانت الصورة موجودة، قم بإزالتها (لإضافتها في المقدمة لاحقاً)
+                if (existingIndex !== -1) {
+                    imageHistory.splice(existingIndex, 1);
+                }
+                
+                // إضافة الصورة إلى بداية المصفوفة
+                imageHistory.unshift({
+                    src: src,
+                    name: name || getFileNameFromPath(src),
+                    timestamp: new Date().toISOString()
+                });
+                
+                // الحد الأقصى لعدد الصور في السجل هو 12
+                if (imageHistory.length > 12) {
+                    imageHistory.pop();
+                }
+                
+                // حفظ السجل وتحديث العرض
+                saveImageHistory();
+                updateImageHistoryDisplay();
+            }
+            
+            // استخراج اسم الملف من المسار
+            function getFileNameFromPath(path) {
+                if (!path) return 'صورة';
+                return path.split('/').pop().split('\\').pop().split('?')[0] || 'صورة';
+            }
+            
+            // تحديث عرض سجل الصور
+            function updateImageHistoryDisplay() {
+                recentImagesGrid.innerHTML = '';
+                
+                if (imageHistory.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'col-span-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm';
+                    emptyMessage.textContent = 'لا توجد صور في سجل الاستخدام';
+                    recentImagesGrid.appendChild(emptyMessage);
+                    return;
+                }
+                
+                imageHistory.forEach((item, index) => {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'recent-image';
+                    if (currentImage === item.src) {
+                        imageContainer.classList.add('selected');
+                    }
+                    
+                    const img = document.createElement('img');
+                    img.src = item.src;
+                    img.alt = item.name;
+                    img.title = item.name;
+                    
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    removeBtn.title = 'إزالة من السجل';
+                    removeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // منع انتشار الحدث للعنصر الأب
+                        imageHistory.splice(index, 1);
+                        saveImageHistory();
+                        updateImageHistoryDisplay();
+                    });
+                    
+                    imageContainer.appendChild(img);
+                    imageContainer.appendChild(removeBtn);
+                    
+                    // عند النقر على الصورة، قم بتحميلها
+                    imageContainer.addEventListener('click', function() {
+                        loadImage(item.src);
+                        // تحديث التحديد البصري
+                        const allImages = document.querySelectorAll('.recent-image');
+                        allImages.forEach(el => el.classList.remove('selected'));
+                        imageContainer.classList.add('selected');
+                    });
+                    
+                    recentImagesGrid.appendChild(imageContainer);
+                });
+            }
+            
+            // مسح سجل الصور
+            clearHistoryBtn.addEventListener('click', function() {
+                if (confirm('هل أنت متأكد من رغبتك في مسح سجل الصور المستخدمة مؤخراً؟')) {
+                    imageHistory = [];
+                    saveImageHistory();
+                    updateImageHistoryDisplay();
+                }
+            });
+            
+            // رفع صورة جديدة
+            uploadImageInput.addEventListener("change", function(event) {
+                if (event.target.files && event.target.files[0]) {
+                    const file = event.target.files[0];
+                    
+                    // التحقق من أن الملف المحدد هو صورة
+                    if (!file.type.match('image.*')) {
+                        alert('يرجى اختيار صورة فقط');
+                        return;
+                    }
+                    
+                    // إظهار اسم الملف المحدد
+                    selectedFileName.textContent = file.name;
+                    
+                    // إعداد الصورة المختارة
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const src = e.target.result;
+                        loadImage(src);
+                        addToImageHistory(src, file.name);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // تحميل وعرض الصورة المختارة
+            function loadImage(src) {
+                // إعادة تعيين التكبير/التصغير
+                currentScale = 1;
+                image.style.transform = "scale(1)";
+                updateZoomUI();
+                
+                // إعداد الصورة الجديدة
+                image.src = src;
+                currentImage = src;
+                
+                // إخفاء حالة "لا صورة" وإظهار الصورة
+                emptyImageState.classList.add('hidden');
+                image.classList.remove('hidden');
+                
+                // مسح أي علامات سابقة
+                marker.style.display = "none";
+                selectedCoordinates = null;
+                coordinatesDisplay.textContent = "لم يتم التحديد بعد";
+                coordinatesDisplay.classList.remove('text-green-600', 'dark:text-green-400');
+                coordinatesDisplay.classList.add('text-gray-700', 'dark:text-gray-300');
+                
+                // إضافة الصورة إلى سجل الصور المستخدمة
+                addToImageHistory(src);
+            }
+            
+            // عند تحميل الصورة، عرض أبعادها
+            image.onload = function() {
+                imageDimensions.textContent = `${image.naturalWidth} × ${image.naturalHeight} بكسل`;
+            };
+            
+            // تحديث واجهة التكبير/التصغير
+            function updateZoomUI() {
+                zoomLevelDisplay.textContent = `${Math.round(currentScale * 100)}%`;
+                zoomLevelBar.style.width = `${((currentScale - 0.5) / 1.5) * 100}%`;
+            }
+            
+            // إضافة الزوم للصورة
+            zoomInBtn.addEventListener("click", function() {
+                if (currentImage && currentScale < 2) {
+                    currentScale += 0.1;
+                    updateZoom();
+                }
+            });
+            
+            zoomOutBtn.addEventListener("click", function() {
+                if (currentImage && currentScale > 0.5) {
+                    currentScale -= 0.1;
+                    updateZoom();
+                }
+            });
+            
+            zoomResetBtn.addEventListener("click", function() {
+                if (currentImage) {
+                    currentScale = 1;
+                    updateZoom();
+                }
+            });
+            
+            function updateZoom() {
+                image.style.transform = `scale(${currentScale})`;
+                updateZoomUI();
+            }
+            
+            // عند النقر على الصورة
+            image.addEventListener("click", function(event) {
+                if (!currentImage) return;
+                
+                const rect = image.getBoundingClientRect();
+                
+                // حساب الإحداثيات بالنسبة للصورة الأصلية
+                const scaleX = image.naturalWidth / rect.width;
+                const scaleY = image.naturalHeight / rect.height;
+                
+                const x = Math.round((event.clientX - rect.left) * scaleX);
+                const y = Math.round((event.clientY - rect.top) * scaleY);
+                
+                // عرض الإحداثيات
+                selectedCoordinates = { x, y };
+                coordinatesDisplay.textContent = `النقطة (X: ${x}, Y: ${y})`;
+                coordinatesDisplay.classList.remove('text-gray-700', 'dark:text-gray-300');
+                coordinatesDisplay.classList.add('text-green-600', 'dark:text-green-400');
+                
+                // إظهار العلامة عند النقطة المحددة
+                marker.style.display = 'block';
+                marker.style.left = (event.clientX - rect.left) + 'px';
+                marker.style.top = (event.clientY - rect.top) + 'px';
+                
+                // إضافة الإحداثيات إلى السجل
+                addToHistory(x, y);
+            });
+            
+            // إضافة إحداثيات إلى السجل
+            function addToHistory(x, y) {
+                const timestamp = new Date().toLocaleTimeString();
+                const entry = { x, y, timestamp, image: currentImage };
+                coordinatesHistory.unshift(entry);
+                
+                // الحد الأقصى للسجل هو 10 إدخالات
+                if (coordinatesHistory.length > 10) {
+                    coordinatesHistory.pop();
+                }
+                
+                updateHistoryDisplay();
+            }
+            
+            // تحديث عرض سجل الإحداثيات
+            function updateHistoryDisplay() {
+                historyList.innerHTML = '';
+                
+                coordinatesHistory.forEach((entry, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'flex justify-between items-center p-2 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors';
+                    
+                    const valueSpan = document.createElement('div');
+                    valueSpan.className = 'text-gray-700 dark:text-gray-300';
+                    valueSpan.innerHTML = `<span class="font-medium">X: ${entry.x}, Y: ${entry.y}</span> <span class="text-xs text-gray-500 dark:text-gray-400">(${entry.timestamp})</span>`;
+                    
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'flex space-x-1 space-x-reverse';
+                    
+                    const useBtn = document.createElement('button');
+                    useBtn.className = 'p-1 text-xs bg-blue-100 dark:bg-blue-800/30 text-blue-600 dark:text-blue-400 rounded hover:bg-blue-200 dark:hover:bg-blue-700/30 transition-colors';
+                    useBtn.innerHTML = '<i class="fas fa-check"></i>';
+                    useBtn.title = 'استخدام';
+                    useBtn.addEventListener('click', function() {
+                        // استخدام الإحداثيات المحفوظة
+                        selectedCoordinates = { x: entry.x, y: entry.y };
+                        coordinatesDisplay.textContent = `النقطة (X: ${entry.x}, Y: ${entry.y})`;
+                        coordinatesDisplay.classList.remove('text-gray-700', 'dark:text-gray-300');
+                        coordinatesDisplay.classList.add('text-green-600', 'dark:text-green-400');
+                        
+                        // إذا كانت الصورة الحالية مختلفة، قم بتحميلها أولاً
+                        if (currentImage !== entry.image) {
+                            loadImage(entry.image);
+                            
+                            // تحديث التحديد البصري في سجل الصور
+                            updateImageHistoryDisplay();
+                        }
+                    });
+                    
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'p-1 text-xs bg-green-100 dark:bg-green-800/30 text-green-600 dark:text-green-400 rounded hover:bg-green-200 dark:hover:bg-green-700/30 transition-colors';
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                    copyBtn.title = 'نسخ';
+                    copyBtn.addEventListener('click', function() {
+                        const textToCopy = `X: ${entry.x}, Y: ${entry.y}`;
+                        navigator.clipboard.writeText(textToCopy)
+                            .then(() => {
+                                // تغيير مؤقت للأيقونة لإظهار النجاح
+                                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                                setTimeout(() => {
+                                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                                }, 1000);
+                            })
+                            .catch(err => {
+                                console.error('فشل في نسخ النص: ', err);
+                                alert('لم نتمكن من نسخ النص. يرجى المحاولة مرة أخرى.');
+                            });
+                    });
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'p-1 text-xs bg-red-100 dark:bg-red-800/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-700/30 transition-colors';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.title = 'حذف';
+                    deleteBtn.addEventListener('click', function() {
+                        coordinatesHistory.splice(index, 1);
+                        updateHistoryDisplay();
+                    });
+                    
+                    actionsDiv.appendChild(useBtn);
+                    actionsDiv.appendChild(copyBtn);
+                    actionsDiv.appendChild(deleteBtn);
+                    
+                    historyItem.appendChild(valueSpan);
+                    historyItem.appendChild(actionsDiv);
+                    
+                    historyList.appendChild(historyItem);
+                });
+                
+                // إذا كان السجل فارغاً، عرض رسالة
+                if (coordinatesHistory.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'py-4 text-center text-gray-500 dark:text-gray-400 text-sm';
+                    emptyMessage.textContent = 'لا توجد إحداثيات مسجلة';
+                    historyList.appendChild(emptyMessage);
+                }
+            }
+            
+            // زر نسخ الإحداثيات
+            copyCoordinatesBtn.addEventListener('click', function() {
+                if (selectedCoordinates) {
+                    const textToCopy = `X: ${selectedCoordinates.x}, Y: ${selectedCoordinates.y}`;
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => {
+                            const originalText = copyCoordinatesBtn.innerHTML;
+                            copyCoordinatesBtn.innerHTML = '<i class="fas fa-check ml-1"></i>تم النسخ!';
+                            setTimeout(() => {
+                                copyCoordinatesBtn.innerHTML = originalText;
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error('فشل في نسخ النص: ', err);
+                            alert('لم نتمكن من نسخ النص. يرجى المحاولة مرة أخرى.');
+                        });
+                } else {
+                    alert('يرجى تحديد إحداثيات أولاً');
+                }
+            });
+            
+            // زر مسح العلامات
+            clearMarkersBtn.addEventListener('click', function() {
+                marker.style.display = 'none';
+                selectedCoordinates = null;
+                coordinatesDisplay.textContent = 'لم يتم التحديد بعد';
+                coordinatesDisplay.classList.remove('text-green-600', 'dark:text-green-400');
+                coordinatesDisplay.classList.add('text-gray-700', 'dark:text-gray-300');
+            });
+            
+            // إضافة التحرك بالماوس لعرض الإحداثيات الحالية بشكل مؤقت
+            image.addEventListener('mousemove', function(event) {
+                if (!currentImage) return;
+                
+                const rect = image.getBoundingClientRect();
+                
+                // حساب الإحداثيات بالنسبة للصورة الأصلية
+                const scaleX = image.naturalWidth / rect.width;
+                const scaleY = image.naturalHeight / rect.height;
+                
+                const x = Math.round((event.clientX - rect.left) * scaleX);
+                const y = Math.round((event.clientY - rect.top) * scaleY);
+                
+                // تحديث عنوان الصفحة بالإحداثيات الحالية
+                document.title = `الإحداثيات: X: ${x}, Y: ${y}`;
+            });
+            
+            // تحميل صور السجل السابقة
+            function loadDefaultImages() {
+                // تحميل آخر صورة تم استخدامها
+                if (imageHistory.length > 0) {
+                    loadImage(imageHistory[0].src);
+                }
+            }
+            
+            // تهيئة عرض السجل
+            updateImageHistoryDisplay();
+            updateHistoryDisplay();
+            
+            // تحميل الصور السابقة
+            loadDefaultImages();
+            
+            // إمكانية السحب والإفلات للصور - تغيير مظهر منطقة الإفلات
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+            });
+            
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+                
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    const file = files[0];
+                    
+                    if (file.type.match('image.*')) {
+                        selectedFileName.textContent = file.name;
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const src = e.target.result;
+                            loadImage(src);
+                            addToImageHistory(src, file.name);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('يجب أن يكون الملف المسحوب صورة');
+                    }
+                }
+            });
+            
+            // إمكانية السحب والإفلات للصفحة بأكملها
+            document.body.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+            });
+            
+            document.body.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+                
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    const file = files[0];
+                    
+                    if (file.type.match('image.*')) {
+                        selectedFileName.textContent = file.name;
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const src = e.target.result;
+                            loadImage(src);
+                            addToImageHistory(src, file.name);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        showNotification('يجب أن يكون الملف المسحوب صورة', 'error');
+                    }
+                }
+            });
+            
+            // إضافة إمكانية التنقل بلوحة المفاتيح للتحكم بالتكبير والتصغير
+            document.addEventListener('keydown', function(e) {
+                if (!currentImage) return;
+                
+                // Ctrl + Plus للتكبير
+                if (e.ctrlKey && e.key === '+') {
+                    e.preventDefault();
+                    if (currentScale < 2) {
+                        currentScale += 0.1;
+                        updateZoom();
+                    }
+                }
+                
+                // Ctrl + Minus للتصغير
+                if (e.ctrlKey && e.key === '-') {
+                    e.preventDefault();
+                    if (currentScale > 0.5) {
+                        currentScale -= 0.1;
+                        updateZoom();
+                    }
+                }
+                
+                // Ctrl + 0 لإعادة الضبط
+                if (e.ctrlKey && e.key === '0') {
+                    e.preventDefault();
+                    currentScale = 1;
+                    updateZoom();
+                }
+            });
+            
+            // إضافة وظيفة إظهار الإشعارات
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 opacity-0';
+                
+                // تحديد نوع الإشعار
+                if (type === 'success') {
+                    notification.classList.add('bg-green-50', 'text-green-800', 'dark:bg-green-900/70', 'dark:text-green-200');
+                    notification.innerHTML = `<i class="fas fa-check-circle ml-2"></i>${message}`;
+                } else if (type === 'error') {
+                    notification.classList.add('bg-red-50', 'text-red-800', 'dark:bg-red-900/70', 'dark:text-red-200');
+                    notification.innerHTML = `<i class="fas fa-times-circle ml-2"></i>${message}`;
+                } else {
+                    notification.classList.add('bg-blue-50', 'text-blue-800', 'dark:bg-blue-900/70', 'dark:text-blue-200');
+                    notification.innerHTML = `<i class="fas fa-info-circle ml-2"></i>${message}`;
+                }
+                
+                document.body.appendChild(notification);
+                
+                // ظهور الإشعار بتأثير متحرك
+                setTimeout(() => {
+                    notification.classList.add('opacity-100');
+                }, 10);
+                
+                // إخفاء الإشعار بعد 3 ثوانٍ
+                setTimeout(() => {
+                    notification.classList.remove('opacity-100');
+                    notification.classList.add('opacity-0');
+                    
+                    // إزالة العنصر بعد انتهاء التأثير
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+            
+            // إضافة وظيفة لدعم عجلة الماوس للتكبير والتصغير
+            imageWrapper.addEventListener('wheel', function(e) {
+                if (!currentImage) return;
+                
+                e.preventDefault();
+                
+                // Ctrl + Wheel للتكبير والتصغير
+                if (e.ctrlKey) {
+                    if (e.deltaY < 0 && currentScale < 2) {
+                        // تكبير
+                        currentScale += 0.1;
+                        updateZoom();
+                    } else if (e.deltaY > 0 && currentScale > 0.5) {
+                        // تصغير
+                        currentScale -= 0.1;
+                        updateZoom();
+                    }
+                }
+            });
+            
+            // إضافة زر لتحميل الصورة كما هي بالعلامات
+            function addDownloadWithMarksButton() {
+                const downloadBtn = document.createElement('button');
+                downloadBtn.id = 'downloadWithMarks';
+                downloadBtn.className = 'absolute top-2 left-2 w-10 h-10 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-md';
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+                downloadBtn.title = 'تحميل الصورة مع العلامات';
+                
+                downloadBtn.addEventListener('click', function() {
+                    if (!currentImage || !selectedCoordinates) {
+                        showNotification('يرجى تحديد إحداثيات على الصورة أولاً', 'error');
+                        return;
+                    }
+                    
+                    // إنشاء عنصر canvas لرسم الصورة مع العلامة
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // تعيين أبعاد الكانفس لتطابق أبعاد الصورة الأصلية
+                    canvas.width = image.naturalWidth;
+                    canvas.height = image.naturalHeight;
+                    
+                    // رسم الصورة الأصلية
+                    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    
+                    // رسم العلامة
+                    ctx.beginPath();
+                    ctx.arc(selectedCoordinates.x, selectedCoordinates.y, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'white';
+                    ctx.stroke();
+                    
+                    // إضافة النص للإحداثيات
+                    ctx.font = 'bold 16px Tajawal';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'top';
+                    ctx.fillStyle = 'white';
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 3;
+                    
+                    const text = `X: ${selectedCoordinates.x}, Y: ${selectedCoordinates.y}`;
+                    const textX = selectedCoordinates.x;
+                    const textY = selectedCoordinates.y + 15;
+                    
+                    // رسم الخط الخارجي
+                    ctx.strokeText(text, textX, textY);
+                    // رسم النص
+                    ctx.fillText(text, textX, textY);
+                    
+                    // تحويل الكانفس إلى صورة
+                    const dataURL = canvas.toDataURL('image/png');
+                    
+                    // إنشاء رابط تحميل
+                    const a = document.createElement('a');
+                    a.href = dataURL;
+                    a.download = 'image_with_coordinates.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    showNotification('تم تحميل الصورة بنجاح', 'success');
+                });
+                
+                imageWrapper.appendChild(downloadBtn);
+            }
+            
+            // إضافة زر التحميل إلى حاوية الصورة
+            addDownloadWithMarksButton();
+            
+            // تتبع آخر إحداثيات للمؤشر
+            let lastCursorX = 0;
+            let lastCursorY = 0;
+            
+            // إضافة عنصر لعرض الإحداثيات الحالية للمؤشر
+            const cursorCoordinates = document.createElement('div');
+            cursorCoordinates.className = 'fixed bottom-4 left-4 py-1 px-3 bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 rounded-lg text-sm shadow-md hidden';
+            document.body.appendChild(cursorCoordinates);
+            
+            image.addEventListener('mousemove', function(event) {
+                if (!currentImage) return;
+                
+                const rect = image.getBoundingClientRect();
+                
+                // حساب الإحداثيات بالنسبة للصورة الأصلية
+                const scaleX = image.naturalWidth / rect.width;
+                const scaleY = image.naturalHeight / rect.height;
+                
+                const x = Math.round((event.clientX - rect.left) * scaleX);
+                const y = Math.round((event.clientY - rect.top) * scaleY);
+                
+                lastCursorX = x;
+                lastCursorY = y;
+                
+                // عرض الإحداثيات الحالية
+                cursorCoordinates.textContent = `X: ${x}, Y: ${y}`;
+                cursorCoordinates.classList.remove('hidden');
+                
+                // تحريك عنصر عرض الإحداثيات مع المؤشر
+                cursorCoordinates.style.left = `${event.pageX + 10}px`;
+                cursorCoordinates.style.top = `${event.pageY + 10}px`;
+            });
+            
+            image.addEventListener('mouseout', function() {
+                cursorCoordinates.classList.add('hidden');
+            });
+            
+            // إضافة ميزة تحديد نقطتين وقياس المسافة بينهما
+            let firstPoint = null;
+            let measureMode = false;
+            
+            // إضافة زر لتفعيل وضع قياس المسافة
+            const measureButton = document.createElement('button');
+            measureButton.id = 'measureMode';
+            measureButton.className = 'absolute top-14 left-2 w-10 h-10 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-md';
+            measureButton.innerHTML = '<i class="fas fa-ruler"></i>';
+            measureButton.title = 'قياس المسافة بين نقطتين';
+            
+            measureButton.addEventListener('click', function() {
+                measureMode = !measureMode;
+                
+                if (measureMode) {
+                    measureButton.classList.add('bg-blue-600', 'text-white', 'dark:bg-blue-700');
+                    showNotification('تم تفعيل وضع قياس المسافة. انقر على نقطتين لقياس المسافة بينهما.', 'info');
+                    firstPoint = null;
+                } else {
+                    measureButton.classList.remove('bg-blue-600', 'text-white', 'dark:bg-blue-700');
+                    firstPoint = null;
+                }
+            });
+            
+            imageWrapper.appendChild(measureButton);
+            
+            // تعديل وظيفة النقر على الصورة لدعم وضع القياس
+            image.addEventListener("click", function(event) {
+                if (!currentImage) return;
+                
+                const rect = image.getBoundingClientRect();
+                
+                // حساب الإحداثيات بالنسبة للصورة الأصلية
+                const scaleX = image.naturalWidth / rect.width;
+                const scaleY = image.naturalHeight / rect.height;
+                
+                const x = Math.round((event.clientX - rect.left) * scaleX);
+                const y = Math.round((event.clientY - rect.top) * scaleY);
+                
+                if (measureMode) {
+                    if (!firstPoint) {
+                        // تخزين النقطة الأولى
+                        firstPoint = { x, y };
+                        showNotification('تم تحديد النقطة الأولى. انقر على النقطة الثانية لإكمال القياس.', 'info');
+                    } else {
+                        // حساب المسافة بين النقطتين
+                        const dx = x - firstPoint.x;
+                        const dy = y - firstPoint.y;
+                        const distance = Math.round(Math.sqrt(dx * dx + dy * dy));
+                        
+                        showNotification(`المسافة بين النقطتين: ${distance} بكسل`, 'success');
+                        
+                        // إضافة المسافة إلى سجل الإحداثيات
+                        const timestamp = new Date().toLocaleTimeString();
+                        const entry = {
+                            x: firstPoint.x,
+                            y: firstPoint.y,
+                            x2: x,
+                            y2: y,
+                            distance,
+                            timestamp,
+                            image: currentImage,
+                            type: 'distance'
+                        };
+                        
+                        coordinatesHistory.unshift(entry);
+                        
+                        // الحد الأقصى للسجل هو 10 إدخالات
+                        if (coordinatesHistory.length > 10) {
+                            coordinatesHistory.pop();
+                        }
+                        
+                        updateHistoryDisplay();
+                        
+                        // إعادة تعيين
+                        firstPoint = null;
+                        measureMode = false;
+                        measureButton.classList.remove('bg-blue-600', 'text-white', 'dark:bg-blue-700');
+                    }
+                } else {
+                    // سلوك النقر العادي لتحديد نقطة واحدة
+                    selectedCoordinates = { x, y };
+                    coordinatesDisplay.textContent = `النقطة (X: ${x}, Y: ${y})`;
+                    coordinatesDisplay.classList.remove('text-gray-700', 'dark:text-gray-300');
+                    coordinatesDisplay.classList.add('text-green-600', 'dark:text-green-400');
+                    
+                    // إظهار العلامة عند النقطة المحددة
+                    marker.style.display = 'block';
+                    marker.style.left = (event.clientX - rect.left) + 'px';
+                    marker.style.top = (event.clientY - rect.top) + 'px';
+                    
+                    // إضافة الإحداثيات إلى السجل
+                    addToHistory(x, y);
+                }
+            });
+            
+            // تحديث وظيفة عرض سجل الإحداثيات لدعم قياسات المسافة
+            function updateHistoryDisplay() {
+                historyList.innerHTML = '';
+                
+                coordinatesHistory.forEach((entry, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'flex justify-between items-center p-2 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors';
+                    
+                    const valueSpan = document.createElement('div');
+                    valueSpan.className = 'text-gray-700 dark:text-gray-300';
+                    
+                    // تمييز قياسات المسافة عن الإحداثيات العادية
+                    if (entry.type === 'distance') {
+                        valueSpan.innerHTML = `
+                            <span class="font-medium">المسافة: ${entry.distance} بكسل</span><br>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">من (${entry.x}, ${entry.y}) إلى (${entry.x2}, ${entry.y2})</span>
+                        `;
+                    } else {
+                        valueSpan.innerHTML = `<span class="font-medium">X: ${entry.x}, Y: ${entry.y}</span> <span class="text-xs text-gray-500 dark:text-gray-400">(${entry.timestamp})</span>`;
+                    }
+                    
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'flex space-x-1 space-x-reverse';
+                    
+                    const useBtn = document.createElement('button');
+                    useBtn.className = 'p-1 text-xs bg-blue-100 dark:bg-blue-800/30 text-blue-600 dark:text-blue-400 rounded hover:bg-blue-200 dark:hover:bg-blue-700/30 transition-colors';
+                    useBtn.innerHTML = '<i class="fas fa-check"></i>';
+                    useBtn.title = 'استخدام';
+                    useBtn.addEventListener('click', function() {
+                        // إذا كانت الصورة الحالية مختلفة، قم بتحميلها أولاً
+                        if (currentImage !== entry.image) {
+                            loadImage(entry.image);
+                            // تحديث التحديد البصري في سجل الصور
+                            updateImageHistoryDisplay();
+                        }
+                        
+                        if (entry.type === 'distance') {
+                            // لا يوجد سلوك محدد لاستخدام قياس المسافة حالياً
+                            showNotification('تم تحديد قياس المسافة', 'info');
+                        } else {
+                            // استخدام الإحداثيات المحفوظة
+                            selectedCoordinates = { x: entry.x, y: entry.y };
+                            coordinatesDisplay.textContent = `النقطة (X: ${entry.x}, Y: ${entry.y})`;
+                            coordinatesDisplay.classList.remove('text-gray-700', 'dark:text-gray-300');
+                            coordinatesDisplay.classList.add('text-green-600', 'dark:text-green-400');
+                        }
+                    });
+                    
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'p-1 text-xs bg-green-100 dark:bg-green-800/30 text-green-600 dark:text-green-400 rounded hover:bg-green-200 dark:hover:bg-green-700/30 transition-colors';
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                    copyBtn.title = 'نسخ';
+                    copyBtn.addEventListener('click', function() {
+                        let textToCopy;
+                        
+                        if (entry.type === 'distance') {
+                            textToCopy = `المسافة: ${entry.distance} بكسل | من (${entry.x}, ${entry.y}) إلى (${entry.x2}, ${entry.y2})`;
+                        } else {
+                            textToCopy = `X: ${entry.x}, Y: ${entry.y}`;
+                        }
+                        
+                        navigator.clipboard.writeText(textToCopy)
+                            .then(() => {
+                                // تغيير مؤقت للأيقونة لإظهار النجاح
+                                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                                setTimeout(() => {
+                                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                                }, 1000);
+                            })
+                            .catch(err => {
+                                console.error('فشل في نسخ النص: ', err);
+                                alert('لم نتمكن من نسخ النص. يرجى المحاولة مرة أخرى.');
+                            });
+                    });
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'p-1 text-xs bg-red-100 dark:bg-red-800/30 text-red-600 dark:text-red-400 rounded hover:bg-red-200 dark:hover:bg-red-700/30 transition-colors';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.title = 'حذف';
+                    deleteBtn.addEventListener('click', function() {
+                        coordinatesHistory.splice(index, 1);
+                        updateHistoryDisplay();
+                    });
+                    
+                    actionsDiv.appendChild(useBtn);
+                    actionsDiv.appendChild(copyBtn);
+                    actionsDiv.appendChild(deleteBtn);
+                    
+                    historyItem.appendChild(valueSpan);
+                    historyItem.appendChild(actionsDiv);
+                    
+                    historyList.appendChild(historyItem);
+                });
+                
+                // إذا كان السجل فارغاً، عرض رسالة
+                if (coordinatesHistory.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'py-4 text-center text-gray-500 dark:text-gray-400 text-sm';
+                    emptyMessage.textContent = 'لا توجد إحداثيات مسجلة';
+                    historyList.appendChild(emptyMessage);
+                }
+            }
+            
+            // إضافة مؤشر العلامة المزدوجة لوضع قياس المسافة
+            const secondMarker = document.createElement('div');
+            secondMarker.className = 'marker';
+            secondMarker.style.display = 'none';
+            secondMarker.style.backgroundColor = 'rgba(0, 128, 255, 0.7)';
+            imageWrapper.appendChild(secondMarker);
+            
+            // إضافة خط الربط بين النقطتين
+            const connectionLine = document.createElement('div');
+            connectionLine.style.position = 'absolute';
+            connectionLine.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            connectionLine.style.border = '1px dashed rgba(0, 128, 255, 0.8)';
+            connectionLine.style.zIndex = '5';
+            connectionLine.style.transformOrigin = 'top left';
+            connectionLine.style.pointerEvents = 'none';
+            connectionLine.style.display = 'none';
+            imageWrapper.appendChild(connectionLine);
+            
+            // وظيفة لإظهار الخط بين نقطتين
+            function showConnectionLine(x1, y1, x2, y2) {
+                // حساب المسافة والزاوية
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                // تعيين موضع وأبعاد الخط
+                connectionLine.style.width = `${length}px`;
+                connectionLine.style.height = '2px';
+                connectionLine.style.left = `${x1}px`;
+                connectionLine.style.top = `${y1}px`;
+                connectionLine.style.transform = `rotate(${angle}deg)`;
+                connectionLine.style.display = 'block';
+            }
+            
+            // إضافة إظهار نطاق أكبر لتصفح الصورة
+            function enableImagePanning() {
+                let isPanning = false;
+                let startX, startY;
+                let scrollLeft, scrollTop;
+                const imageContainer = document.querySelector('.image-container');
+                
+                imageContainer.addEventListener('mousedown', function(e) {
+                    if (e.which === 2) { // الزر الأوسط فقط
+                        e.preventDefault();
+                        isPanning = true;
+                        imageContainer.style.cursor = 'grabbing';
+                        startX = e.pageX - imageContainer.offsetLeft;
+                        startY = e.pageY - imageContainer.offsetTop;
+                        scrollLeft = imageContainer.scrollLeft;
+                        scrollTop = imageContainer.scrollTop;
+                    }
+                });
+                
+                imageContainer.addEventListener('mouseleave', function() {
+                    isPanning = false;
+                    imageContainer.style.cursor = 'default';
+                });
+                
+                imageContainer.addEventListener('mouseup', function() {
+                    isPanning = false;
+                    imageContainer.style.cursor = 'default';
+                });
+                
+                imageContainer.addEventListener('mousemove', function(e) {
+                    if (!isPanning) return;
+                    e.preventDefault();
+                    const x = e.pageX - imageContainer.offsetLeft;
+                    const y = e.pageY - imageContainer.offsetTop;
+                    const walkX = (x - startX) * 2;
+                    const walkY = (y - startY) * 2;
+                    imageContainer.scrollLeft = scrollLeft - walkX;
+                    imageContainer.scrollTop = scrollTop - walkY;
+                });
+            }
+            
+            // تفعيل التحريك بالماوس
+            enableImagePanning();
+            
+            // إضافة وضع الشبكة Grid Mode
+            let gridMode = false;
+            const gridOverlay = document.createElement('div');
+            gridOverlay.className = 'absolute inset-0 pointer-events-none z-20';
+            gridOverlay.style.backgroundImage = 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)';
+            gridOverlay.style.backgroundSize = '20px 20px';
+            gridOverlay.style.display = 'none';
+            imageWrapper.appendChild(gridOverlay);
+            
+            // إضافة زر لتفعيل وضع الشبكة
+            const gridButton = document.createElement('button');
+            gridButton.id = 'gridMode';
+            gridButton.className = 'absolute top-26 left-2 w-10 h-10 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-md';
+            gridButton.style.top = '90px';
+            gridButton.innerHTML = '<i class="fas fa-th"></i>';
+            gridButton.title = 'عرض/إخفاء الشبكة';
+            
+            gridButton.addEventListener('click', function() {
+                gridMode = !gridMode;
+                
+                if (gridMode) {
+                    gridButton.classList.add('bg-blue-600', 'text-white', 'dark:bg-blue-700');
+                    gridOverlay.style.display = 'block';
+                } else {
+                    gridButton.classList.remove('bg-blue-600', 'text-white', 'dark:bg-blue-700');
+                    gridOverlay.style.display = 'none';
+                }
+            });
+            
+            imageWrapper.appendChild(gridButton);
+            
+            // إضافة لوحة الاختصارات
+            function createShortcutsPanel() {
+                const shortcutsBtn = document.createElement('button');
+                shortcutsBtn.className = 'fixed bottom-4 right-4 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors';
+                shortcutsBtn.innerHTML = '<i class="fas fa-keyboard"></i>';
+                shortcutsBtn.title = 'اختصارات لوحة المفاتيح';
+                
+                const shortcutsPanel = document.createElement('div');
+                shortcutsPanel.className = 'fixed bottom-16 right-4 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 transform scale-0 origin-bottom-right transition-transform duration-200';
+                shortcutsPanel.innerHTML = `
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-200">اختصارات لوحة المفاتيح</h3>
+                    <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li class="flex justify-between">
+                            <span>Ctrl + +</span>
+                            <span>تكبير</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Ctrl + -</span>
+                            <span>تصغير</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Ctrl + 0</span>
+                            <span>إعادة الحجم الطبيعي</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Ctrl + عجلة الماوس</span>
+                            <span>تكبير/تصغير</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Ctrl + C</span>
+                            <span>نسخ الإحداثيات</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>زر الماوس الأوسط</span>
+                            <span>تحريك الصورة</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>G</span>
+                            <span>تفعيل/تعطيل الشبكة</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>M</span>
+                            <span>وضع قياس المسافة</span>
+                        </li>
+                    </ul>
+                `;
+                
+                document.body.appendChild(shortcutsBtn);
+                document.body.appendChild(shortcutsPanel);
+                
+                shortcutsBtn.addEventListener('click', function() {
+                    if (shortcutsPanel.classList.contains('scale-0')) {
+                        shortcutsPanel.classList.remove('scale-0');
+                        shortcutsPanel.classList.add('scale-100');
+                    } else {
+                        shortcutsPanel.classList.remove('scale-100');
+                        shortcutsPanel.classList.add('scale-0');
+                    }
+                });
+                
+                // إغلاق اللوحة عند النقر خارجها
+                document.addEventListener('click', function(e) {
+                    if (!shortcutsPanel.contains(e.target) && e.target !== shortcutsBtn && !shortcutsPanel.classList.contains('scale-0')) {
+                        shortcutsPanel.classList.remove('scale-100');
+                        shortcutsPanel.classList.add('scale-0');
+                    }
+                });
+            }
+            
+            // إنشاء لوحة الاختصارات
+            createShortcutsPanel();
+            
+            // إضافة اختصارات لوحة المفاتيح الإضافية
+            document.addEventListener('keydown', function(e) {
+                // اختصار Ctrl+C لنسخ الإحداثيات الحالية
+                if (e.ctrlKey && e.key === 'c' && selectedCoordinates) {
+                    e.preventDefault();
+                    const textToCopy = `X: ${selectedCoordinates.x}, Y: ${selectedCoordinates.y}`;
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => {
+                            showNotification('تم نسخ الإحداثيات', 'success');
+                        })
+                        .catch(err => {
+                            console.error('فشل في نسخ النص: ', err);
+                            showNotification('لم نتمكن من نسخ النص', 'error');
+                        });
+                }
+                
+                // اختصار G لتفعيل/تعطيل وضع الشبكة
+                if (e.key === 'g' || e.key === 'G') {
+                    gridButton.click();
+                }
+                
+                // اختصار M لتفعيل/تعطيل وضع قياس المسافة
+                if (e.key === 'm' || e.key === 'M') {
+                    measureButton.click();
+                }
+            });
+            
+            // تخصيص قائمة السياق Context Menu للصورة
+            image.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                
+                if (!currentImage) return;
+                
+                // إنشاء قائمة مخصصة
+                const contextMenu = document.createElement('div');
+                contextMenu.className = 'absolute bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 overflow-hidden';
+                contextMenu.style.left = `${e.pageX}px`;
+                contextMenu.style.top = `${e.pageY}px`;
+                
+                // إضافة العناصر للقائمة
+                contextMenu.innerHTML = `
+                    <div class="p-2 text-center border-b border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-700 dark:text-gray-300">خيارات</div>
+                    <div class="custom-menu-item copy-coords">
+                        <i class="fas fa-copy ml-2"></i>نسخ الإحداثيات الحالية
+                    </div>
+                    <div class="custom-menu-item toggle-grid">
+                        <i class="fas fa-th ml-2"></i>${gridMode ? 'إخفاء الشبكة' : 'إظهار الشبكة'}
+                    </div>
+                    <div class="custom-menu-item toggle-measure">
+                        <i class="fas fa-ruler ml-2"></i>${measureMode ? 'إلغاء وضع القياس' : 'تفعيل وضع القياس'}
+                    </div>
+                    <div class="custom-menu-item reset-zoom">
+                        <i class="fas fa-search ml-2"></i>إعادة تعيين حجم الصورة
+                    </div>
+                    <div class="custom-menu-item save-image">
+                        <i class="fas fa-download ml-2"></i>حفظ الصورة مع العلامات
+                    </div>
+                `;
+                
+                // إضافة النمط للعناصر
+                const style = document.createElement('style');
+                style.textContent = `
+                    .custom-menu-item {
+                        padding: 8px 12px;
+                        cursor: pointer;
+                        font-size: 0.875rem;
+                        color: #4b5563;
+                        transition: background-color 0.2s;
+                    }
+                    .dark .custom-menu-item {
+                        color: #d1d5db;
+                    }
+                    .custom-menu-item:hover {
+                        background-color: #f3f4f6;
+                    }
+                    .dark .custom-menu-item:hover {
+                        background-color: #374151;
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // إضافة القائمة للصفحة
+                document.body.appendChild(contextMenu);
+                
+                // إضافة مستمعي الأحداث للعناصر
+                contextMenu.querySelector('.copy-coords').addEventListener('click', function() {
+                    const rect = image.getBoundingClientRect();
+                    const scaleX = image.naturalWidth / rect.width;
+                    const scaleY = image.naturalHeight / rect.height;
+                    const x = Math.round((e.clientX - rect.left) * scaleX);
+                    const y = Math.round((e.clientY - rect.top) * scaleY);
+                    
+                    navigator.clipboard.writeText(`X: ${x}, Y: ${y}`)
+                        .then(() => {
+                            showNotification('تم نسخ الإحداثيات', 'success');
+                        });
+                    
+                    document.body.removeChild(contextMenu);
+                });
+                
+                contextMenu.querySelector('.toggle-grid').addEventListener('click', function() {
+                    gridButton.click();
+                    document.body.removeChild(contextMenu);
+                });
+                
+                contextMenu.querySelector('.toggle-measure').addEventListener('click', function() {
+                    measureButton.click();
+                    document.body.removeChild(contextMenu);
+                });
+                
+                contextMenu.querySelector('.reset-zoom').addEventListener('click', function() {
+                    currentScale = 1;
+                    updateZoom();
+                    document.body.removeChild(contextMenu);
+                });
+                
+                contextMenu.querySelector('.save-image').addEventListener('click', function() {
+                    document.getElementById('downloadWithMarks').click();
+                    document.body.removeChild(contextMenu);
+                });
+                
+                // إغلاق القائمة عند النقر خارجها
+                document.addEventListener('click', function hideMenu() {
+                    if (document.body.contains(contextMenu)) {
+                        document.body.removeChild(contextMenu);
+                    }
+                    document.removeEventListener('click', hideMenu);
+                });
+            });
+            
+            // تحسين مظهر العلامة مع تأثير نبض للانتباه
+            const markerStyle = document.createElement('style');
+            markerStyle.textContent = `
+                .marker {
+                    position: absolute;
+                    width: 16px;
+                    height: 16px;
+                    background-color: rgba(255, 0, 0, 0.7);
+                    border: 2px solid white;
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 10;
+                    pointer-events: none;
+                    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+                    animation: pulse 1.5s infinite;
+                }
+                
+                @keyframes pulse {
+                    0% {
+                        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+                    }
+                    70% {
+                        box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+                    }
+                }
+            `;
+            document.head.appendChild(markerStyle);
+            
+            // إضافة نمط محسن للمربع المخصص للتحديد (منطقة إفلات الصور)
+            dropZone.addEventListener('dragenter', function() {
+                this.classList.add('scale-105');
+                this.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+            });
+            
+            dropZone.addEventListener('dragleave', function() {
+                this.classList.remove('scale-105');
+                this.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'border-blue-300', 'dark:border-blue-700');
+            });
+            
+            dropZone.addEventListener('drop', function() {
+                this.classList.remove('scale-105');
+            });
+            
+            // إضافة نمط التحول لمنطقة الإفلات
+            const dropZoneStyle = document.createElement('style');
+            dropZoneStyle.textContent = `
+                #dropZone {
+                    transition: all 0.3s ease;
+                }
+            `;
+            document.head.appendChild(dropZoneStyle);
+            
+            // ضبط مؤشر الماوس لتكون متوافقة مع الوضع الحالي
+            function updateCursorStyle() {
+                if (measureMode) {
+                    image.style.cursor = 'crosshair';
+                } else if (gridMode) {
+                    image.style.cursor = 'default';
+                } else {
+                    image.style.cursor = 'pointer';
+                }
+            }
+            
+            // تحديث نمط المؤشر عند تغيير الأوضاع
+            measureButton.addEventListener('click', updateCursorStyle);
+            gridButton.addEventListener('click', updateCursorStyle);
+        });
+    </script>
+</body>
+</html>
