@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة المتوسطة 1 - الفصل الخامس: النقدية والذمم المدينة</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">المحاسبة المتوسطة 1</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li>
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li>
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li>
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li>
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 - Current -->
+          <li>
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg bg-blue-500">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block font-medium">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 -->
+          <li>
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 -->
+          <li>
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li>
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 -->
+          <li>
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets, Goodwill, Mineral Resources</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 -->
+          <li>
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value to Non-Current Assets</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+
+        <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Chapter Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الفصل 5</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="chapter-5.html" class="text-blue-600 hover:text-blue-800" aria-current="page">النقدية والذمم المدينة</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">النقدية والذمم المدينة</h1>
+        <p class="text-gray-600 mt-2">Cash and Receivables</p>
+      </div>
+
+      <!-- Chapter Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 10%"></div>
+      </div>
+
+      <!-- Introduction -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-info-circle ml-3"></i>
+            مقدمة
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Introduction</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            تعد النقدية والذمم المدينة من أهم الأصول المتداولة في معظم المنشآت، حيث تمثل النقدية الأصل الأكثر سيولة، بينما تمثل الذمم المدينة الحقوق المالية للمنشأة تجاه الآخرين. يتناول هذا الفصل طرق تصنيف وقياس وعرض هذه الأصول في القوائم المالية.
+          </p>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">
+                  <i class="fas fa-coins text-blue-600 ml-2"></i>
+                  أهمية النقدية والذمم المدينة
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>السيولة:</strong> توفر النقدية السيولة اللازمة لتشغيل الأعمال</li>
+                  <li>• <strong>المرونة المالية:</strong> تمكن المنشأة من مواجهة الالتزامات غير المتوقعة</li>
+                  <li>• <strong>تمويل العمليات:</strong> دعم الدورة التشغيلية والاستثمارية</li>
+                  <li>• <strong>المبيعات الآجلة:</strong> الذمم المدينة تساهم في زيادة المبيعات وجذب العملاء</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">
+                  <i class="fas fa-chart-line text-green-600 ml-2"></i>
+                  التحديات المحاسبية
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>تقييم مخاطر الائتمان:</strong> تقدير احتمالية عدم تحصيل الذمم المدينة</li>
+                  <li>• <strong>القيمة الزمنية للنقود:</strong> تأثيرها على تقييم الذمم طويلة الأجل</li>
+                  <li>• <strong>العرض والإفصاح:</strong> متطلبات الإفصاح عن القيود على النقدية</li>
+                  <li>• <strong>توقيت الاعتراف:</strong> متى يتم الاعتراف بالذمم وإلغاء الاعتراف بها</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: Cash and Cash Equivalents -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-money-bill-wave ml-3"></i>
+            1. تعريف وتصنيف النقدية وما في حكمها
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Definition and Classification of Cash and Cash Equivalents</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Cash Definition -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-wallet text-blue-600 ml-2"></i>
+                  النقدية (Cash)
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  النقدية هي أكثر الأصول سيولة، وتشمل العملات المعدنية، الأوراق النقدية، الودائع تحت الطلب، والشيكات القابلة للتحصيل.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أشكال النقدية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>العملات والأوراق النقدية:</strong> العملات الورقية والمعدنية المتداولة</li>
+                    <li>• <strong>الودائع تحت الطلب:</strong> الحسابات الجارية والودائع المصرفية التي يمكن سحبها فوراً</li>
+                    <li>• <strong>الشيكات المستلمة:</strong> من العملاء ولكن لم تودع بعد</li>
+                    <li>• <strong>الحوالات المصرفية:</strong> القابلة للتحصيل الفوري</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cash Equivalents -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-certificate text-green-600 ml-2"></i>
+                  ما في حكم النقدية (Cash Equivalents)
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  استثمارات قصيرة الأجل شديدة السيولة، تستحق خلال 3 أشهر أو أقل من تاريخ الشراء، ويمكن تحويلها بسهولة إلى مبالغ نقدية معروفة مع مخاطر ضئيلة لتغير القيمة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أمثلة على ما في حكم النقدية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>أذون الخزانة قصيرة الأجل:</strong> سندات حكومية تستحق خلال 3 أشهر أو أقل</li>
+                    <li>• <strong>الأوراق التجارية:</strong> سندات دين قصيرة الأجل تصدرها الشركات الكبرى</li>
+                    <li>• <strong>صناديق سوق المال:</strong> استثمارات في أوراق مالية قصيرة الأجل</li>
+                    <li>• <strong>الودائع لأجل:</strong> ذات فترة استحقاق أصلية 3 أشهر أو أقل</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cash in Financial Statements -->
+          <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-file-invoice-dollar text-gray-600 ml-2"></i>
+              النقدية في القوائم المالية
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">العرض في قائمة المركز المالي:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• تظهر النقدية وما في حكمها كأول بند في الأصول المتداولة</li>
+                  <li>• يتم تجميع النقدية وما في حكمها عادة في بند واحد</li>
+                  <li>• تستثنى النقدية المقيدة من النقدية وما في حكمها إذا كانت جوهرية</li>
+                </ul>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">العرض في قائمة التدفقات النقدية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• تشكل النقدية وما في حكمها الأساس لقائمة التدفقات النقدية</li>
+                  <li>• تظهر في بداية ونهاية قائمة التدفقات النقدية</li>
+                  <li>• يتم تسوية التغير في النقدية وما في حكمها مع الأنشطة التشغيلية والاستثمارية والتمويلية</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cash Example -->
+          <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-blue-600 ml-2"></i>
+              مثال توضيحي
+            </h3>
+            <p class="text-gray-700 mb-3">
+              فيما يلي بنود مختلفة من شركة "النجاح التجارية"، ساعد في تحديد ما يعتبر نقدية أو ما في حكمها:
+            </p>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead>
+                  <tr class="bg-gray-100">
+                    <th class="py-2 px-4 border-b text-right">البند</th>
+                    <th class="py-2 px-4 border-b text-right">المبلغ (ريال)</th>
+                    <th class="py-2 px-4 border-b text-right">التصنيف</th>
+                    <th class="py-2 px-4 border-b text-right">السبب</th>
+                  </tr>
+                </thead>
+                <tbody class="text-sm">
+                  <tr>
+                    <td class="py-2 px-4 border-b">نقد في الصندوق</td>
+                    <td class="py-2 px-4 border-b">15,000</td>
+                    <td class="py-2 px-4 border-b">نقدية</td>
+                    <td class="py-2 px-4 border-b">نقد متاح للاستخدام الفوري</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border-b">حساب جاري في البنك</td>
+                    <td class="py-2 px-4 border-b">78,500</td>
+                    <td class="py-2 px-4 border-b">نقدية</td>
+                    <td class="py-2 px-4 border-b">ودائع تحت الطلب قابلة للسحب الفوري</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border-b">وديعة لأجل (تستحق بعد شهرين)</td>
+                    <td class="py-2 px-4 border-b">100,000</td>
+                    <td class="py-2 px-4 border-b">ما في حكم النقدية</td>
+                    <td class="py-2 px-4 border-b">تستحق خلال أقل من 3 أشهر</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border-b">استثمار في أذون خزانة (تستحق بعد 45 يوم)</td>
+                    <td class="py-2 px-4 border-b">50,000</td>
+                    <td class="py-2 px-4 border-b">ما في حكم النقدية</td>
+                    <td class="py-2 px-4 border-b">استثمار قصير الأجل عالي السيولة يستحق خلال 3 أشهر</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border-b">استثمار في أسهم متداولة</td>
+                    <td class="py-2 px-4 border-b">35,000</td>
+                    <td class="py-2 px-4 border-b">ليس نقدية أو ما في حكمها</td>
+                    <td class="py-2 px-4 border-b">مخاطر كبيرة لتغير القيمة</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border-b">وديعة مقيدة لضمان قرض (لمدة سنة)</td>
+                    <td class="py-2 px-4 border-b">25,000</td>
+                    <td class="py-2 px-4 border-b">نقدية مقيدة (ليست ضمن النقدية وما في حكمها)</td>
+                    <td class="py-2 px-4 border-b">غير متاحة للاستخدام الفوري</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border-b">سندات حكومية (تستحق بعد 6 أشهر)</td>
+                    <td class="py-2 px-4 border-b">70,000</td>
+                    <td class="py-2 px-4 border-b">ليس ما في حكم النقدية</td>
+                    <td class="py-2 px-4 border-b">فترة الاستحقاق أكثر من 3 أشهر</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Restricted Cash and Bank Overdrafts -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-lock ml-3"></i>
+            2. النقدية المقيدة والسحب على المكشوف
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Restricted Cash & Bank Overdrafts</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Restricted Cash -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-lock text-purple-600 ml-2"></i>
+                  النقدية المقيدة (Restricted Cash)
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  النقدية المقيدة هي أموال نقدية مخصصة لأغراض معينة ولا تكون متاحة للاستخدام العام في العمليات اليومية للمنشأة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أنواع النقدية المقيدة:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>صندوق النقد الصغير:</strong> مخصص للمصروفات النثرية اليومية</li>
+                    <li>• <strong>ودائع ضمان:</strong> مخصصة لضمان قروض أو التزامات تعاقدية</li>
+                    <li>• <strong>حسابات احتياطية:</strong> للالتزامات المستقبلية كخدمة الدين</li>
+                    <li>• <strong>ودائع مقيدة قانونياً:</strong> بموجب قوانين أو أحكام قضائية</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="bg-white p-4 border border-purple-200 rounded-lg">
+                <h4 class="font-semibold text-gray-800 mb-2">المعالجة المحاسبية للنقدية المقيدة:</h4>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>الإفصاح المنفصل:</strong> يجب فصلها عن النقدية العادية إذا كانت المبالغ جوهرية</li>
+                  <li>• <strong>التصنيف المتداول/غير المتداول:</strong> بناءً على فترة القيد:
+                    <ul class="mr-4 mt-1 space-y-1 text-gray-600">
+                      <li>- <em>متداول:</em> إذا كان القيد سينتهي خلال 12 شهر</li>
+                      <li>- <em>غير متداول:</em> إذا كان القيد سيستمر لأكثر من 12 شهر</li>
+                    </ul>
+                  </li>
+                  <li>• <strong>الإيضاحات:</strong> يجب الإفصاح عن طبيعة القيود وأسبابها في الإيضاحات المتممة</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Bank Overdrafts -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-exclamation-triangle text-red-600 ml-2"></i>
+                  السحب على المكشوف (Bank Overdrafts)
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  يحدث السحب على المكشوف عندما تسحب المنشأة أموالاً من حسابها المصرفي أكثر مما هو متاح فيه، مما يؤدي إلى رصيد سالب.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">خصائص السحب على المكشوف:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>تسهيل ائتماني قصير الأجل:</strong> يقدمه البنك للعملاء المعتمدين</li>
+                    <li>• <strong>فائدة مرتفعة:</strong> تفرض على المبالغ المسحوبة على المكشوف</li>
+                    <li>• <strong>قابل للسداد عند الطلب:</strong> يمكن للبنك طلب السداد في أي وقت</li>
+                    <li>• <strong>مصدر تمويل مؤقت:</strong> لتغطية احتياجات السيولة قصيرة الأجل</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="bg-white p-4 border border-red-200 rounded-lg">
+                <h4 class="font-semibold text-gray-800 mb-2">المعالجة المحاسبية للسحب على المكشوف:</h4>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>العرض كالتزام متداول:</strong> يُعرض عادة ضمن الالتزامات المتداولة في قائمة المركز المالي</li>
+                  <li>• <strong>الاستثناء:</strong> يمكن خصمه من النقدية في الحالات التالية:
+                    <ul class="mr-4 mt-1 space-y-1 text-gray-600">
+                      <li>- إذا كان جزءًا من إدارة النقد للمنشأة</li>
+                      <li>- في نفس البنك الذي توجد فيه أرصدة دائنة</li>
+                      <li>- وجود حق قانوني للمقاصة</li>
+                    </ul>
+                  </li>
+                  <li>• <strong>قائمة التدفقات النقدية:</strong> يُطرح من النقدية وما في حكمها في بداية ونهاية الفترة إذا كان يعتبر جزءًا من إدارة النقد</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Practical Example -->
+          <div class="mt-6 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-user-tie text-gray-600 ml-2"></i>
+              حالة عملية
+            </h3>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2">شركة الشروق للصناعات</h4>
+              <p class="text-sm text-gray-700 mb-3">
+                في 31 ديسمبر 2022، كان لدى شركة الشروق للصناعات البنود النقدية التالية:
+              </p>
+              <ul class="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• نقد في الصندوق: 45,000 ريال</li>
+                <li>• حساب جاري في بنك الاستثمار: 320,000 ريال</li>
+                <li>• سحب على المكشوف من بنك التجارة: 80,000 ريال</li>
+                <li>• وديعة مقيدة لضمان خطاب اعتماد (تنتهي بعد 9 أشهر): 150,000 ريال</li>
+                <li>• وديعة قصيرة الأجل في بنك الاستثمار (تستحق بعد 45 يوم): 200,000 ريال</li>
+              </ul>
+              
+              <p class="text-sm font-semibold text-gray-800 mb-2">كيف يجب عرض هذه البنود في قائمة المركز المالي؟</p>
+              <div class="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                <p class="text-sm text-gray-700 mb-2"><strong>الأصول المتداولة:</strong></p>
+                <ul class="text-sm text-gray-700 space-y-1 mb-3">
+                  <li>النقدية وما في حكمها: 565,000 ريال</li>
+                  <li>(نقد في الصندوق 45,000 + حساب جاري 320,000 + وديعة قصيرة الأجل 200,000)</li>
+                  <li>نقدية مقيدة (ضمان خطاب اعتماد): 150,000 ريال</li>
+                </ul>
+                <p class="text-sm text-gray-700 mb-2"><strong>الالتزامات المتداولة:</strong></p>
+                <ul class="text-sm text-gray-700 space-y-1">
+                  <li>سحب على المكشوف: 80,000 ريال</li>
+                </ul>
+              </div>
+              
+              <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-sm text-gray-700"><strong>ملاحظة:</strong> يتم الإفصاح في الإيضاحات المتممة عن طبيعة النقدية المقيدة والغرض منها، بالإضافة إلى شروط السحب على المكشوف ومعدل الفائدة المطبق.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Receivables -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-file-invoice-dollar ml-3"></i>
+            3. الذمم المدينة
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Receivables</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            الذمم المدينة هي حقوق تعاقدية للحصول على نقد أو أصل مالي آخر من طرف آخر نتيجة معاملات سابقة. تعتبر من الأصول المالية التي تخضع لمتطلبات الاعتراف والقياس والإفصاح وفقاً للمعايير المحاسبية.
+          </p>
+          
+          <div class="grid md:grid-cols-3 gap-6 mb-6">
+            <!-- Accounts Receivable -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-users text-green-600 ml-2"></i>
+                الذمم التجارية
+                <div class="text-xs text-green-600 font-normal mt-1">Accounts Receivable</div>
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                مبالغ مستحقة من العملاء نتيجة بيع البضائع أو تقديم الخدمات في سياق النشاط العادي للمنشأة.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">الخصائص:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• قصيرة الأجل (عادة 30-90 يوم)</li>
+                  <li>• غالباً بدون فائدة صريحة</li>
+                  <li>• ناتجة عن المبيعات الآجلة</li>
+                  <li>• تظهر كأصل متداول</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Notes Receivable -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-file-signature text-blue-600 ml-2"></i>
+                السندات المدينة
+                <div class="text-xs text-blue-600 font-normal mt-1">Notes Receivable</div>
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                مستندات مكتوبة يتعهد فيها المدين بدفع مبلغ محدد من المال مع الفائدة في تاريخ محدد في المستقبل.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">الخصائص:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• وثيقة رسمية قانونية</li>
+                  <li>• تتضمن فائدة صريحة</li>
+                  <li>• محددة المدة والمبلغ</li>
+                  <li>• قد تكون قصيرة أو طويلة الأجل</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Other Receivables -->
+            <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-copy text-purple-600 ml-2"></i>
+                ذمم مدينة أخرى
+                <div class="text-xs text-purple-600 font-normal mt-1">Other Receivables</div>
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                مبالغ مستحقة من أطراف أخرى غير العملاء ولا تنشأ من عمليات البيع العادية.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">أمثلة:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• سلف الموظفين</li>
+                  <li>• ضرائب قابلة للاسترداد</li>
+                  <li>• ذمم مدينة من بيع أصول ثابتة</li>
+                  <li>• ذمم مدينة من أطراف ذات علاقة</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Recognition and Measurement -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-balance-scale text-gray-600 ml-2"></i>
+              4. الاعتراف وتقييم الذمم المدينة
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <!-- Initial Recognition -->
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الاعتراف الأولي:</h4>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>توقيت الاعتراف:</strong> يتم الاعتراف بالذمم المدينة عند:
+                    <ul class="mr-4 mt-1 space-y-1 text-xs text-gray-600">
+                      <li>- بيع البضائع أو تقديم الخدمات على الحساب</li>
+                      <li>- الوفاء بالتزامات الأداء وفقاً لمعايير الاعتراف بالإيراد</li>
+                      <li>- نشوء الحق التعاقدي في استلام النقد</li>
+                    </ul>
+                  </li>
+                  <li>• <strong>القياس الأولي:</strong> بالقيمة العادلة، وهي عادةً قيمة المعاملة (مبلغ الفاتورة)</li>
+                </ul>
+              </div>
+              
+              <!-- Subsequent Measurement -->
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">القياس اللاحق:</h4>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>التكلفة المطفأة:</strong> الذمم المدينة تقاس لاحقاً بالتكلفة المطفأة باستخدام طريقة معدل الفائدة الفعلي</li>
+                  <li>• <strong>خسائر الائتمان المتوقعة:</strong> يتم تخفيض القيمة الدفترية بمخصص للديون المشكوك في تحصيلها</li>
+                  <li>• <strong>صافي القيمة القابلة للتحصيل:</strong> هي القيمة التي يتوقع تحصيلها فعلياً من الذمم المدينة</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Allowance for Doubtful Accounts -->
+          <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-hand-holding-usd text-red-600 ml-2"></i>
+              مخصص الديون المشكوك في تحصيلها
+              <div class="text-xs text-red-600 font-normal mt-1">Allowance for Doubtful Accounts</div>
+            </h3>
+            <p class="text-gray-700 mb-3">
+              حساب تقديري يستخدم لتعديل قيمة الذمم المدينة إلى القيمة المتوقع تحصيلها فعلياً، وذلك وفقاً لمبدأ الحيطة والحذر ومبدأ مقابلة الإيرادات بالمصروفات.
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">طرق تقدير المخصص:</h4>
+                <ul class="text-sm text-gray-600 space-y-2">
+                  <li><strong>1. طريقة نسبة المبيعات (طريقة قائمة الدخل):</strong>
+                    <ul class="mr-4 mt-1 space-y-1 text-xs">
+                      <li>- تقدير نسبة من إجمالي المبيعات الآجلة</li>
+                      <li>- مصروف الديون المعدومة = نسبة × المبيعات الآجلة</li>
+                    </ul>
+                  </li>
+                  <li><strong>2. طريقة نسبة الذمم المدينة (طريقة الميزانية):</strong>
+                    <ul class="mr-4 mt-1 space-y-1 text-xs">
+                      <li>- تقدير نسبة من إجمالي الذمم المدينة</li>
+                      <li>- المخصص المطلوب = نسبة × إجمالي الذمم المدينة</li>
+                    </ul>
+                  </li>
+                  <li><strong>3. طريقة تحليل أعمار الذمم:</strong>
+                    <ul class="mr-4 mt-1 space-y-1 text-xs">
+                      <li>- تصنيف الذمم حسب فترات التأخر عن السداد</li>
+                      <li>- تطبيق نسب مختلفة على كل فئة عمرية</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعالجة المحاسبية:</h4>
+                <div class="text-sm text-gray-600 space-y-2">
+                  <p><strong>عند تكوين المخصص:</strong></p>
+                  <div class="bg-gray-50 p-2 rounded text-xs">
+                    <p>مصروف الديون المشكوك في تحصيلها &nbsp;&nbsp;&nbsp; ××××</p>
+                    <p class="mr-8">مخصص الديون المشكوك في تحصيلها &nbsp;&nbsp;&nbsp; ××××</p>
+                  </div>
+                  
+                  <p><strong>عند شطب ذمم مدينة:</strong></p>
+                  <div class="bg-gray-50 p-2 rounded text-xs">
+                    <p>مخصص الديون المشكوك في تحصيلها &nbsp;&nbsp;&nbsp; ××××</p>
+                    <p class="mr-8">الذمم المدينة &nbsp;&nbsp;&nbsp; ××××</p>
+                  </div>
+                  
+                  <p><strong>عند تحصيل ذمم سبق شطبها:</strong></p>
+                  <div class="bg-gray-50 p-2 rounded text-xs">
+                    <p>النقدية &nbsp;&nbsp;&nbsp; ××××</p>
+                    <p class="mr-8">مخصص الديون المشكوك في تحصيلها &nbsp;&nbsp;&nbsp; ××××</p>
+                  </div>
+                </div>
+                              </div>
+            </div>
+            
+            <!-- Aging Example -->
+            <div class="mt-4 bg-white p-4 rounded-lg border border-gray-200">
+              <h4 class="font-semibold text-gray-800 mb-3">مثال: تحليل أعمار الذمم المدينة</h4>
+              <p class="text-sm text-gray-700 mb-3">
+                شركة الفجر التجارية لديها ذمم مدينة بقيمة 500,000 ريال في 31 ديسمبر 2022. بناء على تجربة الشركة السابقة، قامت بتقدير نسب المخصص التالية حسب أعمار الذمم:
+              </p>
+              
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                  <thead>
+                    <tr class="bg-gray-100">
+                      <th class="py-2 px-4 border-b text-right">عمر الذمم</th>
+                      <th class="py-2 px-4 border-b text-right">المبلغ (ريال)</th>
+                      <th class="py-2 px-4 border-b text-right">نسبة المخصص</th>
+                      <th class="py-2 px-4 border-b text-right">قيمة المخصص (ريال)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-sm">
+                    <tr>
+                      <td class="py-2 px-4 border-b">غير مستحقة السداد</td>
+                      <td class="py-2 px-4 border-b">250,000</td>
+                      <td class="py-2 px-4 border-b">1%</td>
+                      <td class="py-2 px-4 border-b">2,500</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-4 border-b">1-30 يوم</td>
+                      <td class="py-2 px-4 border-b">125,000</td>
+                      <td class="py-2 px-4 border-b">5%</td>
+                      <td class="py-2 px-4 border-b">6,250</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-4 border-b">31-60 يوم</td>
+                      <td class="py-2 px-4 border-b">75,000</td>
+                      <td class="py-2 px-4 border-b">10%</td>
+                      <td class="py-2 px-4 border-b">7,500</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-4 border-b">61-90 يوم</td>
+                      <td class="py-2 px-4 border-b">30,000</td>
+                      <td class="py-2 px-4 border-b">25%</td>
+                      <td class="py-2 px-4 border-b">7,500</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 px-4 border-b">أكثر من 90 يوم</td>
+                      <td class="py-2 px-4 border-b">20,000</td>
+                      <td class="py-2 px-4 border-b">50%</td>
+                      <td class="py-2 px-4 border-b">10,000</td>
+                    </tr>
+                    <tr class="bg-gray-100 font-semibold">
+                      <td class="py-2 px-4 border-b">الإجمالي</td>
+                      <td class="py-2 px-4 border-b">500,000</td>
+                      <td class="py-2 px-4 border-b"></td>
+                      <td class="py-2 px-4 border-b">33,750</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div class="mt-3 bg-blue-50 p-3 rounded-lg border border-blue-200">
+                <p class="text-sm text-gray-700">
+                  <strong>التحليل:</strong> يجب أن يكون رصيد مخصص الديون المشكوك في تحصيلها 33,750 ريال. إذا كان رصيد المخصص الحالي 25,000 ريال، فيجب زيادته بمبلغ 8,750 ريال من خلال القيد التالي:
+                </p>
+                <div class="bg-white p-2 mt-2 rounded text-xs">
+                  <p>مصروف الديون المشكوك في تحصيلها &nbsp;&nbsp;&nbsp; 8,750</p>
+                  <p class="mr-8">مخصص الديون المشكوك في تحصيلها &nbsp;&nbsp;&nbsp; 8,750</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Interactive Quiz -->
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-question-circle text-amber-600 ml-2"></i>
+              اختبر فهمك
+            </h3>
+            <div class="p-4 bg-white border border-amber-200 rounded-lg">
+              <h4 class="font-bold text-gray-800 mb-3">أي من الحالات التالية لا تعتبر من الذمم المدينة؟</h4>
+              <div class="space-y-2">
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="quiz1" value="a" class="ml-2">
+                  <span class="text-gray-700">فواتير بضاعة مباعة للعملاء ولم تُسدد بعد</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="quiz1" value="b" class="ml-2">
+                  <span class="text-gray-700">سلف مدفوعة للموردين مقابل بضاعة لم تستلم بعد</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="quiz1" value="c" class="ml-2">
+                  <span class="text-gray-700">قروض ممنوحة للموظفين</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="quiz1" value="d" class="ml-2">
+                  <span class="text-gray-700">سند إذني مستحق القبض</span>
+                </label>
+              </div>
+              <div id="quizResult1" class="mt-3 hidden"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Time Value of Money -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-clock ml-3"></i>
+            5. القيمة الزمنية للنقود والذمم المدينة
+          </h2>
+          <p class="text-indigo-100 text-sm mt-1">Time Value of Money and Receivables</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            تتأثر قيمة الذمم المدينة طويلة الأجل بمفهوم القيمة الزمنية للنقود، حيث أن قيمة النقود المستلمة في المستقبل تختلف عن قيمتها الحالية بسبب عوامل التضخم وتكلفة الفرصة البديلة.
+          </p>
+          
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Basic Principles -->
+            <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-landmark text-indigo-600 ml-2"></i>
+                المبادئ الأساسية
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                تشير القيمة الزمنية للنقود إلى حقيقة أن وحدة النقد الواحدة المتاحة اليوم تساوي أكثر من نفس الوحدة المتاحة في المستقبل.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">المفاهيم الرئيسية:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• <strong>القيمة الحالية (Present Value):</strong> قيمة المبالغ المستقبلية مخصومة بمعدل فائدة مناسب</li>
+                  <li>• <strong>القيمة المستقبلية (Future Value):</strong> قيمة المبالغ الحالية بعد إضافة الفائدة المركبة</li>
+                  <li>• <strong>معدل الخصم (Discount Rate):</strong> معدل الفائدة المستخدم في حساب القيمة الحالية</li>
+                  <li>• <strong>الفائدة الضمنية (Imputed Interest):</strong> الفرق بين القيمة الاسمية والقيمة الحالية</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Application to Receivables -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-file-invoice-dollar text-blue-600 ml-2"></i>
+                تطبيق على الذمم المدينة
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                يتم تطبيق مفهوم القيمة الزمنية للنقود على الذمم المدينة في حالات محددة.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">حالات التطبيق:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• <strong>الذمم طويلة الأجل:</strong> التي تستحق بعد أكثر من سنة</li>
+                  <li>• <strong>بيع الأصول بالتقسيط:</strong> حيث توجد فترة زمنية طويلة للسداد</li>
+                  <li>• <strong>السندات المدينة بدون فائدة:</strong> أو بمعدل فائدة أقل من السوق</li>
+                  <li>• <strong>تمديد فترات السداد:</strong> إعادة جدولة الديون لفترات أطول</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Example -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-gray-600 ml-2"></i>
+              مثال تطبيقي: قياس القيمة الحالية للذمم المدينة طويلة الأجل
+            </h3>
+            <div class="bg-white p-4 rounded border">
+              <p class="text-sm text-gray-700 mb-3">
+                باعت شركة الهندسة المتطورة معدات بقيمة 500,000 ريال، على أن يسدد المشتري المبلغ على 3 دفعات سنوية متساوية بدون فائدة صريحة. معدل الفائدة السائد في السوق هو 8%.
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-3">
+                  <h4 class="font-semibold text-gray-800 text-sm">خطوات الحل:</h4>
+                  <ol class="text-xs text-gray-700 space-y-2 list-decimal list-inside">
+                    <li>حساب قيمة الدفعة السنوية = 500,000 ÷ 3 = 166,667 ريال</li>
+                    <li>حساب القيمة الحالية لكل دفعة:
+                      <ul class="mr-4 mt-1 space-y-1">
+                        <li>- الدفعة الأولى: 166,667 ÷ (1 + 0.08)¹ = 154,321 ريال</li>
+                        <li>- الدفعة الثانية: 166,667 ÷ (1 + 0.08)² = 142,890 ريال</li>
+                        <li>- الدفعة الثالثة: 166,667 ÷ (1 + 0.08)³ = 132,306 ريال</li>
+                      </ul>
+                    </li>
+                    <li>إجمالي القيمة الحالية = 154,321 + 142,890 + 132,306 = 429,517 ريال</li>
+                  </ol>
+                </div>
+                
+                <div class="bg-indigo-50 p-3 rounded border border-indigo-200">
+                  <h4 class="font-semibold text-gray-800 text-sm mb-2">المعالجة المحاسبية:</h4>
+                  <div class="text-xs text-gray-700 space-y-3">
+                    <p><strong>عند البيع:</strong></p>
+                    <div class="bg-white p-2 rounded">
+                      <p>الذمم المدينة &nbsp;&nbsp;&nbsp; 429,517</p>
+                      <p>خصم الذمم المدينة غير المكتسب &nbsp;&nbsp;&nbsp; 70,483</p>
+                      <p class="mr-8">المبيعات &nbsp;&nbsp;&nbsp; 500,000</p>
+                    </div>
+                    
+                    <p><strong>عند تحصيل كل دفعة (تسجيل إيراد الفائدة):</strong></p>
+                    <div class="bg-white p-2 rounded">
+                      <p>النقدية &nbsp;&nbsp;&nbsp; 166,667</p>
+                      <p class="mr-8">الذمم المدينة &nbsp;&nbsp;&nbsp; 166,667</p>
+                    </div>
+                    <div class="bg-white p-2 rounded">
+                      <p>خصم الذمم المدينة غير المكتسب &nbsp;&nbsp;&nbsp; ××××</p>
+                      <p class="mr-8">إيراد الفوائد &nbsp;&nbsp;&nbsp; ××××</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-3 bg-yellow-50 p-3 rounded border border-yellow-200 text-sm text-gray-700">
+                <strong class="text-yellow-800">ملاحظة:</strong> يتم الاعتراف بالفرق بين القيمة الاسمية (500,000 ريال) والقيمة الحالية (429,517 ريال) كإيراد فوائد على مدى فترة الثلاث سنوات باستخدام طريقة الفائدة الفعلية.
+              </div>
+            </div>
+          </div>
+          
+          <!-- Effective Interest Method -->
+          <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-percentage text-green-600 ml-2"></i>
+              طريقة الفائدة الفعلية
+              <div class="text-xs text-green-600 font-normal mt-1">Effective Interest Method</div>
+            </h3>
+            <p class="text-gray-700 mb-3">
+              هي الطريقة التي يتم بموجبها توزيع إيراد أو مصروف الفائدة على الفترات المحاسبية ذات الصلة، بحيث يتم احتساب معدل فائدة ثابت على الرصيد المتبقي من الأصل أو الالتزام.
+            </p>
+            
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">خطوات التطبيق:</h4>
+              <ol class="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+                <li>تحديد معدل الفائدة الفعلي</li>
+                <li>حساب مبلغ الفائدة لكل فترة (الرصيد المتبقي × معدل الفائدة الفعلي)</li>
+                <li>توزيع كل دفعة بين المبلغ الأصلي والفائدة</li>
+                <li>تحديث الرصيد المتبقي بعد كل دفعة</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Factoring and Securitization -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-orange-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-exchange-alt ml-3"></i>
+            6. بيع وتوريق الذمم المدينة
+          </h2>
+          <p class="text-orange-100 text-sm mt-1">Factoring and Securitization of Receivables</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Factoring -->
+            <div class="border-r-4 border-orange-500 p-4 bg-orange-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-handshake text-orange-600 ml-2"></i>
+                بيع الذمم المدينة (Factoring)
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                عملية بيع الذمم المدينة إلى طرف ثالث (عادة مؤسسة مالية) بخصم معين، مقابل الحصول على النقد بشكل فوري.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">أنواع بيع الذمم:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• <strong>بيع بدون حق الرجوع (Without Recourse):</strong> ينتقل مخاطر عدم السداد إلى المشتري</li>
+                  <li>• <strong>بيع مع حق الرجوع (With Recourse):</strong> تبقى مخاطر عدم السداد على البائع</li>
+                </ul>
+                
+                <h4 class="font-semibold text-gray-800 mt-3 mb-2 text-sm">مزايا بيع الذمم المدينة:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• تحسين السيولة</li>
+                  <li>• تقليل مخاطر الائتمان</li>
+                  <li>• تخفيض تكاليف تحصيل الديون</li>
+                  <li>• تحسين نسب الرفع المالي</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Securitization -->
+            <div class="border-r-4 border-teal-500 p-4 bg-teal-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-chart-network text-teal-600 ml-2"></i>
+                توريق الذمم المدينة (Securitization)
+              </h3>
+              <p class="text-gray-700 mb-3 text-sm">
+                عملية تحويل مجموعة من الذمم المدينة غير السائلة إلى أوراق مالية قابلة للتداول في الأسواق المالية.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">مراحل التوريق:</h4>
+                <ol class="text-xs text-gray-600 space-y-1 list-decimal list-inside">
+                  <li>تجميع الذمم المدينة المتشابهة في محفظة واحدة</li>
+                  <li>تحويل المحفظة إلى شركة ذات غرض خاص (SPV)</li>
+                  <li>إصدار أوراق مالية مدعومة بتلك الأصول</li>
+                  <li>بيع الأوراق المالية للمستثمرين</li>
+                </ol>
+                
+                <h4 class="font-semibold text-gray-800 mt-3 mb-2 text-sm">أمثلة على التوريق:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• الأوراق المالية المدعومة بالرهن العقاري</li>
+                  <li>• الأوراق المالية المدعومة بقروض السيارات</li>
+                  <li>• الأوراق المالية المدعومة ببطاقات الائتمان</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Derecognition -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-minus-circle text-gray-600 ml-2"></i>
+              إلغاء الاعتراف بالذمم المدينة (Derecognition)
+            </h3>
+            <p class="text-gray-700 mb-3 text-sm">
+              وفقاً للمعايير المحاسبية، يتم إلغاء الاعتراف بالذمم المدينة (إزالتها من قائمة المركز المالي) عند استيفاء شروط محددة.
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">شروط إلغاء الاعتراف:</h4>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>انتهاء الحقوق التعاقدية:</strong> في الحصول على التدفقات النقدية من الذمم المدينة</li>
+                  <li>• <strong>تحويل جوهري للمخاطر والمنافع:</strong> مخاطر التخلف عن السداد والمنافع من التحصيل</li>
+                  <li>• <strong>فقدان السيطرة:</strong> على الذمم المدينة ولا يوجد تدخل مستمر في إدارتها</li>
+                </ul>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">نتائج التحليل:</h4>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>إلغاء الاعتراف بالكامل:</strong> إزالة الذمم من قائمة المركز المالي والاعتراف بالربح أو الخسارة</li>
+                  <li>• <strong>استمرار الاعتراف:</strong> الاحتفاظ بالذمم في الميزانية والاعتراف بالتزام مالي للمبالغ المستلمة</li>
+                  <li>• <strong>الاعتراف المستمر بحدود المشاركة:</strong> في حالات المشاركة المستمرة في الأصل المحول</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Example -->
+          <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-orange-600 ml-2"></i>
+              مثال: بيع الذمم المدينة
+            </h3>
+            <div class="bg-white p-4 rounded border">
+              <p class="text-sm text-gray-700 mb-3">
+                باعت شركة المنتجات الاستهلاكية ذمماً مدينة بقيمة اسمية 1,000,000 ريال إلى شركة تمويل مقابل 950,000 ريال نقداً. لا يحق لشركة التمويل الرجوع على الشركة في حالة عدم تحصيل الذمم.
+              </p>
+              
+              <div class="bg-gray-50 p-3 rounded text-sm">
+                <h4 class="font-semibold text-gray-800 mb-2">القيد المحاسبي:</h4>
+                <div class="space-y-1">
+                  <p>من حـ/ النقدية &nbsp;&nbsp;&nbsp; 950,000</p>
+                  <p>من حـ/ خسارة بيع الذمم المدينة &nbsp;&nbsp;&nbsp; 50,000</p>
+                  <p class="mr-8">إلى حـ/ الذمم المدينة &nbsp;&nbsp;&nbsp; 1,000,000</p>
+                </div>
+              </div>
+              
+              <div class="mt-3 bg-blue-50 p-3 rounded border border-blue-200 text-sm">
+                <p class="text-gray-700">
+                  <strong>ملاحظات:</strong>
+                </p>
+                <ul class="text-xs text-gray-600 space-y-1 mt-1">
+                  <li>• تم إلغاء الاعتراف بالذمم المدينة بالكامل لأن الشركة نقلت جميع المخاطر والمنافع المرتبطة بالملكية</li>
+                  <li>• الفرق بين القيمة الدفترية والمبلغ المستلم (50,000 ريال) يمثل خسارة تم الاعتراف بها في قائمة الدخل</li>
+                  <li>• لو كان البيع مع حق الرجوع، قد لا يتم إلغاء الاعتراف بالكامل وقد يتم تسجيل قرض مضمون بالذمم</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Presentation and Disclosure -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-file-alt ml-3"></i>
+            7. العرض والإفصاح
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Presentation and Disclosure</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            تتطلب المعايير المحاسبية إفصاحات محددة للنقدية والذمم المدينة في القوائم المالية لتزويد مستخدمي القوائم المالية بمعلومات مفيدة لاتخاذ القرارات.
+          </p>
+          
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Cash Presentation -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-coins text-blue-600 ml-2"></i>
+                عرض والإفصاح عن النقدية
+              </h3>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">متطلبات العرض:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• عرض النقدية وما في حكمها كبند مستقل في قائمة المركز المالي</li>
+                  <li>• عرض النقدية المقيدة بشكل منفصل إذا كانت جوهرية</li>
+                  <li>• تصنيف النقدية المقيدة طويلة الأجل ضمن الأصول غير المتداولة</li>
+                  <li>• مطابقة النقدية وما في حكمها في بداية ونهاية الفترة في قائمة التدفقات النقدية</li>
+                </ul>
+                
+                <h4 class="font-semibold text-gray-800 mt-3 mb-2 text-sm">متطلبات الإفصاح:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• السياسة المحاسبية المتبعة في تحديد مكونات النقدية وما في حكمها</li>
+                  <li>• طبيعة وقيمة أي قيود على النقدية</li>
+                  <li>• تفاصيل أي معاملات استثمارية أو تمويلية غير نقدية</li>
+                  <li>• إفصاحات عن السحب على المكشوف إذا تم معاملته كجزء من النقدية</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Receivables Presentation -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-file-invoice-dollar text-green-600 ml-2"></i>
+                عرض والإفصاح عن الذمم المدينة
+              </h3>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">متطلبات العرض:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• عرض الذمم المدينة التجارية بشكل منفصل عن الذمم المدينة الأخرى</li>
+                  <li>• عرض الذمم المدينة بالصافي بعد خصم مخصص الديون المشكوك في تحصيلها</li>
+                  <li>• تصنيف الذمم المدينة طويلة الأجل ضمن الأصول غير المتداولة</li>
+                  <li>• فصل الذمم المدينة من الأطراف ذات العلاقة عن الذمم المدينة العادية</li>
+                </ul>
+                
+                <h4 class="font-semibold text-gray-800 mt-3 mb-2 text-sm">متطلبات الإفصاح:</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• السياسات المحاسبية لتقييم الذمم المدينة ومخصص الديون المشكوك فيها</li>
+                  <li>• تفاصيل التغيرات في مخصص الديون المشكوك في تحصيلها خلال الفترة</li>
+                  <li>• تحليل أعمار الذمم المدينة والذمم متأخرة السداد</li>
+                  <li>• معلومات عن أي ذمم مدينة مرهونة أو مقدمة كضمان</li>
+                  <li>• تفاصيل عمليات بيع أو توريق الذمم المدينة</li>
+                  <li>• القيمة العادلة للذمم المدينة طويلة الأجل إذا كانت تختلف جوهرياً عن القيمة الدفترية</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Example Disclosure -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-file-alt text-gray-600 ml-2"></i>
+              نموذج للإفصاح في الإيضاحات المتممة
+            </h3>
+            <div class="bg-white p-4 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-3">إيضاح رقم (×): الذمم المدينة التجارية</h4>
+              <div class="text-sm text-gray-700 space-y-3">
+                <p>تتكون الذمم المدينة التجارية مما يلي:</p>
+                
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                      <tr class="bg-gray-100">
+                        <th class="py-2 px-4 border-b text-right"></th>
+                        <th class="py-2 px-4 border-b text-right">2022 (ريال)</th>
+                        <th class="py-2 px-4 border-b text-right">2021 (ريال)</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-xs">
+                      <tr>
+                        <td class="py-2 px-4 border-b">ذمم مدينة تجارية</td>
+                        <td class="py-2 px-4 border-b">12,500,000</td>
+                        <td class="py-2 px-4 border-b">11,200,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">ذمم مدينة من أطراف ذات علاقة (إيضاح ×)</td>
+                        <td class="py-2 px-4 border-b">1,800,000</td>
+                        <td class="py-2 px-4 border-b">1,500,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">أوراق قبض</td>
+                        <td class="py-2 px-4 border-b">2,500,000</td>
+                        <td class="py-2 px-4 border-b">2,200,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">إجمالي الذمم المدينة</td>
+                        <td class="py-2 px-4 border-b">16,800,000</td>
+                        <td class="py-2 px-4 border-b">14,900,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">ناقصاً: مخصص الديون المشكوك في تحصيلها</td>
+                        <td class="py-2 px-4 border-b">(1,250,000)</td>
+                        <td class="py-2 px-4 border-b">(980,000)</td>
+                      </tr>
+                      <tr class="font-semibold">
+                        <td class="py-2 px-4 border-b">صافي الذمم المدينة</td>
+                        <td class="py-2 px-4 border-b">15,550,000</td>
+                        <td class="py-2 px-4 border-b">13,920,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <p>الحركة على مخصص الديون المشكوك في تحصيلها خلال السنة:</p>
+                
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                      <tr class="bg-gray-100">
+                        <th class="py-2 px-4 border-b text-right"></th>
+                        <th class="py-2 px-4 border-b text-right">2022 (ريال)</th>
+                        <th class="py-2 px-4 border-b text-right">2021 (ريال)</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-xs">
+                      <tr>
+                        <td class="py-2 px-4 border-b">الرصيد في بداية السنة</td>
+                        <td class="py-2 px-4 border-b">980,000</td>
+                        <td class="py-2 px-4 border-b">820,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">المحمل خلال السنة</td>
+                        <td class="py-2 px-4 border-b">520,000</td>
+                        <td class="py-2 px-4 border-b">380,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">ديون معدومة مشطوبة</td>
+                        <td class="py-2 px-4 border-b">(250,000)</td>
+                        <td class="py-2 px-4 border-b">(220,000)</td>
+                      </tr>
+                      <tr class="font-semibold">
+                        <td class="py-2 px-4 border-b">الرصيد في نهاية السنة</td>
+                        <td class="py-2 px-4 border-b">1,250,000</td>
+                        <td class="py-2 px-4 border-b">980,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <p>تحليل أعمار الذمم المدينة التجارية كما في 31 ديسمبر 2022:</p>
+                
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                      <tr class="bg-gray-100">
+                        <th class="py-2 px-4 border-b text-right">العمر</th>
+                        <th class="py-2 px-4 border-b text-right">إجمالي الذمم (ريال)</th>
+                        <th class="py-2 px-4 border-b text-right">مخصص الديون المشكوك فيها (ريال)</th>
+                        <th class="py-2 px-4 border-b text-right">صافي الذمم (ريال)</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-xs">
+                      <tr>
+                        <td class="py-2 px-4 border-b">غير مستحقة السداد</td>
+                        <td class="py-2 px-4 border-b">7,500,000</td>
+                        <td class="py-2 px-4 border-b">(75,000)</td>
+                        <td class="py-2 px-4 border-b">7,425,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">1-30 يوم</td>
+                        <td class="py-2 px-4 border-b">4,200,000</td>
+                        <td class="py-2 px-4 border-b">(210,000)</td>
+                        <td class="py-2 px-4 border-b">3,990,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">31-60 يوم</td>
+                        <td class="py-2 px-4 border-b">2,800,000</td>
+                        <td class="py-2 px-4 border-b">(280,000)</td>
+                        <td class="py-2 px-4 border-b">2,520,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">61-90 يوم</td>
+                        <td class="py-2 px-4 border-b">1,500,000</td>
+                        <td class="py-2 px-4 border-b">(375,000)</td>
+                        <td class="py-2 px-4 border-b">1,125,000</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border-b">أكثر من 90 يوم</td>
+                        <td class="py-2 px-4 border-b">800,000</td>
+                        <td class="py-2 px-4 border-b">(310,000)</td>
+                        <td class="py-2 px-4 border-b">490,000</td>
+                      </tr>
+                      <tr class="font-semibold">
+                        <td class="py-2 px-4 border-b">المجموع</td>
+                        <td class="py-2 px-4 border-b">16,800,000</td>
+                        <td class="py-2 px-4 border-b">(1,250,000)</td>
+                        <td class="py-2 px-4 border-b">15,550,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <p class="mt-3">خلال العام، قامت الشركة ببيع ذمم مدينة بقيمة دفترية 3,000,000 ريال إلى مؤسسة مالية مقابل 2,850,000 ريال نقداً. تم نقل جميع مخاطر ومنافع الملكية إلى المؤسسة المالية، وبالتالي تم إلغاء الاعتراف بهذه الذمم من دفاتر الشركة، ونتج عن العملية خسارة قدرها 150,000 ريال تم تضمينها في بند "مصاريف أخرى" في قائمة الدخل.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: IFRS vs GAAP -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-balance-scale-right ml-3"></i>
+            8. مقارنة بين IFRS و GAAP
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">IFRS vs. GAAP Comparison</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            على الرغم من وجود تشابه كبير في معالجة النقدية والذمم المدينة بين المعايير الدولية للتقارير المالية (IFRS) ومبادئ المحاسبة المقبولة عموماً في الولايات المتحدة (US GAAP)، إلا أن هناك بعض الاختلافات المهمة.
+          </p>
+          
+          <div class="overflow-x-auto mb-6">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-purple-100">
+                  <th class="py-3 px-4 border-b text-right">الموضوع</th>
+                  <th class="py-3 px-4 border-b text-right">IFRS</th>
+                  <th class="py-3 px-4 border-b text-right">US GAAP</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm">
+                <tr>
+                  <td class="py-3 px-4 border-b font-semibold bg-gray-50">تعريف النقدية وما في حكمها</td>
+                  <td class="py-3 px-4 border-b">النقدية والودائع تحت الطلب والاستثمارات قصيرة الأجل عالية السيولة (استحقاق 3 أشهر أو أقل)</td>
+                  <td class="py-3 px-4 border-b">مشابه لـ IFRS، مع بعض الاختلافات في تصنيف بعض أدوات الاستثمار</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 border-b font-semibold bg-gray-50">السحب على المكشوف</td>
+                  <td class="py-3 px-4 border-b">يمكن تضمينها في النقدية وما في حكمها إذا كانت جزءاً من إدارة النقد</td>
+                  <td class="py-3 px-4 border-b">عادة ما تعرض كالتزامات متداولة ولا تخصم من النقدية</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 border-b font-semibold bg-gray-50">نموذج خسائر الائتمان</td>
+                  <td class="py-3 px-4 border-b">نموذج الخسائر الائتمانية المتوقعة (ECL) - IFRS 9</td>
+                  <td class="py-3 px-4 border-b">نموذج الخسائر المتكبدة الحالي مع التحول التدريجي إلى نموذج الخسائر المتوقعة (CECL)</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 border-b font-semibold bg-gray-50">إلغاء الاعتراف بالذمم المدينة</td>
+                  <td class="py-3 px-4 border-b">يركز على تحويل المخاطر والمنافع، مع اختبار ثانوي للسيطرة</td>
+                  <td class="py-3 px-4 border-b">يركز على مفهوم السيطرة القانونية والمالية (نموذج العزل القانوني)</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 border-b font-semibold bg-gray-50">قياس الذمم المدينة طويلة الأجل</td>
+                  <td class="py-3 px-4 border-b">التكلفة المطفأة باستخدام طريقة الفائدة الفعلية</td>
+                  <td class="py-3 px-4 border-b">مشابه لـ IFRS، مع بعض الاختلافات في حساب معدل الفائدة الفعلي</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 border-b font-semibold bg-gray-50">متطلبات الإفصاح</td>
+                  <td class="py-3 px-4 border-b">إفصاحات مفصلة عن مخاطر الائتمان والسيولة وإدارة المخاطر</td>
+                  <td class="py-3 px-4 border-b">إفصاحات أقل تفصيلاً عن إدارة المخاطر مقارنة بـ IFRS</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-lightbulb text-purple-600 ml-2"></i>
+              التقارب بين المعايير
+            </h3>
+            <p class="text-sm text-gray-700">
+              تتجه المعايير المحاسبية العالمية نحو مزيد من التقارب في معالجة النقدية والذمم المدينة. من المتوقع أن تستمر الجهود لتقليل الاختلافات بين IFRS و GAAP، خاصة في مجالات:
+            </p>
+            <ul class="text-sm text-gray-700 mt-2 space-y-1 mr-6 list-disc">
+              <li>نماذج انخفاض قيمة الأصول المالية</li>
+              <li>متطلبات إلغاء الاعتراف بالأصول المالية</li>
+              <li>قياس الأدوات المالية بالقيمة العادلة</li>
+              <li>توحيد متطلبات الإفصاح عن إدارة المخاطر</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter Summary -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            ملخص الفصل الخامس
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">المفاهيم الرئيسية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> النقدية هي الأصل الأكثر سيولة وتشمل العملات الورقية والمعدنية والودائع تحت الطلب</li>
+                <li><i class="fas fa-check ml-2"></i> يجب الإفصاح عن النقدية المقيدة بشكل منفصل إذا كانت جوهرية</li>
+                <li><i class="fas fa-check ml-2"></i> الذمم المدينة تمثل حقوقاً تعاقدية للحصول على نقد أو أصل مالي آخر</li>
+                <li><i class="fas fa-check ml-2"></i> يتم قياس الذمم المدينة بالتكلفة المطفأة مع تطبيق مخصص للديون المشكوك في تحصيلها</li>
+                <li><i class="fas fa-check ml-2"></i> للقيمة الزمنية للنقود تأثير على قياس الذمم المدينة طويلة الأجل</li>
+                <li><i class="fas fa-check ml-2"></i> بيع وتوريق الذمم المدينة يخضع لشروط إلغاء الاعتراف وفقاً للمعايير المحاسبية</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">المصطلحات المهمة:</h3>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><strong>Cash and Cash Equivalents:</strong> النقدية وما في حكمها</div>
+                <div><strong>Restricted Cash:</strong> النقدية المقيدة</div>
+                <div><strong>Accounts Receivable:</strong> الذمم المدينة التجارية</div>
+                <div><strong>Notes Receivable:</strong> السندات المدينة</div>
+                <div><strong>Allowance for Doubtful Accounts:</strong> مخصص الديون المشكوك فيها</div>
+                <div><strong>Effective Interest Method:</strong> طريقة الفائدة الفعلية</div>
+                <div><strong>Factoring:</strong> بيع الذمم المدينة</div>
+                <div><strong>Securitization:</strong> توريق الذمم المدينة</div>
+                <div><strong>Derecognition:</strong> إلغاء الاعتراف</div>
+                <div><strong>Expected Credit Loss (ECL):</strong> الخسائر الائتمانية المتوقعة</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white bg-opacity-10 rounded-lg p-4 mt-4">
+            <h3 class="font-bold text-lg mb-3">المعالجات المحاسبية الرئيسية:</h3>
+            <div class="grid md:grid-cols-3 gap-4 text-xs">
+              <div class="bg-white bg-opacity-20 rounded p-3">
+                <h4 class="font-semibold mb-2">النقدية المقيدة</h4>
+                <p>تصنف كأصول متداولة أو غير متداولة حسب طبيعة القيود، ويتم الإفصاح عن طبيعة هذه القيود</p>
+              </div>
+              <div class="bg-white bg-opacity-20 rounded p-3">
+                <h4 class="font-semibold mb-2">الديون المشكوك في تحصيلها</h4>
+                <p>يتم تقدير مخصص للديون المشكوك في تحصيلها باستخدام طريقة المخصص وفقاً لنموذج الخسائر الائتمانية المتوقعة</p>
+              </div>
+              <div class="bg-white bg-opacity-20 rounded p-3">
+                <h4 class="font-semibold mb-2">بيع الذمم المدينة</h4>
+                <p>يتم إلغاء الاعتراف عند انتقال المخاطر والمنافع، وإلا يتم اعتبارها قرضاً مضموناً</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Practical Applications -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-briefcase ml-3"></i>
+            9. تطبيقات عملية
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Practical Applications</p>
+        </div>
+        <div class="p-6">
+          <!-- Case Study -->
+          <div class="mb-6">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-building text-green-600 ml-2"></i>
+                دراسة حالة: شركة العالمية للإلكترونيات
+              </h3>
+              <p class="text-gray-700 mb-4">
+                شركة العالمية للإلكترونيات تواجه زيادة في الذمم المدينة وتأخير في التحصيل مما يؤثر على سيولتها. فيما يلي تحليل للبيانات والإجراءات المتخذة:
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-4 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">بيانات الشركة:</h4>
+                  <ul class="text-sm text-gray-700 space-y-2">
+                    <li>• إجمالي المبيعات السنوية: 50 مليون ريال</li>
+                    <li>• إجمالي الذمم المدينة: 12 مليون ريال (زيادة 25% عن العام السابق)</li>
+                    <li>• متوسط فترة التحصيل: 87 يوم (مقارنة بـ 65 يوم في العام السابق)</li>
+                    <li>• نسبة الديون المشكوك فيها: 5.2% من إجمالي الذمم</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-white p-4 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الإجراءات المتخذة:</h4>
+                  <ol class="text-sm text-gray-700 space-y-2 list-decimal list-inside">
+                    <li>مراجعة سياسة الائتمان وتشديد شروط منح الائتمان للعملاء الجدد</li>
+                    <li>تقديم خصومات للسداد المبكر (2% للسداد خلال 10 أيام)</li>
+                    <li>تطبيق نظام متابعة آلي للذمم المتأخرة وإرسال تذكيرات دورية</li>
+                    <li>استخدام خدمات شركة تحصيل للديون المتأخرة أكثر من 90 يوم</li>
+                    <li>بيع جزء من الذمم المدينة (5 مليون ريال) مقابل سيولة فورية</li>
+                  </ol>
+                </div>
+              </div>
+              
+              <div class="mt-4 bg-blue-50 p-3 rounded border border-blue-200">
+                <h4 class="font-semibold text-gray-800 mb-2">النتائج بعد 6 أشهر:</h4>
+                <div class="grid md:grid-cols-3 gap-3 text-sm">
+                  <div class="bg-white p-2 rounded">
+                    <p class="font-semibold">متوسط فترة التحصيل</p>
+                    <p class="text-green-600">انخفضت إلى 62 يوم</p>
+                  </div>
+                  <div class="bg-white p-2 rounded">
+                    <p class="font-semibold">الذمم المدينة</p>
+                    <p class="text-green-600">انخفضت بنسبة 30%</p>
+                  </div>
+                  <div class="bg-white p-2 rounded">
+                    <p class="font-semibold">التدفقات النقدية</p>
+                    <p class="text-green-600">تحسنت بمقدار 8 مليون ريال</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Analysis Ratios -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-chart-line text-gray-600 ml-2"></i>
+              النسب المالية لتحليل النقدية والذمم المدينة
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-3">نسب إدارة الذمم المدينة:</h4>
+                <div class="space-y-3 text-sm">
+                  <div>
+                    <p class="font-semibold">1. معدل دوران الذمم المدينة (Receivables Turnover Ratio)</p>
+                    <div class="bg-blue-50 p-2 rounded text-center my-1">
+                      <p>صافي المبيعات الآجلة ÷ متوسط الذمم المدينة</p>
+                    </div>
+                    <p class="text-gray-600 text-xs">يقيس كفاءة الشركة في تحصيل الذمم المدينة. كلما زاد المعدل كان أفضل.</p>
+                  </div>
+                  
+                  <div>
+                    <p class="font-semibold">2. متوسط فترة التحصيل (Days Sales Outstanding)</p>
+                    <div class="bg-blue-50 p-2 rounded text-center my-1">
+                      <p>365 يوم ÷ معدل دوران الذمم المدينة</p>
+                    </div>
+                    <p class="text-gray-600 text-xs">يقيس متوسط عدد الأيام التي تستغرقها الشركة لتحصيل مبيعاتها الآجلة.</p>
+                  </div>
+                  
+                  <div>
+                    <p class="font-semibold">3. نسبة الذمم المدينة إلى إجمالي الأصول</p>
+                    <div class="bg-blue-50 p-2 rounded text-center my-1">
+                      <p>صافي الذمم المدينة ÷ إجمالي الأصول</p>
+                    </div>
+                    <p class="text-gray-600 text-xs">تقيس الأهمية النسبية للذمم المدينة في هيكل أصول الشركة.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-3">نسب السيولة:</h4>
+                <div class="space-y-3 text-sm">
+                  <div>
+                    <p class="font-semibold">1. نسبة التداول (Current Ratio)</p>
+                    <div class="bg-blue-50 p-2 rounded text-center my-1">
+                      <p>الأصول المتداولة ÷ الالتزامات المتداولة</p>
+                    </div>
+                    <p class="text-gray-600 text-xs">تقيس قدرة الشركة على سداد التزاماتها قصيرة الأجل.</p>
+                  </div>
+                  
+                  <div>
+                    <p class="font-semibold">2. نسبة السيولة السريعة (Quick Ratio)</p>
+                    <div class="bg-blue-50 p-2 rounded text-center my-1">
+                      <p>(النقدية + الذمم المدينة + الاستثمارات قصيرة الأجل) ÷ الالتزامات المتداولة</p>
+                    </div>
+                    <p class="text-gray-600 text-xs">تقيس قدرة الشركة على سداد التزاماتها قصيرة الأجل دون الاعتماد على بيع المخزون.</p>
+                  </div>
+                  
+                  <div>
+                    <p class="font-semibold">3. نسبة النقدية (Cash Ratio)</p>
+                    <div class="bg-blue-50 p-2 rounded text-center my-1">
+                      <p>(النقدية + الاستثمارات قصيرة الأجل) ÷ الالتزامات المتداولة</p>
+                    </div>
+                    <p class="text-gray-600 text-xs">تقيس قدرة الشركة على سداد التزاماتها قصيرة الأجل باستخدام النقدية المتاحة فقط.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- End of Chapter Assessment -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-amber-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-tasks ml-3"></i>
+            10. تقييم نهاية الفصل
+          </h2>
+          <p class="text-amber-100 text-sm mt-1">End of Chapter Assessment</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Multiple Choice Questions -->
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-question-circle text-amber-600 ml-2"></i>
+                أسئلة الاختيار من متعدد
+              </h3>
+              
+              <div class="space-y-4">
+                <div class="p-4 bg-white border border-amber-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">1. أي مما يلي ليس من مكونات النقدية وما في حكمها؟</h4>
+                  <div class="space-y-2">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q1" value="a" class="ml-2">
+                      <span class="text-gray-700">الودائع تحت الطلب</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q1" value="b" class="ml-2">
+                      <span class="text-gray-700">النقد في الصندوق</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q1" value="c" class="ml-2">
+                      <span class="text-gray-700">استثمارات في أسهم شركات متداولة</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q1" value="d" class="ml-2">
+                      <span class="text-gray-700">شهادات إيداع تستحق خلال شهرين</span>
+                    </label>
+                  </div>
+                  <div id="q1Result" class="mt-3 hidden"></div>
+                </div>
+                
+                <div class="p-4 bg-white border border-amber-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">2. أي من الطرق التالية لتقدير مخصص الديون المشكوك فيها يعتبر الأكثر تحفظاً؟</h4>
+                  <div class="space-y-2">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q2" value="a" class="ml-2">
+                      <span class="text-gray-700">طريقة نسبة مئوية من المبيعات</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q2" value="b" class="ml-2">
+                      <span class="text-gray-700">طريقة نسبة مئوية من الذمم المدينة</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q2" value="c" class="ml-2">
+                      <span class="text-gray-700">طريقة تحليل أعمار الذمم المدينة</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q2" value="d" class="ml-2">
+                      <span class="text-gray-700">طريقة شطب الديون المباشر</span>
+                    </label>
+                  </div>
+                  <div id="q2Result" class="mt-3 hidden"></div>
+                </div>
+                
+                <div class="p-4 bg-white border border-amber-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">3. عند بيع الذمم المدينة مع حق الرجوع، كيف يتم معالجة العملية محاسبياً؟</h4>
+                  <div class="space-y-2">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q3" value="a" class="ml-2">
+                      <span class="text-gray-700">كبيع كامل مع إلغاء الاعتراف بالذمم المدينة</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q3" value="b" class="ml-2">
+                      <span class="text-gray-700">كقرض مضمون مع استمرار الاعتراف بالذمم المدينة</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q3" value="c" class="ml-2">
+                      <span class="text-gray-700">كبيع جزئي مع إلغاء جزئي للذمم المدينة</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q3" value="d" class="ml-2">
+                      <span class="text-gray-700">كمعاملة خارج الميزانية لا تؤثر على القوائم المالية</span>
+                    </label>
+                  </div>
+                  <div id="q3Result" class="mt-3 hidden"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Calculation Questions -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-calculator text-blue-600 ml-2"></i>
+                أسئلة حسابية
+              </h3>
+              
+              <div class="space-y-4">
+                <div class="p-4 bg-white border border-blue-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">4. احسب مخصص الديون المشكوك فيها</h4>
+                  <p class="text-gray-700 mb-3">
+                    لدى شركة ذمم مدينة بإجمالي 500,000 ريال. بناءً على تحليل أعمار الذمم، تم تقدير نسب عدم التحصيل كالتالي:
+                  </p>
+                  <div class="overflow-x-auto mb-3">
+                    <table class="min-w-full bg-white border border-gray-200">
+                      <thead>
+                        <tr class="bg-gray-100">
+                          <th class="py-2 px-4 border-b text-right">عمر الذمم</th>
+                          <th class="py-2 px-4 border-b text-right">الرصيد</th>
+                          <th class="py-2 px-4 border-b text-right">نسبة عدم التحصيل</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-sm">
+                        <tr>
+                          <td class="py-2 px-4 border-b">غير مستحقة</td>
+                          <td class="py-2 px-4 border-b">200,000 ريال</td>
+                          <td class="py-2 px-4 border-b">1%</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 px-4 border-b">1-30 يوم</td>
+                          <td class="py-2 px-4 border-b">150,000 ريال</td>
+                          <td class="py-2 px-4 border-b">3%</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 px-4 border-b">31-60 يوم</td>
+                          <td class="py-2 px-4 border-b">80,000 ريال</td>
+                          <td class="py-2 px-4 border-b">5%</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 px-4 border-b">61-90 يوم</td>
+                          <td class="py-2 px-4 border-b">50,000 ريال</td>
+                          <td class="py-2 px-4 border-b">10%</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 px-4 border-b">أكثر من 90 يوم</td>
+                          <td class="py-2 px-4 border-b">20,000 ريال</td>
+                          <td class="py-2 px-4 border-b">25%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="block text-gray-700 mb-2">إجمالي مخصص الديون المشكوك فيها:</label>
+                    <input type="text" id="calcAnswer1" class="w-full p-2 border border-gray-300 rounded" placeholder="أدخل الإجابة بالريال">
+                  </div>
+                  
+                  <button id="checkCalc1" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">تحقق من الإجابة</button>
+                  <div id="calc1Result" class="mt-3 hidden"></div>
+                </div>
+                
+                <div class="p-4 bg-white border border-blue-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">5. احسب القيمة الحالية للذمم المدينة طويلة الأجل</h4>
+                  <p class="text-gray-700 mb-3">
+                    باعت شركة معدات بقيمة 240,000 ريال، وستحصل على المبلغ على ثلاث دفعات سنوية متساوية. إذا كان معدل الفائدة السوقي 6% سنوياً، احسب القيمة الحالية للذمم المدينة.
+                  </p>
+                  
+                  <div class="mb-3">
+                    <label class="block text-gray-700 mb-2">القيمة الحالية للذمم المدينة:</label>
+                    <input type="text" id="calcAnswer2" class="w-full p-2 border border-gray-300 rounded" placeholder="أدخل الإجابة بالريال">
+                  </div>
+                  
+                  <button id="checkCalc2" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">تحقق من الإجابة</button>
+                  <div id="calc2Result" class="mt-3 hidden"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- True/False Questions -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-check-circle text-green-600 ml-2"></i>
+                أسئلة صح/خطأ
+              </h3>
+              
+              <div class="space-y-4">
+                <div class="p-4 bg-white border border-green-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">6. الودائع لأجل التي تستحق خلال 4 أشهر تعتبر من النقدية وما في حكمها.</h4>
+                  <div class="space-y-2">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q4" value="true" class="ml-2">
+                      <span class="text-gray-700">صح</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q4" value="false" class="ml-2">
+                      <span class="text-gray-700">خطأ</span>
+                    </label>
+                  </div>
+                  <div id="q4Result" class="mt-3 hidden"></div>
+                </div>
+                
+                <div class="p-4 bg-white border border-green-200 rounded-lg">
+                  <h4 class="font-bold text-gray-800 mb-3">7. وفقاً لمعيار IFRS 9، يتم تطبيق نموذج الخسائر الائتمانية المتوقعة بدلاً من نموذج الخسائر المتكبدة.</h4>
+                  <div class="space-y-2">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q5" value="true" class="ml-2">
+                      <span class="text-gray-700">صح</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                      <input type="radio" name="q5" value="false" class="ml-2">
+                      <span class="text-gray-700">خطأ</span>
+                    </label>
+                  </div>
+                  <div id="q5Result" class="mt-3 hidden"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="chapter-4.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الفصل السابق: الاعتراف بالإيرادات
+        </a>
+        <a href="chapter-6.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          الفصل التالي: المخزون
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.add('hidden');
+    });
+    
+    // Multiple Choice Questions
+    const questions = {
+      q1: {
+        correct: 'c',
+        feedback: {
+          correct: 'إجابة صحيحة! الاستثمارات في الأسهم المتداولة تعتبر استثمارات مالية وليست نقدية وما في حكمها بسبب تقلب قيمتها.',
+                    incorrect: 'إجابة خاطئة. الاستثمارات في الأسهم المتداولة لا تعتبر من النقدية وما في حكمها لأنها معرضة لمخاطر تغير القيمة بشكل كبير.'
+        }
+      },
+      q2: {
+        correct: 'c',
+        feedback: {
+          correct: 'إجابة صحيحة! طريقة تحليل أعمار الذمم المدينة هي الأكثر تحفظاً لأنها تأخذ في الاعتبار مخاطر عدم السداد المتزايدة مع طول فترة التأخير.',
+          incorrect: 'إجابة خاطئة. طريقة تحليل أعمار الذمم المدينة هي الأكثر تحفظاً لأنها تأخذ في الاعتبار الفترات الزمنية المختلفة ومخاطر عدم السداد المرتبطة بها.'
+        }
+      },
+      q3: {
+        correct: 'b',
+        feedback: {
+          correct: 'إجابة صحيحة! عند بيع الذمم المدينة مع حق الرجوع، يتم معالجة العملية كقرض مضمون حيث تبقى المخاطر والمنافع مع البائع.',
+          incorrect: 'إجابة خاطئة. بيع الذمم المدينة مع حق الرجوع يعني أن البائع لا يزال يتحمل مخاطر عدم التحصيل، لذلك تعامل كقرض مضمون وليس كبيع.'
+        }
+      },
+      q4: {
+        correct: 'false',
+        feedback: {
+          correct: 'إجابة صحيحة! النقدية وما في حكمها تشمل الاستثمارات قصيرة الأجل التي تستحق خلال 3 أشهر أو أقل، وليس 4 أشهر.',
+          incorrect: 'إجابة خاطئة. لكي تعتبر ضمن النقدية وما في حكمها، يجب أن تكون الودائع لأجل تستحق خلال 3 أشهر أو أقل.'
+        }
+      },
+      q5: {
+        correct: 'true',
+        feedback: {
+          correct: 'إجابة صحيحة! معيار IFRS 9 يتطلب استخدام نموذج الخسائر الائتمانية المتوقعة (ECL) بدلاً من نموذج الخسائر المتكبدة.',
+          incorrect: 'إجابة خاطئة. معيار IFRS 9 غيّر بالفعل نموذج انخفاض القيمة من نموذج الخسائر المتكبدة إلى نموذج الخسائر الائتمانية المتوقعة.'
+        }
+      }
+    };
+    
+    // Check multiple choice answers
+    function checkAnswer(questionName) {
+      const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+      const resultDiv = document.getElementById(`${questionName}Result`);
+      
+      if (!selectedOption) {
+        resultDiv.innerHTML = `
+          <div class="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">
+            <i class="fas fa-exclamation-circle ml-2"></i>
+            الرجاء اختيار إجابة
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      const isCorrect = selectedOption.value === questions[questionName].correct;
+      const feedbackKey = isCorrect ? 'correct' : 'incorrect';
+      
+      resultDiv.innerHTML = `
+        <div class="p-3 bg-${isCorrect ? 'green' : 'red'}-100 border border-${isCorrect ? 'green' : 'red'}-300 rounded text-${isCorrect ? 'green' : 'red'}-800">
+          <i class="fas fa-${isCorrect ? 'check' : 'times'}-circle ml-2"></i>
+          ${questions[questionName].feedback[feedbackKey]}
+        </div>
+      `;
+      resultDiv.classList.remove('hidden');
+    }
+    
+    // Add event listeners to radio buttons
+    document.querySelectorAll('input[type="radio"][name^="q"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const questionName = radio.getAttribute('name');
+        checkAnswer(questionName);
+      });
+    });
+    
+    // Calculation questions
+    document.getElementById('checkCalc1').addEventListener('click', () => {
+      const userAnswer = parseFloat(document.getElementById('calcAnswer1').value.replace(/,/g, ''));
+      const correctAnswer = 200000 * 0.01 + 150000 * 0.03 + 80000 * 0.05 + 50000 * 0.1 + 20000 * 0.25;
+      const resultDiv = document.getElementById('calc1Result');
+      
+      if (isNaN(userAnswer)) {
+        resultDiv.innerHTML = `
+          <div class="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">
+            <i class="fas fa-exclamation-circle ml-2"></i>
+            الرجاء إدخال قيمة عددية
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      const isCorrect = Math.abs(userAnswer - correctAnswer) < 1; // Allow for rounding
+      
+      resultDiv.innerHTML = `
+        <div class="p-3 bg-${isCorrect ? 'green' : 'red'}-100 border border-${isCorrect ? 'green' : 'red'}-300 rounded text-${isCorrect ? 'green' : 'red'}-800">
+          <i class="fas fa-${isCorrect ? 'check' : 'times'}-circle ml-2"></i>
+          ${isCorrect ? 'إجابة صحيحة!' : 'إجابة خاطئة.'} الإجابة الصحيحة هي ${correctAnswer.toLocaleString('ar-SA')} ريال.
+          <div class="mt-2 text-gray-600 text-xs">
+            التفاصيل: (200,000 × 1%) + (150,000 × 3%) + (80,000 × 5%) + (50,000 × 10%) + (20,000 × 25%) = ${correctAnswer.toLocaleString('ar-SA')} ريال
+          </div>
+        </div>
+      `;
+      resultDiv.classList.remove('hidden');
+    });
+    
+    document.getElementById('checkCalc2').addEventListener('click', () => {
+      const userAnswer = parseFloat(document.getElementById('calcAnswer2').value.replace(/,/g, ''));
+      const paymentPerYear = 240000 / 3;
+      const r = 0.06;
+      const correctAnswer = paymentPerYear / (1 + r) + paymentPerYear / Math.pow(1 + r, 2) + paymentPerYear / Math.pow(1 + r, 3);
+      const roundedAnswer = Math.round(correctAnswer);
+      const resultDiv = document.getElementById('calc2Result');
+      
+      if (isNaN(userAnswer)) {
+        resultDiv.innerHTML = `
+          <div class="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">
+            <i class="fas fa-exclamation-circle ml-2"></i>
+            الرجاء إدخال قيمة عددية
+          </div>
+        `;
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      const isCorrect = Math.abs(userAnswer - roundedAnswer) < 100; // Allow for some variation in rounding
+      
+      resultDiv.innerHTML = `
+        <div class="p-3 bg-${isCorrect ? 'green' : 'red'}-100 border border-${isCorrect ? 'green' : 'red'}-300 rounded text-${isCorrect ? 'green' : 'red'}-800">
+          <i class="fas fa-${isCorrect ? 'check' : 'times'}-circle ml-2"></i>
+          ${isCorrect ? 'إجابة صحيحة!' : 'إجابة خاطئة.'} الإجابة الصحيحة هي حوالي ${roundedAnswer.toLocaleString('ar-SA')} ريال.
+          <div class="mt-2 text-gray-600 text-xs">
+            القيمة الحالية = 80,000 / (1 + 0.06) + 80,000 / (1 + 0.06)² + 80,000 / (1 + 0.06)³ = ${roundedAnswer.toLocaleString('ar-SA')} ريال
+          </div>
+        </div>
+      `;
+      resultDiv.classList.remove('hidden');
+    });
+    
+    // Chapter Progress
+    function updateProgress() {
+      const sections = document.querySelectorAll('section');
+      const progressBar = document.querySelector('.bg-blue-600');
+      
+      let visibleSections = 0;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          visibleSections++;
+        }
+      });
+      
+      const progress = Math.min((visibleSections / sections.length) * 100, 100);
+      if (progressBar) {
+        progressBar.style.width = progress + '%';
+      }
+    }
+    
+    // Update progress on scroll
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('load', updateProgress);
+    
+    // Add animation classes on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Save progress
+    function saveProgress() {
+      localStorage.setItem('chapter5_completed', 'true');
+      localStorage.setItem('last_visited', 'chapter-5.html');
+    }
+    
+    // Save progress when user scrolls to bottom
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+        saveProgress();
+      }
+    });
+    
+    // Load saved progress
+    function loadProgress() {
+      const completed = localStorage.getItem('chapter5_completed');
+      if (completed) {
+        const progressBar = document.querySelector('.bg-blue-600');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+        }
+      }
+    }
+    
+    window.addEventListener('load', loadProgress);
+    
+    // Print functionality
+    function printChapter() {
+      window.print();
+    }
+    
+    // Add print button
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print ml-2"></i> طباعة الفصل';
+    printButton.className = 'fixed bottom-4 left-4 bg-gray-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition z-50';
+    printButton.onclick = printChapter;
+    document.body.appendChild(printButton);
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            const nextLink = document.querySelector('a[href="chapter-6.html"]');
+            if (nextLink) nextLink.click();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            const prevLink = document.querySelector('a[href="chapter-4.html"]');
+            if (prevLink) prevLink.click();
+            break;
+          case 'Home':
+            e.preventDefault();
+            window.location.href = 'index.html';
+            break;
+        }
+      }
+    });
+  </script>
+  
+  <!-- Custom CSS for animations -->
+  <style>
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .fixed, #sidebar, #overlay, button {
+        display: none !important;
+      }
+      
+      .bg-gradient-to-r, .bg-gradient-to-b {
+        background: #4f46e5 !important;
+        color: white !important;
+      }
+      
+      section {
+        break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      
+      .grid {
+        display: block !important;
+      }
+      
+      .md\:grid-cols-2 > div,
+      .md\:grid-cols-3 > div {
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .text-3xl {
+        font-size: 1.5rem;
+      }
+      
+      .text-2xl {
+        font-size: 1.25rem;
+      }
+      
+      .text-xl {
+        font-size: 1.125rem;
+      }
+      .grid {
+        gap: 1rem;
+      }
+      
+      .p-6 {
+        padding: 1rem;
+      }
+      
+      .overflow-x-auto {
+        margin: 0 -1rem;
+        padding: 0 1rem;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+      }
+      
+      .text-gray-700 {
+        color: #d1d5db;
+      }
+      
+      .text-gray-600 {
+        color: #9ca3af;
+      }
+      
+      .border-gray-200 {
+        border-color: #374151;
+      }
+      
+      .bg-gray-50 {
+        background-color: #111827;
+      }
+      
+      .bg-green-50 {
+        background-color: #064e3b;
+      }
+      
+      .bg-blue-50 {
+        background-color: #1e3a8a;
+      }
+      
+      .bg-red-50 {
+        background-color: #7f1d1d;
+      }
+      
+      .bg-yellow-50 {
+        background-color: #78350f;
+      }
+      
+      .bg-purple-50 {
+        background-color: #4c1d95;
+      }
+      
+      .text-gray-800 {
+        color: #f3f4f6;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .focus\:ring-2:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    
+    input[type="radio"]:focus,
+    input[type="text"]:focus {
+      outline: 2px solid #3b82f6;
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .bg-blue-50 {
+        background-color: #dbeafe;
+      }
+      
+      .bg-green-50 {
+        background-color: #dcfce7;
+      }
+      
+      .bg-red-50 {
+        background-color: #fef2f2;
+      }
+      
+      .border {
+        border-width: 2px;
+      }
+      
+      .text-gray-600 {
+        color: #000000;
+      }
+      
+      .text-white {
+        color: #ffffff;
+      }
+      
+      .bg-blue-600,
+      .bg-green-600,
+      .bg-red-600,
+      .bg-purple-600,
+      .bg-orange-600,
+      .bg-amber-600,
+      .bg-teal-600 {
+        background-color: #000000;
+      }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .transition,
+      .animate-fade-in {
+        animation: none;
+        transition: none;
+      }
+    }
+  </style>
+</body>
+</html>
+

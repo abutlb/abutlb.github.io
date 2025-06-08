@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معايير IFRS - المحاسبة المتوسطة 1</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+    .standard-content {
+      display: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+    }
+    
+    .standard-content.show {
+      display: block;
+      max-height: 2000px;
+      transition: max-height 0.5s ease-in;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">معايير IFRS</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets and Goodwill</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-white"></i>
+                <span class="text-sm font-bold">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">موارد إضافية</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="ifrs-standards.html" class="text-blue-600 hover:text-blue-800" aria-current="page">معايير IFRS</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">معايير التقارير المالية الدولية (IFRS)</h1>
+        <p class="text-gray-600 mt-2">International Financial Reporting Standards</p>
+      </div>
+      
+      <!-- Introduction Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-info-circle ml-3"></i>
+            مقدمة عن معايير التقارير المالية الدولية
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Introduction to IFRS</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            معايير التقارير المالية الدولية (IFRS) هي مجموعة من المعايير المحاسبية التي طورتها مؤسسة معايير التقارير المالية الدولية (IFRS Foundation) ومجلس معايير المحاسبة الدولية (IASB). تهدف هذه المعايير إلى توفير لغة محاسبية مشتركة عالمياً، مما يجعل القوائم المالية للشركات قابلة للفهم والمقارنة عبر الحدود الدولية.
+          </p>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-history text-blue-600 ml-2"></i>
+                  التطور التاريخي
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• <strong>1973:</strong> تأسيس لجنة معايير المحاسبة الدولية (IASC)</li>
+                  <li>• <strong>2001:</strong> إعادة هيكلة IASC وتأسيس مجلس معايير المحاسبة الدولية (IASB)</li>
+                  <li>• <strong>2005:</strong> الاتحاد الأوروبي يتبنى معايير IFRS للشركات المدرجة</li>
+                  <li>• <strong>2010:</strong> إطلاق مشروع التقارب مع المعايير الأمريكية (US GAAP)</li>
+                  <li>• <strong>2022:</strong> أكثر من 140 دولة تستخدم معايير IFRS أو تسمح بها</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-check-circle text-green-600 ml-2"></i>
+                  أهداف ومزايا IFRS
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>• تحسين الشفافية والمقارنة للمعلومات المالية</li>
+                  <li>• تعزيز كفاءة أسواق رأس المال الدولية</li>
+                  <li>• تخفيض تكلفة رأس المال وزيادة فرص التمويل الدولي</li>
+                  <li>• تسهيل اتخاذ القرارات الاقتصادية عبر الحدود</li>
+                  <li>• تحسين المساءلة من خلال تقليل فجوة المعلومات بين المستثمرين والإدارة</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-building text-gray-600 ml-2"></i>
+              هيكل إصدار معايير IFRS
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4 text-center">
+              <div class="bg-white p-4 rounded shadow-sm">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">1</div>
+                <h4 class="font-semibold text-gray-800 mb-1">مؤسسة IFRS</h4>
+                <p class="text-xs text-gray-600">المنظمة الأم التي تشرف على IASB</p>
+              </div>
+              <div class="bg-white p-4 rounded shadow-sm">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">2</div>
+                <h4 class="font-semibold text-gray-800 mb-1">مجلس معايير المحاسبة الدولية (IASB)</h4>
+                <p class="text-xs text-gray-600">الهيئة المستقلة التي تضع المعايير</p>
+              </div>
+              <div class="bg-white p-4 rounded shadow-sm">
+                <div class="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2 text-sm font-bold">3</div>
+                <h4 class="font-semibold text-gray-800 mb-1">لجنة تفسيرات IFRS</h4>
+                <p class="text-xs text-gray-600">تقدم إرشادات تفسيرية للمعايير</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Main IFRS Standards Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-list-ul ml-3"></i>
+            معايير IFRS الرئيسية المرتبطة بالمحاسبة المتوسطة
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Key IFRS Standards Related to Intermediate Accounting</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-gray-800">معايير محاسبية أساسية</h3>
+              <div class="flex items-center">
+                <div class="relative mr-2">
+                  <input type="text" id="standardSearch" placeholder="البحث في المعايير..." class="pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm">
+                  <div class="absolute right-3 top-2.5 text-gray-400">
+                    <i class="fas fa-search"></i>
+                  </div>
+                </div>
+                <select id="standardFilter" class="border border-gray-300 rounded-md mr-2 py-2 px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+                  <option value="all">جميع المعايير</option>
+                  <option value="financial-statements">القوائم المالية</option>
+                  <option value="assets">الأصول</option>
+                  <option value="liabilities">الالتزامات</option>
+                  <option value="revenue">الإيرادات</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Standards List -->
+            <div class="space-y-4">
+              <!-- IFRS 1 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="financial-statements">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-full">IFRS 1</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">تطبيق معايير التقارير المالية الدولية لأول مرة</h4>
+                    <p class="text-sm text-gray-600">First-time Adoption of International Financial Reporting Standards</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        ضمان أن أول قوائم مالية للمنشأة وفق IFRS تقدم معلومات عالية الجودة تكون:
+                      </p>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>شفافة للمستخدمين وقابلة للمقارنة</li>
+                        <li>نقطة انطلاق مناسبة للمحاسبة وفق معايير IFRS</li>
+                        <li>يمكن إنتاجها بتكلفة لا تتجاوز المنافع</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">المتطلبات الرئيسية:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>إعداد قائمة مركز مالي افتتاحية وفقاً لمعايير IFRS</li>
+                        <li>تطبيق نفس السياسات المحاسبية في جميع الفترات المعروضة</li>
+                        <li>الإفصاح عن تأثير الانتقال من المعايير السابقة إلى IFRS</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">الإعفاءات المتاحة:</h5>
+                        <p class="text-xs text-gray-700">
+                          يقدم المعيار بعض الإعفاءات الاختيارية والإلزامية من متطلبات معايير IFRS الأخرى عند التطبيق لأول مرة.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        شركة تطبق IFRS لأول مرة في 31 ديسمبر 2023:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>تاريخ الانتقال: 1 يناير 2022 (بداية فترة المقارنة)</li>
+                        <li>يجب إعداد قائمة مركز مالي افتتاحية بتاريخ 1 يناير 2022 وفقاً لـ IFRS</li>
+                        <li>يجب تعديل الأرقام المقارنة لعام 2022 لتتوافق مع IFRS</li>
+                        <li>الإفصاح عن تسويات حقوق الملكية والدخل الشامل من المعايير السابقة إلى IFRS</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IFRS 9 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="assets">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-full">IFRS 9</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">الأدوات المالية</h4>
+                    <p class="text-sm text-gray-600">Financial Instruments</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        وضع مبادئ للتقرير المالي عن الأصول المالية والالتزامات المالية لتقديم معلومات ملائمة ومفيدة لمستخدمي القوائم المالية.
+                      </p>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>تصنيف وقياس الأدوات المالية</li>
+                        <li>منهجية انخفاض القيمة القائمة على الخسائر الائتمانية المتوقعة</li>
+                        <li>متطلبات محاسبة التحوط الجديدة</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">فئات تصنيف الأصول المالية:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>التكلفة المطفأة:</strong> للأصول المحتفظ بها لتحصيل التدفقات النقدية التعاقدية</li>
+                        <li><strong>القيمة العادلة من خلال الدخل الشامل الآخر:</strong> للأصول المحتفظ بها لتحصيل التدفقات النقدية والبيع</li>
+                        <li><strong>القيمة العادلة من خلال الربح أو الخسارة:</strong> لجميع الأصول المالية الأخرى</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">الخسائر الائتمانية المتوقعة:</h5>
+                        <p class="text-xs text-gray-700">
+                          يتطلب المعيار الاعتراف بالخسائر الائتمانية المتوقعة مستقبلاً بدلاً من الانتظار حتى حدوث الخسارة (نموذج "الخسارة المتكبدة").
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        تصنيف وقياس استثمارات الأسهم:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>استثمار استراتيجي طويل المدى: يمكن تصنيفه بالقيمة العادلة من خلال الدخل الشامل الآخر (خيار لا رجعة فيه)</li>
+                        <li>استثمار للمتاجرة: يصنف بالقيمة العادلة من خلال الربح أو الخسارة</li>
+                        <li>سندات دين محتفظ بها لتحصيل التدفقات النقدية: تصنف بالتكلفة المطفأة إذا اجتازت اختبار SPPI</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IFRS 15 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="revenue">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-full">IFRS 15</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">الإيرادات من العقود مع العملاء</h4>
+                    <p class="text-sm text-gray-600">Revenue from Contracts with Customers</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        وضع مبادئ يجب أن تطبقها المنشأة للإبلاغ عن معلومات مفيدة لمستخدمي القوائم المالية حول طبيعة وتوقيت وعدم تأكد الإيرادات والتدفقات النقدية الناشئة عن العقود مع العملاء.
+                      </p>
+                      <div class="p-3 bg-yellow-50 border border-yellow-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">نموذج الخطوات الخمس:</h5>
+                        <ol class="text-sm text-gray-700 space-y-1 mr-5 list-decimal">
+                          <li>تحديد العقد مع العميل</li>
+                          <li>تحديد التزامات الأداء في العقد</li>
+                          <li>تحديد سعر المعاملة</li>
+                          <li>تخصيص سعر المعاملة لالتزامات الأداء</li>
+                          <li>الاعتراف بالإيراد عند (أو كما) تستوفي المنشأة التزام الأداء</li>
+                        </ol>
+                      </div>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الاعتبارات الرئيسية:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>استيفاء التزامات الأداء:</strong> على مدى زمني أو عند نقطة زمنية محددة</li>
+                        <li><strong>المقابل المتغير:</strong> الخصومات، الحوافز، الغرامات، المبالغ المحتملة</li>
+                        <li><strong>تكاليف العقد:</strong> تكاليف الحصول على العقد وتكاليف الوفاء به</li>
+                        <li><strong>متطلبات الإفصاح:</strong> تفصيلية لمساعدة المستخدمين على فهم طبيعة وتوقيت وعدم تأكد الإيرادات</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">التغييرات الرئيسية:</h5>
+                        <p class="text-xs text-gray-700">
+                          حل محل معايير الإيرادات السابقة (IAS 18 و IAS 11) ووحّد متطلبات الاعتراف بالإيرادات عبر جميع الصناعات.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        شركة برمجيات تبيع ترخيصاً للبرنامج مع خدمات تثبيت وصيانة لمدة سنة:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>التزامات الأداء المنفصلة: ترخيص البرنامج، التثبيت، خدمات الصيانة</li>
+                        <li>سعر المعاملة: 100,000 ريال</li>
+                        <li>تخصيص السعر: 70,000 للترخيص، 10,000 للتثبيت، 20,000 للصيانة</li>
+                        <li>الاعتراف: 70,000 عند نقل الترخيص، 10,000 عند اكتمال التثبيت، 20,000 على مدار فترة الصيانة</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IFRS 16 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="assets">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-blue-600 px-2 py-1 rounded-full">IFRS 16</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">عقود الإيجار</h4>
+                    <p class="text-sm text-gray-600">Leases</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        ضمان أن المستأجرين والمؤجرين يقدمون معلومات ملائمة تمثل بصدق معاملات الإيجار، وتوفير أساس لمستخدمي القوائم المالية لتقييم تأثير عقود الإيجار على المركز المالي والأداء المالي والتدفقات النقدية للمنشأة.
+                      </p>
+                      <div class="p-3 bg-purple-50 border border-purple-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">التغيير الرئيسي:</h5>
+                        <p class="text-xs text-gray-700">
+                          إزالة التمييز بين عقود الإيجار التشغيلية والتمويلية بالنسبة للمستأجرين، وتقديم نموذج محاسبي واحد يتطلب الاعتراف بحق استخدام الأصل والتزام الإيجار لجميع عقود الإيجار (باستثناء عقود الإيجار قصيرة الأجل وعقود إيجار الأصول منخفضة القيمة).
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">المتطلبات الرئيسية للمستأجر:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>الاعتراف:</strong> حق استخدام الأصل والتزام الإيجار في قائمة المركز المالي</li>
+                        <li><strong>القياس الأولي:</strong> التزام الإيجار بالقيمة الحالية لدفعات الإيجار، وحق الاستخدام بمبلغ التزام الإيجار مع تعديلات</li>
+                        <li><strong>القياس اللاحق:</strong> استهلاك حق الاستخدام ومصروف الفائدة على التزام الإيجار</li>
+                        <li><strong>العرض:</strong> حق الاستخدام ضمن الأصول والتزام الإيجار ضمن الالتزامات</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">المؤجر:</h5>
+                        <p class="text-xs text-gray-700">
+                          متطلبات المؤجر لم تتغير بشكل جوهري عن المعيار السابق IAS 17، ويستمر تصنيف عقود الإيجار إلى تشغيلية وتمويلية.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        شركة تستأجر مكتباً لمدة 5 سنوات بقيمة إيجار سنوية 100,000 ريال تدفع في بداية كل سنة، معدل الاقتراض الإضافي 5%:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>القيمة الحالية لالتزام الإيجار = 453,000 ريال</li>
+                        <li>الاعتراف الأولي: أصل حق استخدام بقيمة 553,000 ريال (شامل الدفعة الأولى) والتزام إيجار بقيمة 453,000 ريال</li>
+                        <li>استهلاك حق الاستخدام بطريقة القسط الثابت: 110,600 ريال سنوياً</li>
+                        <li>الفائدة على التزام الإيجار في السنة الأولى: 22,650 ريال</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IAS 16 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="assets">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-green-600 px-2 py-1 rounded-full">IAS 16</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">الممتلكات والآلات والمعدات</h4>
+                    <p class="text-sm text-gray-600">Property, Plant and Equipment</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        وصف المعالجة المحاسبية للممتلكات والآلات والمعدات حتى يتمكن مستخدمو القوائم المالية من التمييز بين استثمارات المنشأة في هذه الأصول والتغيرات في تلك الاستثمارات.
+                      </p>
+                      <h5 class="font-bold text-gray-800 mb-2">الاعتراف:</h5>
+                      <p class="text-sm text-gray-700">
+                        يتم الاعتراف بتكلفة بند الممتلكات والآلات والمعدات كأصل عندما:
+                      </p>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>يكون من المحتمل تدفق منافع اقتصادية مستقبلية مرتبطة بالبند إلى المنشأة</li>
+                        <li>يمكن قياس تكلفة البند بشكل موثوق</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">القياس:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>القياس الأولي:</strong> بالتكلفة، متضمنة سعر الشراء والتكاليف المنسوبة مباشرة وتكلفة التفكيك والإزالة</li>
+                        <li><strong>القياس اللاحق:</strong> نموذج التكلفة أو نموذج إعادة التقييم</li>
+                        <li><strong>الاستهلاك:</strong> توزيع المبلغ القابل للاستهلاك بطريقة منتظمة على العمر الإنتاجي</li>
+                        <li><strong>انخفاض القيمة:</strong> تطبيق IAS 36 لتحديد ما إذا كان الأصل قد انخفضت قيمته</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">نموذج إعادة التقييم:</h5>
+                        <p class="text-xs text-gray-700">
+                          يمكن قياس الأصل بالقيمة العادلة في تاريخ إعادة التقييم ناقصاً الاستهلاك المتراكم وخسائر انخفاض القيمة المتراكمة، مع الاعتراف بالزيادة في الدخل الشامل الآخر.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        شركة اشترت آلة صناعية بتكلفة 500,000 ريال:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>تكاليف النقل والتركيب: 50,000 ريال</li>
+                        <li>تكاليف تجريبية للتشغيل: 10,000 ريال</li>
+                        <li>تكاليف التدريب: 15,000 ريال (لا تُضاف للتكلفة)</li>
+                        <li>القيمة المتبقية المقدرة: 60,000 ريال</li>
+                        <li>العمر الإنتاجي: 10 سنوات</li>
+                        <li>مصروف الاستهلاك السنوي (القسط الثابت): (500,000 + 50,000 + 10,000 - 60,000) ÷ 10 = 50,000 ريال</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IAS 38 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="assets">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-green-600 px-2 py-1 rounded-full">IAS 38</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">الأصول غير الملموسة</h4>
+                    <p class="text-sm text-gray-600">Intangible Assets</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        وصف المعالجة المحاسبية للأصول غير الملموسة التي لم تتم معالجتها بشكل خاص في معيار آخر.
+                      </p>
+                      <h5 class="font-bold text-gray-800 mb-2">التعريف:</h5>
+                      <p class="text-sm text-gray-700">
+                        الأصل غير الملموس هو أصل غير نقدي قابل للتحديد بدون جوهر مادي. يكون الأصل قابلاً للتحديد عندما:
+                      </p>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>يكون قابلاً للفصل (يمكن بيعه أو نقله بشكل منفصل)</li>
+                        <li>ينشأ من حقوق تعاقدية أو قانونية</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الاعتراف والقياس:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>معايير الاعتراف:</strong> احتمالية المنافع الاقتصادية المستقبلية وإمكانية قياس التكلفة بشكل موثوق</li>
+                        <li><strong>القياس الأولي:</strong> بالتكلفة</li>
+                        <li><strong>القياس اللاحق:</strong> نموذج التكلفة أو نموذج إعادة التقييم</li>
+                        <li><strong>الإطفاء:</strong> للأصول ذات العمر المحدد على مدى عمرها الإنتاجي</li>
+                        <li><strong>اختبار انخفاض القيمة:</strong> للأصول ذات العمر غير المحدد سنوياً</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-red-50 border border-red-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">البحث والتطوير:</h5>
+                        <p class="text-xs text-gray-700">
+                          <strong>مرحلة البحث:</strong> لا يتم الاعتراف بأي أصل غير ملموس، وتُصرف النفقات عند تكبدها.<br>
+                          <strong>مرحلة التطوير:</strong> يتم الاعتراف بالأصل فقط عند استيفاء معايير محددة تثبت الجدوى التقنية والتجارية.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        شركة برمجيات طورت برنامجاً جديداً:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>تكاليف البحث الأولي: 200,000 ريال (تُصرف كمصروف)</li>
+                        <li>تكاليف التطوير بعد إثبات الجدوى التقنية: 500,000 ريال (تُرسمل كأصل غير ملموس)</li>
+                        <li>العمر الإنتاجي المقدر: 5 سنوات</li>
+                        <li>طريقة الإطفاء: القسط الثابت</li>
+                        <li>مصروف الإطفاء السنوي: 100,000 ريال</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IAS 36 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="assets">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-green-600 px-2 py-1 rounded-full">IAS 36</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">انخفاض قيمة الأصول</h4>
+                    <p class="text-sm text-gray-600">Impairment of Assets</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        وصف الإجراءات التي تطبقها المنشأة لضمان تسجيل أصولها بما لا يزيد عن مبلغها القابل للاسترداد، وتحديد متى يجب على المنشأة الاعتراف بخسارة انخفاض القيمة أو عكسها.
+                      </p>
+                      <h5 class="font-bold text-gray-800 mb-2">مؤشرات انخفاض القيمة:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>مؤشرات خارجية: انخفاض القيمة السوقية، تغييرات تكنولوجية أو قانونية سلبية</li>
+                        <li>مؤشرات داخلية: تقادم أو ضرر مادي، أداء اقتصادي أسوأ من المتوقع</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">المبلغ القابل للاسترداد:</h5>
+                      <p class="text-sm text-gray-700 mb-2">
+                        هو الأعلى من:
+                      </p>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>القيمة العادلة ناقصاً تكاليف البيع:</strong> سعر البيع المحتمل في معاملة تجارية بحتة</li>
+                        <li><strong>القيمة قيد الاستخدام:</strong> القيمة الحالية للتدفقات النقدية المستقبلية المتوقعة من الاستخدام المستمر للأصل</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">خسارة انخفاض القيمة:</h5>
+                        <p class="text-xs text-gray-700">
+                          تُثبت عندما يتجاوز المبلغ المسجل للأصل مبلغه القابل للاسترداد. يتم تخفيض قيمة الأصل إلى المبلغ القابل للاسترداد.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <h5 class="font-bold text-gray-800 mb-2">مثال تطبيقي:</h5>
+                    <div class="bg-gray-50 p-3 rounded border text-sm">
+                      <p class="mb-2">
+                        مصنع بقيمة دفترية 10 مليون ريال يظهر مؤشرات انخفاض القيمة:
+                      </p>
+                      <ul class="mr-5 list-disc space-y-1">
+                        <li>القيمة العادلة ناقصاً تكاليف البيع: 7 مليون ريال</li>
+                        <li>القيمة قيد الاستخدام: 8 مليون ريال</li>
+                        <li>المبلغ القابل للاسترداد: 8 مليون ريال (الأعلى من القيمتين)</li>
+                        <li>خسارة انخفاض القيمة: 2 مليون ريال (10 مليون - 8 مليون)</li>
+                        <li>القيمة الدفترية الجديدة: 8 مليون ريال</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- IAS 1 -->
+              <div class="standard-card bg-gray-50 border border-gray-200 rounded-lg overflow-hidden" data-category="financial-statements">
+                <div class="p-4 cursor-pointer standard-header flex justify-between items-center">
+                  <div>
+                    <span class="text-xs font-medium text-white bg-green-600 px-2 py-1 rounded-full">IAS 1</span>
+                    <h4 class="text-lg font-bold text-gray-800 mt-1">عرض القوائم المالية</h4>
+                    <p class="text-sm text-gray-600">Presentation of Financial Statements</p>
+                  </div>
+                  <button class="toggle-btn bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm flex items-center">
+                    <i class="fas fa-chevron-down mr-1"></i>
+                    عرض التفاصيل
+                  </button>
+                </div>
+                <div class="standard-content p-4 border-t border-gray-200 bg-white">
+                  <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">الهدف من المعيار:</h5>
+                      <p class="text-sm text-gray-700 mb-3">
+                        وضع الأساس لعرض القوائم المالية ذات الغرض العام لضمان قابليتها للمقارنة، سواء مع القوائم المالية للمنشأة لفترات سابقة أو مع القوائم المالية لمنشآت أخرى.
+                      </p>
+                      <h5 class="font-bold text-gray-800 mb-2">مجموعة كاملة من القوائم المالية:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li>قائمة المركز المالي</li>
+                        <li>قائمة الربح أو الخسارة والدخل الشامل الآخر</li>
+                        <li>قائمة التغيرات في حقوق الملكية</li>
+                        <li>قائمة التدفقات النقدية</li>
+                        <li>الإيضاحات</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 class="font-bold text-gray-800 mb-2">المبادئ الأساسية:</h5>
+                      <ul class="text-sm text-gray-700 space-y-1 mr-5 list-disc">
+                        <li><strong>الاستمرارية:</strong> إعداد القوائم على افتراض استمرار المنشأة</li>
+                        <li><strong>أساس الاستحقاق:</strong> الاعتراف بالعناصر عند حدوثها، وليس عند استلام أو دفع النقد</li>
+                        <li><strong>الثبات في العرض:</strong> الحفاظ على نفس طريقة العرض والتصنيف من فترة لأخرى</li>
+                        <li><strong>الأهمية النسبية والتجميع:</strong> عرض العناصر المتشابهة معاً والعناصر المختلفة بشكل منفصل</li>
+                        <li><strong>عدم المقاصة:</strong> عدم إجراء مقاصة بين الأصول والالتزامات أو الإيرادات والمصروفات</li>
+                      </ul>
+                      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+                        <h5 class="font-bold text-gray-800 mb-1">هيكل ومحتوى القوائم المالية:</h5>
+                        <p class="text-xs text-gray-700">
+                          يحدد المعيار الحد الأدنى من المعلومات التي يجب تقديمها في كل قائمة وفي الإيضاحات.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- IFRS vs US GAAP Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-balance-scale ml-3"></i>
+            مقارنة بين IFRS و US GAAP
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Comparison between IFRS and US GAAP</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-4">
+            تعتبر معايير التقارير المالية الدولية (IFRS) ومبادئ المحاسبة المقبولة عموماً في الولايات المتحدة (US GAAP) من أهم إطارين محاسبيين في العالم. على الرغم من وجود جهود للتقارب بينهما، إلا أنه لا تزال هناك اختلافات مهمة.
+          </p>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="px-4 py-3 border-b text-right text-sm font-medium text-gray-800">جانب المقارنة</th>
+                  <th class="px-4 py-3 border-b text-right text-sm font-medium text-blue-800">IFRS</th>
+                  <th class="px-4 py-3 border-b text-right text-sm font-medium text-green-800">US GAAP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">المنهج العام</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">قائم على المبادئ (أكثر مرونة)</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">قائم على القواعد (أكثر تفصيلاً)</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">المخزون</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">لا يسمح باستخدام طريقة LIFO</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">يسمح باستخدام طريقة LIFO</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">تقييم الممتلكات والمعدات</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">يسمح بنموذج إعادة التقييم</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">لا يسمح بإعادة التقييم، نموذج التكلفة فقط</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">عرض قائمة الدخل</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">لا يتطلب تصنيفاً محدداً للمصروفات</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">يتطلب تصنيف المصروفات حسب الوظيفة</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">تكاليف البحث والتطوير</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">تكاليف البحث تُصرف، تكاليف التطوير قد تُرسمل إذا استوفت معايير معينة</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">عموماً تُصرف جميع تكاليف البحث والتطوير</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">الشهرة</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">لا تُطفأ، تخضع لاختبار انخفاض القيمة سنوياً</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">لا تُطفأ، اختبار انخفاض القيمة بطريقة مختلفة</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">الإيرادات</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">IFRS 15 - نموذج الخطوات الخمس</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">ASC 606 - متقارب مع IFRS 15</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">عقود الإيجار</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">IFRS 16 - نموذج واحد للمستأجر</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">ASC 842 - تصنيف مزدوج للإيجارات (تمويلية وتشغيلية)</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 border-b font-medium text-gray-800">الأدوات المالية</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">IFRS 9 - نموذج الخسائر الائتمانية المتوقعة</td>
+                  <td class="px-4 py-3 border-b text-sm text-gray-700">ASC 326 - نموذج مشابه ولكن مع بعض الاختلافات</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <h3 class="font-bold text-lg text-gray-800 mb-3 flex items-center">
+              <i class="fas fa-lightbulb text-yellow-600 ml-2"></i>
+              ملاحظة مهمة
+            </h3>
+            <p class="text-sm text-gray-700">
+              تستمر الجهود للتقارب بين IFRS و US GAAP، وقد تم تحقيق تقدم كبير في مجالات مثل الاعتراف بالإيرادات وعقود الإيجار. ومع ذلك، يجب على المحاسبين والمستثمرين أن يكونوا على دراية بالاختلافات المتبقية، خاصة عند التعامل مع القوائم المالية لشركات من دول مختلفة.
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Implementation Resources Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-book ml-3"></i>
+            موارد تطبيق معايير IFRS
+          </h2>
+          <p class="text-indigo-100 text-sm mt-1">IFRS Implementation Resources</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-external-link-alt text-indigo-600 ml-2"></i>
+                  مواقع رسمية ومصادر موثوقة
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>
+                    <a href="https://www.ifrs.org" target="_blank" class="flex items-center text-indigo-600 hover:text-indigo-800 transition">
+                      <i class="fas fa-globe ml-2"></i>
+                      <span>موقع مؤسسة IFRS الرسمي</span>
+                      <i class="fas fa-external-link-alt mr-2 text-xs"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://www.iasplus.com" target="_blank" class="flex items-center text-indigo-600 hover:text-indigo-800 transition">
+                      <i class="fas fa-globe ml-2"></i>
+                      <span>Deloitte IAS Plus</span>
+                      <i class="fas fa-external-link-alt mr-2 text-xs"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://www.socpa.org.sa" target="_blank" class="flex items-center text-indigo-600 hover:text-indigo-800 transition">
+                      <i class="fas fa-globe ml-2"></i>
+                      <span>الهيئة السعودية للمراجعين والمحاسبين</span>
+                      <i class="fas fa-external-link-alt mr-2 text-xs"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://www.ifac.org" target="_blank" class="flex items-center text-indigo-600 hover:text-indigo-800 transition">
+                      <i class="fas fa-globe ml-2"></i>
+                      <span>الاتحاد الدولي للمحاسبين (IFAC)</span>
+                      <i class="fas fa-external-link-alt mr-2 text-xs"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-download text-green-600 ml-2"></i>
+                  ملفات وأدوات مساعدة
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-3">
+                  <li>
+                    <a href="#" class="flex items-center text-green-600 hover:text-green-800 transition">
+                      <i class="fas fa-file-pdf ml-2"></i>
+                      <span>ملخص تطبيق IFRS في المملكة العربية السعودية (PDF)</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="flex items-center text-green-600 hover:text-green-800 transition">
+                      <i class="fas fa-file-excel ml-2"></i>
+                      <span>قوالب للقوائم المالية وفق IFRS (Excel)</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="flex items-center text-green-600 hover:text-green-800 transition">
+                      <i class="fas fa-table ml-2"></i>
+                      <span>قائمة مرجعية للإفصاحات المطلوبة</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="flex items-center text-green-600 hover:text-green-800 transition">
+                      <i class="fas fa-calculator ml-2"></i>
+                      <span>أداة حساب انخفاض قيمة الأصول</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-user-graduate text-blue-600 ml-2"></i>
+                  فرص التعلم والتدريب
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-2">
+                  <li>
+                    <a href="#" class="flex items-center text-blue-600 hover:text-blue-800 transition">
+                      <i class="fas fa-play-circle ml-2"></i>
+                      <span>دورة تدريبية: أساسيات IFRS للمبتدئين</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="flex items-center text-blue-600 hover:text-blue-800 transition">
+                      <i class="fas fa-certificate ml-2"></i>
+                      <span>شهادة IFRS المعتمدة من ACCA</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="flex items-center text-blue-600 hover:text-blue-800 transition">
+                      <i class="fas fa-user-tie ml-2"></i>
+                      <span>خبراء IFRS - استشارات مباشرة</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="flex items-center text-blue-600 hover:text-blue-800 transition">
+                      <i class="fas fa-users ml-2"></i>
+                      <span>مجتمع المحاسبين العرب - منتدى IFRS</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-newspaper text-purple-600 ml-2"></i>
+                  آخر المستجدات والتحديثات
+                </h3>
+                <ul class="text-sm text-gray-700 space-y-3">
+                  <li class="flex items-start">
+                    <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full ml-2">جديد</span>
+                    <div>
+                      <p class="font-medium">تعديلات على IAS 1 حول تصنيف الالتزامات</p>
+                      <p class="text-xs text-gray-600">تاريخ التطبيق: 1 يناير 2023</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full ml-2">مقترح</span>
+                    <div>
+                      <p class="font-medium">المعيار الجديد المقترح حول الشركات الصغيرة والمتوسطة</p>
+                      <p class="text-xs text-gray-600">تحت الدراسة - 2023</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full ml-2">مطبق</span>
+                    <div>
+                      <p class="font-medium">تطبيق IFRS 17 عقود التأمين</p>
+                      <p class="text-xs text-gray-600">ساري المفعول من 1 يناير 2023</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Subscribe Form -->
+          <div class="mt-6 p-5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg text-white">
+            <h3 class="font-bold text-lg mb-3">اشترك في نشرة IFRS الإخبارية</h3>
+            <p class="text-sm text-blue-100 mb-4">احصل على آخر التحديثات والتغييرات في معايير IFRS مباشرة إلى بريدك الإلكتروني.</p>
+            <form class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 md:space-x-reverse">
+              <input type="email" placeholder="البريد الإلكتروني" class="p-2 rounded-lg border-0 text-gray-800 focus:ring-2 focus:ring-blue-300 md:flex-1">
+              <button type="submit" class="bg-white text-blue-800 py-2 px-4 rounded-lg font-medium hover:bg-blue-100 transition">
+                اشتراك
+                <i class="fas fa-envelope-open ml-1"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Summary and Conclusion -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            ملخص وخاتمة
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">أهمية فهم معايير IFRS:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> ضمان الالتزام بالمتطلبات القانونية والتنظيمية</li>
+                <li><i class="fas fa-check ml-2"></i> تحسين قابلية القوائم المالية للمقارنة على المستوى الدولي</li>
+                <li><i class="fas fa-check ml-2"></i> زيادة الشفافية والثقة في التقارير المالية</li>
+                <li><i class="fas fa-check ml-2"></i> تسهيل الوصول إلى أسواق رأس المال العالمية</li>
+                <li><i class="fas fa-check ml-2"></i> تحسين عملية اتخاذ القرارات الاقتصادية للمستثمرين والدائنين</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">تطبيق المعايير في المملكة العربية السعودية:</h3>
+              <p class="text-sm mb-3">
+                اعتمدت المملكة العربية السعودية معايير IFRS بشكل كامل للشركات المدرجة اعتباراً من 1 يناير 2017، وللمنشآت الأخرى من 1 يناير 2018، مع بعض التعديلات الطفيفة التي أقرتها الهيئة السعودية للمراجعين والمحاسبين.
+              </p>
+              <p class="text-sm">
+                يعد فهم هذه المعايير وتطبيقها بشكل صحيح أمراً ضرورياً لطلاب المحاسبة والمحاسبين المهنيين في المملكة، خاصة مع استمرار تطور المعايير وتحديثها بشكل دوري.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="index.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          العودة للصفحة الرئيسية
+        </a>
+        <a href="glossary.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          الانتقال إلى قاموس المصطلحات
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('translate-x-0');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('translate-x-0');
+      overlay.classList.add('hidden');
+    });
+    
+    // Toggle IFRS standards content
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.standard-card');
+        const content = card.querySelector('.standard-content');
+        content.classList.toggle('show');
+        
+        // Update button text
+        if (content.classList.contains('show')) {
+          button.innerHTML = '<i class="fas fa-chevron-up mr-1"></i> إخفاء التفاصيل';
+        } else {
+          button.innerHTML = '<i class="fas fa-chevron-down mr-1"></i> عرض التفاصيل';
+        }
+      });
+    });
+    
+    // Standard search functionality
+    const searchInput = document.getElementById('standardSearch');
+    const standardCards = document.querySelectorAll('.standard-card');
+    
+    searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      
+      standardCards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+        const cardCategory = card.getAttribute('data-category');
+        const filterValue = document.getElementById('standardFilter').value;
+        
+        // Show/hide based on search term and filter
+        if (cardText.includes(searchTerm) && (filterValue === 'all' || filterValue === cardCategory)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+    
+    // Standard filter functionality
+    const filterSelect = document.getElementById('standardFilter');
+    filterSelect.addEventListener('change', () => {
+      const filterValue = filterSelect.value;
+      const searchTerm = searchInput.value.toLowerCase();
+      
+      standardCards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+        const cardCategory = card.getAttribute('data-category');
+        
+        // Show/hide based on filter and search term
+        if ((filterValue === 'all' || filterValue === cardCategory) && cardText.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+    
+    // Show the first standard by default
+    if (standardCards.length > 0) {
+      const firstContent = standardCards[0].querySelector('.standard-content');
+      const firstButton = standardCards[0].querySelector('.toggle-btn');
+      firstContent.classList.add('show');
+      firstButton.innerHTML = '<i class="fas fa-chevron-up mr-1"></i> إخفاء التفاصيل';
+    }
+    
+    // Card hover effects
+    document.querySelectorAll('.card-hover').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+      });
+    });
+    
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

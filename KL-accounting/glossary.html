@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قاموس المصطلحات المحاسبية - المحاسبة المتوسطة 1</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+    .term-card {
+      transition: all 0.3s ease;
+    }
+    .term-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">قاموس المصطلحات</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li>
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li>
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Other chapters (simplified for brevity) -->
+          <li>
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <li>
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <li>
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg bg-blue-600">
+                <i class="fas fa-book ml-2 text-white"></i>
+                <span class="text-sm font-bold">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Page Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">المراجع</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <span class="text-blue-600">قاموس المصطلحات</span>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">قاموس المصطلحات المحاسبية</h1>
+        <p class="text-gray-600 mt-2">Accounting Terms Glossary</p>
+      </div>
+
+      <!-- Search and Filter -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-4 bg-blue-50 border-b border-blue-100">
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+              <div class="relative">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <input id="searchInput" type="text" class="block w-full pr-10 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ابحث عن مصطلح...">
+              </div>
+            </div>
+            <div class="md:w-1/4">
+              <select id="categoryFilter" class="block w-full py-2 px-3 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="all">جميع الفئات</option>
+                <option value="general">مفاهيم عامة</option>
+                <option value="financial-statements">القوائم المالية</option>
+                <option value="assets">الأصول</option>
+                <option value="liabilities">الخصوم</option>
+                <option value="revenue">الإيرادات</option>
+                <option value="framework">الأطر المفاهيمية</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Glossary Navigation - Letter Index -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="flex flex-wrap justify-center p-2 border-b border-gray-200">
+          <a href="#letter-أ" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">أ</a>
+          <a href="#letter-ب" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ب</a>
+          <a href="#letter-ت" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ت</a>
+          <a href="#letter-ث" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ث</a>
+          <a href="#letter-ج" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ج</a>
+          <a href="#letter-ح" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ح</a>
+                    <a href="#letter-خ" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">خ</a>
+          <a href="#letter-د" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">د</a>
+          <a href="#letter-ذ" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ذ</a>
+          <a href="#letter-ر" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ر</a>
+          <a href="#letter-ز" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ز</a>
+          <a href="#letter-س" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">س</a>
+          <a href="#letter-ش" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ش</a>
+          <a href="#letter-ص" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ص</a>
+          <a href="#letter-ض" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ض</a>
+          <a href="#letter-ط" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ط</a>
+          <a href="#letter-ظ" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ظ</a>
+          <a href="#letter-ع" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ع</a>
+          <a href="#letter-غ" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">غ</a>
+          <a href="#letter-ف" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ف</a>
+          <a href="#letter-ق" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ق</a>
+          <a href="#letter-ك" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ك</a>
+          <a href="#letter-ل" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ل</a>
+          <a href="#letter-م" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">م</a>
+          <a href="#letter-ن" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ن</a>
+          <a href="#letter-هـ" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">هـ</a>
+          <a href="#letter-و" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">و</a>
+          <a href="#letter-ي" class="m-1 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white">ي</a>
+        </div>
+      </div>
+
+      <!-- Glossary Content -->
+      <div id="glossaryContent">
+        <!-- Letter أ -->
+        <div id="letter-أ" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">أ</span>
+            <span>الألف</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="general">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">أساس الاستحقاق</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Accrual Basis</span>
+              </div>
+              <p class="text-gray-600 mt-2">مبدأ محاسبي يقضي بالاعتراف بالإيرادات والمصروفات عند حدوثها (بغض النظر عن استلام أو دفع النقد) وتسجيلها في الفترة المحاسبية التي تخصها.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 3</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="assets">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">الأصول</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Assets</span>
+              </div>
+              <p class="text-gray-600 mt-2">موارد اقتصادية حالية تسيطر عليها المنشأة نتيجة أحداث ماضية ومن المتوقع أن تحقق منافع اقتصادية مستقبلية.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 5-9</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="framework">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">الأهمية النسبية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Materiality</span>
+              </div>
+              <p class="text-gray-600 mt-2">مفهوم يعني أن المعلومات تعتبر جوهرية إذا كان حذفها أو تحريفها يمكن أن يؤثر على القرارات الاقتصادية التي يتخذها مستخدمو القوائم المالية.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="general">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">الافتراضات الأساسية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Fundamental Assumptions</span>
+              </div>
+              <p class="text-gray-600 mt-2">المبادئ الأساسية التي تقوم عليها المحاسبة المالية، وتشمل افتراض الوحدة الاقتصادية، افتراض الاستمرارية، افتراض الفترة المحاسبية، وافتراض الوحدة النقدية.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter ت -->
+        <div id="letter-ت" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">ت</span>
+            <span>التاء</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="general">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">التكلفة التاريخية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Historical Cost</span>
+              </div>
+              <p class="text-gray-600 mt-2">مبدأ قياس يعتمد على تسجيل الأصول والخصوم بالمبلغ المدفوع أو المستلم وقت حدوث المعاملة، بغض النظر عن التغيرات اللاحقة في القيمة.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 8</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="financial-statements">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">التمثيل الصادق</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Faithful Representation</span>
+              </div>
+              <p class="text-gray-600 mt-2">خاصية أساسية للمعلومات المالية المفيدة، وتعني أن المعلومات يجب أن تمثل بصدق الظواهر الاقتصادية التي تدعي تمثيلها، وتتصف بالاكتمال والحياد والخلو من الأخطاء.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter ج -->
+        <div id="letter-ج" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">ج</span>
+            <span>الجيم</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="financial-statements">
+              <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-bold text-blue-800">الجوهر فوق الشكل</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Substance Over Form</span>
+              </div>
+              <p class="text-gray-600 mt-2">مبدأ محاسبي يقضي بأن المعاملات والأحداث يجب أن تتم المحاسبة عنها وعرضها وفقاً لجوهرها الاقتصادي وليس فقط شكلها القانوني.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter خ -->
+        <div id="letter-خ" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">خ</span>
+            <span>الخاء</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="liabilities">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">الخصوم</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Liabilities</span>
+              </div>
+              <p class="text-gray-600 mt-2">التزامات حالية للمنشأة ناشئة من أحداث ماضية، من المتوقع أن يؤدي تسويتها إلى تدفق خارج من المنشأة للموارد التي تتضمن منافع اقتصادية.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="qualitative-characteristics">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">الخصائص النوعية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Qualitative Characteristics</span>
+              </div>
+              <p class="text-gray-600 mt-2">الصفات التي تجعل المعلومات المالية مفيدة، وتنقسم إلى خصائص أساسية (الملاءمة والتمثيل الصادق) وخصائص معززة (قابلية المقارنة، قابلية التحقق، التوقيت المناسب، القابلية للفهم).</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter د -->
+        <div id="letter-د" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">د</span>
+            <span>الدال</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="financial-statements">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">الدخل الشامل</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Comprehensive Income</span>
+              </div>
+              <p class="text-gray-600 mt-2">التغير في حقوق ملكية المنشأة خلال فترة معينة الناتج عن المعاملات والأحداث والظروف الأخرى من مصادر غير المالكين، ويشمل جميع التغيرات في حقوق الملكية باستثناء تلك الناتجة عن استثمارات المالكين وتوزيعات الأرباح لهم.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 4</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="financial-statements">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">دورة محاسبية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Accounting Cycle</span>
+              </div>
+              <p class="text-gray-600 mt-2">سلسلة من الخطوات التي تتم خلال الفترة المحاسبية بدءًا من تسجيل المعاملات وانتهاءً بإعداد القوائم المالية.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter ر -->
+        <div id="letter-ر" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">ر</span>
+            <span>الراء</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="revenue">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">رقابة داخلية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Internal Control</span>
+              </div>
+              <p class="text-gray-600 mt-2">عملية مصممة لتوفير تأكيد معقول بشأن تحقيق أهداف المنشأة فيما يتعلق بموثوقية التقارير المالية، وفعالية وكفاءة العمليات، والامتثال للقوانين واللوائح المعمول بها.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter ق -->
+        <div id="letter-ق" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">ق</span>
+            <span>القاف</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="assets">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">القيمة العادلة</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Fair Value</span>
+              </div>
+              <p class="text-gray-600 mt-2">السعر الذي يمكن استلامه من بيع أصل أو دفعه لتحويل التزام في معاملة منظمة بين المشاركين في السوق في تاريخ القياس.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 7</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 10</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="financial-statements">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">القوائم المالية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Financial Statements</span>
+              </div>
+              <p class="text-gray-600 mt-2">تقارير رسمية توضح الوضع المالي للمنشأة ونتائج أعمالها، وتشمل عادةً قائمة المركز المالي، قائمة الدخل، قائمة التغيرات في حقوق الملكية، وقائمة التدفقات النقدية، بالإضافة إلى الإيضاحات المتممة.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="assets">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">قابلية المقارنة</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Comparability</span>
+              </div>
+              <p class="text-gray-600 mt-2">خاصية نوعية معززة للمعلومات المالية تتيح للمستخدمين تحديد أوجه التشابه والاختلاف بين العناصر، سواء بين فترات مختلفة للمنشأة نفسها أو بين منشآت مختلفة.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter م -->
+        <div id="letter-م" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">م</span>
+            <span>الميم</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="framework">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">معايير التقارير المالية الدولية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">IFRS</span>
+              </div>
+              <p class="text-gray-600 mt-2">مجموعة من المعايير المحاسبية والتفسيرات الصادرة عن مجلس معايير المحاسبة الدولية (IASB)، وتستخدم لإعداد القوائم المالية في العديد من الدول حول العالم.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="assets">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">مخزون</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Inventory</span>
+              </div>
+              <p class="text-gray-600 mt-2">أصول محتفظ بها للبيع ضمن النشاط العادي للمنشأة، أو قيد الإنتاج للبيع، أو في شكل مواد أو مستلزمات ستستخدم في عملية الإنتاج أو تقديم الخدمات.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 6</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="general">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">ملاءمة</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Relevance</span>
+              </div>
+              <p class="text-gray-600 mt-2">خاصية أساسية للمعلومات المالية المفيدة، وتعني أن المعلومات قادرة على إحداث فرق في القرارات التي يتخذها المستخدمون، وتتضمن قيمة تنبؤية أو قيمة تأكيدية أو كليهما.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 2</span>
+              </div>
+            </div>
+
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="assets">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">ممتلكات ومصانع ومعدات</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Property, Plant and Equipment</span>
+              </div>
+              <p class="text-gray-600 mt-2">أصول ملموسة محتفظ بها لاستخدامها في الإنتاج أو توريد السلع أو الخدمات، أو للتأجير للغير، أو للأغراض الإدارية، ومن المتوقع استخدامها خلال أكثر من فترة واحدة.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter ن -->
+        <div id="letter-ن" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">ن</span>
+            <span>النون</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="financial-statements">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">نظرية المحاسبة المالية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Financial Accounting Theory</span>
+              </div>
+              <p class="text-gray-600 mt-2">مجموعة من المبادئ والمفاهيم والافتراضات التي توجه عملية إعداد وعرض المعلومات المالية بطريقة منطقية ومتسقة.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter هـ -->
+        <div id="letter-هـ" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">هـ</span>
+            <span>الهاء</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="assets">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">هبوط القيمة</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Impairment</span>
+              </div>
+              <p class="text-gray-600 mt-2">انخفاض في قيمة الأصل عندما تتجاوز قيمته الدفترية قيمته القابلة للاسترداد، مما يستلزم تسجيل خسارة هبوط القيمة في قائمة الدخل.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 8</span>
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 9</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Letter و -->
+        <div id="letter-و" class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="inline-block w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center ml-3">و</span>
+            <span>الواو</span>
+          </h2>
+          
+          <div class="grid md:grid-cols-1 gap-4">
+            <div class="term-card bg-white rounded-lg shadow p-4 border-r-4 border-blue-500" data-category="general">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-blue-800">وحدة اقتصادية</h3>
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Economic Entity</span>
+              </div>
+              <p class="text-gray-600 mt-2">افتراض أن الشركة كيان منفصل ومستقل عن مالكيها أو إدارتها. يتم إعداد القوائم المالية للوحدة الاقتصادية وليس للمالكين.</p>
+              <div class="mt-3 text-xs text-gray-500">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-1 mr-1 mb-1">الفصل 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Matching Results -->
+        <div id="noResults" class="hidden text-center py-8">
+          <i class="fas fa-search text-gray-400 text-4xl mb-4"></i>
+          <h3 class="text-xl font-bold text-gray-600">لا توجد نتائج مطابقة</h3>
+          <p class="text-gray-500 mt-2">حاول استخدام كلمات مفتاحية أخرى أو اختر فئة مختلفة</p>
+        </div>
+      </div>
+
+      <!-- Back to Top Button -->
+      <div class="flex justify-center mt-8 mb-4">
+        <a href="#" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-up ml-2"></i>
+          العودة للأعلى
+        </a>
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- Overlay for mobile -->
+  <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.add('hidden');
+    });
+    
+    // Search and filter functionality
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const termCards = document.querySelectorAll('.term-card');
+    const noResults = document.getElementById('noResults');
+    const letterSections = document.querySelectorAll('[id^="letter-"]');
+    
+    function filterTerms() {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const category = categoryFilter.value;
+      
+      let visibleCount = 0;
+      
+      // Reset letter sections visibility
+      letterSections.forEach(section => {
+        section.classList.remove('hidden');
+      });
+      
+      termCards.forEach(card => {
+        const termText = card.textContent.toLowerCase();
+        const termCategory = card.getAttribute('data-category');
+        
+        const matchesSearch = searchTerm === '' || termText.includes(searchTerm);
+        const matchesCategory = category === 'all' || termCategory === category;
+        
+        if (matchesSearch && matchesCategory) {
+          card.classList.remove('hidden');
+          visibleCount++;
+          
+          // Make sure parent letter section is visible
+          const parentSection = card.closest('[id^="letter-"]');
+          if (parentSection) {
+            parentSection.classList.remove('hidden');
+          }
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Check if any terms are visible in each letter section
+      letterSections.forEach(section => {
+        const visibleTerms = section.querySelectorAll('.term-card:not(.hidden)');
+        if (visibleTerms.length === 0) {
+          section.classList.add('hidden');
+        }
+      });
+      
+      // Show no results message if needed
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+      }
+    }
+    
+    searchInput.addEventListener('input', filterTerms);
+    categoryFilter.addEventListener('change', filterTerms);
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // Letter navigation highlighting
+    function highlightCurrentLetter() {
+      const scrollPosition = window.scrollY + 150;
+      
+      letterSections.forEach(section => {
+        if (!section.classList.contains('hidden')) {
+          const sectionTop = section.offsetTop;
+          const sectionBottom = sectionTop + section.offsetHeight;
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            const letterId = section.id;
+            document.querySelectorAll('.flex.flex-wrap.justify-center a').forEach(link => {
+              if (link.getAttribute('href') === `#${letterId}`) {
+                link.classList.add('bg-blue-600', 'text-white');
+                link.classList.remove('bg-blue-100', 'text-blue-800');
+              } else {
+                link.classList.remove('bg-blue-600', 'text-white');
+                link.classList.add('bg-blue-100', 'text-blue-800');
+              }
+            });
+          }
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', highlightCurrentLetter);
+    
+    // Print functionality
+    function printGlossary() {
+      window.print();
+    }
+    
+    // Add print button
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print ml-2"></i> طباعة القاموس';
+    printButton.className = 'fixed bottom-4 left-4 bg-gray-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition z-50';
+    printButton.onclick = printGlossary;
+    document.body.appendChild(printButton);
+    
+    // Back to top functionality
+    const backToTopButton = document.querySelector('a[href="#"]');
+    backToTopButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Show back to top button only when scrolled down
+    function toggleBackToTopButton() {
+      if (window.scrollY > 300) {
+        backToTopButton.parentElement.classList.remove('opacity-0');
+        backToTopButton.parentElement.classList.add('opacity-100');
+      } else {
+        backToTopButton.parentElement.classList.add('opacity-0');
+        backToTopButton.parentElement.classList.remove('opacity-100');
+      }
+    }
+    
+    window.addEventListener('scroll', toggleBackToTopButton);
+    toggleBackToTopButton();
+  </script>
+  
+  <!-- Print styles -->
+  <style>
+    @media print {
+      .sidebar-fixed, #menuToggle, #overlay, button, .bg-blue-50,
+      .flex.flex-wrap.justify-center, #backToTop, .fixed {
+        display: none !important;
+      }
+      
+      body {
+        background-color: white;
+      }
+      
+      .flex-1 {
+        margin-right: 0 !important;
+      }
+      
+      .term-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 15px;
+      }
+      
+      .term-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      
+      h2 {
+        page-break-before: always;
+        margin-top: 20px;
+      }
+      
+      h2:first-of-type {
+        page-break-before: avoid;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+      }
+      
+      .text-gray-700, .text-gray-800 {
+        color: #d1d5db;
+      }
+      
+      .text-gray-600 {
+        color: #9ca3af;
+      }
+      
+      .border-gray-200 {
+        border-color: #374151;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .focus\:ring-2:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .transition {
+        transition: none;
+      }
+      
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</body>
+</html>
+

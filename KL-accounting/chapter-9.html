@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة المتوسطة 1 - الفصل التاسع: الأصول غير الملموسة والشهرة</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">المحاسبة المتوسطة 1</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li>
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block font-medium">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li>
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li>
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li>
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 -->
+          <li>
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 -->
+          <li>
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 -->
+          <li>
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li>
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 - Current -->
+          <li>
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block font-medium">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets, Goodwill, Mineral Resources</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 -->
+          <li>
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value to Non-Current Assets</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Chapter Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الفصل 9</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="chapter-9.html" class="text-blue-600 hover:text-blue-800" aria-current="page">الأصول غير الملموسة والشهرة</a>
+                            </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">الأصول غير الملموسة والشهرة</h1>
+        <p class="text-gray-600 mt-2">Intangible Assets, Goodwill, Mineral Resources, and Government Grants</p>
+      </div>
+
+      <!-- Chapter Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 10%"></div>
+      </div>
+
+      <!-- Section 1: Introduction to Intangible Assets -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            1. الأصول غير الملموسة
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Intangible Assets</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Definition and Characteristics -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-info-circle text-blue-600 ml-2"></i>
+                تعريف وخصائص الأصول غير الملموسة
+              </h3>
+              <p class="text-gray-700 mb-3">
+                الأصول غير الملموسة هي أصول غير نقدية قابلة للتحديد وليس لها جوهر مادي. تتميز هذه الأصول بإمكانية فصلها عن المنشأة أو أنها تنشأ من حقوق تعاقدية أو قانونية أخرى.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الخصائص الرئيسية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>عدم وجود جوهر مادي (ليست ملموسة)</li>
+                  <li>قابلة للتحديد (يمكن فصلها أو تنشأ من حقوق)</li>
+                  <li>غير نقدية (ليست أصولاً مالية)</li>
+                  <li>تُستخدم في إنتاج أو توريد السلع أو الخدمات</li>
+                  <li>متوقع أن تولد منافع اقتصادية مستقبلية</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Examples of Intangible Assets -->
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <div class="flex justify-center mb-3">
+                  <span class="bg-blue-100 text-blue-800 rounded-full p-2">
+                    <i class="fas fa-certificate text-xl"></i>
+                  </span>
+                </div>
+                <h4 class="text-center font-bold text-gray-800 mb-2">براءات الاختراع</h4>
+                <p class="text-sm text-gray-600 text-center">حقوق حصرية تمنحها الدولة للمخترع لاستغلال اختراعه لفترة محددة (عادة 20 سنة)</p>
+              </div>
+              
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <div class="flex justify-center mb-3">
+                  <span class="bg-purple-100 text-purple-800 rounded-full p-2">
+                    <i class="fas fa-trademark text-xl"></i>
+                  </span>
+                </div>
+                <h4 class="text-center font-bold text-gray-800 mb-2">العلامات التجارية</h4>
+                <p class="text-sm text-gray-600 text-center">رموز أو شعارات تميز منتجات أو خدمات شركة عن غيرها</p>
+              </div>
+              
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <div class="flex justify-center mb-3">
+                  <span class="bg-green-100 text-green-800 rounded-full p-2">
+                    <i class="fas fa-file-contract text-xl"></i>
+                  </span>
+                </div>
+                <h4 class="text-center font-bold text-gray-800 mb-2">تراخيص وامتيازات</h4>
+                <p class="text-sm text-gray-600 text-center">حقوق استخدام ممنوحة من قبل طرف آخر، مثل تراخيص البرمجيات أو حقوق الامتياز</p>
+              </div>
+              
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <div class="flex justify-center mb-3">
+                  <span class="bg-red-100 text-red-800 rounded-full p-2">
+                    <i class="fas fa-copyright text-xl"></i>
+                  </span>
+                </div>
+                <h4 class="text-center font-bold text-gray-800 mb-2">حقوق النشر</h4>
+                <p class="text-sm text-gray-600 text-center">حقوق حصرية للمؤلفين على أعمالهم الأدبية والفنية والعلمية</p>
+              </div>
+              
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <div class="flex justify-center mb-3">
+                  <span class="bg-yellow-100 text-yellow-800 rounded-full p-2">
+                    <i class="fas fa-database text-xl"></i>
+                  </span>
+                </div>
+                <h4 class="text-center font-bold text-gray-800 mb-2">قواعد البيانات</h4>
+                <p class="text-sm text-gray-600 text-center">مجموعات منظمة من البيانات التي تم تطويرها داخلياً أو الحصول عليها</p>
+              </div>
+              
+              <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                <div class="flex justify-center mb-3">
+                  <span class="bg-indigo-100 text-indigo-800 rounded-full p-2">
+                    <i class="fas fa-laptop-code text-xl"></i>
+                  </span>
+                </div>
+                <h4 class="text-center font-bold text-gray-800 mb-2">برمجيات الحاسوب</h4>
+                <p class="text-sm text-gray-600 text-center">برامج الكمبيوتر المطورة أو المرخصة للاستخدام في العمليات التجارية</p>
+              </div>
+            </div>
+
+            <!-- Recognition and Initial Measurement -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-check-circle text-green-600 ml-2"></i>
+                الاعتراف والقياس الأولي
+              </h3>
+              <p class="text-gray-700 mb-3">
+                يتم الاعتراف بالأصل غير الملموس فقط إذا كان من المحتمل أن تتدفق المنافع الاقتصادية المستقبلية المتوقعة إلى المنشأة ويمكن قياس تكلفة الأصل بشكل موثوق.
+              </p>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الشراء المنفصل:</h4>
+                  <p class="text-sm text-gray-600">
+                    يتم قياس الأصل غير الملموس المشترى بشكل منفصل بتكلفته التي تشمل:
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc mt-2">
+                    <li>سعر الشراء بعد خصم الخصومات التجارية</li>
+                    <li>الرسوم الجمركية وضرائب الشراء غير المستردة</li>
+                    <li>التكاليف المنسوبة مباشرة لإعداد الأصل للاستخدام المقصود</li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">التطوير الداخلي:</h4>
+                  <p class="text-sm text-gray-600">
+                    تُقسم عملية إنشاء أصل غير ملموس داخلياً إلى:
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc mt-2">
+                    <li><strong>مرحلة البحث:</strong> تُسجل جميع النفقات كمصروفات عند تكبدها</li>
+                    <li><strong>مرحلة التطوير:</strong> يمكن رسملة النفقات فقط إذا استوفت شروطاً محددة</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
+                <h4 class="font-semibold text-gray-800 mb-1 flex items-center">
+                  <i class="fas fa-exclamation-triangle text-yellow-600 ml-2"></i>
+                  ملاحظة هامة:
+                </h4>
+                <p class="text-sm text-gray-700">
+                  لا يتم الاعتراف بالشهرة المولدة داخلياً، أو العلامات التجارية المولدة داخلياً، أو قوائم العملاء أو العناصر المماثلة كأصول غير ملموسة.
+                </p>
+              </div>
+            </div>
+
+            <!-- Subsequent Measurement -->
+            <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-balance-scale text-purple-600 ml-2"></i>
+                القياس اللاحق
+              </h3>
+              <p class="text-gray-700 mb-3">
+                بعد الاعتراف الأولي، يمكن قياس الأصل غير الملموس باستخدام نموذج التكلفة أو نموذج إعادة التقييم. ويعتمد اختيار النموذج على طبيعة الأصل وسياسة الشركة المحاسبية.
+              </p>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">نموذج التكلفة:</h4>
+                  <p class="text-sm text-gray-600">
+                    التكلفة مطروحاً منها:
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc mt-2">
+                    <li>الإطفاء المتراكم</li>
+                    <li>خسائر الانخفاض في القيمة المتراكمة</li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">نموذج إعادة التقييم:</h4>
+                  <p class="text-sm text-gray-600">
+                    القيمة العادلة في تاريخ إعادة التقييم مطروحاً منها:
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc mt-2">
+                    <li>الإطفاء المتراكم اللاحق</li>
+                    <li>خسائر الانخفاض في القيمة المتراكمة اللاحقة</li>
+                  </ul>
+                  <p class="text-sm text-gray-500 mt-2">
+                    <em>ملاحظة: يستخدم هذا النموذج فقط إذا كان بالإمكان تحديد القيمة العادلة بالرجوع إلى سوق نشط.</em>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Useful Life and Amortization -->
+            <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-hourglass-half text-indigo-600 ml-2"></i>
+                العمر الإنتاجي والإطفاء
+              </h3>
+              <p class="text-gray-700 mb-3">
+                يجب تقييم العمر الإنتاجي للأصل غير الملموس لتحديد ما إذا كان محدداً أو غير محدد. ويؤثر هذا التقييم على طريقة المعالجة المحاسبية اللاحقة.
+              </p>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">العمر المحدد:</h4>
+                  <p class="text-sm text-gray-600">
+                    عندما يكون هناك حد متوقع للفترة التي يتوقع أن يولد فيها الأصل تدفقات نقدية للمنشأة.
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc mt-2">
+                    <li>يتم إطفاء الأصل على مدى عمره الإنتاجي</li>
+                    <li>يجب مراجعة فترة الإطفاء وطريقة الإطفاء سنوياً على الأقل</li>
+                    <li>يتم اختبار الانخفاض في القيمة عندما تكون هناك مؤشرات</li>
+                  </ul>
+                  <div class="mt-2 p-2 bg-gray-50 rounded border border-gray-200">
+                    <h5 class="text-xs font-semibold text-gray-700">طرق الإطفاء:</h5>
+                    <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc mt-1">
+                      <li>طريقة القسط الثابت</li>
+                      <li>طريقة القسط المتناقص</li>
+                      <li>طريقة وحدات الإنتاج</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">العمر غير المحدد:</h4>
+                  <p class="text-sm text-gray-600">
+                    عندما لا يكون هناك حد متوقع للفترة التي يتوقع أن يولد فيها الأصل تدفقات نقدية للمنشأة.
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc mt-2">
+                    <li>لا يتم إطفاء الأصل</li>
+                    <li>يتم اختبار الانخفاض في القيمة سنوياً، وكلما كانت هناك مؤشرات على احتمال انخفاض قيمته</li>
+                    <li>يجب مراجعة تقييم العمر غير المحدد سنوياً</li>
+                  </ul>
+                  <p class="text-xs text-gray-500 italic mt-2">
+                    ملاحظة: العمر "غير المحدد" لا يعني "غير منتهي" - فهو يعكس عدم القدرة على توقع الفترة التي يتوقع أن يولد فيها الأصل منافع اقتصادية.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Amortization Example -->
+              <div class="mt-4 p-4 bg-white rounded border">
+                <h4 class="font-semibold text-gray-800 mb-3">مثال على حساب الإطفاء:</h4>
+                <p class="text-sm text-gray-600 mb-3">
+                  اشترت شركة براءة اختراع بمبلغ 500,000 ريال، ويقدر عمرها الإنتاجي بـ 10 سنوات، والقيمة المتبقية 50,000 ريال.
+                </p>
+                <div class="bg-gray-50 p-3 rounded">
+                  <p class="text-sm font-medium text-gray-700 mb-2">حساب مصروف الإطفاء السنوي باستخدام طريقة القسط الثابت:</p>
+                  <div class="flex flex-col items-center">
+                    <div class="border-b-2 border-gray-400 px-4 pb-1 mb-1">
+                      <span class="font-bold">التكلفة - القيمة المتبقية</span>
+                    </div>
+                    <div>
+                      <span class="font-bold">العمر الإنتاجي</span>
+                    </div>
+                  </div>
+                  <div class="text-center mt-2">
+                    <div class="border-b-2 border-gray-400 px-4 pb-1 mb-1">
+                      <span class="font-bold">500,000 - 50,000</span>
+                    </div>
+                    <div>
+                      <span class="font-bold">10</span>
+                    </div>
+                  </div>
+                  <div class="text-center mt-2 text-green-600 font-bold">
+                    = 45,000 ريال سنوياً
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Goodwill -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-handshake ml-3"></i>
+            2. الشهرة
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Goodwill</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Definition and Recognition -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-info-circle text-green-600 ml-2"></i>
+                تعريف الشهرة والاعتراف بها
+              </h3>
+              <p class="text-gray-700 mb-3">
+                الشهرة هي أصل يمثل المنافع الاقتصادية المستقبلية الناشئة من أصول أخرى تم الحصول عليها في عملية اندماج الأعمال والتي لا يمكن تحديدها بشكل فردي والاعتراف بها بشكل منفصل.
+              </p>
+              
+              <div class="bg-white p-3 rounded border mb-3">
+                <h4 class="font-semibold text-gray-800 mb-2">خصائص الشهرة:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>لا يمكن تحديدها بشكل منفصل عن المنشأة</li>
+                  <li>لا يمكن شراؤها أو بيعها بشكل منفصل</li>
+                  <li>تنشأ فقط في عمليات اندماج الأعمال</li>
+                  <li>تمثل قيمة السمعة والولاء والعلاقات وغيرها من العوامل غير الملموسة</li>
+                </ul>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">كيفية حساب الشهرة:</h4>
+                <div class="text-sm text-gray-600">
+                  <p class="mb-2">الشهرة = المقابل المحول - القيمة العادلة لصافي الأصول القابلة للتحديد المستحوذ عليها</p>
+                  <div class="bg-gray-50 p-3 rounded mt-2">
+                    <h5 class="font-medium text-gray-700 mb-2">مثال:</h5>
+                    <p class="mb-1">- دفعت الشركة (أ) مبلغ 10 مليون ريال للاستحواذ على الشركة (ب)</p>
+                    <p class="mb-1">- القيمة العادلة للأصول القابلة للتحديد = 12 مليون ريال</p>
+                    <p class="mb-1">- القيمة العادلة للالتزامات = 4 مليون ريال</p>
+                    <p class="mb-3">- صافي القيمة العادلة للأصول القابلة للتحديد = 8 مليون ريال</p>
+                    <p class="font-bold">الشهرة = 10 مليون - 8 مليون = 2 مليون ريال</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mt-3">
+                <h4 class="font-semibold text-gray-800 mb-1 flex items-center">
+                  <i class="fas fa-exclamation-triangle text-yellow-600 ml-2"></i>
+                  تنبيه:
+                </h4>
+                <p class="text-sm text-gray-700">
+                  لا يتم الاعتراف بالشهرة المولدة داخلياً كأصل في القوائم المالية لأنها لا تستوفي شروط الاعتراف بالأصول غير الملموسة.
+                </p>
+              </div>
+            </div>
+
+            <!-- Subsequent Measurement -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-balance-scale text-blue-600 ml-2"></i>
+                القياس اللاحق للشهرة
+              </h3>
+              <p class="text-gray-700 mb-3">
+                بعد الاعتراف الأولي، تقاس الشهرة المكتسبة في اندماج الأعمال بالتكلفة مطروحاً منها خسائر الانخفاض في القيمة المتراكمة.
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">المعالجة المحاسبية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>لا يتم إطفاء الشهرة</li>
+                    <li>تخضع لاختبار الانخفاض في القيمة سنوياً على الأقل</li>
+                    <li>تخضع لاختبار الانخفاض في القيمة عندما تكون هناك مؤشرات على انخفاض القيمة</li>
+                    <li>يتم تخصيص الشهرة لوحدات توليد النقد التي يتوقع أن تستفيد من اندماج الأعمال</li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">اختبار الانخفاض في القيمة:</h4>
+                  <p class="text-sm text-gray-600 mb-2">
+                    يتم مقارنة القيمة الدفترية لوحدة توليد النقد (بما في ذلك الشهرة) مع المبلغ القابل للاسترداد.
+                  </p>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>المبلغ القابل للاسترداد = القيمة العادلة مطروحاً منها تكاليف البيع أو القيمة قيد الاستخدام، أيهما أعلى</li>
+                    <li>إذا كان المبلغ القابل للاسترداد أقل من القيمة الدفترية، يتم الاعتراف بخسارة انخفاض القيمة</li>
+                    <li>يتم تخصيص خسارة انخفاض القيمة أولاً للشهرة ثم للأصول الأخرى</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="bg-red-50 border border-red-200 rounded p-3 mt-3">
+                <h4 class="font-semibold text-gray-800 mb-1 flex items-center">
+                  <i class="fas fa-exclamation-circle text-red-600 ml-2"></i>
+                  ملاحظة هامة:
+                </h4>
+                <p class="text-sm text-gray-700">
+                  لا يمكن عكس خسائر انخفاض قيمة الشهرة في فترات لاحقة، على عكس معظم الأصول الأخرى التي يمكن عكس خسائر انخفاض قيمتها في حال زوال أسباب الانخفاض.
+                </p>
+              </div>
+            </div>
+
+            <!-- Differences between Intangible Assets and Goodwill -->
+            <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-random text-purple-600 ml-2"></i>
+                الفرق بين الأصول غير الملموسة والشهرة
+              </h3>
+              <div class="overflow-x-auto">
+                <table class="w-full bg-white border border-gray-200 rounded">
+                  <thead>
+                    <tr class="bg-purple-100">
+                      <th class="px-4 py-2 text-right border-b border-gray-200">وجه المقارنة</th>
+                      <th class="px-4 py-2 text-right border-b border-gray-200">الأصول غير الملموسة</th>
+                      <th class="px-4 py-2 text-right border-b border-gray-200">الشهرة</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-sm">
+                    <tr>
+                      <td class="px-4 py-2 border-b border-gray-200 font-medium">التعريف</td>
+                      <td class="px-4 py-2 border-b border-gray-200">أصول غير نقدية قابلة للتحديد وليس لها جوهر مادي</td>
+                      <td class="px-4 py-2 border-b border-gray-200">منافع اقتصادية مستقبلية ناشئة من أصول غير قابلة للتحديد بشكل فردي</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 border-b border-gray-200 font-medium">القابلية للتحديد</td>
+                      <td class="px-4 py-2 border-b border-gray-200">يمكن فصلها أو تنشأ من حقوق تعاقدية أو قانونية</td>
+                      <td class="px-4 py-2 border-b border-gray-200">لا يمكن تحديدها بشكل منفصل</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 border-b border-gray-200 font-medium">الاعتراف</td>
+                      <td class="px-4 py-2 border-b border-gray-200">يمكن شراؤها أو تطويرها داخلياً (بشروط)</td>
+                      <td class="px-4 py-2 border-b border-gray-200">تنشأ فقط في اندماج الأعمال</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 border-b border-gray-200 font-medium">الإطفاء</td>
+                      <td class="px-4 py-2 border-b border-gray-200">تطفأ إذا كان لها عمر إنتاجي محدد</td>
+                      <td class="px-4 py-2 border-b border-gray-200">لا تطفأ أبداً</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 border-b border-gray-200 font-medium">اختبار الانخفاض</td>
+                      <td class="px-4 py-2 border-b border-gray-200">عند وجود مؤشرات (للعمر المحدد)، أو سنوياً (للعمر غير المحدد)</td>
+                      <td class="px-4 py-2 border-b border-gray-200">سنوياً بغض النظر عن المؤشرات</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2 font-medium">عكس الانخفاض</td>
+                      <td class="px-4 py-2">يمكن عكس الانخفاض في الظروف المناسبة</td>
+                      <td class="px-4 py-2">لا يمكن عكس الانخفاض أبداً</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Mineral Resources -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-amber-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-mountain ml-3"></i>
+            3. الموارد المعدنية
+          </h2>
+          <p class="text-amber-100 text-sm mt-1">Mineral Resources</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Phases of Mineral Resources -->
+            <div class="border-r-4 border-amber-500 p-4 bg-amber-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-layer-group text-amber-600 ml-2"></i>
+                مراحل الموارد المعدنية
+              </h3>
+              <p class="text-gray-700 mb-3">
+                تتضمن عمليات استغلال الموارد المعدنية ثلاث مراحل رئيسية: الاستكشاف، التطوير، والاستخراج. ولكل مرحلة معالجة محاسبية مختلفة.
+              </p>
+              
+              <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-white p-3 rounded border shadow-sm">
+                  <h4 class="font-semibold text-gray-800 mb-2 text-center border-b pb-2 border-amber-200">
+                    <span class="inline-block bg-amber-100 text-amber-800 w-8 h-8 rounded-full text-center leading-8 ml-2">1</span>
+                    مرحلة الاستكشاف
+                  </h4>
+                  <p class="text-sm text-gray-600 mb-2">
+                    تشمل البحث عن الموارد المعدنية وتحديد الجدوى الفنية والاقتصادية لاستخراجها.
+                  </p>
+                  <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>الحصول على حقوق الاستكشاف</li>
+                    <li>الدراسات الطبوغرافية والجيولوجية</li>
+                    <li>الحفر الاستكشافي</li>
+                    <li>تحليل العينات</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-white p-3 rounded border shadow-sm">
+                  <h4 class="font-semibold text-gray-800 mb-2 text-center border-b pb-2 border-amber-200">
+                    <span class="inline-block bg-amber-100 text-amber-800 w-8 h-8 rounded-full text-center leading-8 ml-2">2</span>
+                    مرحلة التطوير
+                  </h4>
+                  <p class="text-sm text-gray-600 mb-2">
+                    تشمل إنشاء وصول إلى المورد المعدني وتجهيز البنية التحتية اللازمة للاستخراج.
+                  </p>
+                  <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>حفر آبار الوصول</li>
+                    <li>إنشاء الأنفاق والمنحدرات</li>
+                    <li>بناء مرافق المعالجة</li>
+                    <li>تطوير البنية التحتية</li>
+                  </ul>
+                </div>
+                
+                <div class="bg-white p-3 rounded border shadow-sm">
+                  <h4 class="font-semibold text-gray-800 mb-2 text-center border-b pb-2 border-amber-200">
+                    <span class="inline-block bg-amber-100 text-amber-800 w-8 h-8 rounded-full text-center leading-8 ml-2">3</span>
+                    مرحلة الاستخراج
+                  </h4>
+                  <p class="text-sm text-gray-600 mb-2">
+                    تشمل استخراج المعادن من الأرض ومعالجتها وبيعها.
+                  </p>
+                  <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>عمليات التعدين أو الحفر</li>
+                    <li>نقل المواد المستخرجة</li>
+                    <li>معالجة وتنقية المعادن</li>
+                    <li>إعادة تأهيل الموقع</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accounting Methods -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-file-invoice-dollar text-blue-600 ml-2"></i>
+                طرق المحاسبة عن الموارد المعدنية
+              </h3>
+              <p class="text-gray-700 mb-3">
+                هناك عدة طرق محاسبية لمعالجة تكاليف الاستكشاف والتطوير للموارد المعدنية، منها:
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">طريقة التكلفة الكاملة (Full Cost Method):</h4>
+                  <p class="text-sm text-gray-600 mb-2">
+                    يتم رسملة جميع تكاليف الاستكشاف والتطوير بغض النظر عن نجاح أو فشل الجهود.
+                  </p>
+                  <div class="bg-gray-50 p-2 rounded">
+                    <h5 class="text-xs font-semibold text-gray-700 mb-1">الخصائص:</h5>
+                    <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>رسملة جميع التكاليف في مركز تكلفة كبير (عادة على أساس جغرافي)</li>
+                      <li>استنفاد التكاليف المرسملة على أساس نسبة الإنتاج إلى الاحتياطيات</li>
+                      <li>اختبار الانخفاض في القيمة على مستوى المركز</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">طريقة الجهود الناجحة (Successful Efforts Method):</h4>
+                  <p class="text-sm text-gray-600 mb-2">
+                    يتم رسملة تكاليف الاستكشاف فقط للمشاريع الناجحة، بينما تصرف تكاليف المشاريع غير الناجحة.
+                  </p>
+                  <div class="bg-gray-50 p-2 rounded">
+                    <h5 class="text-xs font-semibold text-gray-700 mb-1">الخصائص:</h5>
+                    <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>رسملة تكاليف الاستكشاف الناجحة فقط</li>
+                      <li>تحميل تكاليف الاستكشاف غير الناجحة على المصروفات</li>
+                      <li>رسملة تكاليف التطوير لجميع المشاريع</li>
+                      <li>استنفاد التكاليف المرسملة على أساس كل مشروع على حدة</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الاستنفاد (Depletion):</h4>
+                <p class="text-sm text-gray-600 mb-2">
+                  الاستنفاد هو عملية تخصيص تكلفة الموارد المعدنية على مدى فترة الإنتاج، وهو مماثل للاستهلاك ولكن يطبق على الموارد الطبيعية.
+                </p>
+                <div class="bg-gray-50 p-3 rounded">
+                  <h5 class="text-xs font-semibold text-gray-700 mb-2">طريقة وحدات الإنتاج لحساب الاستنفاد:</h5>
+                  <div class="text-xs text-gray-600">
+                    <div class="flex flex-col items-center mb-3">
+                      <div class="border-b-2 border-gray-400 px-4 pb-1 mb-1">
+                        <span class="font-bold">التكلفة - القيمة المتبقية</span>
+                      </div>
+                      <div>
+                        <span class="font-bold">إجمالي الاحتياطيات المقدرة</span>
+                      </div>
+                    </div>
+                    <p class="mb-2">× كمية الإنتاج خلال الفترة = مصروف الاستنفاد للفترة</p>
+                    
+                    <div class="bg-blue-50 p-2 rounded border border-blue-200 mt-2">
+                      <h6 class="font-semibold text-gray-700 mb-1">مثال:</h6>
+                      <p>- تكلفة منجم ذهب = 10 مليون ريال</p>
+                      <p>- القيمة المتبقية المقدرة = 1 مليون ريال</p>
+                      <p>- احتياطيات الذهب المقدرة = 90,000 أونصة</p>
+                      <p>- إنتاج السنة الحالية = 15,000 أونصة</p>
+                      <p class="mt-2 font-bold">معدل الاستنفاد = (10,000,000 - 1,000,000) ÷ 90,000 = 100 ريال/أونصة</p>
+                      <p class="font-bold">مصروف الاستنفاد للسنة = 100 × 15,000 = 1,500,000 ريال</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reclamation and Environmental Obligations -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-leaf text-green-600 ml-2"></i>
+                التزامات إعادة التأهيل والالتزامات البيئية
+              </h3>
+              <p class="text-gray-700 mb-3">
+                عمليات استغلال الموارد المعدنية غالباً ما تتطلب إعادة تأهيل المواقع المستخدمة والوفاء بالتزامات بيئية بعد انتهاء عمليات الاستخراج.
+              </p>
+              
+              <div class="bg-white p-3 rounded border mb-3">
+                <h4 class="font-semibold text-gray-800 mb-2">المعالجة المحاسبية:</h4>
+                <ol class="text-sm text-gray-600 space-y-2 mr-4 list-decimal">
+                  <li>
+                    <strong>الاعتراف:</strong> يتم الاعتراف بمخصص تكاليف إعادة التأهيل عندما:
+                    <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc mt-1">
+                      <li>يكون هناك التزام حالي (قانوني أو ضمني) نتيجة لحدث سابق</li>
+                      <li>من المحتمل أن يتطلب تسوية الالتزام تدفقاً خارجاً للموارد</li>
+                      <li>يمكن تقدير مبلغ الالتزام بشكل موثوق</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>القياس:</strong> يقاس المخصص بأفضل تقدير للنفقات المطلوبة لتسوية الالتزام الحالي في نهاية فترة التقرير.
+                  </li>
+                  <li>
+                    <strong>الخصم:</strong> إذا كان أثر القيمة الزمنية للنقود جوهرياً، يتم خصم المبلغ المتوقع للنفقات.
+                  </li>
+                  <li>
+                    <strong>المراجعة:</strong> تتم مراجعة المخصصات في نهاية كل فترة تقرير وتعديلها لتعكس أفضل تقدير حالي.
+                  </li>
+                </ol>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">طريقة العرض في القوائم المالية:</h4>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
+                  <div>
+                    <h5 class="font-medium text-gray-700 mb-1">قائمة المركز المالي:</h5>
+                    <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>يُعرض مخصص إعادة التأهيل ضمن المطلوبات طويلة الأجل</li>
+                      <li>تُضاف تكلفة إعادة التأهيل المقدرة إلى تكلفة الأصل المعدني وتستنفد على مدى عمره الإنتاجي</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 class="font-medium text-gray-700 mb-1">قائمة الدخل:</h5>
+                    <ul class="text-xs text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>يُعترف بمصروف الاستنفاد للجزء المتعلق بتكلفة إعادة التأهيل</li>
+                      <li>يُعترف بمصروف الفائدة الناتج عن إلغاء الخصم على المخصص</li>
+                      <li>أي تغييرات في تقديرات المخصص تؤثر على الأصل والمخصص</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Government Grants -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-hand-holding-usd ml-3"></i>
+            4. المنح الحكومية
+          </h2>
+          <p class="text-indigo-100 text-sm mt-1">Government Grants</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Definition and Types -->
+            <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-info-circle text-indigo-600 ml-2"></i>
+                تعريف وأنواع المنح الحكومية
+              </h3>
+              <p class="text-gray-700 mb-3">
+                المنح الحكومية هي مساعدات تقدمها الحكومة في شكل تحويلات موارد إلى منشأة مقابل امتثال المنشأة في الماضي أو المستقبل لشروط معينة تتعلق بالأنشطة التشغيلية للمنشأة.
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أنواع المنح الحكومية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-2 mr-4 list-disc">
+                    <li>
+                      <strong>منح متعلقة بالأصول:</strong>
+                      <p class="text-xs text-gray-500 mt-1">منح حكومية يكون شرطها الأساسي أن تقوم المنشأة بشراء أو إنشاء أو اقتناء أصول طويلة الأجل.</p>
+                    </li>
+                    <li>
+                      <strong>منح متعلقة بالدخل:</strong>
+                      <p class="text-xs text-gray-500 mt-1">منح حكومية بخلاف تلك المتعلقة بالأصول، وتهدف عادة إلى دعم الأنشطة التشغيلية.</p>
+                    </li>
+                    <li>
+                      <strong>الإعفاءات الضريبية:</strong>
+                      <p class="text-xs text-gray-500 mt-1">إعفاءات أو تخفيضات في الضرائب التي تعتبر شكلاً من أشكال المنح الحكومية.</p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">شروط الاعتراف بالمنح:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>وجود تأكيد معقول بأن المنشأة ستمتثل للشروط المرتبطة بالمنحة</li>
+                    <li>وجود تأكيد معقول بأن المنحة سيتم استلامها</li>
+                    <li>القدرة على قياس قيمة المنحة بشكل موثوق</li>
+                    <li>عدم الاعتراف بالمنح حتى تتحقق هذه الشروط</li>
+                  </ul>
+                  <div class="bg-yellow-50 border border-yellow-200 rounded p-2 mt-2">
+                    <p class="text-xs text-gray-700">
+                      <i class="fas fa-exclamation-triangle text-yellow-600 ml-1"></i>
+                      ملاحظة: لا يتم الاعتراف بالمنح الحكومية، بما في ذلك المنح غير النقدية بالقيمة العادلة، حتى يكون هناك تأكيد معقول بتحقق الشروط.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accounting Methods -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-balance-scale text-green-600 ml-2"></i>
+                طرق المحاسبة عن المنح الحكومية
+              </h3>
+              
+              <div class="bg-white p-3 rounded border mb-4">
+                <h4 class="font-semibold text-gray-800 mb-2">المنح المتعلقة بالأصول:</h4>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة الدخل المؤجل:</h5>
+                    <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>تُسجل المنحة كدخل مؤجل في قائمة المركز المالي</li>
+                      <li>تُعترف بالمنحة في قائمة الدخل على أساس منتظم على مدى العمر الإنتاجي للأصل</li>
+                      <li>يتم مطابقة الاعتراف بالدخل مع مصروف استهلاك الأصل</li>
+                    </ul>
+                  </div>
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة تخفيض الأصل:</h5>
+                    <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>تُخفض قيمة المنحة من القيمة الدفترية للأصل</li>
+                      <li>يتم الاعتراف بالمنحة في قائمة الدخل من خلال تخفيض مصروف الاستهلاك</li>
+                      <li>تظهر الأصول بصافي قيمتها بعد خصم المنحة</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white p-3 rounded border mb-4">
+                <h4 class="font-semibold text-gray-800 mb-2">المنح المتعلقة بالدخل:</h4>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة عرض المنحة كدخل:</h5>
+                    <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>تُعرض المنحة كدخل في قائمة الدخل</li>
+                      <li>يمكن عرضها كبند منفصل أو ضمن "إيرادات أخرى"</li>
+                      <li>يتم الاعتراف بها في الفترة التي تصبح فيها مستحقة</li>
+                    </ul>
+                  </div>
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة تخفيض المصروفات ذات الصلة:</h5>
+                    <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>تُخصم المنحة من المصروفات ذات الصلة</li>
+                      <li>تظهر المصروفات بالصافي بعد خصم المنحة</li>
+                      <li>مناسبة عندما تكون المنحة تعويضاً عن مصروفات محددة</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-yellow-50 border border-yellow-200 rounded p-3">
+                <h4 class="font-semibold text-gray-800 mb-1 flex items-center">
+                  <i class="fas fa-lightbulb text-yellow-600 ml-2"></i>
+                  ملاحظات مهمة:
+                </h4>
+                <ul class="text-sm text-gray-700 space-y-1 mr-4 list-disc">
+                  <li>يجب تطبيق الطريقة المختارة بشكل ثابت لجميع المنح المماثلة</li>
+                  <li>إذا أصبحت المنحة قابلة للسداد، يتم معالجتها كتغيير في التقدير المحاسبي</li>
+                  <li>المنح غير النقدية (مثل الأراضي أو الموارد الأخرى) يتم تقييمها عادة بالقيمة العادلة</li>
+                  <li>قد تتطلب المنح الحكومية إفصاحات إضافية في الإيضاحات المرفقة بالقوائم المالية</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Examples -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-clipboard-list text-blue-600 ml-2"></i>
+                أمثلة تطبيقية
+              </h3>
+              
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-3">مثال 1: منحة متعلقة بالأصول</h4>
+                <p class="text-sm text-gray-600 mb-3">
+                  حصلت شركة على منحة حكومية قدرها 500,000 ريال لبناء مصنع تبلغ تكلفته 2,000,000 ريال. العمر الإنتاجي المتوقع للمصنع هو 20 سنة بدون قيمة متبقية.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-4 mt-2">
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة الدخل المؤجل:</h5>
+                    
+                    <div class="text-xs text-gray-600 mb-2">
+                      <p class="font-bold mb-1">عند استلام المنحة:</p>
+                      <div class="bg-white p-2 rounded border">
+                        <p>من حـ/ النقد - 500,000</p>
+                        <p>إلى حـ/ إيراد منح مؤجل - 500,000</p>
+                      </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-600">
+                      <p class="font-bold mb-1">في كل سنة (لمدة 20 سنة):</p>
+                      <div class="bg-white p-2 rounded border">
+                        <p>من حـ/ إيراد منح مؤجل - 25,000</p>
+                        <p>إلى حـ/ إيراد المنح - 25,000</p>
+                        <p class="text-gray-500 italic">(500,000 ÷ 20 سنة)</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة تخفيض الأصل:</h5>
+                    
+                    <div class="text-xs text-gray-600 mb-2">
+                      <p class="font-bold mb-1">عند تسجيل الأصل:</p>
+                      <div class="bg-white p-2 rounded border">
+                        <p>من حـ/ المصنع - 1,500,000</p>
+                        <p>من حـ/ النقد - 500,000</p>
+                        <p>إلى حـ/ النقد أو الدائنين - 2,000,000</p>
+                      </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-600">
+                      <p class="font-bold mb-1">حساب الاستهلاك السنوي:</p>
+                      <div class="bg-white p-2 rounded border">
+                        <p>مصروف الاستهلاك السنوي = 1,500,000 ÷ 20 = 75,000 ريال</p>
+                        <p class="text-gray-500 italic">(بدلاً من 2,000,000 ÷ 20 = 100,000 ريال)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="bg-white p-4 rounded border mt-4">
+                <h4 class="font-semibold text-gray-800 mb-3">مثال 2: منحة متعلقة بالدخل</h4>
+                <p class="text-sm text-gray-600 mb-3">
+                  حصلت شركة على منحة حكومية قدرها 200,000 ريال كتعويض عن مصاريف التدريب التي تكبدتها والبالغة 300,000 ريال.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-4 mt-2">
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة عرض المنحة كدخل:</h5>
+                    
+                    <div class="text-xs text-gray-600">
+                      <p class="font-bold mb-1">القيود المحاسبية:</p>
+                      <div class="bg-white p-2 rounded border mb-2">
+                        <p>من حـ/ مصاريف التدريب - 300,000</p>
+                        <p>إلى حـ/ النقد أو الدائنين - 300,000</p>
+                      </div>
+                      <div class="bg-white p-2 rounded border">
+                        <p>من حـ/ النقد أو المدينين - 200,000</p>
+                        <p>إلى حـ/ إيراد المنح الحكومية - 200,000</p>
+                      </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-600 mt-2">
+                      <p class="font-bold mb-1">في قائمة الدخل:</p>
+                      <div class="bg-white p-2 rounded border">
+                        <p>مصاريف التدريب - (300,000)</p>
+                        <p>إيراد المنح الحكومية - 200,000</p>
+                        <p>صافي الأثر على الدخل - (100,000)</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">طريقة تخفيض المصروفات:</h5>
+                    
+                    <div class="text-xs text-gray-600">
+                      <p class="font-bold mb-1">القيود المحاسبية:</p>
+                      <div class="bg-white p-2 rounded border mb-2">
+                        <p>من حـ/ مصاريف التدريب - 300,000</p>
+                        <p>إلى حـ/ النقد أو الدائنين - 300,000</p>
+                      </div>
+                      <div class="bg-white p-2 rounded border">
+                        <p>من حـ/ النقد أو المدينين - 200,000</p>
+                        <p>إلى حـ/ مصاريف التدريب - 200,000</p>
+                      </div>
+                    </div>
+                    
+                    <div class="text-xs text-gray-600 mt-2">
+                      <p class="font-bold mb-1">في قائمة الدخل:</p>
+                      <div class="bg-white p-2 rounded border">
+                        <p>مصاريف التدريب (صافي) - 100,000</p>
+                        <p class="text-gray-500 italic">(300,000 - 200,000)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Practical Cases and Applications -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-graduation-cap ml-3"></i>
+            5. حالات عملية وتطبيقات
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Practical Cases and Applications</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Case Study -->
+            <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-briefcase text-purple-600 ml-2"></i>
+                دراسة حالة: شركة تقنية
+              </h3>
+              
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-3">شركة المستقبل للبرمجيات</h4>
+                <p class="text-sm text-gray-600 mb-4">
+                  شركة المستقبل للبرمجيات هي شركة تطوير برمجيات تأسست في عام 2020. خلال السنة المالية 2023، قامت الشركة بالعمليات التالية المتعلقة بالأصول غير الملموسة:
+                </p>
+                
+                <div class="space-y-4 text-sm">
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">1. تطوير برمجية جديدة داخلياً:</h5>
+                    <ul class="text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>تكاليف مرحلة البحث: 200,000 ريال</li>
+                      <li>تكاليف مرحلة التطوير: 800,000 ريال (بعد استيفاء معايير الرسملة)</li>
+                      <li>العمر الإنتاجي المتوقع: 5 سنوات</li>
+                    </ul>
+                    
+                    <div class="bg-blue-50 p-2 rounded border border-blue-200 mt-2">
+                      <p class="font-bold text-gray-700 mb-1">المعالجة المحاسبية:</p>
+                      <ul class="text-gray-600 space-y-1 mr-4 list-disc">
+                        <li>تسجيل تكاليف مرحلة البحث (200,000 ريال) كمصروفات</li>
+                        <li>رسملة تكاليف مرحلة التطوير (800,000 ريال) كأصل غير ملموس</li>
+                        <li>الإطفاء السنوي: 160,000 ريال (800,000 ÷ 5)</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">2. شراء تراخيص برمجيات:</h5>
+                    <ul class="text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>تكلفة شراء تراخيص البرمجيات: 500,000 ريال</li>
+                      <li>رسوم قانونية متعلقة بالحصول على التراخيص: 50,000 ريال</li>
+                      <li>مدة التراخيص: 4 سنوات غير قابلة للتجديد</li>
+                    </ul>
+                    
+                    <div class="bg-blue-50 p-2 rounded border border-blue-200 mt-2">
+                      <p class="font-bold text-gray-700 mb-1">المعالجة المحاسبية:</p>
+                      <ul class="text-gray-600 space-y-1 mr-4 list-disc">
+                        <li>التكلفة الإجمالية للأصل: 550,000 ريال (500,000 + 50,000)</li>
+                        <li>الإطفاء السنوي: 137,500 ريال (550,000 ÷ 4)</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div class="p-3 bg-gray-50 rounded">
+                    <h5 class="font-medium text-gray-700 mb-2">3. الاستحواذ على شركة ناشئة:</h5>
+                    <ul class="text-gray-600 space-y-1 mr-4 list-disc">
+                      <li>المقابل المدفوع: 5,000,000 ريال</li>
+                      <li>القيمة العادلة للأصول المحددة: 3,500,000 ريال</li>
+                      <li>القيمة العادلة للالتزامات: 1,000,000 ريال</li>
+                      <li>تم تحديد علامة تجارية بقيمة عادلة: 800,000 ريال (عمر غير محدد)</li>
+                      <li>تم تحديد قائمة عملاء بقيمة عادلة: 400,000 ريال (عمر متوقع: 8 سنوات)</li>
+                    </ul>
+                    
+                    <div class="bg-blue-50 p-2 rounded border border-blue-200 mt-2">
+                      <p class="font-bold text-gray-700 mb-1">المعالجة المحاسبية:</p>
+                      <ul class="text-gray-600 space-y-1 mr-4 list-disc">
+                        <li>صافي الأصول المحددة: 3,700,000 ريال (3,500,000 - 1,000,000 + 800,000 + 400,000)</li>
+                        <li>الشهرة: 1,300,000 ريال (5,000,000 - 3,700,000)</li>
+                        <li>العلامة التجارية (عمر غير محدد): لا تخضع للإطفاء، ولكن تخضع لاختبار انخفاض القيمة سنوياً</li>
+                        <li>قائمة العملاء: تخضع للإطفاء بمبلغ 50,000 ريال سنوياً (400,000 ÷ 8)</li>
+                        <li>الشهرة: لا تخضع للإطفاء، ولكن تخضع لاختبار انخفاض القيمة سنوياً</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Disclosure Requirements -->
+            <div class="border-r-4 border-orange-500 p-4 bg-orange-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-file-alt text-orange-600 ml-2"></i>
+                متطلبات الإفصاح
+              </h3>
+              
+              <p class="text-gray-700 mb-3">
+                وفقاً لمعايير التقارير المالية الدولية، يجب على الشركات الإفصاح عن معلومات معينة حول الأصول غير الملموسة والشهرة في قوائمها المالية.
+              </p>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الإفصاحات المطلوبة للأصول غير الملموسة:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>ما إذا كانت الأعمار الإنتاجية محددة أو غير محددة</li>
+                    <li>معدلات الإطفاء والطرق المستخدمة للأصول ذات الأعمار المحددة</li>
+                    <li>القيمة الدفترية الإجمالية والإطفاء المتراكم في بداية ونهاية الفترة</li>
+                    <li>تسوية القيمة الدفترية في بداية ونهاية الفترة، مع تفاصيل الإضافات والاستبعادات</li>
+                    <li>تفاصيل خسائر انخفاض القيمة المعترف بها أو المعكوسة</li>
+                    <li>الأسباب التي تدعم تقييم العمر الإنتاجي غير المحدد</li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الإفصاحات المطلوبة للشهرة:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>القيمة الدفترية للشهرة المخصصة لكل وحدة توليد نقد</li>
+                    <li>أساس تحديد المبلغ القابل للاسترداد (القيمة قيد الاستخدام أو القيمة العادلة ناقصاً تكاليف البيع)</li>
+                    <li>الافتراضات الرئيسية المستخدمة في تقدير المبلغ القابل للاسترداد</li>
+                    <li>تحليل الحساسية للافتراضات الرئيسية</li>
+                    <li>تفاصيل خسائر انخفاض قيمة الشهرة المعترف بها خلال الفترة</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="bg-white p-3 rounded border mt-4">
+                <h4 class="font-semibold text-gray-800 mb-2">نموذج إفصاح في الإيضاحات:</h4>
+                <div class="text-xs text-gray-600 p-3 bg-gray-50 rounded border">
+                  <p class="font-bold mb-2">إيضاح 10: الأصول غير الملموسة والشهرة</p>
+                  <p class="mb-2">تتضمن الأصول غير الملموسة برامج الكمبيوتر والتراخيص والعلامات التجارية وقوائم العملاء والشهرة. يتم قياس الأصول غير الملموسة المستحوذ عليها بشكل منفصل مبدئياً بالتكلفة. تكلفة الأصول غير الملموسة المستحوذ عليها في اندماج الأعمال هي قيمتها العادلة في تاريخ الاستحواذ.</p>
+                  <p class="mb-2">بعد الاعتراف المبدئي، يتم تسجيل الأصول غير الملموسة بالتكلفة ناقصاً أي إطفاء متراكم وأي خسائر انخفاض قيمة متراكمة. يتم تقييم الأعمار الإنتاجية للأصول غير الملموسة إما كمحددة أو غير محددة.</p>
+                  <p>يتم إطفاء الأصول غير الملموسة ذات الأعمار المحددة على مدى أعمارها الإنتاجية الاقتصادية ويتم تقييمها لانخفاض القيمة عندما يكون هناك مؤشر على أن الأصل غير الملموس قد تنخفض قيمته. لا يتم إطفاء الأصول غير الملموسة ذات الأعمار الإنتاجية غير المحددة، ولكن يتم اختبارها سنوياً لانخفاض القيمة.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Quiz -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-question-circle text-blue-600 ml-2"></i>
+                اختبر معرفتك
+              </h3>
+              
+              <div class="bg-white p-4 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-3">أسئلة للمراجعة:</h4>
+                
+                <div class="space-y-4">
+                  <div class="p-3 bg-gray-50 rounded">
+                    <p class="font-medium text-gray-800 mb-2">1. ما هو الفرق الرئيسي بين الأصول غير الملموسة والشهرة؟</p>
+                    <div class="ml-5">
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q1" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">الأصول غير الملموسة يتم إطفاؤها دائماً، بينما الشهرة لا تخضع للإطفاء.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q1" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">الشهرة لها عمر إنتاجي محدد، بينما الأصول غير الملموسة قد يكون لها عمر غير محدد.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q1" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">الأصول غير الملموسة يمكن تحديدها بشكل منفصل، بينما الشهرة لا يمكن تحديدها بشكل منفصل.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer">
+                        <input type="radio" name="q1" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">الأصول غير الملموسة يمكن شراؤها فقط، بينما الشهرة يمكن تطويرها داخلياً.</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div class="p-3 bg-gray-50 rounded">
+                    <p class="font-medium text-gray-800 mb-2">2. متى يتم رسملة تكاليف تطوير البرمجيات داخلياً؟</p>
+                    <div class="ml-5">
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q2" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">في جميع الحالات، بغض النظر عن المرحلة.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q2" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">فقط في مرحلة البحث.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q2" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">فقط في مرحلة التطوير، بعد استيفاء معايير معينة.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer">
+                        <input type="radio" name="q2" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">لا يتم رسملة تكاليف تطوير البرمجيات داخلياً مطلقاً.</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div class="p-3 bg-gray-50 rounded">
+                    <p class="font-medium text-gray-800 mb-2">3. ما هي المعالجة المحاسبية الصحيحة للمنح الحكومية المتعلقة بالأصول؟</p>
+                    <div class="ml-5">
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q3" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">يجب دائماً تسجيلها كدخل فوري.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q3" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">يمكن تسجيلها كدخل مؤجل أو تخفيض من قيمة الأصل.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer mb-2">
+                        <input type="radio" name="q3" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">يجب دائماً تخفيضها من قيمة الأصل.</span>
+                      </label>
+                      <label class="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer">
+                        <input type="radio" name="q3" class="form-radio text-blue-600">
+                        <span class="text-sm text-gray-700">لا يتم الاعتراف بها في القوائم المالية.</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div id="quizResults" class="mt-4 hidden">
+                  <div class="p-3 bg-green-50 border border-green-200 rounded text-green-800">
+                    <p class="font-bold flex items-center">
+                      <i class="fas fa-check-circle ml-2"></i>
+                      النتائج:
+                    </p>
+                    <ul class="mt-2 mr-6 list-disc text-sm">
+                      <li id="result1"></li>
+                      <li id="result2"></li>
+                      <li id="result3"></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                  <button id="checkAnswers" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                    تحقق من إجاباتك
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter Summary -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            ملخص الفصل التاسع
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">النقاط الرئيسية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> الأصول غير الملموسة هي أصول غير نقدية قابلة للتحديد وليس لها جوهر مادي</li>
+                <li><i class="fas fa-check ml-2"></i> تكاليف البحث تصرف فوراً، بينما تكاليف التطوير ترسمل عند استيفاء شروط معينة</li>
+                <li><i class="fas fa-check ml-2"></i> الشهرة تنشأ فقط في اندماج الأعمال ولا تخضع للإطفاء</li>
+                <li><i class="fas fa-check ml-2"></i> يتم إطفاء الأصول غير الملموسة ذات الأعمار المحددة واختبار انخفاض قيمتها عند وجود مؤشرات</li>
+                <li><i class="fas fa-check ml-2"></i> الموارد المعدنية تمر بمراحل الاستكشاف والتطوير والاستخراج</li>
+                <li><i class="fas fa-check ml-2"></i> المنح الحكومية يمكن معالجتها بطرق مختلفة حسب طبيعتها وسياسة الشركة</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">المصطلحات المهمة:</h3>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><strong>Intangible Assets:</strong> الأصول غير الملموسة</div>
+                <div><strong>Goodwill:</strong> الشهرة</div>
+                <div><strong>Amortization:</strong> الإطفاء</div>
+                <div><strong>Impairment Testing:</strong> اختبار انخفاض القيمة</div>
+                <div><strong>Mineral Resources:</strong> الموارد المعدنية</div>
+                <div><strong>Depletion:</strong> الاستنفاد</div>
+                <div><strong>Government Grant:</strong> المنحة الحكومية</div>
+                <div><strong>Research & Development:</strong> البحث والتطوير</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 bg-white bg-opacity-10 p-4 rounded">
+            <h3 class="font-bold text-lg mb-3">ملاحظات ختامية:</h3>
+            <p class="text-sm">
+              تعتبر المحاسبة عن الأصول غير الملموسة والشهرة والموارد المعدنية من المجالات المعقدة في المحاسبة المالية، وتتطلب حكماً مهنياً كبيراً. يجب على المحاسبين فهم الطبيعة الخاصة لهذه الأصول والتحديات المتعلقة بقياسها والإفصاح عنها بشكل مناسب. كما أن التطورات التكنولوجية المستمرة تزيد من أهمية الأصول غير الملموسة في اقتصاد اليوم، مما يجعل فهم المعالجة المحاسبية لها أمراً ضرورياً للمحاسبين المعاصرين.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="chapter-8.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الفصل السابق: الممتلكات والمصانع والمعدات
+        </a>
+        <a href="chapter-10.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          الفصل التالي: تطبيقات القيمة العادلة
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.add('hidden');
+    });
+    
+    // Quiz functionality
+    const checkAnswersBtn = document.getElementById('checkAnswers');
+    const quizResults = document.getElementById('quizResults');
+    const result1 = document.getElementById('result1');
+    const result2 = document.getElementById('result2');
+    const result3 = document.getElementById('result3');
+    
+    checkAnswersBtn.addEventListener('click', () => {
+      // Get selected answers
+      const q1Selected = document.querySelector('input[name="q1"]:checked');
+      const q2Selected = document.querySelector('input[name="q2"]:checked');
+      const q3Selected = document.querySelector('input[name="q3"]:checked');
+      
+      // Check answers
+      let correctCount = 0;
+      
+      // Question 1
+      if (q1Selected) {
+        const q1Index = Array.from(document.querySelectorAll('input[name="q1"]')).indexOf(q1Selected);
+        if (q1Index === 2) { // Third option is correct
+          result1.innerHTML = 'السؤال 1: إجابة صحيحة! الأصول غير الملموسة يمكن تحديدها بشكل منفصل، بينما الشهرة لا يمكن تحديدها بشكل منفصل.';
+          result1.classList.add('text-green-700');
+          correctCount++;
+        } else {
+          result1.innerHTML = 'السؤال 1: إجابة خاطئة. الإجابة الصحيحة هي: الأصول غير الملموسة يمكن تحديدها بشكل منفصل، بينما الشهرة لا يمكن تحديدها بشكل منفصل.';
+          result1.classList.add('text-red-700');
+        }
+      } else {
+        result1.innerHTML = 'السؤال 1: لم تختر إجابة.';
+        result1.classList.add('text-yellow-700');
+      }
+      
+      // Question 2
+      if (q2Selected) {
+        const q2Index = Array.from(document.querySelectorAll('input[name="q2"]')).indexOf(q2Selected);
+        if (q2Index === 2) { // Third option is correct
+          result2.innerHTML = 'السؤال 2: إجابة صحيحة! يتم رسملة تكاليف التطوير فقط بعد استيفاء معايير معينة.';
+          result2.classList.add('text-green-700');
+          correctCount++;
+        } else {
+          result2.innerHTML = 'السؤال 2: إجابة خاطئة. الإجابة الصحيحة هي: يتم رسملة تكاليف التطوير فقط بعد استيفاء معايير معينة.';
+          result2.classList.add('text-red-700');
+        }
+      } else {
+        result2.innerHTML = 'السؤال 2: لم تختر إجابة.';
+        result2.classList.add('text-yellow-700');
+      }
+      
+      // Question 3
+      if (q3Selected) {
+        const q3Index = Array.from(document.querySelectorAll('input[name="q3"]')).indexOf(q3Selected);
+        if (q3Index === 1) { // Second option is correct
+          result3.innerHTML = 'السؤال 3: إجابة صحيحة! يمكن تسجيل المنح الحكومية المتعلقة بالأصول كدخل مؤجل أو تخفيض من قيمة الأصل.';
+          result3.classList.add('text-green-700');
+          correctCount++;
+        } else {
+          result3.innerHTML = 'السؤال 3: إجابة خاطئة. الإجابة الصحيحة هي: يمكن تسجيل المنح الحكومية المتعلقة بالأصول كدخل مؤجل أو تخفيض من قيمة الأصل.';
+          result3.classList.add('text-red-700');
+        }
+      } else {
+        result3.innerHTML = 'السؤال 3: لم تختر إجابة.';
+        result3.classList.add('text-yellow-700');
+      }
+      
+      // Show results
+      quizResults.classList.remove('hidden');
+      
+      // Scroll to results
+      quizResults.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Add animation classes on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Progress tracking
+    function updateProgress() {
+      const totalSections = document.querySelectorAll('section').length;
+      const viewedSections = document.querySelectorAll('.animate-fade-in').length;
+      
+      const progressPercentage = Math.min((viewedSections / totalSections) * 100, 100);
+      
+      // Update progress bar if it exists
+      const progressBar = document.querySelector('.progress-bar');
+      if (progressBar) {
+        progressBar.style.width = progressPercentage + '%';
+      }
+      
+      // Save progress to localStorage
+      localStorage.setItem('chapter9_progress', progressPercentage);
+    }
+    
+    // Check for saved progress on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedProgress = localStorage.getItem('chapter9_progress');
+      if (savedProgress) {
+        const progressBar = document.querySelector('.progress-bar');
+        if (progressBar) {
+          progressBar.style.width = savedProgress + '%';
+        }
+      }
+    });
+    
+    // Update progress when sections become visible
+    const progressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          updateProgress();
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    document.querySelectorAll('section').forEach(section => {
+      progressObserver.observe(section);
+    });
+    
+    // Interactive card hover effects
+    document.querySelectorAll('.card-hover').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('shadow-lg');
+        card.style.transform = 'translateY(-5px)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('shadow-lg');
+        card.style.transform = 'translateY(0)';
+      });
+    });
+    
+    // Print functionality
+    document.getElementById('printChapter')?.addEventListener('click', () => {
+      window.print();
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // Previous chapter: Alt + Left Arrow
+      if (e.altKey && e.key === 'ArrowLeft') {
+        const prevLink = document.querySelector('a[href="chapter-10.html"]');
+        if (prevLink) prevLink.click();
+      }
+      
+      // Next chapter: Alt + Right Arrow
+      if (e.altKey && e.key === 'ArrowRight') {
+        const nextLink = document.querySelector('a[href="chapter-8.html"]');
+        if (nextLink) nextLink.click();
+      }
+      
+      // Home: Alt + Home
+      if (e.altKey && e.key === 'Home') {
+        const homeLink = document.querySelector('a[href="index.html"]');
+        if (homeLink) homeLink.click();
+      }
+    });
+  </script>
+  
+  <!-- Custom CSS for animations -->
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    /* Print styles */
+    @media print {
+      .sidebar-fixed, #menuToggle, #overlay, button {
+        display: none !important;
+      }
+      
+      .md\:mr-80 {
+        margin-right: 0 !important;
+      }
+      
+      .rounded-lg {
+        border-radius: 0 !important;
+      }
+      
+      .shadow-md {
+        box-shadow: none !important;
+      }
+      
+      section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 1rem;
+      }
+      
+      .bg-gradient-to-r {
+        background: #4a5568 !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .text-white {
+        color: black !important;
+      }
+      
+      .bg-blue-600, .bg-green-600, .bg-red-600, .bg-purple-600, .bg-indigo-600, .bg-orange-600 {
+        background-color: #edf2f7 !important;
+        color: black !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .grid {
+        display: block !important;
+      }
+      
+      .md\:grid-cols-2 > div, .md\:grid-cols-3 > div {
+        margin-bottom: 1rem;
+      }
+    }
+    
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-in {
+        animation: none !important;
+      }
+      
+      .transition, .card-hover {
+        transition: none !important;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1a202c;
+      }
+      
+      .text-gray-800 {
+        color: #e2e8f0;
+      }
+      
+      .text-gray-700 {
+        color: #cbd5e0;
+      }
+      
+      .text-gray-600 {
+        color: #a0aec0;
+      }
+      
+      .border {
+        border-color: #2d3748;
+      }
+      
+      .bg-gray-50 {
+        background-color: #2d3748;
+      }
+    }
+  </style>
+</body>
+</html>

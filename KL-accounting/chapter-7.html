@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة المتوسطة 1 - الفصل السابع: الأصول المالية</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">المحاسبة المتوسطة 1</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li>
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block font-medium">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li>
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li>
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li>
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 -->
+          <li>
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 -->
+          <li>
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 - Current -->
+          <li>
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg bg-blue-500">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block font-medium">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li>
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 -->
+          <li>
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets, Goodwill, Mineral Resources</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 -->
+          <li>
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value to Non-Current Assets</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Chapter Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الفصل 7</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="chapter-7.html" class="text-blue-600 hover:text-blue-800" aria-current="page">الأصول المالية</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">الأصول المالية</h1>
+        <p class="text-gray-600 mt-2">Financial Assets</p>
+      </div>
+
+      <!-- Chapter Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 10%"></div>
+      </div>
+
+      <!-- Section 1: Introduction to Financial Assets -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-coins ml-3"></i>
+            1. مقدمة في الأصول المالية
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Introduction to Financial Assets</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Definition and Purpose -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-file-contract text-blue-600 ml-2"></i>
+                  تعريف الأصول المالية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  الأصول المالية هي حقوق تعاقدية للحصول على نقد أو أداة مالية أخرى من طرف آخر. وهي تمثل نوعاً من الاستثمارات التي تحتفظ بها المنشأة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">خصائص الأصول المالية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• حق تعاقدي للحصول على منافع اقتصادية</li>
+                    <li>• يمكن تحويلها إلى نقد في المستقبل</li>
+                    <li>• تمثل علاقة بين طرفين (المالك والمصدر)</li>
+                    <li>• تختلف في الأجل والمخاطر والعائد</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Examples of Financial Assets -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-list-ul text-green-600 ml-2"></i>
+                  أمثلة على الأصول المالية
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  تتنوع الأصول المالية بشكل كبير وتشمل مجموعة واسعة من الأدوات المالية.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أنواع شائعة:</h4>
+                  <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                    <div class="bg-gray-50 p-2 rounded">
+                      <i class="fas fa-money-bill-wave text-green-500 ml-1"></i> النقدية
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <i class="fas fa-university text-blue-500 ml-1"></i> الودائع البنكية
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <i class="fas fa-file-invoice-dollar text-purple-500 ml-1"></i> الذمم المدينة
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <i class="fas fa-chart-line text-red-500 ml-1"></i> الأسهم
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <i class="fas fa-landmark text-yellow-500 ml-1"></i> السندات
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <i class="fas fa-handshake text-indigo-500 ml-1"></i> المشتقات المالية
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Importance of Financial Assets -->
+          <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-star text-yellow-500 ml-2"></i>
+              أهمية الأصول المالية
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="bg-white p-3 rounded border text-center">
+                <i class="fas fa-coins text-yellow-500 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">تنويع الاستثمارات</h4>
+                <p class="text-xs text-gray-600">تساعد على توزيع المخاطر وتحقيق عوائد متنوعة</p>
+              </div>
+              <div class="bg-white p-3 rounded border text-center">
+                <i class="fas fa-chart-pie text-blue-500 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">إدارة السيولة</h4>
+                <p class="text-xs text-gray-600">توفير سيولة واحتياطيات للاستثمارات والعمليات</p>
+              </div>
+              <div class="bg-white p-3 rounded border text-center">
+                <i class="fas fa-exchange-alt text-green-500 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">التحوط من المخاطر</h4>
+                <p class="text-xs text-gray-600">حماية المنشأة من مخاطر أسعار الفائدة والصرف</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Regulatory Framework -->
+          <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-balance-scale text-blue-600 ml-2"></i>
+              الإطار التنظيمي
+            </h3>
+            <p class="text-gray-700 mb-3">
+              تخضع المعالجة المحاسبية للأصول المالية لعدة معايير محاسبية دولية ومحلية:
+            </p>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعايير الدولية (IFRS):</h4>
+                <ul class="text-gray-600 space-y-1">
+                  <li>• <strong>IFRS 9:</strong> الأدوات المالية (تصنيف وقياس الأصول المالية)</li>
+                  <li>• <strong>IFRS 7:</strong> الأدوات المالية: الإفصاحات</li>
+                  <li>• <strong>IAS 32:</strong> الأدوات المالية: العرض</li>
+                </ul>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعايير الأمريكية (ASPE):</h4>
+                <ul class="text-gray-600 space-y-1">
+                  <li>• <strong>Section 3856:</strong> الأدوات المالية</li>
+                  <li>• <strong>ASC 320:</strong> الاستثمارات - الديون والأوراق المالية</li>
+                  <li>• <strong>ASC 325:</strong> الاستثمارات - أخرى</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Classification of Financial Assets -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-tags ml-3"></i>
+            2. تصنيف الأصول المالية
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Classification of Financial Assets</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-6">
+            وفقاً للمعايير المحاسبية الدولية (IFRS) والمعايير المحاسبية للمنشآت الخاصة (ASPE)، يتم تصنيف الأصول المالية إلى عدة فئات رئيسية بناءً على طبيعتها والغرض من الاحتفاظ بها.
+          </p>
+
+          <!-- Strategic Investments -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">الاستثمارات الاستراتيجية في الأسهم</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+              <!-- Subsidiaries -->
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-building text-blue-600 ml-2"></i>
+                  الشركات التابعة (Subsidiaries)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  شركات تمتلك فيها المنشأة أكثر من 50% من حقوق التصويت أو لديها سيطرة عليها.
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة المحاسبة:</strong> التوحيد الكامل (Consolidation)</li>
+                    <li>• <strong>المعيار المطبق:</strong> IFRS 10 / Section 1591 (ASPE)</li>
+                    <li>• <strong>مفهوم السيطرة:</strong> القدرة على التحكم في السياسات المالية والتشغيلية</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Associates -->
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-handshake text-purple-600 ml-2"></i>
+                  الشركات الزميلة (Associates)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  شركات تمتلك فيها المنشأة تأثيراً جوهرياً (عادة 20-50% من حقوق التصويت).
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة المحاسبة:</strong> طريقة حقوق الملكية (Equity Method)</li>
+                    <li>• <strong>المعيار المطبق:</strong> IAS 28 / Section 3051 (ASPE)</li>
+                    <li>• <strong>التأثير الجوهري:</strong> المشاركة في صنع القرارات دون سيطرة كاملة</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Joint Ventures -->
+              <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-project-diagram text-indigo-600 ml-2"></i>
+                  المشاريع المشتركة (Joint Ventures)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  ترتيبات يكون فيها للمنشأة سيطرة مشتركة مع أطراف أخرى.
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة المحاسبة:</strong> طريقة حقوق الملكية أو التوحيد النسبي</li>
+                    <li>• <strong>المعيار المطبق:</strong> IFRS 11 / Section 3056 (ASPE)</li>
+                    <li>• <strong>السيطرة المشتركة:</strong> تتطلب موافقة جماعية على القرارات</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Non-Strategic Investments -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">الاستثمارات غير الاستراتيجية</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Held-for-trading -->
+              <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-exchange-alt text-red-600 ml-2"></i>
+                  المحتفظ بها للتداول (Held-for-trading)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  أصول مالية يتم شراؤها بهدف بيعها في المدى القصير وتحقيق أرباح من تقلبات الأسعار.
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة القياس:</strong> القيمة العادلة من خلال الربح أو الخسارة (FVTPL)</li>
+                    <li>• <strong>معالجة التغيرات:</strong> تعترف بالتغيرات في القيمة العادلة مباشرة في الدخل</li>
+                    <li>• <strong>أمثلة:</strong> الأسهم والسندات المشتراة للمتاجرة، المشتقات المالية</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Available-for-sale -->
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-store text-blue-600 ml-2"></i>
+                  المتاحة للبيع (Available-for-sale)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  أصول مالية غير مصنفة في فئات أخرى ويمكن بيعها عند الحاجة للسيولة أو استجابة لتغيرات السوق.
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة القياس:</strong> القيمة العادلة من خلال الدخل الشامل الآخر (FVTOCI)</li>
+                    <li>• <strong>معالجة التغيرات:</strong> تسجل في الدخل الشامل الآخر وليس في صافي الدخل</li>
+                    <li>• <strong>عند البيع:</strong> يتم إعادة تصنيف الأرباح/الخسائر المتراكمة إلى الدخل</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Held-to-maturity -->
+              <div class="border-r-4 border-yellow-500 p-4 bg-yellow-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-calendar-check text-yellow-600 ml-2"></i>
+                  المحتفظ بها حتى تاريخ الاستحقاق (Held-to-maturity)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  أصول مالية ذات دفعات ثابتة أو قابلة للتحديد وتاريخ استحقاق محدد ولدى المنشأة نية وقدرة على الاحتفاظ بها حتى الاستحقاق.
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة القياس:</strong> التكلفة المطفأة (Amortized Cost)</li>
+                    <li>• <strong>حساب الإيراد:</strong> طريقة الفائدة الفعالة (Effective Interest Method)</li>
+                    <li>• <strong>أمثلة:</strong> السندات، الصكوك، شهادات الإيداع</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Loans and Receivables -->
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h4 class="font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-file-invoice-dollar text-green-600 ml-2"></i>
+                  القروض والذمم المدينة (Loans and Receivables)
+                </h4>
+                <p class="text-sm text-gray-700 mb-3">
+                  أصول مالية غير مشتقة ذات دفعات ثابتة أو قابلة للتحديد وغير مدرجة في سوق نشط.
+                </p>
+                <div class="bg-white p-3 rounded border text-xs">
+                  <ul class="text-gray-600 space-y-1">
+                    <li>• <strong>طريقة القياس:</strong> التكلفة المطفأة (Amortized Cost)</li>
+                    <li>• <strong>اختبار الانخفاض:</strong> يتم اختبار الانخفاض في القيمة دورياً</li>
+                    <li>• <strong>أمثلة:</strong> القروض الممنوحة، الذمم المدينة التجارية، الودائع</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Classification Flowchart -->
+          <div class="bg-white border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3 text-center">
+              <i class="fas fa-sitemap text-purple-600 ml-2"></i>
+              مخطط تصنيف الأصول المالية
+            </h3>
+            <div class="flex justify-center">
+              <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg max-w-3xl">
+                <div class="flex flex-col items-center">
+                  <div class="border-2 border-blue-600 rounded-lg p-3 bg-white text-center mb-4 w-64">
+                    <p class="font-bold text-blue-800">هل الاستثمار استراتيجي؟</p>
+                  </div>
+                  <i class="fas fa-arrow-down text-gray-400 my-2"></i>
+                  <div class="grid grid-cols-2 gap-6 w-full">
+                    <div class="flex flex-col items-center">
+                      <div class="border-2 border-green-600 rounded-lg p-3 bg-white text-center w-full">
+                        <p class="font-bold text-green-800">نعم</p>
+                      </div>
+                      <i class="fas fa-arrow-down text-gray-400 my-2"></i>
+                      <div class="grid grid-cols-1 gap-2 w-full">
+                        <div class="border border-gray-300 rounded p-2 bg-blue-50 text-center text-sm">
+                          <p>الشركات التابعة (> 50%)</p>
+                          <p class="text-xs text-gray-600">التوحيد الكامل</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 bg-purple-50 text-center text-sm">
+                          <p>الشركات الزميلة (20-50%)</p>
+                          <p class="text-xs text-gray-600">طريقة حقوق الملكية</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 bg-indigo-50 text-center text-sm">
+                          <p>المشاريع المشتركة</p>
+                          <p class="text-xs text-gray-600">حقوق الملكية / التوحيد النسبي</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="border-2 border-red-600 rounded-lg p-3 bg-white text-center w-full">
+                        <p class="font-bold text-red-800">لا</p>
+                      </div>
+                      <i class="fas fa-arrow-down text-gray-400 my-2"></i>
+                      <div class="grid grid-cols-1 gap-2 w-full">
+                        <div class="border border-gray-300 rounded p-2 bg-red-50 text-center text-sm">
+                          <p>محتفظ بها للتداول</p>
+                          <p class="text-xs text-gray-600">القيمة العادلة (FVTPL)</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 bg-blue-50 text-center text-sm">
+                          <p>متاحة للبيع</p>
+                          <p class="text-xs text-gray-600">القيمة العادلة (FVTOCI)</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 bg-yellow-50 text-center text-sm">
+                          <p>محتفظ بها حتى الاستحقاق</p>
+                          <p class="text-xs text-gray-600">التكلفة المطفأة</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 bg-green-50 text-center text-sm">
+                          <p>قروض وذمم مدينة</p>
+                          <p class="text-xs text-gray-600">التكلفة المطفأة</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Measurement and Accounting -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-calculator ml-3"></i>
+            3. القياس والمحاسبة
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Measurement and Accounting</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-6">
+            تختلف طرق قياس الأصول المالية ومعالجتها المحاسبية حسب تصنيفها، وتتبع عموماً إحدى الطريقتين الرئيسيتين: التكلفة المطفأة أو القيمة العادلة.
+          </p>
+
+          <!-- Amortized Cost Method -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">
+              <i class="fas fa-percentage text-blue-600 ml-2"></i>
+              طريقة التكلفة المطفأة (Amortized Cost)
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">التعريف والتطبيق</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    التكلفة المطفأة هي المبلغ الذي يقاس به الأصل المالي عند الاعتراف الأولي، ناقصاً مدفوعات أصل المبلغ، زائداً أو ناقصاً الإطفاء المتراكم باستخدام طريقة الفائدة الفعالة.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">تطبق على:</h5>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• الاستثمارات المحتفظ بها حتى تاريخ الاستحقاق</li>
+                      <li>• القروض والذمم المدينة</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">طريقة الفائدة الفعالة (Effective Interest Method)</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    طريقة لحساب التكلفة المطفأة لأصل مالي وتخصيص إيراد الفائدة على مدى الفترة ذات الصلة، باستخدام معدل الفائدة الفعلي.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">معدل الفائدة الفعلي (EIR):</h5>
+                    <p class="text-gray-600">
+                      المعدل الذي يخصم بالضبط المدفوعات أو المقبوضات النقدية المستقبلية المقدرة خلال العمر المتوقع للأداة المالية إلى صافي القيمة الدفترية للأصل المالي.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="space-y-4">
+                <div class="border-r-4 border-yellow-500 p-4 bg-yellow-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">معالجة الخصم والعلاوة</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    عند شراء أداة دين (مثل السندات) بخصم أو علاوة، يتم إطفاء الفرق بين سعر الشراء والقيمة الاسمية على مدى عمر الأداة.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <div class="grid grid-cols-2 gap-2">
+                      <div>
+                        <h5 class="font-semibold text-gray-800 mb-1">الشراء بخصم:</h5>
+                        <p class="text-gray-600">
+                          شراء أقل من القيمة الاسمية، يزداد إيراد الفائدة الفعلي عن الفائدة المعلنة.
+                        </p>
+                      </div>
+                      <div>
+                        <h5 class="font-semibold text-gray-800 mb-1">الشراء بعلاوة:</h5>
+                        <p class="text-gray-600">
+                          شراء أعلى من القيمة الاسمية، ينخفض إيراد الفائدة الفعلي عن الفائدة المعلنة.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">انخفاض القيمة (Impairment)</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    يجب تقييم الأصول المالية المقاسة بالتكلفة المطفأة للتحقق من وجود انخفاض في القيمة في نهاية كل فترة تقرير.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">مؤشرات انخفاض القيمة:</h5>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• صعوبات مالية كبيرة للمصدر أو المدين</li>
+                      <li>• خرق العقد مثل التخلف عن السداد</li>
+                      <li>• احتمالية دخول المدين في إفلاس</li>
+                      <li>• اختفاء سوق نشط للأصل المالي</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Practical Example -->
+            <div class="mt-4 border border-gray-200 rounded-lg overflow-hidden">
+              <div class="bg-blue-100 text-blue-800 px-4 py-2 font-bold">
+                مثال عملي: حساب التكلفة المطفأة
+              </div>
+              <div class="p-4 bg-white">
+                <p class="text-sm text-gray-700 mb-3">
+                  شركة استثمارية اشترت سند بقيمة اسمية 10,000 ريال وسعر فائدة كوبون 5% سنوياً (500 ريال) لمدة 3 سنوات. اشترت السند بمبلغ 9,500 ريال (بخصم).
+                </p>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border border-gray-200">
+                    <thead class="bg-gray-100">
+                      <tr>
+                        <th class="py-2 px-4 border text-right">السنة</th>
+                        <th class="py-2 px-4 border text-right">القيمة الدفترية (بداية)</th>
+                        <th class="py-2 px-4 border text-right">إيراد الفائدة الفعلية (6.5%)</th>
+                        <th class="py-2 px-4 border text-right">الفائدة المستلمة (5%)</th>
+                        <th class="py-2 px-4 border text-right">إطفاء الخصم</th>
+                        <th class="py-2 px-4 border text-right">القيمة الدفترية (نهاية)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="py-2 px-4 border">1</td>
+                        <td class="py-2 px-4 border">9,500</td>
+                        <td class="py-2 px-4 border">617.5</td>
+                        <td class="py-2 px-4 border">500</td>
+                        <td class="py-2 px-4 border">117.5</td>
+                        <td class="py-2 px-4 border">9,617.5</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border">2</td>
+                        <td class="py-2 px-4 border">9,617.5</td>
+                        <td class="py-2 px-4 border">625.1</td>
+                        <td class="py-2 px-4 border">500</td>
+                        <td class="py-2 px-4 border">125.1</td>
+                        <td class="py-2 px-4 border">9,742.6</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 px-4 border">3</td>
+                        <td class="py-2 px-4 border">9,742.6</td>
+                        <td class="py-2 px-4 border">632.4</td>
+                        <td class="py-2 px-4 border">500</td>
+                        <td class="py-2 px-4 border">132.4</td>
+                        <td class="py-2 px-4 border">10,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                  <p><strong>ملاحظة:</strong> معدل الفائدة الفعلي (6.5%) هو المعدل الذي يخصم التدفقات النقدية المستقبلية المقدرة إلى القيمة الحالية المساوية لسعر الشراء.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fair Value Method -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">
+              <i class="fas fa-balance-scale text-purple-600 ml-2"></i>
+              طريقة القيمة العادلة (Fair Value)
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">التعريف والتطبيق</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    القيمة العادلة هي السعر الذي سيتم استلامه لبيع أصل أو دفعه لتحويل التزام في معاملة منظمة بين المشاركين في السوق في تاريخ القياس.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">تطبق على:</h5>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• الأصول المالية المحتفظ بها للتداول (FVTPL)</li>
+                      <li>• الأصول المالية المتاحة للبيع (FVTOCI)</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">القيمة العادلة من خلال الربح أو الخسارة (FVTPL)</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    تقييم الأصول بالقيمة العادلة في نهاية كل فترة، مع الاعتراف بتغيرات القيمة العادلة مباشرة في قائمة الدخل.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">خصائص:</h5>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• تأثير مباشر وفوري على صافي الربح</li>
+                      <li>• تقلبات محتملة أكبر في الدخل</li>
+                      <li>• يعكس القيمة السوقية الحالية للأصول</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="space-y-4">
+                <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">القيمة العادلة من خلال الدخل الشامل الآخر (FVTOCI)</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    تقييم الأصول بالقيمة العادلة في نهاية كل فترة، مع الاعتراف بتغيرات القيمة العادلة في الدخل الشامل الآخر وليس في صافي الربح.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">خصائص:</h5>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• لا تؤثر التغيرات على صافي الربح حتى البيع</li>
+                      <li>• يتم تراكم التغيرات في احتياطي منفصل ضمن حقوق الملكية</li>
+                      <li>• عند البيع، يتم إعادة تصنيف التغيرات المتراكمة إلى الربح أو الخسارة</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                  <h4 class="font-bold text-gray-800 mb-2">تحديد القيمة العادلة</h4>
+                  <p class="text-sm text-gray-700 mb-3">
+                    يتم تحديد القيمة العادلة باستخدام تسلسل هرمي للقيمة العادلة يعطي أولوية للأسعار المعلنة في الأسواق النشطة.
+                  </p>
+                  <div class="bg-white p-3 rounded border text-xs">
+                    <h5 class="font-semibold text-gray-800 mb-1">مستويات القياس:</h5>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• <strong>المستوى 1:</strong> أسعار معلنة في أسواق نشطة لأصول مطابقة</li>
+                      <li>• <strong>المستوى 2:</strong> مدخلات يمكن ملاحظتها بخلاف الأسعار المعلنة (مثل أسعار الفائدة، منحنيات العائد)</li>
+                      <li>• <strong>المستوى 3:</strong> مدخلات غير قابلة للملاحظة (تقنيات تقييم داخلية)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Practical Example -->
+            <div class="mt-4 border border-gray-200 rounded-lg overflow-hidden">
+              <div class="bg-purple-100 text-purple-800 px-4 py-2 font-bold">
+                مثال عملي: المحاسبة على القيمة العادلة
+              </div>
+              <div class="p-4 bg-white">
+                <p class="text-sm text-gray-700 mb-3">
+                  شركة استثمارية اشترت أسهم بمبلغ 100,000 ريال كاستثمار متاح للبيع. في نهاية السنة، بلغت القيمة العادلة للأسهم 115,000 ريال. في السنة التالية، تم بيع الأسهم بمبلغ 120,000 ريال.
+                </p>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                  <div class="border rounded p-3">
+                    <h5 class="font-semibold text-gray-800 mb-2">السنة الأولى - القيود المحاسبية:</h5>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <p><strong>عند الشراء:</strong></p>
+                      <p>من حـ/ استثمارات متاحة للبيع 100,000</p>
+                      <p>إلى حـ/ النقدية 100,000</p>
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded mt-2">
+                      <p><strong>في نهاية السنة (إعادة التقييم):</strong></p>
+                      <p>من حـ/ استثمارات متاحة للبيع 15,000</p>
+                      <p>إلى حـ/ احتياطي القيمة العادلة (ضمن الدخل الشامل الآخر) 15,000</p>
+                    </div>
+                  </div>
+                  <div class="border rounded p-3">
+                    <h5 class="font-semibold text-gray-800 mb-2">السنة الثانية - القيود المحاسبية:</h5>
+                    <div class="bg-gray-50 p-2 rounded">
+                      <p><strong>عند البيع:</strong></p>
+                      <p>من حـ/ النقدية 120,000</p>
+                      <p>من حـ/ احتياطي القيمة العادلة 15,000</p>
+                      <p>إلى حـ/ استثمارات متاحة للبيع 115,000</p>
+                      <p>إلى حـ/ أرباح بيع استثمارات 20,000</p>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-600">ملاحظة: تم إعادة تصنيف احتياطي القيمة العادلة إلى الربح أو الخسارة عند البيع.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Table -->
+          <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3 text-center">
+              <i class="fas fa-table text-blue-600 ml-2"></i>
+              ملخص طرق القياس المحاسبي
+            </h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="py-2 px-4 border text-right">طريقة القياس</th>
+                    <th class="py-2 px-4 border text-right">فئات الأصول المالية</th>
+                    <th class="py-2 px-4 border text-right">القياس اللاحق</th>
+                    <th class="py-2 px-4 border text-right">الاعتراف بالتغيرات</th>
+                    <th class="py-2 px-4 border text-right">معالجة الإيرادات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="py-2 px-4 border font-semibold">التكلفة المطفأة</td>
+                    <td class="py-2 px-4 border">محتفظ بها حتى الاستحقاق / قروض وذمم مدينة</td>
+                    <td class="py-2 px-4 border">التكلفة المطفأة باستخدام طريقة الفائدة الفعالة</td>
+                    <td class="py-2 px-4 border">خسائر الانخفاض في قائمة الدخل</td>
+                    <td class="py-2 px-4 border">إيراد الفائدة في قائمة الدخل بمعدل الفائدة الفعلي</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border font-semibold">FVTPL</td>
+                    <td class="py-2 px-4 border">محتفظ بها للتداول</td>
+                    <td class="py-2 px-4 border">القيمة العادلة</td>
+                    <td class="py-2 px-4 border">جميع التغيرات في قائمة الدخل مباشرة</td>
+                    <td class="py-2 px-4 border">الفوائد وتوزيعات الأرباح في قائمة الدخل</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-4 border font-semibold">FVTOCI</td>
+                    <td class="py-2 px-4 border">متاحة للبيع</td>
+                    <td class="py-2 px-4 border">القيمة العادلة</td>
+                    <td class="py-2 px-4 border">التغيرات في الدخل الشامل الآخر حتى البيع</td>
+                    <td class="py-2 px-4 border">الفوائد بطريقة الفائدة الفعالة وتوزيعات الأرباح في قائمة الدخل</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Reclassification -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-yellow-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-exchange-alt ml-3"></i>
+            4. إعادة التصنيف
+          </h2>
+          <p class="text-yellow-100 text-sm mt-1">Reclassification</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-6">
+            إعادة تصنيف الأصول المالية تعني تغيير تصنيفها من فئة إلى أخرى، مما يؤدي إلى تغيير في طريقة قياسها والمعالجة المحاسبية لها. وتخضع إعادة التصنيف لشروط وضوابط صارمة في المعايير المحاسبية.
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Rules and Conditions -->
+            <div class="border-r-4 border-yellow-500 p-4 bg-yellow-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-gavel text-yellow-600 ml-2"></i>
+                قواعد وشروط إعادة التصنيف
+              </h3>
+              <p class="text-sm text-gray-700 mb-3">
+                تختلف قواعد إعادة التصنيف بين المعايير المحاسبية، وعموماً تكون أكثر تقييداً في المعايير الدولية (IFRS).
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2 text-sm">وفقاً للمعايير الدولية (IFRS 9):</h4>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• يسمح بإعادة التصنيف فقط عند تغيير نموذج الأعمال لإدارة الأصول المالية</li>
+                  <li>• يجب أن يكون تغيير نموذج الأعمال نادراً وجوهرياً وقابلاً للإثبات لأطراف خارجية</li>
+                  <li>• لا يسمح بإعادة التصنيف استجابة لتغيرات مؤقتة في السوق</li>
+                  <li>• تطبق إعادة التصنيف بأثر مستقبلي من تاريخ إعادة التصنيف</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Permissible and Prohibited Reclassifications -->
+            <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-ban text-red-600 ml-2"></i>
+                إعادة التصنيف المسموحة والممنوعة
+              </h3>
+              <p class="text-sm text-gray-700 mb-3">
+                بعض حالات إعادة التصنيف مسموح بها بينما البعض الآخر ممنوع بموجب المعايير المحاسبية.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="bg-green-50 p-2 rounded">
+                    <h4 class="font-semibold text-green-800 mb-1">مسموح بها (بشروط):</h4>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• من التكلفة المطفأة إلى FVTPL</li>
+                      <li>• من FVTPL إلى التكلفة المطفأة</li>
+                      <li>• من التكلفة المطفأة إلى FVTOCI</li>
+                      <li>• من FVTOCI إلى التكلفة المطفأة</li>
+                    </ul>
+                  </div>
+                  <div class="bg-red-50 p-2 rounded">
+                    <h4 class="font-semibold text-red-800 mb-1">غير مسموح بها عموماً:</h4>
+                    <ul class="text-gray-600 space-y-1">
+                      <li>• إعادة تصنيف استثمارات الأسهم المقاسة بـ FVTOCI</li>
+                      <li>• إعادة تصنيف عند بيع قريب متوقع</li>
+                      <li>• إعادة تصنيف لتجنب خسائر الانخفاض في القيمة</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accounting Treatment for Reclassification -->
+          <div class="mt-6 bg-white border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-pencil-alt text-gray-600 ml-2"></i>
+              المعالجة المحاسبية لإعادة التصنيف
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+              <div class="bg-gray-50 p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">من التكلفة المطفأة إلى القيمة العادلة:</h4>
+                <ol class="text-gray-600 space-y-2 list-decimal pr-5">
+                  <li>قياس الأصل بالقيمة العادلة في تاريخ إعادة التصنيف</li>
+                  <li>الاعتراف بالفرق بين القيمة الدفترية السابقة والقيمة العادلة:
+                    <ul class="pr-4 pt-1">
+                      <li>• في الربح أو الخسارة (إذا كان إلى FVTPL)</li>
+                      <li>• في الدخل الشامل الآخر (إذا كان إلى FVTOCI)</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+              <div class="bg-gray-50 p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">من القيمة العادلة إلى التكلفة المطفأة:</h4>
+                <ol class="text-gray-600 space-y-2 list-decimal pr-5">
+                  <li>القيمة العادلة في تاريخ إعادة التصنيف تصبح القيمة الدفترية الجديدة</li>
+                  <li>حساب معدل الفائدة الفعلي الجديد على أساس القيمة العادلة</li>
+                  <li>إذا كان من FVTOCI، يتم إطفاء الربح/الخسارة المتراكمة في الدخل الشامل الآخر على العمر المتبقي للأصل</li>
+                </ol>
+              </div>
+            </div>
+            
+            <div class="mt-4 bg-blue-50 p-3 rounded border text-sm">
+              <h4 class="font-semibold text-blue-800 mb-2">
+                <i class="fas fa-lightbulb text-blue-500 ml-2"></i>
+                نقاط مهمة للانتباه:
+              </h4>
+              <ul class="text-gray-700 space-y-1">
+                <li>• إعادة التصنيف قرار يجب أن يتخذ بعناية نظراً لتأثيراته المحاسبية المهمة</li>
+                <li>• يجب الإفصاح بشكل مفصل عن إعادة التصنيف في الإيضاحات المرفقة بالقوائم المالية</li>
+                <li>• يتطلب توثيق أسباب إعادة التصنيف وتأثيراتها المالية</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: IFRS vs ASPE Comparison -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-balance-scale-right ml-3"></i>
+            5. مقارنة بين المعايير الدولية والمعايير المحاسبية للمنشآت الخاصة
+          </h2>
+          <p class="text-indigo-100 text-sm mt-1">IFRS vs ASPE Comparison</p>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 mb-6">
+            هناك اختلافات مهمة بين المعايير الدولية للتقارير المالية (IFRS) والمعايير المحاسبية للمنشآت الخاصة (ASPE) في معالجة الأصول المالية.
+          </p>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="py-2 px-4 border text-right">الجانب</th>
+                  <th class="py-2 px-4 border text-right">المعايير الدولية (IFRS 9)</th>
+                  <th class="py-2 px-4 border text-right">المعايير المحاسبية للمنشآت الخاصة (ASPE)</th>
+                </tr>
+              </thead>
+              <tbody class="text-sm">
+                <tr>
+                  <td class="py-2 px-4 border font-semibold">فئات التصنيف</td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>التكلفة المطفأة</li>
+                      <li>القيمة العادلة من خلال الدخل الشامل الآخر (FVTOCI)</li>
+                      <li>القيمة العادلة من خلال الربح أو الخسارة (FVTPL)</li>
+                    </ul>
+                  </td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>محتفظ بها للتداول (القيمة العادلة)</li>
+                      <li>متاحة للبيع (التكلفة أو القيمة العادلة)</li>
+                      <li>محتفظ بها حتى الاستحقاق (التكلفة المطفأة)</li>
+                      <li>قروض وذمم مدينة (التكلفة المطفأة)</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border font-semibold">أساس التصنيف</td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>نموذج الأعمال لإدارة الأصول المالية</li>
+                      <li>خصائص التدفقات النقدية التعاقدية</li>
+                    </ul>
+                  </td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>نية الإدارة والغرض من الاحتفاظ</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border font-semibold">انخفاض القيمة</td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>نموذج الخسائر الائتمانية المتوقعة (ECL)</li>
+                      <li>الاعتراف بخسائر متوقعة قبل حدوث التأخر في السداد</li>
+                    </ul>
+                  </td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>نموذج الخسائر المتكبدة</li>
+                      <li>الاعتراف بالخسائر فقط عند وجود دليل موضوعي على انخفاض القيمة</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border font-semibold">إعادة التصنيف</td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>مقيدة جداً - فقط عند تغيير نموذج الأعمال</li>
+                      <li>نادرة الحدوث في الممارسة العملية</li>
+                    </ul>
+                  </td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>أكثر مرونة - يمكن إعادة التصنيف عند تغير النية</li>
+                      <li>قيود على إعادة التصنيف من وإلى فئة المحتفظ بها للتداول</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4 border font-semibold">الإفصاحات</td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>إفصاحات مفصلة جداً (IFRS 7)</li>
+                      <li>إفصاحات كمية ونوعية حول المخاطر</li>
+                      <li>إفصاحات حول التصنيف والقياس والانخفاض في القيمة</li>
+                    </ul>
+                  </td>
+                  <td class="py-2 px-4 border">
+                    <ul class="list-disc pr-4 space-y-1">
+                      <li>إفصاحات أقل تفصيلاً</li>
+                      <li>التركيز على المخاطر الرئيسية</li>
+                      <li>إفصاحات أساسية حول التصنيف والقياس</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3 text-center">
+              <i class="fas fa-exclamation-triangle text-yellow-600 ml-2"></i>
+              تأثيرات الاختلافات على التقارير المالية
+            </h3>
+            <div class="grid md:grid-cols-3 gap-4 text-sm">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">التعقيد والتكلفة</h4>
+                <p class="text-gray-600">
+                  المعايير الدولية (IFRS) عموماً أكثر تعقيداً وتكلفة في التطبيق، خاصة بالنسبة للشركات الصغيرة والمتوسطة.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">تقلب الأرباح</h4>
+                <p class="text-gray-600">
+                  قد تؤدي متطلبات القيمة العادلة في IFRS إلى تقلبات أكبر في الأرباح المبلغ عنها مقارنة بـ ASPE.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">توقيت الاعتراف بالخسائر</h4>
+                <p class="text-gray-600">
+                  نموذج ECL في IFRS يؤدي إلى اعتراف مبكر بخسائر الائتمان، مما قد يقلل من الأرباح في الفترات المبكرة.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Quiz -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-amber-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-question-circle ml-3"></i>
+            اختبر فهمك
+          </h2>
+          <p class="text-amber-100 text-sm mt-1">Test Your Understanding</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Question 1 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">السؤال 1:</h3>
+              <p class="text-gray-700 mb-3">
+                شركة استثمارية اشترت سندات بقيمة 1,000,000 ريال بنية الاحتفاظ بها حتى تاريخ الاستحقاق. ما هي طريقة القياس المناسبة لهذه السندات؟
+              </p>
+              <div class="space-y-2">
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz1" value="a" class="ml-2">
+                  <span>القيمة العادلة من خلال الربح أو الخسارة (FVTPL)</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz1" value="b" class="ml-2">
+                  <span>القيمة العادلة من خلال الدخل الشامل الآخر (FVTOCI)</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz1" value="c" class="ml-2">
+                  <span>التكلفة المطفأة (Amortized Cost)</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz1" value="d" class="ml-2">
+                  <span>التكلفة التاريخية (Historical Cost)</span>
+                </label>
+              </div>
+              <div id="answer1" class="mt-3 hidden"></div>
+              <button id="check1" class="mt-3 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded">تحقق من الإجابة</button>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">السؤال 2:</h3>
+              <p class="text-gray-700 mb-3">
+                شركة تمتلك 30% من أسهم شركة أخرى مع وجود تأثير جوهري على سياساتها. ما هي الطريقة المحاسبية المناسبة لهذا الاستثمار؟
+              </p>
+              <div class="space-y-2">
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz2" value="a" class="ml-2">
+                  <span>التوحيد الكامل (Full Consolidation)</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz2" value="b" class="ml-2">
+                  <span>طريقة حقوق الملكية (Equity Method)</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz2" value="c" class="ml-2">
+                  <span>القيمة العادلة من خلال الربح أو الخسارة</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz2" value="d" class="ml-2">
+                  <span>التكلفة المطفأة</span>
+                </label>
+              </div>
+              <div id="answer2" class="mt-3 hidden"></div>
+              <button id="check2" class="mt-3 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded">تحقق من الإجابة</button>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">السؤال 3:</h3>
+              <p class="text-gray-700 mb-3">
+                تم شراء سند بقيمة اسمية 100,000 ريال بمبلغ 95,000 ريال (بخصم). ما هو تأثير ذلك على إيراد الفائدة المعترف به باستخدام طريقة الفائدة الفعالة؟
+              </p>
+              <div class="space-y-2">
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz3" value="a" class="ml-2">
+                  <span>إيراد الفائدة الفعلي سيكون أقل من الفائدة الاسمية</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz3" value="b" class="ml-2">
+                  <span>إيراد الفائدة الفعلي سيكون أعلى من الفائدة الاسمية</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz3" value="c" class="ml-2">
+                  <span>إيراد الفائدة الفعلي سيكون مساوياً للفائدة الاسمية</span>
+                </label>
+                <label class="flex items-center p-2 rounded hover:bg-amber-100 cursor-pointer">
+                  <input type="radio" name="quiz3" value="d" class="ml-2">
+                  <span>لا يوجد تأثير على إيراد الفائدة</span>
+                </label>
+              </div>
+              <div id="answer3" class="mt-3 hidden"></div>
+              <button id="check3" class="mt-3 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded">تحقق من الإجابة</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter Summary -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-book ml-3"></i>
+            ملخص الفصل السابع: الأصول المالية
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">المفاهيم الرئيسية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check-circle ml-2"></i> الأصول المالية هي استثمارات في أدوات مالية قد تكون استراتيجية أو غير استراتيجية</li>
+                <li><i class="fas fa-check-circle ml-2"></i> التصنيف يعتمد على طبيعة الاستثمار والغرض منه ونسبة الملكية</li>
+                <li><i class="fas fa-check-circle ml-2"></i> طرق القياس الرئيسية: التكلفة المطفأة والقيمة العادلة</li>
+                <li><i class="fas fa-check-circle ml-2"></i> المعالجة المحاسبية تختلف باختلاف فئة الأصل المالي</li>
+                <li><i class="fas fa-check-circle ml-2"></i> إعادة التصنيف محكومة بقواعد صارمة خاصة في المعايير الدولية</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">المصطلحات المهمة:</h3>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><strong>Subsidiary:</strong> شركة تابعة</div>
+                <div><strong>Associate:</strong> شركة زميلة</div>
+                <div><strong>Joint Venture:</strong> مشروع مشترك</div>
+                <div><strong>Amortized Cost:</strong> التكلفة المطفأة</div>
+                <div><strong>Fair Value:</strong> القيمة العادلة</div>
+                <div><strong>FVTPL:</strong> القيمة العادلة من خلال الربح أو الخسارة</div>
+                <div><strong>FVTOCI:</strong> القيمة العادلة من خلال الدخل الشامل الآخر</div>
+                <div><strong>Effective Interest Rate:</strong> معدل الفائدة الفعال</div>
+                <div><strong>Impairment:</strong> انخفاض القيمة</div>
+                <div><strong>Reclassification:</strong> إعادة التصنيف</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 pt-4 border-t border-white border-opacity-30">
+            <h3 class="font-bold text-lg mb-3">التطبيقات العملية الأساسية:</h3>
+            <div class="grid md:grid-cols-3 gap-4 text-sm">
+              <div class="bg-white bg-opacity-10 p-3 rounded">
+                <h4 class="font-semibold mb-2">الاستثمارات الاستراتيجية:</h4>
+                <p>تطبيق طريقة التوحيد الكامل للشركات التابعة، وطريقة حقوق الملكية للشركات الزميلة والمشاريع المشتركة.</p>
+              </div>
+              <div class="bg-white bg-opacity-10 p-3 rounded">
+                <h4 class="font-semibold mb-2">السندات وأدوات الدين:</h4>
+                <p>استخدام طريقة الفائدة الفعالة لحساب إيراد الفائدة وإطفاء الخصم أو العلاوة على مدى عمر السند.</p>
+              </div>
+              <div class="bg-white bg-opacity-10 p-3 rounded">
+                <h4 class="font-semibold mb-2">الأسهم والاستثمارات المتداولة:</h4>
+                <p>تقييم الاستثمارات المحتفظ بها للتداول بالقيمة العادلة وإثبات التغيرات في الربح أو الخسارة أو الدخل الشامل الآخر.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="chapter-6.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الفصل السابق: المخزون
+        </a>
+        <a href="chapter-8.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          الفصل التالي: الممتلكات والمصانع والمعدات
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.add('hidden');
+    });
+    
+    // Quiz functionality
+    document.getElementById('check1').addEventListener('click', function() {
+      const selected = document.querySelector('input[name="quiz1"]:checked');
+      const resultDiv = document.getElementById('answer1');
+      
+      if (!selected) {
+        resultDiv.innerHTML = '<div class="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">الرجاء اختيار إجابة</div>';
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (selected.value === 'c') {
+        resultDiv.innerHTML = '<div class="p-3 bg-green-100 border border-green-300 rounded text-green-800"><i class="fas fa-check-circle ml-2"></i>إجابة صحيحة! السندات المحتفظ بها حتى تاريخ الاستحقاق تقاس بالتكلفة المطفأة.</div>';
+      } else {
+        resultDiv.innerHTML = '<div class="p-3 bg-red-100 border border-red-300 rounded text-red-800"><i class="fas fa-times-circle ml-2"></i>إجابة خاطئة. السندات المحتفظ بها حتى تاريخ الاستحقاق تقاس بالتكلفة المطفأة.</div>';
+      }
+      
+      resultDiv.classList.remove('hidden');
+    });
+    
+    document.getElementById('check2').addEventListener('click', function() {
+      const selected = document.querySelector('input[name="quiz2"]:checked');
+      const resultDiv = document.getElementById('answer2');
+      
+      if (!selected) {
+        resultDiv.innerHTML = '<div class="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">الرجاء اختيار إجابة</div>';
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (selected.value === 'b') {
+        resultDiv.innerHTML = '<div class="p-3 bg-green-100 border border-green-300 rounded text-green-800"><i class="fas fa-check-circle ml-2"></i>إجابة صحيحة! يتم استخدام طريقة حقوق الملكية للشركات الزميلة (الاستثمارات بنسبة 20-50% مع وجود تأثير جوهري).</div>';
+      } else {
+                resultDiv.innerHTML = '<div class="p-3 bg-red-100 border border-red-300 rounded text-red-800"><i class="fas fa-times-circle ml-2"></i>إجابة خاطئة. يتم استخدام طريقة حقوق الملكية للشركات الزميلة (الاستثمارات بنسبة 20-50% مع وجود تأثير جوهري).</div>';
+      }
+      
+      resultDiv.classList.remove('hidden');
+    });
+    
+    document.getElementById('check3').addEventListener('click', function() {
+      const selected = document.querySelector('input[name="quiz3"]:checked');
+      const resultDiv = document.getElementById('answer3');
+      
+      if (!selected) {
+        resultDiv.innerHTML = '<div class="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">الرجاء اختيار إجابة</div>';
+        resultDiv.classList.remove('hidden');
+        return;
+      }
+      
+      if (selected.value === 'b') {
+        resultDiv.innerHTML = '<div class="p-3 bg-green-100 border border-green-300 rounded text-green-800"><i class="fas fa-check-circle ml-2"></i>إجابة صحيحة! عند شراء سند بخصم، يكون إيراد الفائدة الفعلي أعلى من الفائدة الاسمية لأن جزءاً من الخصم يتم إطفاؤه كإيراد فائدة إضافي.</div>';
+      } else {
+        resultDiv.innerHTML = '<div class="p-3 bg-red-100 border border-red-300 rounded text-red-800"><i class="fas fa-times-circle ml-2"></i>إجابة خاطئة. عند شراء سند بخصم، يكون إيراد الفائدة الفعلي أعلى من الفائدة الاسمية.</div>';
+      }
+      
+      resultDiv.classList.remove('hidden');
+    });
+    
+    // Progress tracking
+    function updateProgress() {
+      const sections = document.querySelectorAll('section');
+      const progressBar = document.querySelector('.bg-blue-600');
+      
+      let visibleSections = 0;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          visibleSections++;
+        }
+      });
+      
+      const progress = Math.min((visibleSections / sections.length) * 100, 100);
+      if (progressBar) {
+        progressBar.style.width = progress + '%';
+      }
+    }
+    
+    // Update progress on scroll
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('load', updateProgress);
+    
+    // Add animation classes on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Interactive elements
+    document.querySelectorAll('.card-hover').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+        this.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+        this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+      });
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            const nextLink = document.querySelector('a[href="chapter-8.html"]');
+            if (nextLink) nextLink.click();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            const prevLink = document.querySelector('a[href="chapter-6.html"]');
+            if (prevLink) prevLink.click();
+            break;
+        }
+      }
+    });
+    
+    // Print functionality
+    function printChapter() {
+      window.print();
+    }
+    
+    // Add print button
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print ml-2"></i> طباعة الفصل';
+    printButton.className = 'fixed bottom-4 left-4 bg-gray-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition z-50';
+    printButton.onclick = printChapter;
+    document.body.appendChild(printButton);
+    
+    // Local storage for progress
+    function saveProgress() {
+      localStorage.setItem('chapter7_completed', 'true');
+      localStorage.setItem('last_visited', 'chapter-7.html');
+    }
+    
+    // Save progress when user scrolls to bottom
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+        saveProgress();
+      }
+    });
+    
+    // Load saved progress
+    function loadProgress() {
+      const completed = localStorage.getItem('chapter7_completed');
+      if (completed) {
+        const progressBar = document.querySelector('.bg-blue-600');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+        }
+      }
+    }
+    
+    window.addEventListener('load', loadProgress);
+  </script>
+  
+  <!-- Custom CSS for animations -->
+  <style>
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .fixed, #sidebar, #overlay, button {
+        display: none !important;
+      }
+      
+      .bg-gradient-to-r, .bg-gradient-to-b {
+        background: #4f46e5 !important;
+        color: white !important;
+      }
+      
+      section {
+        break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      
+      .grid {
+        display: block !important;
+      }
+      
+      .md\:grid-cols-2 > div,
+      .md\:grid-cols-3 > div {
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .text-3xl {
+        font-size: 1.5rem;
+      }
+      
+      .text-2xl {
+        font-size: 1.25rem;
+      }
+      
+      .text-xl {
+        font-size: 1.125rem;
+      }
+      
+      .grid {
+        gap: 1rem;
+      }
+      
+      .p-6 {
+        padding: 1rem;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+      }
+      
+      .text-gray-700 {
+        color: #d1d5db;
+      }
+      
+      .text-gray-600 {
+        color: #9ca3af;
+      }
+      
+      .border-gray-200 {
+        border-color: #374151;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .focus\:ring-2:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .bg-blue-50 {
+        background-color: #dbeafe;
+      }
+      
+      .bg-green-50 {
+        background-color: #dcfce7;
+      }
+      
+      .bg-red-50 {
+        background-color: #fef2f2;
+      }
+      
+      .border {
+        border-width: 2px;
+      }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .transition,
+      .animate-fade-in {
+        animation: none;
+        transition: none;
+      }
+    }
+  </style>
+</body>
+</html>

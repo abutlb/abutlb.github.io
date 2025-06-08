@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة المتوسطة 1 - الفصل العاشر: تطبيقات القيمة العادلة على الأصول غير المتداولة</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">المحاسبة المتوسطة 1</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 -->
+          <li class="hover:bg-blue-600 rounded-lg transition">
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets, Goodwill, Mineral Resources</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 - Current -->
+          <li>
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg bg-blue-500">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block font-medium">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value to Non-Current Assets</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Chapter Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الفصل 10</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="chapter-10.html" class="text-blue-600 hover:text-blue-800" aria-current="page">تطبيقات القيمة العادلة</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">تطبيقات القيمة العادلة على الأصول غير المتداولة</h1>
+        <p class="text-gray-600 mt-2">Applications of Fair Value to Non-Current Assets</p>
+      </div>
+
+      <!-- Chapter Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full progress-bar" style="width: 0%"></div>
+      </div>
+
+      <!-- Section 1: Introduction to Fair Value -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-balance-scale ml-3"></i>
+            1. مقدمة في القيمة العادلة
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Introduction to Fair Value</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Definition and Purpose -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-book-open text-blue-600 ml-2"></i>
+                تعريف القيمة العادلة
+              </h3>
+              <p class="text-gray-700 mb-3">
+                <span class="font-medium text-blue-600">Fair Value:</span> 
+                هي السعر الذي سيتم استلامه لبيع أصل أو دفعه لتحويل التزام في معاملة منظمة بين المشاركين في السوق في تاريخ القياس.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المفاهيم الأساسية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>القيمة العادلة تعتمد على منظور السوق وليس منظور المنشأة</li>
+                  <li>تفترض معاملة افتراضية في ظروف السوق الحالية</li>
+                  <li>تعتمد على السوق الرئيسي أو السوق الأكثر فائدة</li>
+                  <li>تستخدم افتراضات المشاركين في السوق</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Importance and Benefits -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-chart-line text-green-600 ml-2"></i>
+                أهمية تطبيق القيمة العادلة
+              </h3>
+              <p class="text-gray-700 mb-3">
+                تعتبر القيمة العادلة أحد أساليب القياس المهمة في المحاسبة المالية، وخاصة عند تطبيقها على الأصول غير المتداولة.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">فوائد استخدام القيمة العادلة:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>توفر معلومات أكثر ملاءمة لاتخاذ القرارات الاقتصادية</li>
+                  <li>تعكس القيمة الحالية للأصول بدلاً من التكلفة التاريخية</li>
+                  <li>تعزز الشفافية والقابلية للمقارنة بين المنشآت</li>
+                  <li>تسمح بتحديث قيم الأصول وفقاً لظروف السوق</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fair Value Hierarchy -->
+          <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-layer-group text-gray-600 ml-2"></i>
+              تسلسل القيمة العادلة
+            </h3>
+            <p class="text-gray-700 mb-3">
+              يتم تصنيف مدخلات قياس القيمة العادلة ضمن ثلاثة مستويات، حسب قابلية الملاحظة والأهمية:
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="bg-blue-50 p-3 rounded border text-center">
+                <i class="fas fa-signal text-blue-600 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">المستوى 1</h4>
+                <p class="text-xs text-gray-600">الأسعار المعلنة (غير المعدلة) في الأسواق النشطة للأصول أو الالتزامات المطابقة</p>
+              </div>
+              <div class="bg-blue-50 p-3 rounded border text-center">
+                <i class="fas fa-chart-bar text-blue-600 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">المستوى 2</h4>
+                <p class="text-xs text-gray-600">مدخلات قابلة للملاحظة بخلاف الأسعار المعلنة ضمن المستوى 1، مباشرة أو غير مباشرة</p>
+              </div>
+              <div class="bg-blue-50 p-3 rounded border text-center">
+                <i class="fas fa-calculator text-blue-600 text-xl mb-2"></i>
+                <h4 class="font-semibold text-gray-800 mb-1">المستوى 3</h4>
+                <p class="text-xs text-gray-600">مدخلات غير قابلة للملاحظة تعتمد على افتراضات المنشأة والتقديرات</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Revaluation Model -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-sync-alt ml-3"></i>
+            2. نموذج إعادة التقييم
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Revaluation Model</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-cogs text-green-600 ml-2"></i>
+                أساسيات نموذج إعادة التقييم
+              </h3>
+              <p class="text-gray-700 mb-3">
+                نموذج إعادة التقييم هو أحد النماذج المسموح بها في المعايير الدولية للتقارير المالية (IFRS) لقياس الأصول غير المتداولة بعد الاعتراف الأولي. يتم تطبيقه على فئات كاملة من الأصول مثل الممتلكات والمعدات والأصول غير الملموسة.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">نطاق التطبيق:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>الممتلكات والمصانع والمعدات (IAS 16)</li>
+                  <li>الأصول غير الملموسة (IAS 38)</li>
+                  <li>الاستثمارات العقارية (IAS 40) - اختياري</li>
+                  <li>يجب تطبيقه على فئة كاملة من الأصول وليس على أصول فردية</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Revaluation Methods -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">طرق إعادة التقييم</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-percentage text-blue-600 ml-2"></i>
+                  الطريقة النسبية (Proportional Method)
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  تعديل القيمة الدفترية والاهتلاك المتراكم بنسبة التغيير في القيمة العادلة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">خطوات التطبيق:</h5>
+                  <ol class="text-sm text-gray-600 space-y-1 mr-4 list-decimal">
+                    <li>تحديد معامل إعادة التقييم (القيمة العادلة ÷ القيمة الدفترية)</li>
+                    <li>ضرب التكلفة الأصلية في المعامل</li>
+                    <li>ضرب الاهتلاك المتراكم في المعامل</li>
+                    <li>تسجيل فرق إعادة التقييم (زيادة/انخفاض)</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-eraser text-purple-600 ml-2"></i>
+                  طريقة الإلغاء (Elimination Method)
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  إلغاء الاهتلاك المتراكم مقابل القيمة الدفترية الإجمالية وتعديل صافي القيمة إلى القيمة العادلة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">خطوات التطبيق:</h5>
+                  <ol class="text-sm text-gray-600 space-y-1 mr-4 list-decimal">
+                    <li>إلغاء الاهتلاك المتراكم (جعله صفراً)</li>
+                    <li>تعديل القيمة الدفترية للأصل لتصبح مساوية للقيمة العادلة</li>
+                    <li>تسجيل فرق إعادة التقييم</li>
+                    <li>البدء في احتساب الاهتلاك على القيمة الجديدة</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accounting Treatment of Revaluation -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-file-invoice-dollar text-gray-600 ml-2"></i>
+              المعالجة المحاسبية لإعادة التقييم
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الزيادة في القيمة:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>تُسجّل في الدخل الشامل الآخر (OCI) وتتراكم في حقوق الملكية تحت بند "فائض إعادة التقييم"</li>
+                  <li>تُسجّل في قائمة الدخل فقط إذا كانت تعكس انخفاضاً سبق الاعتراف به في قائمة الدخل</li>
+                  <li>يمكن تحويل فائض إعادة التقييم إلى الأرباح المحتجزة عند استبعاد الأصل أو أثناء استخدامه</li>
+                </ul>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الانخفاض في القيمة:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>يتم تخفيض فائض إعادة التقييم المتراكم أولاً (إن وجد)</li>
+                  <li>يُسجّل أي انخفاض متبقي كمصروف في قائمة الدخل</li>
+                  <li>يمكن عكس الانخفاض لاحقاً إذا زادت القيمة العادلة بعد ذلك</li>
+                  <li>يتطلب تقييمات دورية منتظمة لضمان دقة القيم الدفترية</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example of Revaluation -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-yellow-600 ml-2"></i>
+              مثال تطبيقي على إعادة التقييم
+            </h3>
+            <p class="text-gray-700 mb-3">
+              شركة النهضة للتصنيع اشترت آلة بقيمة 100,000 ريال، وبعد سنتين من الاستخدام (الاهتلاك المتراكم 20,000 ريال)، قررت الشركة تطبيق نموذج إعادة التقييم. وقد حددت القيمة العادلة للآلة بمبلغ 90,000 ريال.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">باستخدام الطريقة النسبية:</h4>
+                <div class="text-sm">
+                  <p class="text-gray-700 mb-2">القيمة الدفترية قبل إعادة التقييم: 100,000 - 20,000 = 80,000 ريال</p>
+                  <p class="text-gray-700 mb-2">معامل التقييم: 90,000 ÷ 80,000 = 1.125</p>
+                  <p class="text-gray-700 mb-2">التكلفة المعدلة: 100,000 × 1.125 = 112,500 ريال</p>
+                  <p class="text-gray-700 mb-2">الاهتلاك المتراكم المعدل: 20,000 × 1.125 = 22,500 ريال</p>
+                  <p class="text-gray-700 mb-2">القيمة الدفترية بعد إعادة التقييم: 112,500 - 22,500 = 90,000 ريال</p>
+                  <p class="text-gray-700 font-bold">الزيادة في قيمة الأصل: 90,000 - 80,000 = 10,000 ريال</p>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">باستخدام طريقة الإلغاء:</h4>
+                <div class="text-sm">
+                  <p class="text-gray-700 mb-2">إلغاء الاهتلاك المتراكم (20,000 ريال) مقابل التكلفة</p>
+                  <p class="text-gray-700 mb-2">القيمة الدفترية بعد الإلغاء: 100,000 - 20,000 = 80,000 ريال</p>
+                  <p class="text-gray-700 mb-2">تعديل القيمة الدفترية إلى القيمة العادلة: 90,000 ريال</p>
+                  <p class="text-gray-700 font-bold">الزيادة في قيمة الأصل: 90,000 - 80,000 = 10,000 ريال</p>
+                  <p class="text-gray-700 mb-2">القيد المحاسبي:</p>
+                  <p class="text-gray-700">من حـ/ الآلات: 10,000 ريال</p>
+                  <p class="text-gray-700">إلى حـ/ فائض إعادة التقييم: 10,000 ريال</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Depreciation After Revaluation -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-chart-line-down ml-3"></i>
+            3. الاهتلاك بعد إعادة التقييم
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Depreciation After Revaluation</p>
+        </div>
+        <div class="p-6">
+          <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calendar-alt text-purple-600 ml-2"></i>
+              أساسيات احتساب الاهتلاك بعد إعادة التقييم
+            </h3>
+            <p class="text-gray-700 mb-3">
+              بعد إعادة تقييم الأصل، يجب تعديل مصروف الاهتلاك للفترات المستقبلية ليعكس القيمة الدفترية الجديدة والعمر الإنتاجي المتبقي للأصل.
+            </p>
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">المبادئ الأساسية:</h4>
+              <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                <li>يُحتسب الاهتلاك على القيمة المعاد تقييمها (القيمة العادلة)</li>
+                <li>يتم توزيع القيمة المعاد تقييمها على العمر الإنتاجي المتبقي</li>
+                <li>يمكن تعديل العمر الإنتاجي المتبقي إذا تغيرت التوقعات</li>
+                <li>يُعترف بمصروف الاهتلاك في قائمة الدخل</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Amortization of Revaluation Surplus -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">معالجة فائض إعادة التقييم</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-exchange-alt text-blue-600 ml-2"></i>
+                  تحويل فائض إعادة التقييم
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  يمكن تحويل جزء من فائض إعادة التقييم إلى الأرباح المحتجزة مع استهلاك الأصل.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">الطرق المتاحة:</h5>
+                  <ol class="text-sm text-gray-600 space-y-1 mr-4 list-decimal">
+                    <li><strong>الطريقة الأولى:</strong> تحويل الفائض دفعة واحدة عند استبعاد الأصل</li>
+                    <li><strong>الطريقة الثانية:</strong> تحويل الفائض تدريجياً أثناء استخدام الأصل</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-calculator text-green-600 ml-2"></i>
+                  كيفية احتساب التحويل التدريجي
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  المبلغ المحول = الفرق بين الاهتلاك على أساس القيمة المعاد تقييمها والاهتلاك على أساس التكلفة الأصلية.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h5 class="font-semibold text-gray-800 mb-2">الصيغة:</h5>
+                  <div class="text-sm text-gray-600">
+                    <p>المبلغ المحول = فائض إعادة التقييم × (الاهتلاك للفترة ÷ القيمة الدفترية المعاد تقييمها)</p>
+                    <p class="mt-2">ملاحظة: هذا التحويل لا يؤثر على قائمة الدخل، بل هو تحويل داخل حقوق الملكية.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example of Depreciation After Revaluation -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-yellow-600 ml-2"></i>
+              مثال تطبيقي على احتساب الاهتلاك بعد إعادة التقييم
+            </h3>
+            <p class="text-gray-700 mb-3">
+              استكمالاً للمثال السابق، بفرض أن العمر الإنتاجي المتبقي للآلة هو 8 سنوات، وأن الشركة تستخدم طريقة القسط الثابت في الاهتلاك.
+            </p>
+
+            <div class="bg-white p-4 rounded border mb-4">
+              <h4 class="font-semibold text-gray-800 mb-2">احتساب مصروف الاهتلاك السنوي:</h4>
+              <div class="text-sm text-gray-700 space-y-2">
+                <p>قبل إعادة التقييم: (100,000 - 20,000) ÷ 8 = 10,000 ريال</p>
+                <p>بعد إعادة التقييم: 90,000 ÷ 8 = 11,250 ريال</p>
+                <p class="font-bold">الزيادة في مصروف الاهتلاك السنوي: 11,250 - 10,000 = 1,250 ريال</p>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">التحويل التدريجي للفائض:</h4>
+              <div class="text-sm text-gray-700 space-y-2">
+                <p>فائض إعادة التقييم: 10,000 ريال</p>
+                <p>المبلغ المحول سنوياً: 10,000 × (11,250 ÷ 90,000) = 1,250 ريال</p>
+                <p class="font-bold">القيد المحاسبي في نهاية كل سنة:</p>
+                <p>من حـ/ فائض إعادة التقييم: 1,250 ريال</p>
+                <p>إلى حـ/ الأرباح المحتجزة: 1,250 ريال</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Impairment -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-red-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-arrow-down ml-3"></i>
+            4. الانخفاض في القيمة
+          </h2>
+          <p class="text-red-100 text-sm mt-1">Impairment</p>
+        </div>
+        <div class="p-6">
+          <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-exclamation-triangle text-red-600 ml-2"></i>
+              مفهوم انخفاض القيمة
+            </h3>
+            <p class="text-gray-700 mb-3">
+              انخفاض القيمة هو انخفاض في القيمة الدفترية للأصل بحيث تتجاوز القيمة القابلة للاسترداد. يتطلب معيار المحاسبة الدولي (IAS 36) من المنشآت تقييم مؤشرات انخفاض القيمة في نهاية كل فترة تقرير.
+            </p>
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">مؤشرات انخفاض القيمة:</h4>
+              <div class="grid md:grid-cols-2 gap-2">
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>انخفاض القيمة السوقية للأصل بشكل كبير</li>
+                  <li>تغييرات سلبية في التكنولوجيا أو السوق</li>
+                  <li>زيادة أسعار الفائدة السوقية</li>
+                  <li>تقادم أو تلف مادي للأصل</li>
+                </ul>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>أداء اقتصادي للأصل أسوأ من المتوقع</li>
+                  <li>خطط لإعادة هيكلة أو استبعاد الأصل</li>
+                  <li>توقف المشروع الذي ينتمي إليه الأصل</li>
+                  <li>انخفاض في القيمة الدفترية لصافي أصول المنشأة</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Impairment Testing Process -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">عملية اختبار انخفاض القيمة</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-search-dollar text-blue-600 ml-2"></i>
+                  تحديد القيمة القابلة للاسترداد
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  القيمة القابلة للاسترداد هي الأعلى من:
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <ol class="text-sm text-gray-600 space-y-3 mr-4 list-decimal">
+                    <li>
+                      <strong>القيمة العادلة مطروحاً منها تكاليف البيع:</strong>
+                      <p class="text-xs mt-1">سعر البيع في معاملة تجارية بحتة مطروحاً منه التكاليف الإضافية للاستبعاد</p>
+                    </li>
+                    <li>
+                      <strong>القيمة في الاستخدام:</strong>
+                      <p class="text-xs mt-1">القيمة الحالية للتدفقات النقدية المستقبلية المتوقع الحصول عليها من استمرار استخدام الأصل وبيعه في نهاية عمره الإنتاجي</p>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-calculator text-purple-600 ml-2"></i>
+                  احتساب القيمة في الاستخدام
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  تتضمن عملية احتساب القيمة في الاستخدام الخطوات التالية:
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <ol class="text-sm text-gray-600 space-y-1 mr-4 list-decimal">
+                    <li>تقدير التدفقات النقدية المستقبلية الداخلة والخارجة</li>
+                    <li>تحديد معدل الخصم المناسب (يعكس قيمة النقود والمخاطر)</li>
+                    <li>خصم التدفقات النقدية المستقبلية باستخدام معدل الخصم</li>
+                    <li>مقارنة القيمة الحالية للتدفقات النقدية مع القيمة الدفترية</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recognizing Impairment Loss -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-minus-circle text-red-600 ml-2"></i>
+              الاعتراف بخسارة انخفاض القيمة
+            </h3>
+            <p class="text-gray-700 mb-3">
+              عندما تكون القيمة القابلة للاسترداد للأصل أقل من قيمته الدفترية، يجب تخفيض القيمة الدفترية إلى القيمة القابلة للاسترداد.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الأصول بالتكلفة التاريخية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>يتم الاعتراف بالخسارة مباشرة في قائمة الدخل</li>
+                  <li>تُخفض القيمة الدفترية للأصل بمقدار الخسارة</li>
+                  <li>يتم تعديل مصروف الاهتلاك المستقبلي على أساس القيمة المعدلة</li>
+                </ul>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الأصول المعاد تقييمها:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>تُعامل كانخفاض في إعادة التقييم</li>
+                  <li>تُخفض من فائض إعادة التقييم المتراكم (إن وجد) أولاً</li>
+                  <li>أي خسارة إضافية تُسجل في قائمة الدخل</li>
+                  <li>تؤثر على الاهتلاك المستقبلي والقيمة المتبقية</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reversal of Impairment Loss -->
+          <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-undo text-green-600 ml-2"></i>
+              عكس خسارة انخفاض القيمة
+            </h3>
+            <p class="text-gray-700 mb-3">
+              في المعايير الدولية للتقارير المالية (IFRS)، يمكن عكس خسارة انخفاض القيمة المعترف بها سابقاً إذا كان هناك تغير في التقديرات المستخدمة لتحديد القيمة القابلة للاسترداد.
+            </p>
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">قيود وشروط العكس:</h4>
+              <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                <li>لا يمكن أن تتجاوز القيمة الدفترية بعد العكس ما كانت ستكون عليه لو لم يتم الاعتراف بالانخفاض</li>
+                <li>يُعترف بالعكس في قائمة الدخل، ما لم يكن الأصل مسجلاً بقيمة معاد تقييمها</li>
+                <li>بالنسبة للأصول المعاد تقييمها، يُعامل العكس كزيادة في إعادة التقييم</li>
+                <li>لا يسمح بعكس انخفاض قيمة الشهرة</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Example of Impairment -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-clipboard-list text-yellow-600 ml-2"></i>
+              مثال تطبيقي على انخفاض القيمة
+            </h3>
+            <p class="text-gray-700 mb-3">
+              شركة الصناعات المتطورة لديها آلة إنتاجية تظهر في دفاترها بقيمة دفترية 500,000 ريال. بسبب التغيرات التكنولوجية، قررت الشركة اختبار انخفاض قيمة الآلة.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعطيات:</h4>
+                <div class="text-sm text-gray-700">
+                  <p>- القيمة الدفترية للآلة: 500,000 ريال</p>
+                  <p>- القيمة العادلة مطروحاً منها تكاليف البيع: 380,000 ريال</p>
+                  <p>- القيمة في الاستخدام (التدفقات النقدية المخصومة): 420,000 ريال</p>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الحل:</h4>
+                <div class="text-sm text-gray-700">
+                  <p>1. القيمة القابلة للاسترداد = الأعلى من:</p>
+                  <p>   - القيمة العادلة مطروحاً منها تكاليف البيع: 380,000 ريال</p>
+                  <p>   - القيمة في الاستخدام: 420,000 ريال</p>
+                  <p>2. القيمة القابلة للاسترداد = 420,000 ريال</p>
+                  <p>3. خسارة انخفاض القيمة = 500,000 - 420,000 = 80,000 ريال</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">القيد المحاسبي:</h4>
+              <div class="text-sm text-gray-700">
+                <p>من حـ/ مصروف انخفاض القيمة: 80,000 ريال</p>
+                <p>إلى حـ/ مخصص انخفاض قيمة الآلات: 80,000 ريال</p>
+                <p class="mt-2">القيمة الدفترية الجديدة للآلة = 500,000 - 80,000 = 420,000 ريال</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Non-Current Assets Held for Sale -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-amber-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-tag ml-3"></i>
+            5. الأصول غير المتداولة المحتفظ بها للبيع
+          </h2>
+          <p class="text-amber-100 text-sm mt-1">Non-Current Assets Held for Sale</p>
+        </div>
+        <div class="p-6">
+          <div class="border-r-4 border-amber-500 p-4 bg-amber-50 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-info-circle text-amber-600 ml-2"></i>
+              المفهوم والمتطلبات
+            </h3>
+            <p class="text-gray-700 mb-3">
+              يتناول المعيار الدولي للتقارير المالية (IFRS 5) المحاسبة عن الأصول غير المتداولة المحتفظ بها للبيع والعمليات المتوقفة. يتم تصنيف الأصول غير المتداولة كمحتفظ بها للبيع عندما تكون قيمتها الدفترية قابلة للاسترداد بشكل أساسي من خلال معاملة بيع وليس من خلال الاستخدام المستمر.
+            </p>
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">شروط التصنيف كمحتفظ به للبيع:</h4>
+              <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                <li>الأصل متاح للبيع الفوري بحالته الحالية</li>
+                <li>البيع محتمل بدرجة عالية (احتمال أكثر من 50%)</li>
+                <li>وجود خطة نشطة ومبادرات للبحث عن مشتري</li>
+                <li>البيع متوقع أن يكتمل خلال سنة واحدة من تاريخ التصنيف</li>
+                <li>سعر البيع معقول بالنسبة للقيمة العادلة الحالية</li>
+                <li>من غير المحتمل إجراء تغييرات جوهرية على خطة البيع</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Measurement of Assets Held for Sale -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">قياس الأصول المحتفظ بها للبيع</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-ruler text-blue-600 ml-2"></i>
+                  القياس عند التصنيف
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  عند تصنيف الأصل كمحتفظ به للبيع، يتم قياسه بالقيمة الأقل من:
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <ul class="text-sm text-gray-600 space-y-3 mr-4 list-disc">
+                    <li>
+                      <strong>القيمة الدفترية:</strong>
+                      <p class="text-xs mt-1">قبل التصنيف مباشرة (بعد تطبيق المعايير المحاسبية ذات الصلة)</p>
+                    </li>
+                    <li>
+                      <strong>القيمة العادلة مطروحاً منها تكاليف البيع:</strong>
+                      <p class="text-xs mt-1">السعر المتوقع للبيع مخصوماً منه التكاليف الإضافية المرتبطة مباشرة بالبيع</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="border-r-4 border-purple-500 p-4 bg-purple-50 rounded">
+                <h4 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-chart-bar text-purple-600 ml-2"></i>
+                  القياس اللاحق
+                </h4>
+                <p class="text-gray-700 mb-3">
+                  في الفترات اللاحقة، تستمر المنشأة في قياس الأصول المحتفظ بها للبيع بالقيمة الأقل من:
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>القيمة الدفترية المعدلة (إذا لم يتم تصنيفها كمحتفظ بها للبيع)</li>
+                    <li>القيمة العادلة مطروحاً منها تكاليف البيع</li>
+                    <li>يتم الاعتراف بالخسائر الناتجة عن انخفاض القيمة في قائمة الدخل</li>
+                    <li>يمكن الاعتراف بالأرباح الناتجة عن الزيادة اللاحقة في القيمة العادلة، ولكن بما لا يتجاوز خسائر انخفاض القيمة المتراكمة</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Presentation and Disclosure -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-file-alt text-gray-600 ml-2"></i>
+              العرض والإفصاح
+            </h3>
+            <p class="text-gray-700 mb-3">
+              تتطلب المعايير عرض الأصول المحتفظ بها للبيع بشكل منفصل في قائمة المركز المالي، وتقديم إفصاحات محددة في الإيضاحات.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">العرض في القوائم المالية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>عرض الأصول المحتفظ بها للبيع بشكل منفصل عن الأصول الأخرى</li>
+                  <li>عدم إعادة تبويب أو عرض الفترات السابقة</li>
+                  <li>لا يتم استهلاك الأصول المحتفظ بها للبيع</li>
+                  <li>مجموعات الاستبعاد تعرض الأصول والالتزامات بشكل منفصل</li>
+                </ul>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الإفصاحات المطلوبة:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>وصف للأصول غير المتداولة أو مجموعة الاستبعاد</li>
+                  <li>وصف للحقائق والظروف المتعلقة بالبيع</li>
+                  <li>الأرباح أو الخسائر المعترف بها</li>
+                  <li>القطاع الذي تنتمي إليه الأصول (إذا كان قابلاً للتطبيق)</li>
+                  <li>التغييرات في خطة البيع وتأثيرها</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example of Assets Held for Sale -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-clipboard-list text-yellow-600 ml-2"></i>
+              مثال تطبيقي على الأصول المحتفظ بها للبيع
+            </h3>
+            <p class="text-gray-700 mb-3">
+              شركة البناء المتطور قررت بيع إحدى معداتها الإنشائية. في 1 ديسمبر 2023، استوفت المعدات شروط التصنيف كأصل محتفظ به للبيع.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المعطيات:</h4>
+                <div class="text-sm text-gray-700">
+                  <p>- التكلفة التاريخية للمعدات: 800,000 ريال</p>
+                  <p>- الاهتلاك المتراكم: 350,000 ريال</p>
+                  <p>- القيمة الدفترية: 450,000 ريال</p>
+                  <p>- القيمة العادلة: 420,000 ريال</p>
+                  <p>- تكاليف البيع المقدرة: 20,000 ريال</p>
+                </div>
+              </div>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الحل:</h4>
+                <div class="text-sm text-gray-700">
+                  <p>1. القيمة العادلة مطروحاً منها تكاليف البيع = 420,000 - 20,000 = 400,000 ريال</p>
+                  <p>2. القيمة الدفترية = 450,000 ريال</p>
+                  <p>3. تُقاس المعدات بالقيمة الأقل: 400,000 ريال</p>
+                  <p>4. خسارة انخفاض القيمة = 450,000 - 400,000 = 50,000 ريال</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-3 rounded border">
+              <h4 class="font-semibold text-gray-800 mb-2">المعالجة المحاسبية:</h4>
+              <div class="text-sm text-gray-700">
+                <p class="font-bold">1. الاعتراف بخسارة انخفاض القيمة:</p>
+                <p>من حـ/ خسارة انخفاض القيمة: 50,000 ريال</p>
+                <p>إلى حـ/ المعدات: 50,000 ريال</p>
+                <p class="font-bold mt-2">2. إعادة التصنيف:</p>
+                <p>من حـ/ أصول محتفظ بها للبيع: 400,000 ريال</p>
+                <p>إلى حـ/ المعدات: 400,000 ريال</p>
+                <p class="mt-2">ملاحظة: تتوقف الشركة عن احتساب الاهتلاك على المعدات بعد تصنيفها كمحتفظ بها للبيع.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Comparison Between IFRS and Other Standards -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-balance-scale-left ml-3"></i>
+            6. مقارنة بين المعايير الدولية ومعايير أخرى
+          </h2>
+          <p class="text-indigo-100 text-sm mt-1">Comparison Between IFRS and Other Standards</p>
+        </div>
+        <div class="p-6">
+          <!-- IFRS vs ASPE -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">مقارنة بين IFRS و ASPE فيما يخص القيمة العادلة</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr class="bg-gray-100">
+                    <th class="py-3 px-4 text-right border-b">الموضوع</th>
+                    <th class="py-3 px-4 text-right border-b">المعايير الدولية (IFRS)</th>
+                    <th class="py-3 px-4 text-right border-b">معايير المحاسبة للمنشآت الخاصة (ASPE)</th>
+                  </tr>
+                </thead>
+                <tbody class="text-sm">
+                  <tr>
+                    <td class="py-3 px-4 border-b font-medium">نموذج إعادة التقييم</td>
+                    <td class="py-3 px-4 border-b text-green-600">مسموح به كسياسة محاسبية للممتلكات والمعدات والأصول غير الملموسة</td>
+                    <td class="py-3 px-4 border-b text-red-600">غير مسموح به، يستخدم نموذج التكلفة فقط</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 border-b font-medium">انخفاض القيمة</td>
+                    <td class="py-3 px-4 border-b">يتم مقارنة القيمة الدفترية بالقيمة القابلة للاسترداد (الأعلى من القيمة العادلة ناقص تكاليف البيع والقيمة في الاستخدام)</td>
+                    <td class="py-3 px-4 border-b">يتم مقارنة القيمة الدفترية بالتدفقات النقدية المستقبلية غير المخصومة</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 border-b font-medium">عكس خسارة انخفاض القيمة</td>
+                    <td class="py-3 px-4 border-b text-green-600">مسموح به للأصول باستثناء الشهرة</td>
+                    <td class="py-3 px-4 border-b text-red-600">غير مسموح به</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 border-b font-medium">الأصول المحتفظ بها للبيع</td>
+                    <td class="py-3 px-4 border-b">تصنيف وعرض منفصل، قياس بالقيمة الأقل من القيمة الدفترية والقيمة العادلة ناقص تكاليف البيع</td>
+                    <td class="py-3 px-4 border-b">لا يوجد تصنيف منفصل، الأصول تبقى ضمن تصنيفها الأصلي</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 border-b font-medium">تسلسل القيمة العادلة</td>
+                    <td class="py-3 px-4 border-b">تحديد رسمي لثلاثة مستويات من المدخلات (المستوى 1، 2، 3)</td>
+                    <td class="py-3 px-4 border-b">لا يوجد تسلسل رسمي للقيمة العادلة</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-4 border-b font-medium">الإفصاحات</td>
+                    <td class="py-3 px-4 border-b">متطلبات إفصاح شاملة للقيمة العادلة وإعادة التقييم</td>
+                    <td class="py-3 px-4 border-b">متطلبات إفصاح أقل تفصيلاً</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- IFRS vs US GAAP -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">مقارنة بين IFRS و US GAAP فيما يخص القيمة العادلة</h3>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p class="text-gray-700 mb-3">
+                رغم التقارب بين المعايير الدولية (IFRS) ومعايير المحاسبة الأمريكية (US GAAP) في معالجة القيمة العادلة، إلا أن هناك بعض الاختلافات الرئيسية:
+              </p>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أوجه التشابه:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>تعريف متشابه للقيمة العادلة في كلا المعيارين</li>
+                    <li>استخدام تسلسل القيمة العادلة بثلاثة مستويات</li>
+                    <li>الاعتراف بانخفاض القيمة عندما تنخفض القيمة الدفترية</li>
+                    <li>متطلبات إفصاح شاملة حول قياسات القيمة العادلة</li>
+                  </ul>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أوجه الاختلاف:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                    <li>US GAAP لا يسمح بنموذج إعادة التقييم للممتلكات والمعدات</li>
+                    <li>اختلافات في طريقة قياس انخفاض قيمة الشهرة</li>
+                    <li>اختلافات في عكس خسائر انخفاض القيمة (أكثر تقييداً في US GAAP)</li>
+                    <li>تفاصيل محددة في متطلبات الإفصاح واختبارات انخفاض القيمة</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Benefits and Challenges -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-lightbulb text-yellow-600 ml-2"></i>
+              فوائد وتحديات تطبيق القيمة العادلة
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-green-50 p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الفوائد:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>تقديم معلومات أكثر ملاءمة للمستخدمين</li>
+                  <li>تعكس القيمة الاقتصادية الحقيقية للأصول</li>
+                  <li>تحسين الشفافية والقابلية للمقارنة</li>
+                  <li>إظهار التغيرات في قيمة الأصول في الوقت المناسب</li>
+                  <li>تقليل فرص التلاعب بالأرقام المحاسبية</li>
+                </ul>
+              </div>
+              <div class="bg-red-50 p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">التحديات:</h4>
+                <ul class="text-sm text-gray-600 space-y-1 mr-4 list-disc">
+                  <li>صعوبة تحديد القيمة العادلة في الأسواق غير النشطة</li>
+                  <li>الاعتماد على التقديرات والأحكام الشخصية</li>
+                  <li>تكلفة الحصول على تقييمات دورية</li>
+                  <li>تقلب النتائج المالية بسبب تغيرات القيمة العادلة</li>
+                  <li>تعقيد المعالجة المحاسبية وإعداد التقارير</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Quiz -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-question-circle ml-3"></i>
+            اختبر فهمك
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Test Your Understanding</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <!-- Question 1 -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">السؤال 1</h3>
+              <p class="text-gray-700 mb-3">شركة تمتلك مبنى بتكلفة 2,000,000 ريال واهتلاك متراكم 500,000 ريال. قررت الشركة تطبيق نموذج إعادة التقييم وكانت القيمة العادلة للمبنى 1,800,000 ريال. ما هو مبلغ فائض إعادة التقييم الذي سيتم الاعتراف به؟</p>
+              <div class="space-y-2">
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q1" value="a" class="ml-2">
+                  <span class="text-gray-700">300,000 ريال</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q1" value="b" class="ml-2">
+                  <span class="text-gray-700">200,000 ريال</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q1" value="c" class="ml-2">
+                  <span class="text-gray-700">500,000 ريال</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q1" value="d" class="ml-2">
+                  <span class="text-gray-700">لا يوجد فائض</span>
+                </label>
+              </div>
+              <div id="answer1" class="mt-3 hidden"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">السؤال 2</h3>
+              <p class="text-gray-700 mb-3">أي من العبارات التالية صحيحة بخصوص الأصول المحتفظ بها للبيع؟</p>
+              <div class="space-y-2">
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q2" value="a" class="ml-2">
+                  <span class="text-gray-700">يستمر استهلاك الأصول المحتفظ بها للبيع</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q2" value="b" class="ml-2">
+                  <span class="text-gray-700">يتوقف استهلاك الأصول المحتفظ بها للبيع</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q2" value="c" class="ml-2">
+                  <span class="text-gray-700">يتم قياس الأصول المحتفظ بها للبيع بالقيمة العادلة فقط</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q2" value="d" class="ml-2">
+                  <span class="text-gray-700">لا يمكن إلغاء تصنيف الأصول كمحتفظ بها للبيع</span>
+                </label>
+              </div>
+              <div id="answer2" class="mt-3 hidden"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">السؤال 3</h3>
+              <p class="text-gray-700 mb-3">عند اختبار انخفاض قيمة الأصل، تكون القيمة القابلة للاسترداد هي:</p>
+              <div class="space-y-2">
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q3" value="a" class="ml-2">
+                  <span class="text-gray-700">القيمة العادلة فقط</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q3" value="b" class="ml-2">
+                  <span class="text-gray-700">القيمة في الاستخدام فقط</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q3" value="c" class="ml-2">
+                  <span class="text-gray-700">الأعلى من القيمة العادلة ناقص تكاليف البيع والقيمة في الاستخدام</span>
+                </label>
+                <label class="flex items-center cursor-pointer p-2 rounded hover:bg-blue-100">
+                  <input type="radio" name="q3" value="d" class="ml-2">
+                  <span class="text-gray-700">الأقل من القيمة العادلة ناقص تكاليف البيع والقيمة في الاستخدام</span>
+                </label>
+              </div>
+              <div id="answer3" class="mt-3 hidden"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter Summary -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-lightbulb ml-3"></i>
+            ملخص الفصل العاشر
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">المفاهيم الرئيسية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> <strong>نموذج القيمة العادلة:</strong> بديل لنموذج التكلفة يعكس القيمة الاقتصادية الحالية للأصول</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>نموذج إعادة التقييم:</strong> يسمح بتحديث قيمة الأصول غير المتداولة إلى قيمتها العادلة</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>انخفاض القيمة:</strong> عملية تخفيض قيمة الأصول عندما تتجاوز قيمتها الدفترية القيمة القابلة للاسترداد</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>الأصول المحتفظ بها للبيع:</strong> أصول متوقع استرداد قيمتها من خلال البيع وليس الاستخدام المستمر</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>فائض إعادة التقييم:</strong> الزيادة في القيمة الدفترية للأصل نتيجة لإعادة تقييمه</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">التطبيقات المحاسبية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> <strong>إعادة التقييم:</strong> زيادة القيمة تُسجل في حقوق الملكية، والانخفاض يُسجل في قائمة الدخل</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>الاهتلاك بعد إعادة التقييم:</strong> يُحتسب على أساس القيمة المعاد تقييمها والعمر المتبقي</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>انخفاض القيمة:</strong> اختبار ومقارنة القيمة الدفترية بالقيمة القابلة للاسترداد</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>الأصول المحتفظ بها للبيع:</strong> تقاس بالقيمة الأقل من القيمة الدفترية والقيمة العادلة ناقص تكاليف البيع</li>
+                <li><i class="fas fa-check ml-2"></i> <strong>التحويل من فائض إعادة التقييم:</strong> يمكن تحويله للأرباح المحتجزة مباشرة أو تدريجياً</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="mt-6 pt-4 border-t border-white border-opacity-30">
+            <h3 class="font-bold text-lg mb-3">النقاط المهمة للتذكر:</h3>
+            <ul class="grid md:grid-cols-2 gap-2 text-sm">
+              <li><i class="fas fa-star ml-2"></i> نموذج القيمة العادلة اختياري ويتطلب تطبيقاً متسقاً لفئة كاملة من الأصول</li>
+              <li><i class="fas fa-star ml-2"></i> تطبيق اختبارات انخفاض القيمة بشكل دوري للأصول</li>
+              <li><i class="fas fa-star ml-2"></i> مراعاة الفروق بين المعايير الدولية (IFRS) والمعايير المحلية</li>
+              <li><i class="fas fa-star ml-2"></i> الأصول المحتفظ بها للبيع تتوقف عن الاستهلاك</li>
+              <li><i class="fas fa-star ml-2"></i> الإفصاح عن تفاصيل قياسات القيمة العادلة في الإيضاحات</li>
+              <li><i class="fas fa-star ml-2"></i> اختلاف معالجة الارتفاع والانخفاض في القيمة بين نموذجي التكلفة وإعادة التقييم</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="chapter-9.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الفصل السابق: الأصول غير الملموسة والشهرة
+        </a>
+        <a href="index.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          العودة للصفحة الرئيسية
+          <i class="fas fa-home mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.add('hidden');
+    });
+    
+    // Quiz functionality
+    const quizQuestions = [
+      {
+        name: 'q1',
+        correctValue: 'b',
+        correctText: 'إجابة صحيحة! القيمة الدفترية للمبنى = 2,000,000 - 500,000 = 1,500,000 ريال. فائض إعادة التقييم = 1,800,000 - 1,500,000 = 300,000 ريال.',
+        incorrectText: 'إجابة خاطئة. القيمة الدفترية للمبنى = 2,000,000 - 500,000 = 1,500,000 ريال. فائض إعادة التقييم = 1,800,000 - 1,500,000 = 300,000 ريال.'
+      },
+      {
+        name: 'q2',
+        correctValue: 'b',
+        correctText: 'إجابة صحيحة! يتوقف استهلاك الأصول المحتفظ بها للبيع لأن الهدف هو استرداد قيمتها من خلال البيع وليس الاستخدام المستمر.',
+        incorrectText: 'إجابة خاطئة. عند تصنيف الأصل كمحتفظ به للبيع، يتوقف استهلاكه لأن الهدف هو استرداد قيمته من خلال البيع وليس الاستخدام المستمر.'
+      },
+      {
+        name: 'q3',
+        correctValue: 'c',
+        correctText: 'إجابة صحيحة! القيمة القابلة للاسترداد هي الأعلى من القيمة العادلة ناقص تكاليف البيع والقيمة في الاستخدام.',
+        incorrectText: 'إجابة خاطئة. القيمة القابلة للاسترداد هي الأعلى (وليس الأقل) من القيمة العادلة ناقص تكاليف البيع والقيمة في الاستخدام.'
+      }
+    ];
+    
+    quizQuestions.forEach((question, index) => {
+      const inputs = document.querySelectorAll(`input[name="${question.name}"]`);
+      const answerDiv = document.getElementById(`answer${index + 1}`);
+      
+      inputs.forEach(input => {
+        input.addEventListener('change', () => {
+          answerDiv.classList.remove('hidden');
+          
+          if (input.value === question.correctValue) {
+            answerDiv.innerHTML = `
+              <div class="p-3 bg-green-100 border border-green-300 rounded text-green-800">
+                <i class="fas fa-check-circle ml-2"></i>
+                ${question.correctText}
+              </div>
+            `;
+          } else {
+            answerDiv.innerHTML = `
+              <div class="p-3 bg-red-100 border border-red-300 rounded text-red-800">
+                <i class="fas fa-times-circle ml-2"></i>
+                ${question.incorrectText}
+              </div>
+            `;
+          }
+        });
+      });
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Progress tracking
+    function updateProgress() {
+      const sections = document.querySelectorAll('section');
+      const progressBar = document.querySelector('.bg-blue-600');
+      
+      let visibleSections = 0;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          visibleSections++;
+        }
+      });
+      
+      const progress = Math.min((visibleSections / sections.length) * 100, 100);
+      if (progressBar) {
+        progressBar.style.width = progress + '%';
+      }
+    }
+    
+    // Update progress on scroll
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('load', updateProgress);
+    
+    // Add animation classes on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Save progress when user scrolls to bottom
+    function saveProgress() {
+      localStorage.setItem('chapter10_completed', 'true');
+      localStorage.setItem('last_visited', 'chapter-10.html');
+    }
+    
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+        saveProgress();
+      }
+    });
+    
+    // Load saved progress
+    function loadProgress() {
+      const completed = localStorage.getItem('chapter10_completed');
+      if (completed) {
+        const progressBar = document.querySelector('.bg-blue-600');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+        }
+      }
+    }
+    
+    window.addEventListener('load', loadProgress);
+    
+    // Toggle details sections
+    document.querySelectorAll('.toggle-details').forEach(button => {
+      button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          if (targetElement.classList.contains('hidden')) {
+            targetElement.classList.remove('hidden');
+            this.innerHTML = '<i class="fas fa-chevron-up ml-2"></i> إخفاء التفاصيل';
+          } else {
+            targetElement.classList.add('hidden');
+            this.innerHTML = '<i class="fas fa-chevron-down ml-2"></i> عرض التفاصيل';
+          }
+        }
+      });
+    });
+    
+    // Interactive examples
+    document.querySelectorAll('.interactive-example').forEach(example => {
+      const inputs = example.querySelectorAll('input[type="number"]');
+      const calculateButton = example.querySelector('.calculate-button');
+      const resultElement = example.querySelector('.result');
+      
+      if (calculateButton && resultElement) {
+        calculateButton.addEventListener('click', function() {
+          let values = [];
+          
+          inputs.forEach(input => {
+            values.push(parseFloat(input.value) || 0);
+          });
+          
+          // Custom calculation based on the example type
+          const exampleType = example.getAttribute('data-type');
+          let result = 0;
+          
+          if (exampleType === 'revaluation') {
+            // Revaluation calculation
+            const costValue = values[0];
+            const accumulatedDepreciation = values[1];
+            const fairValue = values[2];
+            
+            const carryingAmount = costValue - accumulatedDepreciation;
+            const revaluationSurplus = fairValue - carryingAmount;
+            
+            result = revaluationSurplus;
+            resultElement.innerHTML = `
+              <div class="p-3 bg-blue-100 border border-blue-300 rounded text-blue-800">
+                <p>القيمة الدفترية = ${costValue} - ${accumulatedDepreciation} = ${carryingAmount} ريال</p>
+                <p>فائض إعادة التقييم = ${fairValue} - ${carryingAmount} = ${result} ريال</p>
+              </div>
+            `;
+          } else if (exampleType === 'impairment') {
+            // Impairment calculation
+            const carryingAmount = values[0];
+            const fairValue = values[1];
+            const costToSell = values[2];
+            const valueInUse = values[3];
+            
+            const fvlcts = fairValue - costToSell;
+            const recoverable = Math.max(fvlcts, valueInUse);
+            const impairment = carryingAmount > recoverable ? carryingAmount - recoverable : 0;
+            
+            resultElement.innerHTML = `
+              <div class="p-3 bg-blue-100 border border-blue-300 rounded text-blue-800">
+                <p>القيمة العادلة ناقص تكاليف البيع = ${fairValue} - ${costToSell} = ${fvlcts} ريال</p>
+                <p>القيمة القابلة للاسترداد = ${recoverable} ريال</p>
+                <p>خسارة انخفاض القيمة = ${impairment > 0 ? impairment + ' ريال' : 'لا يوجد انخفاض في القيمة'}</p>
+              </div>
+            `;
+          }
+        });
+      }
+    });
+    
+    // Print functionality
+    function printChapter() {
+      window.print();
+    }
+    
+    // Add print button
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print ml-2"></i> طباعة الفصل';
+    printButton.className = 'fixed bottom-4 left-4 bg-gray-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition z-50';
+    printButton.onclick = printChapter;
+    document.body.appendChild(printButton);
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            const nextLink = document.querySelector('a[href="index.html"]');
+            if (nextLink) nextLink.click();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            const prevLink = document.querySelector('a[href="chapter-9.html"]');
+            if (prevLink) prevLink.click();
+            break;
+        }
+      }
+    });
+  </script>
+  
+  <!-- Custom CSS for animations -->
+  <style>
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .fixed, #sidebar, #overlay, button {
+        display: none !important;
+      }
+      
+      .bg-gradient-to-r, .bg-gradient-to-b {
+        background: #4f46e5 !important;
+        color: white !important;
+      }
+      
+      section {
+        break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      
+      .grid {
+        display: block !important;
+      }
+      
+      .md\:grid-cols-2 > div,
+      .md\:grid-cols-3 > div {
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .text-3xl {
+        font-size: 1.5rem;
+      }
+      
+      .text-2xl {
+        font-size: 1.25rem;
+      }
+      
+      .text-xl {
+        font-size: 1.125rem;
+      }
+      
+      .grid {
+        gap: 1rem;
+      }
+      
+      .p-6 {
+        padding: 1rem;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+      }
+      
+      .text-gray-700 {
+        color: #d1d5db;
+      }
+      
+      .text-gray-600 {
+        color: #9ca3af;
+      }
+      
+      .border-gray-200 {
+        border-color: #374151;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .focus\:ring-2:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .bg-blue-50 {
+        background-color: #dbeafe;
+      }
+      
+      .bg-green-50 {
+        background-color: #dcfce7;
+      }
+      
+      .bg-red-50 {
+        background-color: #fef2f2;
+      }
+      
+      .border {
+        border-width: 2px;
+      }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .transition,
+      .animate-fade-in {
+        animation: none;
+        transition: none;
+      }
+    }
+  </style>
+</body>
+</html>
+

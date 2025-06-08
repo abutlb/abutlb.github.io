@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة المتوسطة 1 - الفصل السادس: المخزون</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .sidebar-fixed {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .sidebar-fixed {
+        position: fixed;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-fixed.show {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <h1 class="font-bold text-lg">المحاسبة المتوسطة 1</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar-fixed bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-80 p-4 shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة المتوسطة 1</h2>
+        <p class="text-blue-200 mt-2">كين لو - Ken Lo</p>
+        <p class="text-blue-300 text-sm mt-1">الجزء الأول: الفصول 1-10</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول المحتويات</h3>
+        <ul class="space-y-2">
+          <!-- Chapter 1 -->
+          <li>
+            <a href="chapter-1.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">1</span>
+              <div>
+                <span class="block font-medium">أساسيات نظرية المحاسبة المالية</span>
+                <span class="text-xs text-blue-200">Fundamentals of Financial Accounting Theory</span>
+              </div>
+            </a>
+          </li>
+
+          <!-- Chapter 2 -->
+          <li>
+            <a href="chapter-2.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">2</span>
+              <div>
+                <span class="block">الأطر المفاهيمية للتقارير المالية</span>
+                <span class="text-xs text-blue-200">Frameworks for Financial Reporting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 3 -->
+          <li>
+            <a href="chapter-3.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">3</span>
+              <div>
+                <span class="block">المحاسبة على أساس الاستحقاق</span>
+                <span class="text-xs text-blue-200">Accrual Accounting</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 4 -->
+          <li>
+            <a href="chapter-4.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">4</span>
+              <div>
+                <span class="block">الاعتراف بالإيرادات</span>
+                <span class="text-xs text-blue-200">Revenue Recognition</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 5 -->
+          <li>
+            <a href="chapter-5.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">5</span>
+              <div>
+                <span class="block">النقدية والذمم المدينة</span>
+                <span class="text-xs text-blue-200">Cash and Receivables</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 6 - Current -->
+          <li>
+            <a href="chapter-6.html" class="flex items-center p-3 rounded-lg bg-blue-500">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">6</span>
+              <div>
+                <span class="block font-medium">المخزون</span>
+                <span class="text-xs text-blue-200">Inventories</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 7 -->
+          <li>
+            <a href="chapter-7.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">7</span>
+              <div>
+                <span class="block">الأصول المالية</span>
+                <span class="text-xs text-blue-200">Financial Assets</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 8 -->
+          <li>
+            <a href="chapter-8.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">8</span>
+              <div>
+                <span class="block">الممتلكات والمصانع والمعدات</span>
+                <span class="text-xs text-blue-200">Property, Plant, and Equipment</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 9 -->
+          <li>
+            <a href="chapter-9.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">9</span>
+              <div>
+                <span class="block">الأصول غير الملموسة والشهرة</span>
+                <span class="text-xs text-blue-200">Intangible Assets, Goodwill, Mineral Resources</span>
+              </div>
+            </a>
+          </li>
+          
+          <!-- Chapter 10 -->
+          <li>
+            <a href="chapter-10.html" class="flex items-center p-3 rounded-lg hover:bg-blue-600 transition">
+              <span class="bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center ml-3 font-bold">10</span>
+              <div>
+                <span class="block">تطبيقات القيمة العادلة</span>
+                <span class="text-xs text-blue-200">Applications of Fair Value to Non-Current Assets</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Additional Resources -->
+        <div class="mt-8 pt-6 border-t border-blue-600">
+          <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">موارد إضافية</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="glossary.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-book ml-2 text-blue-300"></i>
+                <span class="text-sm">قاموس المصطلحات</span>
+              </a>
+            </li>
+            <li>
+              <a href="exercises.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-pencil-alt ml-2 text-blue-300"></i>
+                <span class="text-sm">تمارين وحلول</span>
+              </a>
+            </li>
+            <li>
+              <a href="case-studies.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-briefcase ml-2 text-blue-300"></i>
+                <span class="text-sm">دراسات حالة</span>
+              </a>
+            </li>
+            <li>
+              <a href="ifrs-standards.html" class="flex items-center p-2 rounded-lg hover:bg-blue-600 transition">
+                <i class="fas fa-globe ml-2 text-blue-300"></i>
+                <span class="text-sm">معايير IFRS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-30 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 md:mr-80 p-4 md:p-8 mt-16 md:mt-0">
+      <!-- Chapter Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الفصل 6</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="chapter-6.html" class="text-blue-600 hover:text-blue-800" aria-current="page">المخزون</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">المخزون</h1>
+        <p class="text-gray-600 mt-2">Inventories</p>
+      </div>
+
+      <!-- Chapter Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 10%"></div>
+      </div>
+
+      <!-- Section 1: Definition and Importance of Inventory -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-boxes ml-3"></i>
+            1. تعريف المخزون وأهميته
+          </h2>
+          <p class="text-blue-100 text-sm mt-1">Definition and Importance of Inventory</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Definition -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-tag text-blue-600 ml-2"></i>
+                  تعريف المخزون
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  المخزون هو التكاليف غير المنتهية المرتبطة بالبضائع المملوكة من قبل المنشأة والتي يُتوقع بيعها لاحقًا. يُعتبر من الأصول المتداولة في قائمة المركز المالي، إذ تنتقل من كونها أصولًا إلى مصروفات عند بيعها.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">أنواع المخزون:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• البضائع الجاهزة للبيع (في الشركات التجارية)</li>
+                    <li>• المواد الخام (في الشركات الصناعية)</li>
+                    <li>• الإنتاج تحت التشغيل (في الشركات الصناعية)</li>
+                    <li>• البضاعة تامة الصنع (في الشركات الصناعية)</li>
+                    <li>• مواد التعبئة والتغليف ومستلزمات الإنتاج</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Importance -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-chart-line text-green-600 ml-2"></i>
+                  أهمية المخزون
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  يُعد المخزون من أهم الأصول المتداولة للعديد من الشركات، حيث يمثل استثمارًا كبيرًا ويؤثر بشكل مباشر على الربحية والوضع المالي للشركة.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">الأهمية المالية والتشغيلية:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• يؤثر على تحديد تكلفة البضاعة المباعة وصافي الدخل</li>
+                    <li>• يمثل جزءًا كبيرًا من الأصول المتداولة في الميزانية</li>
+                    <li>• يؤثر على نسب السيولة ورأس المال العامل</li>
+                    <li>• يؤثر على التدفقات النقدية التشغيلية</li>
+                    <li>• يلعب دورًا مهمًا في تخطيط الإنتاج وتلبية طلبات العملاء</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Statement Presentation -->
+          <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-file-invoice text-gray-600 ml-2"></i>
+              عرض المخزون في القوائم المالية
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">قائمة المركز المالي:</h4>
+                <p class="text-sm text-gray-600 mb-2">
+                  يظهر المخزون ضمن الأصول المتداولة، ويتم عرضه بالقيمة الأقل بين التكلفة وصافي القيمة القابلة للتحقق.
+                </p>
+                <div class="bg-blue-50 p-2 rounded text-xs">
+                  <strong>مثال:</strong><br>
+                  الأصول المتداولة:<br>
+                  - النقد وما في حكمه: 500,000 ريال<br>
+                  - الذمم المدينة: 300,000 ريال<br>
+                  - <strong>المخزون: 450,000 ريال</strong><br>
+                  - مصروفات مدفوعة مقدمًا: 50,000 ريال
+                </div>
+              </div>
+
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">قائمة الدخل:</h4>
+                <p class="text-sm text-gray-600 mb-2">
+                  يظهر المخزون ضمن تكلفة البضاعة المباعة، والتي تؤثر مباشرة على إجمالي الربح.
+                </p>
+                <div class="bg-blue-50 p-2 rounded text-xs">
+                  <strong>مثال:</strong><br>
+                  المبيعات: 1,200,000 ريال<br>
+                  تكلفة البضاعة المباعة:<br>
+                  - مخزون أول المدة: 400,000 ريال<br>
+                  - المشتريات: 800,000 ريال<br>
+                  - <strong>مخزون آخر المدة: (450,000) ريال</strong><br>
+                  إجمالي تكلفة البضاعة المباعة: 750,000 ريال<br>
+                  إجمالي الربح: 450,000 ريال
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Inventory Systems -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-cogs ml-3"></i>
+            2. أنظمة الجرد: الدوري مقابل المستمر
+          </h2>
+          <p class="text-green-100 text-sm mt-1">Inventory Systems: Periodic vs. Perpetual</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Periodic Inventory System -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-amber-500 p-4 bg-amber-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-sync text-amber-600 ml-2"></i>
+                  نظام الجرد الدوري
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  في نظام الجرد الدوري، لا يتم تحديث رصيد المخزون بشكل مستمر. بدلاً من ذلك، يتم تسجيل المشتريات في حساب "المشتريات"، ويتم تحديد رصيد المخزون وتكلفة البضاعة المباعة فقط في نهاية الفترة المحاسبية بعد إجراء الجرد الفعلي.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">خصائص نظام الجرد الدوري:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• يتطلب عد المخزون فعليًا في نهاية الفترة</li>
+                    <li>• لا يوفر معلومات فورية عن أرصدة المخزون</li>
+                    <li>• مناسب للشركات الصغيرة ذات المخزون المحدود</li>
+                    <li>• أقل تكلفة وأسهل في التطبيق</li>
+                    <li>• يستخدم حسابات خاصة مثل "المشتريات" و"مردودات المشتريات"</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Journal Entries for Periodic System -->
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-2">القيود المحاسبية في نظام الجرد الدوري:</h4>
+                <div class="space-y-3 text-sm">
+                  <div class="bg-gray-50 p-2 rounded">
+                    <p class="font-medium mb-1">عند شراء بضاعة:</p>
+                    <p>من حـ/ المشتريات XXX</p>
+                    <p>إلى حـ/ النقدية / الذمم الدائنة XXX</p>
+                  </div>
+                  
+                  <div class="bg-gray-50 p-2 rounded">
+                    <p class="font-medium mb-1">عند بيع بضاعة:</p>
+                    <p>من حـ/ النقدية / الذمم المدينة XXX</p>
+                    <p>إلى حـ/ المبيعات XXX</p>
+                    <p class="text-gray-500">(لا يتم تسجيل تكلفة البضاعة المباعة في وقت البيع)</p>
+                  </div>
+                  
+                  <div class="bg-gray-50 p-2 rounded">
+                    <p class="font-medium mb-1">في نهاية الفترة (بعد الجرد):</p>
+                    <p>من حـ/ ملخص الدخل XXX</p>
+                    <p>إلى حـ/ المخزون (أول المدة) XXX</p>
+                    <p>إلى حـ/ المشتريات XXX</p>
+                    <p>من حـ/ المخزون (آخر المدة) XXX</p>
+                    <p>إلى حـ/ ملخص الدخل XXX</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Perpetual Inventory System -->
+            <div class="space-y-4">
+              <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">
+                  <i class="fas fa-database text-blue-600 ml-2"></i>
+                  نظام الجرد المستمر
+                </h3>
+                <p class="text-gray-700 mb-3">
+                  في نظام الجرد المستمر، يتم تحديث رصيد المخزون وتكلفة البضاعة المباعة بشكل مستمر مع كل عملية بيع أو شراء. يوفر هذا النظام معلومات فورية عن أرصدة المخزون وتكلفته في أي وقت.
+                </p>
+                <div class="bg-white p-3 rounded border">
+                  <h4 class="font-semibold text-gray-800 mb-2">خصائص نظام الجرد المستمر:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• يوفر معلومات فورية عن أرصدة المخزون</li>
+                    <li>• يسهل تحديد نقطة إعادة الطلب ومنع نفاد المخزون</li>
+                    <li>• يساعد في الرقابة على المخزون واكتشاف السرقات</li>
+                    <li>• يتطلب استخدام أنظمة معلومات متقدمة</li>
+                    <li>• أكثر تكلفة ولكنه أكثر فعالية للشركات الكبيرة</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Journal Entries for Perpetual System -->
+              <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-2">القيود المحاسبية في نظام الجرد المستمر:</h4>
+                <div class="space-y-3 text-sm">
+                  <div class="bg-gray-50 p-2 rounded">
+                    <p class="font-medium mb-1">عند شراء بضاعة:</p>
+                    <p>من حـ/ المخزون XXX</p>
+                    <p>إلى حـ/ النقدية / الذمم الدائنة XXX</p>
+                  </div>
+                  
+                  <div class="bg-gray-50 p-2 rounded">
+                    <p class="font-medium mb-1">عند بيع بضاعة:</p>
+                    <p>من حـ/ النقدية / الذمم المدينة XXX</p>
+                    <p>إلى حـ/ المبيعات XXX</p>
+                    <p class="mt-2">ومن حـ/ تكلفة البضاعة المباعة XXX</p>
+                    <p>إلى حـ/ المخزون XXX</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Comparison Table -->
+              <div class="bg-white border border-gray-200 rounded-lg p-4 mt-4">
+                <h4 class="font-semibold text-gray-800 mb-2">مقارنة بين نظامي الجرد:</h4>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm text-right">
+                    <thead class="bg-gray-100">
+                      <tr>
+                        <th class="p-2 border">وجه المقارنة</th>
+                        <th class="p-2 border">نظام الجرد الدوري</th>
+                        <th class="p-2 border">نظام الجرد المستمر</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="p-2 border font-medium">تحديث الرصيد</td>
+                        <td class="p-2 border">في نهاية الفترة فقط</td>
+                        <td class="p-2 border">بشكل مستمر مع كل عملية</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 border font-medium">تكلفة البضاعة المباعة</td>
+                        <td class="p-2 border">تحسب في نهاية الفترة</td>
+                        <td class="p-2 border">تسجل مع كل عملية بيع</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 border font-medium">الحسابات المستخدمة</td>
+                        <td class="p-2 border">المشتريات، مردودات المشتريات، المخزون</td>
+                        <td class="p-2 border">المخزون، تكلفة البضاعة المباعة</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 border font-medium">مناسب لـ</td>
+                        <td class="p-2 border">الشركات الصغيرة، المخزون المحدود</td>
+                        <td class="p-2 border">الشركات الكبيرة، المخزون المتنوع</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Inventory Costing Methods -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-purple-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-calculator ml-3"></i>
+            3. طرق حساب تكلفة المخزون
+          </h2>
+          <p class="text-purple-100 text-sm mt-1">Inventory Costing Methods (Cost Flow Assumptions)</p>
+        </div>
+        <div class="p-6">
+          <!-- Introduction -->
+          <div class="mb-6">
+            <p class="text-gray-700">
+              تستخدم الشركات عدة طرق لتحديد تكلفة المخزون وتكلفة البضاعة المباعة. تعتمد هذه الطرق على افتراضات مختلفة حول تدفق التكلفة، وليس بالضرورة التدفق الفعلي للبضائع. يمكن أن يكون لاختيار الطريقة تأثير كبير على الربح المعلن والضرائب المستحقة.
+            </p>
+          </div>
+          
+          <!-- Main Costing Methods -->
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Specific Identification Method -->
+            <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-fingerprint text-indigo-600 ml-2"></i>
+                طريقة التحديد الخاص
+              </h3>
+              <p class="text-gray-700 mb-3">
+                <span class="font-medium text-indigo-600">Specific Identification Method:</span> 
+                تتبع تكلفة كل وحدة بشكل منفصل من وقت الشراء حتى البيع. تستخدم للسلع باهظة الثمن أو الفريدة من نوعها.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الخصائص:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• الأكثر دقة لتحديد تكلفة البضاعة المباعة</li>
+                  <li>• مناسبة للبضائع ذات القيمة العالية (السيارات، المجوهرات)</li>
+                  <li>• تتطلب نظاماً دقيقاً لتتبع كل وحدة</li>
+                  <li>• تسمح للإدارة بالتلاعب بالأرباح من خلال اختيار الوحدات المباعة</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- FIFO Method -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-sort-amount-down-alt text-blue-600 ml-2"></i>
+                طريقة الوارد أولاً يصرف أولاً (FIFO)
+              </h3>
+              <p class="text-gray-700 mb-3">
+                <span class="font-medium text-blue-600">First-In, First-Out (FIFO):</span> 
+                تفترض أن الوحدات التي تم شراؤها أولاً يتم بيعها أولاً، وبالتالي فإن المخزون النهائي يتكون من أحدث المشتريات.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الخصائص:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• تعكس التدفق الطبيعي للبضائع في معظم الشركات</li>
+                  <li>• تظهر المخزون النهائي بقيم أقرب إلى الأسعار الحالية</li>
+                  <li>• في فترات التضخم، تؤدي إلى أرباح أعلى وضرائب أكبر</li>
+                  <li>• تقلل من التلاعب الإداري في تحديد الأرباح</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- LIFO Method -->
+            <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-sort-amount-up text-red-600 ml-2"></i>
+                طريقة الوارد أخيراً يصرف أولاً (LIFO)
+              </h3>
+              <p class="text-gray-700 mb-3">
+                <span class="font-medium text-red-600">Last-In, First-Out (LIFO):</span> 
+                تفترض أن الوحدات التي تم شراؤها مؤخراً يتم بيعها أولاً، وبالتالي فإن المخزون النهائي يتكون من أقدم المشتريات.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الخصائص:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• تطابق التكاليف الحالية مع الإيرادات الحالية</li>
+                  <li>• في فترات التضخم، تؤدي إلى أرباح أقل وضرائب أقل</li>
+                  <li>• قد تظهر المخزون النهائي بقيم قديمة لا تعكس الواقع</li>
+                  <li>• غير مسموح بها في معايير التقارير المالية الدولية (IFRS)</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Weighted Average Method -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-balance-scale text-green-600 ml-2"></i>
+                طريقة المتوسط المرجح
+              </h3>
+              <p class="text-gray-700 mb-3">
+                <span class="font-medium text-green-600">Weighted-Average Cost:</span> 
+                تحسب متوسط تكلفة جميع الوحدات المتاحة للبيع خلال الفترة، وتستخدم هذه التكلفة المتوسطة لكل من المخزون النهائي وتكلفة البضاعة المباعة.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">الخصائص:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• سهلة التطبيق وأقل عرضة للتلاعب</li>
+                  <li>• تعطي نتائج متوسطة بين FIFO و LIFO</li>
+                  <li>• تقلل من تأثير تقلبات الأسعار</li>
+                  <li>• مقبولة في معايير التقارير المالية الدولية (IFRS)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Numerical Example -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-clipboard-list text-gray-600 ml-2"></i>
+              مثال عملي لمقارنة طرق حساب تكلفة المخزون
+            </h3>
+            
+            <div class="overflow-x-auto">
+              <p class="text-gray-700 mb-2">لنفترض أن شركة لديها البيانات التالية عن المخزون خلال شهر:</p>
+              
+              <table class="w-full text-sm text-right mb-4">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="p-2 border">التاريخ</th>
+                    <th class="p-2 border">البيان</th>
+                    <th class="p-2 border">الكمية</th>
+                    <th class="p-2 border">سعر الوحدة</th>
+                    <th class="p-2 border">الإجمالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="p-2 border">1 يناير</td>
+                    <td class="p-2 border">مخزون أول المدة</td>
+                    <td class="p-2 border">100</td>
+                    <td class="p-2 border">10 ريال</td>
+                    <td class="p-2 border">1,000 ريال</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">10 يناير</td>
+                    <td class="p-2 border">مشتريات</td>
+                    <td class="p-2 border">200</td>
+                    <td class="p-2 border">12 ريال</td>
+                    <td class="p-2 border">2,400 ريال</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">20 يناير</td>
+                    <td class="p-2 border">مشتريات</td>
+                    <td class="p-2 border">150</td>
+                    <td class="p-2 border">15 ريال</td>
+                    <td class="p-2 border">2,250 ريال</td>
+                  </tr>
+                </tbody>
+                <tfoot class="bg-gray-100">
+                  <tr>
+                    <td class="p-2 border" colspan="2">الإجمالي المتاح للبيع</td>
+                    <td class="p-2 border">450</td>
+                    <td class="p-2 border">-</td>
+                    <td class="p-2 border">5,650 ريال</td>
+                  </tr>
+                </tfoot>
+              </table>
+              
+              <p class="text-gray-700 mb-2">إذا كان المخزون النهائي في 31 يناير هو 150 وحدة، فسيتم حساب تكلفته كما يلي:</p>
+              
+              <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-3 rounded border text-sm">
+                  <h4 class="font-semibold text-blue-800 mb-2">طريقة FIFO:</h4>
+                  <p>المخزون النهائي (150 وحدة):</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>150 وحدة × 15 ريال = 2,250 ريال</li>
+                  </ul>
+                  <p class="mt-2">تكلفة البضاعة المباعة (300 وحدة):</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>100 وحدة × 10 ريال = 1,000 ريال</li>
+                    <li>200 وحدة × 12 ريال = 2,400 ريال</li>
+                    <li><strong>الإجمالي: 3,400 ريال</strong></li>
+                  </ul>
+                </div>
+                
+                <div class="bg-red-50 p-3 rounded border text-sm">
+                  <h4 class="font-semibold text-red-800 mb-2">طريقة LIFO:</h4>
+                  <p>المخزون النهائي (150 وحدة):</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>100 وحدة × 10 ريال = 1,000 ريال</li>
+                    <li>50 وحدة × 12 ريال = 600 ريال</li>
+                    <li><strong>الإجمالي: 1,600 ريال</strong></li>
+                  </ul>
+                  <p class="mt-2">تكلفة البضاعة المباعة (300 وحدة):</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>150 وحدة × 15 ريال = 2,250 ريال</li>
+                    <li>150 وحدة × 12 ريال = 1,800 ريال</li>
+                    <li><strong>الإجمالي: 4,050 ريال</strong></li>
+                  </ul>
+                </div>
+                
+                <div class="bg-green-50 p-3 rounded border text-sm">
+                  <h4 class="font-semibold text-green-800 mb-2">طريقة المتوسط المرجح:</h4>
+                  <p>متوسط تكلفة الوحدة:</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>5,650 ريال ÷ 450 وحدة = 12.56 ريال</li>
+                  </ul>
+                  <p class="mt-2">المخزون النهائي (150 وحدة):</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>150 وحدة × 12.56 ريال = 1,884 ريال</li>
+                  </ul>
+                  <p class="mt-2">تكلفة البضاعة المباعة (300 وحدة):</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-700 mt-1">
+                    <li>300 وحدة × 12.56 ريال = 3,766 ريال</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="bg-gray-100 p-3 mt-4 rounded text-sm">
+                <h4 class="font-semibold text-gray-800 mb-2">ملاحظات مهمة:</h4>
+                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                  <li>طريقة FIFO تعطي أعلى قيمة للمخزون النهائي وأقل تكلفة للبضاعة المباعة، مما يؤدي إلى أعلى ربح.</li>
+                  <li>طريقة LIFO تعطي أقل قيمة للمخزون النهائي وأعلى تكلفة للبضاعة المباعة، مما يؤدي إلى أقل ربح.</li>
+                  <li>طريقة المتوسط المرجح تعطي قيماً متوسطة بين الطريقتين السابقتين.</li>
+                  <li>في فترات ارتفاع الأسعار، تزداد الفروق بين الطرق المختلفة.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Interactive Quiz -->
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-question-circle text-amber-600 ml-2"></i>
+              اختبر فهمك
+            </h3>
+            <div class="space-y-4">
+              <div class="p-4 bg-white border border-amber-200 rounded-lg">
+                <h4 class="font-bold text-gray-800 mb-3">أي من طرق تقييم المخزون التالية غير مسموح بها وفقاً لمعايير التقارير المالية الدولية (IFRS)؟</h4>
+                <div class="space-y-2">
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="a" class="ml-2">
+                    <span class="text-gray-700">طريقة التحديد الخاص (Specific Identification)</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="b" class="ml-2">
+                    <span class="text-gray-700">طريقة الوارد أولاً يصرف أولاً (FIFO)</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="c" class="ml-2">
+                    <span class="text-gray-700">طريقة الوارد أخيراً يصرف أولاً (LIFO)</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                    <input type="radio" name="quiz1" value="d" class="ml-2">
+                    <span class="text-gray-700">طريقة المتوسط المرجح (Weighted Average)</span>
+                  </label>
+                </div>
+                <div id="quizResult1" class="mt-3 hidden"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Lower of Cost or Market Rule -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-teal-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-arrow-down ml-3"></i>
+            4. قاعدة "الأقل بين التكلفة أو السوق"
+          </h2>
+          <p class="text-teal-100 text-sm mt-1">Lower of Cost or Market (LCM) Rule</p>
+        </div>
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- LCM Concept -->
+            <div class="border-r-4 border-teal-500 p-4 bg-teal-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-balance-scale-left text-teal-600 ml-2"></i>
+                مفهوم قاعدة الأقل بين التكلفة أو السوق
+              </h3>
+              <p class="text-gray-700 mb-3">
+                وفقاً لمبدأ الحيطة والحذر، يجب تقييم المخزون بالأقل بين تكلفته التاريخية وقيمته السوقية. تهدف هذه القاعدة إلى تجنب المبالغة في تقييم الأصول وضمان الاعتراف بالخسائر المحتملة في الفترة الحالية.
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">المصطلحات الأساسية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• <strong>التكلفة (Cost):</strong> التكلفة التاريخية للمخزون محسوبة بإحدى الطرق السابقة</li>
+                  <li>• <strong>القيمة السوقية (Market):</strong> تعادل صافي القيمة القابلة للتحقق (NRV)</li>
+                  <li>• <strong>صافي القيمة القابلة للتحقق (NRV):</strong> سعر البيع المقدر مطروحاً منه تكاليف الإتمام والبيع</li>
+                  <li>• <strong>سقف السوق (Ceiling):</strong> سعر البيع المقدر</li>
+                  <li>• <strong>أرضية السوق (Floor):</strong> صافي القيمة القابلة للتحقق مطروحاً منها هامش الربح المعتاد</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- LCM Application -->
+            <div class="border-r-4 border-blue-500 p-4 bg-blue-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-chart-line text-blue-600 ml-2"></i>
+                تطبيق القاعدة
+              </h3>
+              <p class="text-gray-700 mb-3">
+                يمكن تطبيق قاعدة الأقل بين التكلفة أو السوق بعدة طرق، منها:
+              </p>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">طرق التطبيق:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• <strong>على أساس كل صنف على حدة:</strong> يتم تطبيق القاعدة على كل صنف من أصناف المخزون بشكل منفصل</li>
+                  <li>• <strong>على أساس المجموعات المتجانسة:</strong> يتم تطبيق القاعدة على مجموعات متجانسة من المخزون</li>
+                  <li>• <strong>على أساس إجمالي المخزون:</strong> يتم تطبيق القاعدة على إجمالي المخزون (أقل استخداماً)</li>
+                </ul>
+                
+                <div class="mt-3 p-2 bg-blue-50 rounded text-sm">
+                  <strong>ملاحظة:</strong> وفق معايير التقارير المالية الدولية (IFRS)، يتم تقييم المخزون بالأقل بين التكلفة وصافي القيمة القابلة للتحقق على أساس كل صنف على حدة.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Example -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-clipboard-list text-gray-600 ml-2"></i>
+              مثال تطبيقي على قاعدة الأقل بين التكلفة أو السوق
+            </h3>
+            
+            <div class="overflow-x-auto">
+              <p class="text-gray-700 mb-2">لنفترض أن شركة لديها البيانات التالية عن المخزون في نهاية السنة:</p>
+              
+              <table class="w-full text-sm text-right mb-4">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="p-2 border">الصنف</th>
+                    <th class="p-2 border">التكلفة</th>
+                    <th class="p-2 border">سعر البيع المقدر</th>
+                    <th class="p-2 border">تكاليف الإتمام والبيع</th>
+                    <th class="p-2 border">صافي القيمة القابلة للتحقق (NRV)</th>
+                    <th class="p-2 border">القيمة الدفترية (الأقل بين التكلفة و NRV)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="p-2 border">أ</td>
+                    <td class="p-2 border">10,000</td>
+                    <td class="p-2 border">15,000</td>
+                    <td class="p-2 border">3,000</td>
+                    <td class="p-2 border">12,000</td>
+                    <td class="p-2 border font-bold">10,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">ب</td>
+                    <td class="p-2 border">8,000</td>
+                    <td class="p-2 border">9,000</td>
+                    <td class="p-2 border">2,000</td>
+                    <td class="p-2 border">7,000</td>
+                    <td class="p-2 border font-bold text-red-600">7,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">ج</td>
+                    <td class="p-2 border">15,000</td>
+                    <td class="p-2 border">20,000</td>
+                    <td class="p-2 border">2,000</td>
+                    <td class="p-2 border">18,000</td>
+                    <td class="p-2 border font-bold">15,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">د</td>
+                    <td class="p-2 border">12,000</td>
+                    <td class="p-2 border">13,000</td>
+                    <td class="p-2 border">2,500</td>
+                    <td class="p-2 border">10,500</td>
+                    <td class="p-2 border font-bold text-red-600">10,500</td>
+                  </tr>
+                </tbody>
+                <tfoot class="bg-gray-100">
+                  <tr>
+                    <td class="p-2 border">الإجمالي</td>
+                    <td class="p-2 border">45,000</td>
+                    <td class="p-2 border">57,000</td>
+                    <td class="p-2 border">9,500</td>
+                    <td class="p-2 border">47,500</td>
+                    <td class="p-2 border font-bold">42,500</td>
+                  </tr>
+                </tfoot>
+              </table>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">القيد المحاسبي:</h4>
+                <div class="bg-gray-50 p-2 rounded text-sm">
+                  <p>من حـ/ خسائر هبوط قيمة المخزون 2,500 (8,000 - 7,000 + 12,000 - 10,500)</p>
+                  <p>إلى حـ/ مخصص هبوط قيمة المخزون 2,500</p>
+                </div>
+                
+                <p class="text-gray-700 mt-3 text-sm">
+                  <i class="fas fa-info-circle text-blue-600 ml-1"></i>
+                  ملاحظة: يتم إظهار المخزون في الميزانية بالقيمة الأقل (42,500) وليس بالتكلفة الأصلية (45,000)، ويتم الاعتراف بالخسارة في قائمة الدخل.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Inventory Errors and Financial Impact -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-red-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-exclamation-triangle ml-3"></i>
+            5. أخطاء المخزون وتأثيرها على القوائم المالية
+          </h2>
+          <p class="text-red-100 text-sm mt-1">Inventory Errors and Their Financial Impact</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <p class="text-gray-700">
+              تعتبر أخطاء المخزون من أكثر الأخطاء المحاسبية تأثيرًا على القوائم المالية، حيث تؤثر على كل من قائمة الدخل وقائمة المركز المالي لأكثر من فترة محاسبية.
+            </p>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Types of Inventory Errors -->
+            <div class="border-r-4 border-red-500 p-4 bg-red-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-exclamation-circle text-red-600 ml-2"></i>
+                أنواع أخطاء المخزون
+              </h3>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">أخطاء شائعة في المخزون:</h4>
+                <ul class="text-sm text-gray-600 space-y-2">
+                  <li class="p-2 bg-red-50 rounded">
+                    <strong>المبالغة في مخزون آخر المدة:</strong> تقدير المخزون بأكبر من قيمته الحقيقية.
+                  </li>
+                  <li class="p-2">
+                    <strong>التقليل من مخزون آخر المدة:</strong> تقدير المخزون بأقل من قيمته الحقيقية.
+                  </li>
+                  <li class="p-2 bg-red-50 rounded">
+                    <strong>عدم تسجيل بضاعة الأمانة:</strong> إدراج البضاعة المستلمة برسم الأمانة ضمن المخزون.
+                  </li>
+                  <li class="p-2">
+                    <strong>خطأ في العد الفعلي:</strong> أخطاء في عد أو وزن أو قياس المخزون.
+                  </li>
+                  <li class="p-2 bg-red-50 rounded">
+                    <strong>عدم تطبيق قاعدة الأقل بين التكلفة أو السوق:</strong> تجاهل انخفاض قيمة المخزون.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Impact of Inventory Errors -->
+            <div class="border-r-4 border-amber-500 p-4 bg-amber-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-chart-bar text-amber-600 ml-2"></i>
+                تأثير الأخطاء على القوائم المالية
+              </h3>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">آثار أخطاء المخزون:</h4>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead class="bg-gray-100">
+                      <tr>
+                        <th class="p-2 border">الخطأ</th>
+                        <th class="p-2 border">تأثير الفترة الحالية</th>
+                        <th class="p-2 border">تأثير الفترة التالية</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="p-2 border">المبالغة في مخزون آخر المدة</td>
+                        <td class="p-2 border text-green-600">زيادة الربح (↑)</td>
+                        <td class="p-2 border text-red-600">انخفاض الربح (↓)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 border">التقليل من مخزون آخر المدة</td>
+                        <td class="p-2 border text-red-600">انخفاض الربح (↓)</td>
+                        <td class="p-2 border text-green-600">زيادة الربح (↑)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <p class="text-gray-700 mt-3 text-sm">
+                  <i class="fas fa-info-circle text-blue-600 ml-1"></i>
+                  ملاحظة: أخطاء المخزون تؤثر على فترتين متتاليتين بشكل متعاكس، حيث يتم تصحيح الخطأ تلقائيًا في الفترة التالية.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Detailed Example -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-calculator text-gray-600 ml-2"></i>
+              مثال تطبيقي على تأثير أخطاء المخزون
+            </h3>
+            
+            <p class="text-gray-700 mb-2">
+              لنفترض أن شركة سجلت مخزون آخر المدة لسنة 2022 بمبلغ 120,000 ريال، بينما القيمة الصحيحة هي 100,000 ريال (مبالغة بمقدار 20,000 ريال).
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-4 mt-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">تأثير الخطأ على سنة 2022:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• تكلفة البضاعة المباعة: <span class="text-red-600">تنخفض بمبلغ 20,000 ريال (↓)</span></li>
+                  <li>• صافي الربح: <span class="text-green-600">يزداد بمبلغ 20,000 ريال (↑)</span></li>
+                  <li>• الأصول (المخزون): <span class="text-green-600">تزداد بمبلغ 20,000 ريال (↑)</span></li>
+                  <li>• حقوق الملكية (الأرباح المحتجزة): <span class="text-green-600">تزداد بمبلغ 20,000 ريال (↑)</span></li>
+                </ul>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">تأثير الخطأ على سنة 2023:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• مخزون أول المدة: <span class="text-green-600">يزداد بمبلغ 20,000 ريال (↑)</span></li>
+                  <li>• تكلفة البضاعة المباعة: <span class="text-green-600">تزداد بمبلغ 20,000 ريال (↑)</span></li>
+                  <li>• صافي الربح: <span class="text-red-600">ينخفض بمبلغ 20,000 ريال (↓)</span></li>
+                  <li>• الأثر التراكمي على الفترتين: <span class="text-blue-600">يتلاشى (±0)</span></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-amber-50 p-3 rounded border mt-4 text-sm">
+              <h4 class="font-semibold text-amber-800 mb-2">الخلاصة:</h4>
+              <p class="text-gray-700">
+                يتضح مما سبق أن أخطاء المخزون تعتبر من الأخطاء "ذاتية التصحيح" Self-Correcting، حيث يتلاشى تأثيرها بعد فترتين متتاليتين. ومع ذلك، إذا تم اكتشاف الخطأ قبل إصدار القوائم المالية، يجب تصحيحه. أما إذا تم اكتشافه لاحقًا، فيجب معالجته وفقًا لمعايير المحاسبة الخاصة بتصحيح الأخطاء.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Tips for Preventing Inventory Errors -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-shield-alt text-blue-600 ml-2"></i>
+              إرشادات للوقاية من أخطاء المخزون
+            </h3>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">إجراءات الرقابة الداخلية:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• تطبيق نظام جرد مستمر مدعوم بتكنولوجيا المعلومات</li>
+                  <li>• إجراء جرد فعلي دوري ومطابقته مع السجلات</li>
+                  <li>• فصل المهام بين الموظفين المسؤولين عن المخزون</li>
+                  <li>• توثيق إجراءات استلام وصرف المخزون</li>
+                  <li>• تدريب الموظفين على إجراءات الجرد الصحيحة</li>
+                </ul>
+              </div>
+              
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">ممارسات محاسبية سليمة:</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• ثبات الطرق المحاسبية المستخدمة في تقييم المخزون</li>
+                  <li>• تطبيق قاعدة الأقل بين التكلفة أو السوق بشكل منتظم</li>
+                  <li>• التمييز بين البضاعة المملوكة وبضاعة الأمانة</li>
+                  <li>• التأكد من حساب تكاليف الشحن والخصومات بشكل صحيح</li>
+                  <li>• استخدام المراجعة الداخلية والخارجية للتحقق من صحة المخزون</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Disclosure Requirements -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8 card-hover">
+        <div class="bg-indigo-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-file-alt ml-3"></i>
+            6. متطلبات الإفصاح عن المخزون
+          </h2>
+          <p class="text-indigo-100 text-sm mt-1">Inventory Disclosure Requirements</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <p class="text-gray-700">
+              تتطلب معايير المحاسبة الدولية (معيار المحاسبة الدولي رقم 2) الإفصاح عن معلومات محددة تتعلق بالمخزون في القوائم المالية والإيضاحات المرفقة بها.
+            </p>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <!-- Financial Statement Disclosures -->
+            <div class="border-r-4 border-indigo-500 p-4 bg-indigo-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-list-alt text-indigo-600 ml-2"></i>
+                الإفصاحات الأساسية
+              </h3>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">متطلبات الإفصاح الرئيسية:</h4>
+                <ul class="text-sm text-gray-600 space-y-2">
+                  <li class="p-2 bg-indigo-50 rounded">
+                    <strong>السياسات المحاسبية:</strong> الإفصاح عن الطرق المستخدمة في تقييم المخزون (FIFO، المتوسط المرجح، إلخ).
+                  </li>
+                  <li class="p-2">
+                    <strong>القيمة الدفترية:</strong> القيمة الإجمالية للمخزون وتصنيفاته الرئيسية (مواد خام، إنتاج تحت التشغيل، بضاعة تامة).
+                  </li>
+                  <li class="p-2 bg-indigo-50 rounded">
+                    <strong>القيمة القابلة للتحقق:</strong> قيمة المخزون المسجل بصافي القيمة القابلة للتحقق.
+                  </li>
+                  <li class="p-2">
+                    <strong>المخزون المرهون:</strong> قيمة المخزون المرهون كضمان للقروض أو الالتزامات الأخرى.
+                  </li>
+                  <li class="p-2 bg-indigo-50 rounded">
+                    <strong>خسائر الهبوط:</strong> مبلغ أي خسائر هبوط في قيمة المخزون المعترف بها كمصروف خلال الفترة.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Additional Disclosures -->
+            <div class="border-r-4 border-green-500 p-4 bg-green-50 rounded">
+              <h3 class="font-bold text-lg text-gray-800 mb-3">
+                <i class="fas fa-file-invoice text-green-600 ml-2"></i>
+                إفصاحات إضافية
+              </h3>
+              <div class="bg-white p-3 rounded border">
+                <h4 class="font-semibold text-gray-800 mb-2">معلومات تكميلية مهمة:</h4>
+                <ul class="text-sm text-gray-600 space-y-2">
+                  <li class="p-2 bg-green-50 rounded">
+                    <strong>معدل دوران المخزون:</strong> مؤشر يقيس كفاءة إدارة المخزون (تكلفة البضاعة المباعة ÷ متوسط المخزون).
+                  </li>
+                  <li class="p-2">
+                    <strong>متوسط فترة الاحتفاظ بالمخزون:</strong> متوسط عدد الأيام التي يبقى فيها المخزون قبل بيعه (365 ÷ معدل دوران المخزون).
+                  </li>
+                  <li class="p-2 bg-green-50 rounded">
+                    <strong>التغيرات في طرق التقييم:</strong> تأثير أي تغيير في طرق تقييم المخزون على النتائج المالية.
+                  </li>
+                  <li class="p-2">
+                    <strong>المخزون بطيء الحركة:</strong> تفاصيل المخزون القديم أو بطيء الحركة ومخصصاته.
+                  </li>
+                  <li class="p-2 bg-green-50 rounded">
+                    <strong>تكلفة المخزون المعترف بها كمصروف:</strong> إجمالي قيمة المخزون المعترف به كمصروف خلال الفترة.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Example Disclosure -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">
+              <i class="fas fa-quote-right text-gray-600 ml-2"></i>
+              نموذج للإفصاح عن المخزون في الإيضاحات
+            </h3>
+            
+            <div class="bg-white p-4 rounded border text-sm">
+              <h4 class="font-bold text-gray-800 mb-2">إيضاح رقم (8): المخزون</h4>
+              
+              <p class="mb-3">يتم تقييم المخزون بالتكلفة أو صافي القيمة القابلة للتحقق، أيهما أقل. يتم تحديد التكلفة باستخدام طريقة المتوسط المرجح. تشمل تكلفة البضاعة تامة الصنع والإنتاج تحت التشغيل تكلفة المواد والعمالة المباشرة ونسبة من المصاريف الصناعية غير المباشرة.</p>
+              
+              <table class="w-full mb-3">
+                <thead class="bg-gray-100">
+                  <tr>
+                    <th class="p-2 border text-right">البند</th>
+                    <th class="p-2 border">2023</th>
+                    <th class="p-2 border">2022</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="p-2 border">مواد خام</td>
+                    <td class="p-2 border">15,000,000</td>
+                    <td class="p-2 border">12,500,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">إنتاج تحت التشغيل</td>
+                    <td class="p-2 border">8,200,000</td>
+                    <td class="p-2 border">7,400,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">بضاعة تامة الصنع</td>
+                    <td class="p-2 border">20,500,000</td>
+                    <td class="p-2 border">18,300,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">قطع غيار ومستلزمات</td>
+                    <td class="p-2 border">2,300,000</td>
+                    <td class="p-2 border">1,800,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border font-bold">الإجمالي</td>
+                    <td class="p-2 border font-bold">46,000,000</td>
+                    <td class="p-2 border font-bold">40,000,000</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border">مخصص المخزون بطيء الحركة</td>
+                    <td class="p-2 border text-red-600">(1,500,000)</td>
+                    <td class="p-2 border text-red-600">(1,200,000)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 border font-bold">صافي المخزون</td>
+                    <td class="p-2 border font-bold">44,500,000</td>
+                    <td class="p-2 border font-bold">38,800,000</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <p class="mb-2">بلغت قيمة المخزون المعترف بها كمصروف خلال السنة 320,000,000 ريال (2022: 280,000,000 ريال).</p>
+              
+              <p class="mb-2">تم رهن مخزون بقيمة 10,000,000 ريال كضمان لقروض بنكية (إيضاح 15).</p>
+              
+              <p>خلال العام، تم الاعتراف بخسائر هبوط في قيمة المخزون بمبلغ 800,000 ريال (2022: 600,000 ريال) نتيجة انخفاض أسعار بعض المنتجات في السوق.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapter Summary -->
+      <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-clipboard-check ml-3"></i>
+            ملخص الفصل السادس: المخزون
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-3">المفاهيم الأساسية:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-check ml-2"></i> المخزون هو أصل متداول يحتفظ به للبيع أو للاستخدام في إنتاج سلع أخرى</li>
+                <li><i class="fas fa-check ml-2"></i> يتم قياس المخزون بالتكلفة أو صافي القيمة القابلة للتحقق، أيهما أقل</li>
+                <li><i class="fas fa-check ml-2"></i> تشمل تكلفة المخزون تكاليف الشراء والتحويل والتكاليف الأخرى اللازمة</li>
+                <li><i class="fas fa-check ml-2"></i> يمكن استخدام طرق مختلفة لتحديد تكلفة المخزون (FIFO، المتوسط المرجح)</li>
+                <li><i class="fas fa-check ml-2"></i> أخطاء المخزون تؤثر على فترتين ماليتين متتاليتين بشكل متعاكس</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-3">الأثر المالي للمخزون:</h3>
+              <ul class="space-y-2 text-sm">
+                <li><i class="fas fa-arrow-right ml-2"></i> <strong>قائمة المركز المالي:</strong> المخزون أصل متداول ضمن الأصول المتداولة</li>
+                <li><i class="fas fa-arrow-right ml-2"></i> <strong>قائمة الدخل:</strong> تكلفة البضاعة المباعة = مخزون أول المدة + المشتريات - مخزون آخر المدة</li>
+                <li><i class="fas fa-arrow-right ml-2"></i> <strong>النسب المالية:</strong> معدل دوران المخزون، متوسط فترة الاحتفاظ بالمخزون</li>
+                <li><i class="fas fa-arrow-right ml-2"></i> <strong>التدفقات النقدية:</strong> شراء المخزون يؤثر سلباً على التدفقات النقدية التشغيلية</li>
+                <li><i class="fas fa-arrow-right ml-2"></i> <strong>المؤشرات المالية:</strong> اختيار طريقة تقييم المخزون يؤثر على الأرباح والضرائب</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="mt-6 bg-white bg-opacity-10 p-4 rounded-lg">
+            <h3 class="font-bold text-lg mb-2">المصطلحات المحاسبية الرئيسية:</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>Inventory:</strong> المخزون</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>Cost of Goods Sold:</strong> تكلفة البضاعة المباعة</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>Periodic Inventory:</strong> الجرد الدوري</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>Perpetual Inventory:</strong> الجرد المستمر</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>FIFO:</strong> الوارد أولاً يصرف أولاً</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>LIFO:</strong> الوارد أخيراً يصرف أولاً</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>Weighted Average:</strong> المتوسط المرجح</div>
+              <div class="bg-white bg-opacity-20 p-2 rounded"><strong>LCM:</strong> الأقل بين التكلفة أو السوق</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Quiz -->
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+        <h3 class="font-bold text-lg text-gray-800 mb-3">
+          <i class="fas fa-question-circle text-amber-600 ml-2"></i>
+          اختبر فهمك للفصل
+        </h3>
+        <div class="space-y-4">
+          <div class="p-4 bg-white border border-amber-200 rounded-lg">
+            <h4 class="font-bold text-gray-800 mb-3">أي من العبارات التالية صحيحة؟</h4>
+            <div class="space-y-2">
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="quiz2" value="a" class="ml-2">
+                <span class="text-gray-700">المبالغة في تقدير مخزون آخر المدة يؤدي إلى تخفيض الربح في نفس الفترة</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="quiz2" value="b" class="ml-2">
+                <span class="text-gray-700">طريقة FIFO تعطي أقل ربح في فترات ارتفاع الأسعار</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="quiz2" value="c" class="ml-2">
+                <span class="text-gray-700">وفقاً لمبدأ الحيطة والحذر، يجب تقييم المخزون بالأقل بين التكلفة وصافي القيمة القابلة للتحقق</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="quiz2" value="d" class="ml-2">
+                <span class="text-gray-700">في نظام الجرد الدوري، يتم تحديث رصيد المخزون مع كل عملية بيع أو شراء</span>
+              </label>
+            </div>
+            <div id="quizResult2" class="mt-3 hidden"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="chapter-5.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الفصل السابق: النقدية والذمم المدينة
+        </a>
+        <a href="chapter-7.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+          الفصل التالي: الأصول المالية
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة المتوسطة 1. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.add('hidden');
+    });
+    
+    // Quiz functionality
+    const quizInputs1 = document.querySelectorAll('input[name="quiz1"]');
+    const quizResult1 = document.getElementById('quizResult1');
+    
+    quizInputs1.forEach(input => {
+      input.addEventListener('change', () => {
+        if (input.value === 'c') {
+          quizResult1.classList.remove('hidden');
+          quizResult1.innerHTML = `
+            <div class="p-3 bg-green-100 border border-green-300 rounded text-green-800">
+              <i class="fas fa-check-circle ml-2"></i>
+              إجابة صحيحة! طريقة الوارد أخيراً يصرف أولاً (LIFO) غير مسموح بها وفقاً لمعايير التقارير المالية الدولية (IFRS).
+            </div>
+          `;
+        } else {
+          quizResult1.classList.remove('hidden');
+          quizResult1.innerHTML = `
+            <div class="p-3 bg-red-100 border border-red-300 rounded text-red-800">
+              <i class="fas fa-times-circle ml-2"></i>
+              إجابة خاطئة. طريقة الوارد أخيراً يصرف أولاً (LIFO) هي الطريقة غير المسموح بها وفقاً لمعايير التقارير المالية الدولية.
+            </div>
+          `;
+        }
+      });
+    });
+    
+    const quizInputs2 = document.querySelectorAll('input[name="quiz2"]');
+    const quizResult2 = document.getElementById('quizResult2');
+    
+    quizInputs2.forEach(input => {
+      input.addEventListener('change', () => {
+        if (input.value === 'c') {
+          quizResult2.classList.remove('hidden');
+          quizResult2.innerHTML = `
+            <div class="p-3 bg-green-100 border border-green-300 rounded text-green-800">
+              <i class="fas fa-check-circle ml-2"></i>
+              إجابة صحيحة! وفقاً لمبدأ الحيطة والحذر، يتم تقييم المخزون بالأقل بين التكلفة وصافي القيمة القابلة للتحقق.
+            </div>
+          `;
+        } else {
+          quizResult2.classList.remove('hidden');
+          quizResult2.innerHTML = `
+            <div class="p-3 bg-red-100 border border-red-300 rounded text-red-800">
+              <i class="fas fa-times-circle ml-2"></i>
+              إجابة خاطئة. وفقاً لمبدأ الحيطة والحذر، يجب تقييم المخزون بالأقل بين التكلفة وصافي القيمة القابلة للتحقق.
+            </div>
+          `;
+        }
+      });
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // Progress tracking
+    function updateProgress() {
+      const sections = document.querySelectorAll('section');
+      const progressBar = document.querySelector('.bg-blue-600');
+      
+      let visibleSections = 0;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          visibleSections++;
+        }
+      });
+      
+      const progress = Math.min((visibleSections / sections.length) * 100, 100);
+      if (progressBar) {
+        progressBar.style.width = progress + '%';
+      }
+    }
+    
+    // Update progress on scroll
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('load', updateProgress);
+    
+    // Add animation classes on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+    
+    // Save progress when user scrolls to bottom
+    function saveProgress() {
+      localStorage.setItem('chapter6_completed', 'true');
+      localStorage.setItem('last_visited', 'chapter-6.html');
+    }
+    
+    // Save progress when user scrolls to bottom
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+        saveProgress();
+      }
+    });
+    
+    // Load saved progress
+    function loadProgress() {
+      const completed = localStorage.getItem('chapter6_completed');
+      if (completed) {
+        const progressBar = document.querySelector('.bg-blue-600');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+        }
+      }
+    }
+    
+    window.addEventListener('load', loadProgress);
+  </script>
+  
+  <!-- Custom CSS for animations -->
+  <style>
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      .fixed, #sidebar, #overlay, button {
+        display: none !important;
+      }
+      
+      .bg-gradient-to-r, .bg-gradient-to-b {
+        background: #4f46e5 !important;
+        color: white !important;
+      }
+      
+      section {
+        break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      
+      .grid {
+        display: block !important;
+      }
+      
+      .md\:grid-cols-2 > div,
+      .md\:grid-cols-3 > div {
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .text-3xl {
+        font-size: 1.5rem;
+      }
+      
+      .text-2xl {
+        font-size: 1.25rem;
+      }
+      
+      .text-xl {
+        font-size: 1.125rem;
+      }
+      
+      .grid {
+        gap: 1rem;
+      }
+      
+      .p-6 {
+        padding: 1rem;
+      }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+      }
+      
+      .text-gray-700 {
+        color: #d1d5db;
+      }
+      
+      .text-gray-600 {
+        color: #9ca3af;
+      }
+      
+      .border-gray-200 {
+        border-color: #374151;
+      }
+    }
+    
+    /* Accessibility improvements */
+    .focus\:ring-2:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #3b82f6;
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .bg-blue-50 {
+        background-color: #dbeafe;
+      }
+      
+      .bg-green-50 {
+        background-color: #dcfce7;
+      }
+      
+      .bg-red-50 {
+        background-color: #fef2f2;
+      }
+      
+      .border {
+        border-width: 2px;
+      }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .transition,
+      .animate-fade-in {
+        animation: none;
+        transition: none;
+      }
+    }
+
+    /* Table responsive styles */
+    @media (max-width: 640px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+
+    /* Custom highlights for inventory concepts */
+    .highlight-fifo {
+      background: linear-gradient(transparent 60%, rgba(96, 165, 250, 0.2) 40%);
+    }
+    
+    .highlight-lifo {
+      background: linear-gradient(transparent 60%, rgba(248, 113, 113, 0.2) 40%);
+    }
+    
+    .highlight-average {
+      background: linear-gradient(transparent 60%, rgba(52, 211, 153, 0.2) 40%);
+    }
+  </style>
+</body>
+</html>
+
+
