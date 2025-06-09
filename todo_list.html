@@ -29,21 +29,11 @@
             font-family: 'Tajawal', sans-serif;
             background-color: #f8fafc;
         }
-        .dark-mode {
-            background-color: #1e293b;
-            color: #e2e8f0;
-        }
         .glass-card {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        .glass-card-dark {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(30, 41, 59, 0.3);
         }
         .gradient-border {
             border-width: 1px;
@@ -51,44 +41,38 @@
             border-image: linear-gradient(to bottom, #10b981, #0891b2) 1;
         }
 
-        /* Custom colors for dark mode toggle */
-        .moon-icon {
-            color: #0d9488;
-        }
-        .sun-icon {
-            color: #fbbf24;
-        }
-
         /* Toggle switch styles */
-        .theme-switch {
-            display: inline-block;
-            height: 24px;
+        .switch {
             position: relative;
+            display: inline-block;
             width: 44px;
+            height: 24px;
         }
-        .theme-switch input {
-            display: none;
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
         .slider {
-            background-color: #ccc;
-            bottom: 0;
-            cursor: pointer;
-            left: 0;
             position: absolute;
-            right: 0;
+            cursor: pointer;
             top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
             transition: .4s;
             border-radius: 34px;
         }
         .slider:before {
-            background-color: white;
-            bottom: 4px;
+            position: absolute;
             content: "";
             height: 16px;
-            left: 4px;
-            position: absolute;
-            transition: .4s;
             width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
             border-radius: 50%;
         }
         input:checked + .slider {
@@ -96,11 +80,6 @@
         }
         input:checked + .slider:before {
             transform: translateX(20px);
-        }
-
-        /* Fix for toggle dot in dark mode */
-        html.dark .toggle-dot {
-            transform: translateX(1.5rem) !important;
         }
 
         /* Task list styles */
@@ -234,52 +213,126 @@
             opacity: 1;
         }
     </style>
+    
+    <style>
+/* Additional styles for the task app */
+
+/* Category color selection */
+.category-color-option {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.category-color-option:hover {
+    transform: scale(1.1);
+}
+
+.category-color-option.selected {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #000;
+}
+
+/* Hover effect for task items */
+.task-item {
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Tab button active state */
+.tab-btn.active {
+    position: relative;
+    font-weight: 600;
+}
+
+.tab-btn.active:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 20%;
+    width: 60%;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Animations */
+@keyframes slide-in {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.task-item {
+    animation: slide-in 0.3s ease-out forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .task-item {
+        animation: none;
+    }
+}
+
+    </style>   
 </head>
-<body class="min-h-screen py-6 transition-colors duration-300">
+<body class="min-h-screen py-6 transition-colors duration-300" onload="App.initialize()">
     <div class="max-w-7xl mx-auto px-4">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div class="flex justify-start">
-                <a href="index.html" class="p-2 bg-emerald-300 dark:bg-emerald-900 rounded-full hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors">
-                  <i class="fas fa-arrow-right text-emerald-600 dark:text-emerald-300"></i>
+                <a href="index.html" class="p-2 bg-emerald-300 rounded-full hover:bg-emerald-200 transition-colors">
+                  <i class="fas fa-arrow-right text-emerald-600"></i>
                 </a>
             </div>
             <div>
                 <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-cyan-600 text-center">قائمة المهام التفاعلية</h1>
-                <p class="text-gray-600 dark:text-gray-400 text-center">نظم مهامك بسهولة مع إمكانية السحب والإفلات</p>
+                <p class="text-gray-600 text-center">نظم مهامك بسهولة مع إمكانية السحب والإفلات</p>
             </div>
-            <div class="flex space-x-3 space-x-reverse items-center">
-                <!-- Theme Toggle Switch -->
-                <div class="relative inline-flex items-center">
-                    <label for="themeSwitch" class="sr-only">تبديل الوضع المظلم</label>
-                    <input type="checkbox" id="themeSwitch" class="sr-only">
-                    <div id="themeToggle" class="w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300 ease-in-out cursor-pointer relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">
-                            <i class="fas fa-moon text-teal-300 dark:text-teal-200 text-xs"></i>
-                        </div>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-1.5 pointer-events-none">
-                            <i class="fas fa-sun text-amber-500 text-xs"></i>
-                        </div>
-                        <div class="toggle-dot absolute inset-y-0.5 left-0.5 bg-white dark:bg-teal-600 w-5 h-5 rounded-full transition-transform duration-300 ease-in-out shadow-md"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="w-10"></div><!-- Placeholder for balance -->
         </div>
         
         <!-- Main Content -->
-        <div class="glass-card dark:glass-card-dark rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+        <div class="glass-card rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
             <!-- Tabs -->
-            <div class="flex border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white">
-                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="tasks">
+            <div class="flex border-b border-gray-200 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" onclick="App.switchTab(this)" data-tab="tasks">
                     <i class="fas fa-tasks ml-2"></i>المهام
                 </button>
-                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="categories">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" onclick="App.switchTab(this)" data-tab="categories">
                     <i class="fas fa-layer-group ml-2"></i>التصنيفات
                 </button>
-                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="settings">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" onclick="App.switchTab(this)" data-tab="settings">
                     <i class="fas fa-cog ml-2"></i>الإعدادات
                 </button>
-                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" onclick="App.switchTab(this)" data-tab="about">
                     <i class="fas fa-info-circle ml-2"></i>حول الأداة
                 </button>
             </div>
@@ -289,395 +342,245 @@
                 <!-- Task Controls -->
                 <div class="flex flex-wrap items-center justify-between mb-6">
                     <div class="mb-4 md:mb-0 flex flex-wrap gap-2">
-                        <button id="addTaskBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center">
+                        <button id="addTaskBtn" onclick="App.openTaskModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center">
                             <i class="fas fa-plus ml-2"></i>إضافة مهمة
                         </button>
-                        <button id="exportTasksBtn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg flex items-center">
+                        <button id="exportTasksBtn" onclick="App.exportTasks()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg flex items-center">
                             <i class="fas fa-file-export ml-2"></i>تصدير المهام
                         </button>
-                        <button id="importTasksBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                        <button id="importTasksBtn" onclick="document.getElementById('importFileInput').dataset.importType='tasks'; document.getElementById('importFileInput').click()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
                             <i class="fas fa-file-import ml-2"></i>استيراد المهام
                         </button>
-                        <button id="printTasksBtn" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg flex items-center">
+                        <button id="printTasksBtn" onclick="App.printTasksAsPDF()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg flex items-center">
                             <i class="fas fa-print ml-2"></i>طباعة PDF
                         </button>
                     </div>
                     
                     <div class="flex flex-wrap gap-2 items-center">
-                        <div id="savedMessage" class="hidden text-green-600 dark:text-green-400 font-medium">
+                        <div id="savedMessage" class="hidden text-green-600 font-medium">
                             <i class="fas fa-check-circle ml-1"></i>تم الحفظ بنجاح
                         </div>
                         
                         <div class="relative">
-                            <input type="text" id="searchTasks" placeholder="بحث في المهام..." class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <input type="text" id="searchTasks" onkeyup="App.filterTasks()" placeholder="بحث في المهام..." class="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700">
                         </div>
                     </div>
                 </div>
                 
                 <!-- Task Filters -->
-                <div class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg">
+                <div class="mb-6 bg-white p-4 rounded-lg">
                     <div class="flex flex-wrap gap-4 items-center">
-                        <div class="font-bold text-gray-700 dark:text-gray-300">تصفية:</div>
+                        <div class="flex-1">
+                            <label for="categoryFilter" class="block text-sm font-medium text-gray-700 mb-1">التصنيف</label>
+                            <select id="categoryFilter" onchange="App.filterTasks()" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="all">جميع التصنيفات</option>
+                                <!-- Category options will be populated by JS -->
+                            </select>
+                        </div>
                         
-                        <select id="categoryFilter" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="all">جميع التصنيفات</option>
-                            <option value="work">العمل</option>
-                            <option value="personal">شخصي</option>
-                            <option value="shopping">تسوق</option>
-                            <option value="health">صحة</option>
-                            <option value="education">تعليم</option>
-                        </select>
-                        <select id="priorityFilter" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="all">جميع الأولويات</option>
-                            <option value="high">أولوية عالية</option>
-                            <option value="medium">أولوية متوسطة</option>
-                            <option value="low">أولوية منخفضة</option>
-                        </select>
+                        <div class="flex-1">
+                            <label for="priorityFilter" class="block text-sm font-medium text-gray-700 mb-1">الأولوية</label>
+                            <select id="priorityFilter" onchange="App.filterTasks()" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="all">جميع الأولويات</option>
+                                <option value="high">عالية</option>
+                                <option value="medium">متوسطة</option>
+                                <option value="low">منخفضة</option>
+                            </select>
+                        </div>
                         
-                        <select id="statusFilter" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="all">جميع الحالات</option>
-                            <option value="pending">قيد الانتظار</option>
-                            <option value="in-progress">قيد التنفيذ</option>
-                            <option value="completed">مكتملة</option>
-                        </select>
+                        <div class="flex-1">
+                            <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">الحالة</label>
+                            <select id="statusFilter" onchange="App.filterTasks()" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="all">جميع الحالات</option>
+                                <option value="active">قيد التنفيذ</option>
+                                <option value="completed">مكتملة</option>
+                                <option value="in-progress">قيد التقدم</option>
+                                <option value="due-today">تستحق اليوم</option>
+                                <option value="overdue">متأخرة</option>
+                            </select>
+                        </div>
                         
-                        <select id="sortTasks" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="dueDate">ترتيب حسب تاريخ الاستحقاق</option>
-                            <option value="priority">ترتيب حسب الأولوية</option>
-                            <option value="progress">ترتيب حسب التقدم</option>
-                            <option value="title">ترتيب حسب العنوان</option>
-                        </select>
+                        <div class="flex-1">
+                            <label for="sortTasks" class="block text-sm font-medium text-gray-700 mb-1">ترتيب حسب</label>
+                            <select id="sortTasks" onchange="App.filterTasks()" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="dueDate">تاريخ الاستحقاق</option>
+                                <option value="priority">الأولوية</option>
+                                <option value="title">الاسم</option>
+                                <option value="createdAt">تاريخ الإضافة</option>
+                                <option value="progress">نسبة الإنجاز</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Task Lists Container -->
-                <div id="taskListsContainer" class="grid grid-cols-1 gap-6">
-                    <!-- Default Task List -->
-                    <div id="defaultTaskList" class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">
-                            <div class="flex items-center justify-between">
-                                <span>المهام</span>
-                                <div class="flex items-center space-x-3 space-x-reverse">
-                                    <div class="flex items-center">
-                                        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-1 px-2 rounded-full mr-1">الكل:</span>
-                                        <span id="totalTaskCount" class="text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 py-1 px-2 rounded-full">0</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-1 px-2 rounded-full mr-1">نشطة:</span>
-                                        <span id="activeTaskCount" class="text-sm bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 py-1 px-2 rounded-full">0</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-1 px-2 rounded-full mr-1">مكتملة:</span>
-                                        <span id="completedTaskCount" class="text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 py-1 px-2 rounded-full">0</span>
-                                    </div>
-                                </div>
+                <!-- Task Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">إجمالي المهام</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="totalTaskCount">0</h3>
                             </div>
-                            <div class="mt-3">
-                                <div class="flex justify-between text-xs mb-1">
-                                    <span class="text-gray-600 dark:text-gray-400">التقدم الإجمالي</span>
-                                    <span id="overallProgressText" class="text-gray-600 dark:text-gray-400">0%</span>
-                                </div>
-                                <div class="progress-bar bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
-                                    <div id="overallProgress" class="progress-value bg-emerald-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                                </div>
+                            <div class="text-emerald-600 bg-emerald-100 p-3 rounded-full">
+                                <i class="fas fa-tasks text-xl"></i>
                             </div>
-                        </h3>                        
-                        
-                        <div class="task-list" id="mainTaskList">
-                            <!-- Tasks will be added here dynamically -->
-                            
-                            <!-- Example Task Item (will be generated by JS) -->
-                            <div class="task-item mb-3 bg-white dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 priority-medium">
-                                <div class="p-4">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" class="task-checkbox w-5 h-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-3">
-                                            <h4 class="font-bold text-gray-800 dark:text-gray-200">إكمال المشروع</h4>
-                                        </div>
-                                        <div class="flex items-center space-x-2 space-x-reverse">
-                                            <span class="due-date-soon text-sm"><i class="far fa-clock ml-1"></i>غداً</span>
-                                            <div class="dropdown relative">
-                                                <button class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-full">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </button>
-                                                <!-- Dropdown menu will be added by JS -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">إكمال المشروع قبل الموعد النهائي وتسليمه للعميل.</p>
-                                    
-                                    <!-- Progress Bar -->
-                                    <div class="mb-3">
-                                        <div class="flex items-center justify-between text-xs mb-1">
-                                            <span class="text-gray-600 dark:text-gray-400">التقدم</span>
-                                            <span class="text-gray-600 dark:text-gray-400">50%</span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-value bg-yellow-500" style="width: 50%"></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Subtasks -->
-                                    <div class="mt-3">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <button class="text-sm text-emerald-600 dark:text-emerald-400 flex items-center">
-                                                <i class="fas fa-chevron-down ml-1"></i>
-                                                <span>المهام الفرعية (2/4)</span>
-                                            </button>
-                                            <button class="text-sm text-emerald-600 dark:text-emerald-400">
-                                                <i class="fas fa-plus ml-1"></i>إضافة مهمة فرعية
-                                            </button>
-                                        </div>
-                                        
-                                        <div class="subtasks-list pl-6 border-r-2 border-gray-200 dark:border-gray-600">
-                                            <div class="subtask-item py-2 flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <input type="checkbox" class="subtask-checkbox w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-2" checked>
-                                                    <span class="subtask-title text-sm text-gray-600 dark:text-gray-400 line-through">تحليل المتطلبات</span>
-                                                </div>
-                                                <button class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                            
-                                            <div class="subtask-item py-2 flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <input type="checkbox" class="subtask-checkbox w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-2" checked>
-                                                    <span class="subtask-title text-sm text-gray-600 dark:text-gray-400 line-through">تصميم الواجهة</span>
-                                                </div>
-                                                <button class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                            
-                                            <div class="subtask-item py-2 flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <input type="checkbox" class="subtask-checkbox w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-2">
-                                                    <span class="subtask-title text-sm text-gray-700 dark:text-gray-300">تطوير الوظائف</span>
-                                                </div>
-                                                <button class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                            
-                                            <div class="subtask-item py-2 flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <input type="checkbox" class="subtask-checkbox w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-2">
-                                                    <span class="subtask-title text-sm text-gray-700 dark:text-gray-300">اختبار وتسليم</span>
-                                                </div>
-                                                <button class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Empty State -->
-                        <div id="emptyTaskList" class="hidden py-8 text-center">
-                            <div class="text-gray-400 dark:text-gray-500 mb-3">
-                                <i class="fas fa-tasks text-5xl"></i>
-                            </div>
-                            <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400 mb-2">لا توجد مهام</h4>
-                            <p class="text-gray-400 dark:text-gray-500 mb-4">أضف مهامك الأولى للبدء في تنظيم يومك</p>
-                            <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg inline-flex items-center">
-                                <i class="fas fa-plus ml-2"></i>إضافة مهمة
-                            </button>
                         </div>
                     </div>
+                    
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">المهام النشطة</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="activeTaskCount">0</h3>
+                            </div>
+                            <div class="text-blue-600 bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-spinner text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">المهام المكتملة</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="completedTaskCount">0</h3>
+                            </div>
+                            <div class="text-green-600 bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="mb-6 bg-white p-4 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-sm font-medium text-gray-700">التقدم الكلي</p>
+                        <p class="text-sm font-medium text-gray-700" id="overallProgressText">0%</p>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="overallProgress" class="progress-value bg-emerald-500 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Task List -->
+                <div id="mainTaskList" class="space-y-3">
+                    <!-- Tasks will be populated by JS -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyTaskList" class="hidden text-center py-10">
+                    <div class="text-gray-400 text-6xl mb-4">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-600 mb-2">لا توجد مهام</h3>
+                    <p class="text-gray-500 mb-4">أضف مهامك الجديدة لتنظيم يومك بشكل أفضل</p>
+                    <button onclick="App.openTaskModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center mx-auto">
+                        <i class="fas fa-plus ml-2"></i>إضافة مهمة جديدة
+                    </button>
                 </div>
             </div>
             
             <!-- Categories Tab -->
             <div id="categories-tab" class="tab-content p-6 hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Categories List -->
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">التصنيفات</h3>
-                        
-                        <div class="mb-4">
-                            <div class="flex">
-                                <input type="text" id="newCategoryName" placeholder="اسم التصنيف الجديد" class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-r-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                                <button id="addCategoryBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-l-lg">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="categoriesList" class="space-y-2">
-                            <!-- Categories will be added here dynamically -->
-                            <div class="category-item flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-blue-500 ml-3"></span>
-                                    <span class="text-gray-700 dark:text-gray-300">العمل</span>
-                                </div>
-                                <div class="flex items-center space-x-2 space-x-reverse">
-                                    <span class="text-xs bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 py-1 px-2 rounded-full">5 مهام</span>
-                                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="category-item flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <div class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full bg-green-500 ml-3"></span>
-                                    <span class="text-gray-700 dark:text-gray-300">شخصي</span>
-                                </div>
-                                <div class="flex items-center space-x-2 space-x-reverse">
-                                    <span class="text-xs bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 py-1 px-2 rounded-full">3 مهام</span>
-                                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Category Colors -->
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">ألوان التصنيفات</h3>
-                        
-                        <div class="grid grid-cols-4 gap-3">
-                            <button class="category-color w-full aspect-square rounded-lg bg-red-500 hover:ring-2 hover:ring-offset-2 hover:ring-red-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-orange-500 hover:ring-2 hover:ring-offset-2 hover:ring-orange-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-amber-500 hover:ring-2 hover:ring-offset-2 hover:ring-amber-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-yellow-500 hover:ring-2 hover:ring-offset-2 hover:ring-yellow-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-lime-500 hover:ring-2 hover:ring-offset-2 hover:ring-lime-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-green-500 hover:ring-2 hover:ring-offset-2 hover:ring-green-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-emerald-500 hover:ring-2 hover:ring-offset-2 hover:ring-emerald-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-teal-500 hover:ring-2 hover:ring-offset-2 hover:ring-teal-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-cyan-500 hover:ring-2 hover:ring-offset-2 hover:ring-cyan-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-sky-500 hover:ring-2 hover:ring-offset-2 hover:ring-sky-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-blue-500 hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-indigo-500 hover:ring-2 hover:ring-offset-2 hover:ring-indigo-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-violet-500 hover:ring-2 hover:ring-offset-2 hover:ring-violet-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-purple-500 hover:ring-2 hover:ring-offset-2 hover:ring-purple-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-fuchsia-500 hover:ring-2 hover:ring-offset-2 hover:ring-fuchsia-500 transition-all"></button>
-                            <button class="category-color w-full aspect-square rounded-lg bg-pink-500 hover:ring-2 hover:ring-offset-2 hover:ring-pink-500 transition-all"></button>
-                        </div>
-                        
-                        <div class="mt-6">
-                            <h4 class="font-medium mb-2 text-gray-700 dark:text-gray-300">تخصيص الألوان</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">انقر على لون لتطبيقه على التصنيف المحدد.</p>
-                            
-                            <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-gray-700 dark:text-gray-300">التصنيف المحدد:</span>
-                                    <span class="text-emerald-600 dark:text-emerald-400" id="selectedCategoryName">لا يوجد</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-gray-700 dark:text-gray-300">اللون الحالي:</span>
-                                    <div class="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-500" id="selectedCategoryColor"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">تصنيفات المهام</h2>
+                    <button id="addCategoryBtn" onclick="App.openCategoryModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center">
+                        <i class="fas fa-plus ml-2"></i>إضافة تصنيف
+                    </button>
+                </div>
+                
+                <div id="categoriesList" class="bg-white rounded-lg divide-y divide-gray-200">
+                    <!-- Categories will be populated by JS -->
                 </div>
             </div>
             
             <!-- Settings Tab -->
             <div id="settings-tab" class="tab-content p-6 hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Display Settings -->
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">إعدادات العرض</h3>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <label class="text-gray-700 dark:text-gray-300">الوضع المظلم</label>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="darkModeToggle" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
-                                </label>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <label class="text-gray-700 dark:text-gray-300">إظهار المهام المكتملة</label>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="showCompletedToggle" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
-                                </label>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <label class="text-gray-700 dark:text-gray-300">تنبيهات المهام المستحقة</label>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="dueDateAlertsToggle" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
-                                </label>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <label class="text-gray-700 dark:text-gray-300">عرض شريط التقدم</label>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="showProgressToggle" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
-                                </label>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300 mb-2">نمط عرض المهام</label>
-                                <select id="taskViewStyle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                                    <option value="detailed">تفصيلي (مع الوصف والمهام الفرعية)</option>
-                                    <option value="compact">مختصر (العناوين فقط)</option>
-                                    <option value="kanban">كانبان (عرض بطاقات)</option>
-                                </select>
-                            </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-6">إعدادات التطبيق</h2>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                        <div>
+                            <h3 class="font-medium text-gray-800">إظهار المهام المكتملة</h3>
+                            <p class="text-sm text-gray-500">إظهار/إخفاء المهام المكتملة في القائمة</p>
                         </div>
+                        <label class="switch">
+                            <input type="checkbox" id="showCompletedToggle" onchange="App.updateSettings()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                        <div>
+                            <h3 class="font-medium text-gray-800">تنبيهات تواريخ الاستحقاق</h3>
+                            <p class="text-sm text-gray-500">عرض إشعارات للمهام المستحقة والمتأخرة</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="dueDateAlertsToggle" onchange="App.updateSettings()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                        <div>
+                            <h3 class="font-medium text-gray-800">إظهار شريط التقدم</h3>
+                            <p class="text-sm text-gray-500">عرض نسبة الإنجاز للمهام ذات المهام الفرعية</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="showProgressToggle" onchange="App.updateSettings()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                        <div>
+                            <h3 class="font-medium text-gray-800">طريقة عرض المهام</h3>
+                            <p class="text-sm text-gray-500">اختر طريقة عرض المهام المفضلة لديك</p>
+                        </div>
+                        <select id="taskViewStyle" onchange="App.updateTaskViewStyle()" class="px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="detailed">تفصيلي</option>
+                            <option value="compact">مختصر</option>
+                            <!-- <option value="kanban">كانبان</option> -->
+                        </select>
                     </div>
                     
                     <!-- Data Management -->
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">إدارة البيانات</h3>
+                    <div class="mt-8">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">إدارة البيانات</h3>
                         
-                        <div class="space-y-4">
-                            <div>
-                                <button id="exportDataBtn" class="w-full py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition flex items-center justify-center">
-                                    <i class="fas fa-download ml-2"></i>تصدير جميع البيانات
-                                </button>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">تصدير جميع المهام والتصنيفات والإعدادات كملف JSON</p>
-                            </div>
-                            
-                            <div>
-                                <div class="flex items-center">
-                                    <input type="file" id="importDataFile" class="hidden" accept=".json">
-                                    <button id="importDataBtn" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition flex items-center justify-center">
-                                        <i class="fas fa-upload ml-2"></i>استيراد البيانات
-                                    </button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button id="exportDataBtn" onclick="App.exportAllData()" class="p-4 bg-white rounded-lg flex items-center text-right hover:bg-gray-50">
+                                <div class="text-blue-600 bg-blue-100 p-3 rounded-full ml-4">
+                                    <i class="fas fa-file-export text-xl"></i>
                                 </div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">استيراد البيانات من ملف JSON تم تصديره مسبقاً</p>
-                            </div>
-                            
-                            <div class="pt-2">
-                                <label class="block text-gray-700 dark:text-gray-300 mb-2">خيارات الاستيراد</label>
-                                <div class="space-y-2">
-                                    <label class="flex items-center">
-                                        <input type="radio" name="importOption" value="merge" class="ml-2 text-emerald-600" checked>
-                                        <span class="text-gray-700 dark:text-gray-300">دمج مع البيانات الحالية</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="radio" name="importOption" value="replace" class="ml-2 text-emerald-600">
-                                        <span class="text-gray-700 dark:text-gray-300">استبدال البيانات الحالية</span>
-                                    </label>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">تصدير كل البيانات</h4>
+                                    <p class="text-sm text-gray-500">حفظ نسخة احتياطية من كل البيانات بتنسيق JSON</p>
                                 </div>
-                            </div>
+                            </button>
                             
-                            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                                <button id="clearDataBtn" class="w-full py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition flex items-center justify-center">
-                                    <i class="fas fa-trash-alt ml-2"></i>مسح جميع البيانات
-                                </button>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">حذف جميع المهام والتصنيفات. لا يمكن التراجع عن هذا الإجراء!</p>
-                            </div>
+                            <button id="importDataBtn" onclick="document.getElementById('importFileInput').dataset.importType='all'; document.getElementById('importFileInput').click()" class="p-4 bg-white rounded-lg flex items-center text-right hover:bg-gray-50">
+                                <div class="text-green-600 bg-green-100 p-3 rounded-full ml-4">
+                                    <i class="fas fa-file-import text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">استيراد البيانات</h4>
+                                    <p class="text-sm text-gray-500">استعادة البيانات من ملف JSON</p>
+                                </div>
+                            </button>
+                            
+                            <input type="file" id="importFileInput" accept=".json" onchange="App.handleImportFile(this)" style="display: none;">
+                            
+                            <button id="clearDataBtn" onclick="App.confirmClearAllData()" class="p-4 bg-white rounded-lg flex items-center text-right hover:bg-gray-50">
+                                <div class="text-red-600 bg-red-100 p-3 rounded-full ml-4">
+                                    <i class="fas fa-trash-alt text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">مسح كل البيانات</h4>
+                                    <p class="text-sm text-gray-500">حذف كل المهام والتصنيفات</p>
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -685,255 +588,271 @@
             
             <!-- About Tab -->
             <div id="about-tab" class="tab-content p-6 hidden">
-                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">حول أداة قائمة المهام التفاعلية</h2>
+                <h2 class="text-xl font-bold text-gray-800 mb-6">حول الأداة</h2>
                 
-                <div class="space-y-6">
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
-                        <p class="text-gray-700 dark:text-gray-300 mb-4">
-                            أداة قائمة المهام التفاعلية هي تطبيق مصمم لمساعدتك في تنظيم مهامك وزيادة إنتاجيتك. تتميز بواجهة سهلة الاستخدام مع إمكانية السحب والإفلات لإعادة ترتيب المهام.
-                        </p>
-                        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
-                            <li>إنشاء وتنظيم المهام بسهولة</li>
-                            <li>إضافة مهام فرعية لتقسيم المهام الكبيرة</li>
-                            <li>تتبع التقدم من خلال شريط التقدم</li>
-                            <li>تصنيف المهام حسب الأولوية والفئة</li>
-                            <li>تصدير واستيراد المهام للنسخ الاحتياطي</li>
-                            <li>طباعة قائمة المهام بتنسيق PDF</li>
-                        </ul>
-                    </div>
+                <div class="bg-white rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-bold text-emerald-600 mb-4">قائمة المهام التفاعلية</h3>
+                    <p class="text-gray-700 mb-4">هذه الأداة تساعدك على تنظيم مهامك اليومية بشكل فعال. يمكنك إضافة وتعديل وحذف المهام، وتصنيفها، ومتابعة تقدمك في إنجازها.</p>
                     
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">كيفية استخدام الأداة</h3>
-                        <ol class="list-decimal list-inside space-y-2 text-gray-700 dark:text-gray-300">
-                            <li>أضف مهمة جديدة باستخدام زر "إضافة مهمة"</li>
-                            <li>حدد عنوان المهمة ووصفها وتاريخ الاستحقاق والأولوية</li>
-                            <li>أضف مهام فرعية لتقسيم المهمة إلى خطوات أصغر</li>
-                            <li>اسحب وأفلت المهام لإعادة ترتيبها حسب الأهمية</li>
-                            <li>استخدم التصنيفات لتنظيم المهام حسب المجالات المختلفة</li>
-                            <li>تابع تقدمك من خلال شريط التقدم ونسبة الإكمال</li>
-                        </ol>
-                    </div>
-                    
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">تواصل معنا</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <a href="https://twitter.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
-                                <div class="p-2 rounded-full bg-blue-50 dark:bg-blue-900/30">
-                                    <i class="fab fa-twitter text-blue-400"></i>
-                                </div>
-                                <span class="mr-3 text-gray-700 dark:text-gray-300">@abutlb</span>
-                            </a>
-                            
-                            <a href="https://github.com/abutlb" target="_blank" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
-                                <div class="p-2 rounded-full bg-gray-50 dark:bg-gray-800">
-                                    <i class="fab fa-github text-gray-700 dark:text-white"></i>
-                                </div>
-                                <span class="mr-3 text-gray-700 dark:text-gray-300">GitHub</span>
-                            </a>
-                            
-                            <a href="mailto:abutlb10015@gmail.com" class="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg hover:shadow-md transition-shadow">
-                                <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/30">
-                                    <i class="fas fa-envelope text-red-500"></i>
-                                </div>
-                                <span class="mr-3 text-gray-700 dark:text-gray-300">البريد الإلكتروني</span>
-                            </a>
+                    <div class="flex items-center mb-4">
+                        <div class="text-gray-500 ml-2">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">الإصدار: <span class="text-emerald-600">1.0.0</span></p>
                         </div>
                     </div>
                     
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
-                        <h3 class="text-lg font-bold mb-4 text-emerald-600 dark:text-emerald-400">معلومات الإصدار</h3>
-                        <p class="text-gray-700 dark:text-gray-300">الإصدار: 1.0.0</p>
-                        <p class="text-gray-700 dark:text-gray-300">آخر تحديث: <span id="lastUpdated">يوليو 2023</span></p>
-                        <p class="text-gray-600 dark:text-gray-400 mt-2">جميع الحقوق محفوظة © <span id="currentYear">2023</span></p>
+                    <div class="flex items-center mb-4">
+                        <div class="text-gray-500 ml-2">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">آخر تحديث: <span class="text-emerald-600" id="lastUpdated"></span></p>
+                        </div>
                     </div>
+                    
+                    <div class="flex items-center">
+                        <div class="text-gray-500 ml-2">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">موقع المطور: <a href="https://abutlb.github.io" target="_blank" class="text-emerald-600 hover:underline">abutlb.github.io</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-bold text-emerald-600 mb-4">المميزات</h3>
+                    
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <div class="text-emerald-500 ml-2 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>إدارة المهام مع خاصية السحب والإفلات</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="text-emerald-500 ml-2 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>تصنيف المهام وتنظيمها حسب الأولوية</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="text-emerald-500 ml-2 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>إضافة مهام فرعية وتتبع نسبة الإنجاز</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="text-emerald-500 ml-2 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>تصدير واستيراد البيانات للنسخ الاحتياطي</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="text-emerald-500 ml-2 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>عرض المهام بطرق متعددة (قائمة تفصيلية، قائمة مختصرة، لوحة كانبان)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="text-emerald-500 ml-2 mt-1">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>تخزين البيانات محلياً في المتصفح</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-emerald-600 mb-4">كيفية الاستخدام</h3>
+                    
+                    <ol class="space-y-3 text-gray-700 list-decimal pr-5">
+                        <li>أضف مهامك الجديدة باستخدام زر "إضافة مهمة"</li>
+                        <li>صنف المهام واختر لها أولوية وتاريخ استحقاق</li>
+                        <li>أضف مهام فرعية إذا كانت المهمة الرئيسية تتطلب خطوات متعددة</li>
+                        <li>اضغط على خانة الاختيار لتحديد المهام المكتملة</li>
+                        <li>استخدم خاصية السحب والإفلات لإعادة ترتيب المهام</li>
+                        <li>استخدم قسم الإعدادات لتخصيص تجربة الاستخدام</li>
+                        <li>قم بتصدير بياناتك للاحتفاظ بنسخة احتياطية</li>
+                    </ol>
                 </div>
             </div>
         </div>
         
-        <!-- Back to Tools Page Button -->
-        <div class="flex justify-center mt-8">
-            <a href="index.html" class="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition-colors shadow-md flex items-center">
-                <i class="fas fa-arrow-right ml-2"></i>
-                العودة إلى صفحة الأدوات
-            </a>
-        </div>
-    </div>
-
-    <!-- Task Modal -->
-    <div id="taskModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="taskModalTitle">إضافة مهمة جديدة</h3>
-                <button id="closeTaskModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                    <i class="fas fa-times"></i>
-                </button>
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-sm text-gray-600">
+            <p>جميع الحقوق محفوظة &copy; <span id="footerYear"></span></p>
+            <p class="mt-2">تم التطوير بواسطة <a href="https://abutlb.github.io" target="_blank" class="text-emerald-600 hover:underline">عبدالله التويجري</a></p>
+            <div class="mt-4 flex justify-center space-x-4 space-x-reverse rtl:space-x-reverse">
+                <a href="https://github.com/abutlb" class="text-gray-500 hover:text-emerald-500">
+                    <i class="fab fa-github text-lg"></i>
+                </a>
+                <a href="https://twitter.com/abutlb" class="text-gray-500 hover:text-emerald-500">
+                    <i class="fab fa-twitter text-lg"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" class="text-gray-500 hover:text-emerald-500">
+                    <i class="fab fa-linkedin text-lg"></i>
+                </a>
             </div>
+        </footer>
+    </div>
+    
+    <!-- Task Modal -->
+    <div id="taskModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
+            <button id="closeTaskModal" onclick="App.hideTaskModal()" class="absolute top-3 left-3 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
             
-            <form id="taskForm">
-                <input type="hidden" id="taskId" value="">
+            <h2 id="taskModalTitle" class="text-xl font-bold text-gray-800 mb-4">إضافة مهمة جديدة</h2>
+            
+            <form id="taskForm" onsubmit="return App.saveTask(event)">
+                <input type="hidden" id="taskId">
                 
                 <div class="mb-4">
-                    <label for="taskTitle" class="block text-gray-700 dark:text-gray-300 mb-2">عنوان المهمة</label>
-                    <input type="text" id="taskTitle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل عنوان المهمة" required>
+                    <label for="taskTitle" class="block text-sm font-medium text-gray-700 mb-1">عنوان المهمة</label>
+                    <input type="text" id="taskTitle" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" required>
                 </div>
                 
                 <div class="mb-4">
-                    <label for="taskDescription" class="block text-gray-700 dark:text-gray-300 mb-2">وصف المهمة</label>
-                    <textarea id="taskDescription" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل وصفاً مختصراً (اختياري)" rows="3"></textarea>
+                    <label for="taskDescription" class="block text-sm font-medium text-gray-700 mb-1">الوصف (اختياري)</label>
+                    <textarea id="taskDescription" rows="3" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"></textarea>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
-                        <label for="taskCategory" class="block text-gray-700 dark:text-gray-300 mb-2">التصنيف</label>
-                        <select id="taskCategory" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="work">العمل</option>
-                            <option value="personal">شخصي</option>
-                            <option value="shopping">تسوق</option>
-                            <option value="health">صحة</option>
-                            <option value="education">تعليم</option>
+                        <label for="taskCategory" class="block text-sm font-medium text-gray-700 mb-1">التصنيف</label>
+                        <select id="taskCategory" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                            <!-- Categories will be populated by JS -->
                         </select>
                     </div>
                     
                     <div>
-                        <label for="taskPriority" class="block text-gray-700 dark:text-gray-300 mb-2">الأولوية</label>
-                        <select id="taskPriority" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                            <option value="low">منخفضة</option>
-                            <option value="medium" selected>متوسطة</option>
+                        <label for="taskPriority" class="block text-sm font-medium text-gray-700 mb-1">الأولوية</label>
+                        <select id="taskPriority" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
                             <option value="high">عالية</option>
+                            <option value="medium" selected>متوسطة</option>
+                            <option value="low">منخفضة</option>
                         </select>
                     </div>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="taskDueDate" class="block text-gray-700 dark:text-gray-300 mb-2">تاريخ الاستحقاق</label>
-                    <input type="date" id="taskDueDate" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                </div>
-                
-                <div class="mb-4" id="subtasksContainer">
-                    <label class="block text-gray-700 dark:text-gray-300 mb-2">المهام الفرعية</label>
                     
-                    <div id="subtasksList" class="space-y-2 mb-3">
-                        <!-- Subtasks will be added here dynamically -->
+                    <div>
+                        <label for="taskDueDate" class="block text-sm font-medium text-gray-700 mb-1">تاريخ الاستحقاق</label>
+                        <input type="date" id="taskDueDate" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                </div>
+                
+                <!-- Subtasks -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-gray-700">المهام الفرعية</label>
                     </div>
                     
-                    <div class="flex">
-                        <input type="text" id="newSubtaskTitle" placeholder="عنوان المهمة الفرعية" class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-r-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                        <button type="button" id="addSubtaskBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-l-lg">
+                    <div class="flex items-center mb-2">
+                        <input type="text" id="newSubtaskTitle" placeholder="عنوان المهمة الفرعية" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500">
+                        <button type="button" id="addSubtaskBtn" onclick="App.addSubtaskField(event)" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md mr-2">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
+                    
+                    <div id="subtasksList" class="space-y-2 max-h-40 overflow-y-auto">
+                        <!-- Subtasks will be added here -->
+                    </div>
                 </div>
                 
-                <div class="flex items-center justify-between mt-6">
-                    <button type="button" id="deleteTaskBtn" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition hidden">
-                        <i class="fas fa-trash-alt ml-2"></i>حذف
-                    </button>
-                    
-                    <div class="flex gap-2">
-                        <button type="button" id="cancelTaskBtn" class="py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                <div class="flex justify-between items-center mt-6">
+                    <div>
+                        <button type="button" id="deleteTaskBtn" onclick="App.confirmDeleteTask()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg hidden">
+                            <i class="fas fa-trash-alt ml-1"></i>حذف
+                        </button>
+                    </div>
+                    <div class="flex space-x-2 space-x-reverse">
+                        <button type="button" id="cancelTaskBtn" onclick="App.hideTaskModal()" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg">
                             إلغاء
                         </button>
-                        <button type="submit" class="py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition">
-                            <i class="fas fa-save ml-2"></i>حفظ
+                        <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg">
+                            حفظ
                         </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
+    
     <!-- Category Modal -->
-    <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white" id="categoryModalTitle">تعديل التصنيف</h3>
-                <button id="closeCategoryModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+    <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+            <button id="closeCategoryModal" onclick="App.hideCategoryModal()" class="absolute top-3 left-3 text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
             
-            <form id="categoryForm">
-                <input type="hidden" id="categoryId" value="">
+            <h2 id="categoryModalTitle" class="text-xl font-bold text-gray-800 mb-4">إضافة تصنيف جديد</h2>
+            
+            <form id="categoryForm" onsubmit="return App.saveCategory(event)">
+                <input type="hidden" id="categoryId">
                 
                 <div class="mb-4">
-                    <label for="categoryName" class="block text-gray-700 dark:text-gray-300 mb-2">اسم التصنيف</label>
-                    <input type="text" id="categoryName" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" placeholder="أدخل اسم التصنيف" required>
+                    <label for="categoryName" class="block text-sm font-medium text-gray-700 mb-1">اسم التصنيف</label>
+                    <input type="text" id="categoryName" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500" required>
                 </div>
                 
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-300 mb-2">لون التصنيف</label>
-                    <div class="grid grid-cols-8 gap-2">
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-red-500 hover:ring-2 hover:ring-offset-2 hover:ring-red-500 transition-all" data-color="red-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-orange-500 hover:ring-2 hover:ring-offset-2 hover:ring-orange-500 transition-all" data-color="orange-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-amber-500 hover:ring-2 hover:ring-offset-2 hover:ring-amber-500 transition-all" data-color="amber-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-yellow-500 hover:ring-2 hover:ring-offset-2 hover:ring-yellow-500 transition-all" data-color="yellow-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-lime-500 hover:ring-2 hover:ring-offset-2 hover:ring-lime-500 transition-all" data-color="lime-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-green-500 hover:ring-2 hover:ring-offset-2 hover:ring-green-500 transition-all" data-color="green-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-emerald-500 hover:ring-2 hover:ring-offset-2 hover:ring-emerald-500 transition-all" data-color="emerald-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-teal-500 hover:ring-2 hover:ring-offset-2 hover:ring-teal-500 transition-all" data-color="teal-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-cyan-500 hover:ring-2 hover:ring-offset-2 hover:ring-cyan-500 transition-all" data-color="cyan-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-sky-500 hover:ring-2 hover:ring-offset-2 hover:ring-sky-500 transition-all" data-color="sky-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-blue-500 hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 transition-all" data-color="blue-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-indigo-500 hover:ring-2 hover:ring-offset-2 hover:ring-indigo-500 transition-all" data-color="indigo-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-violet-500 hover:ring-2 hover:ring-offset-2 hover:ring-violet-500 transition-all" data-color="violet-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-purple-500 hover:ring-2 hover:ring-offset-2 hover:ring-purple-500 transition-all" data-color="purple-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-fuchsia-500 hover:ring-2 hover:ring-offset-2 hover:ring-fuchsia-500 transition-all" data-color="fuchsia-500"></button>
-                        <button type="button" class="category-color-option w-full aspect-square rounded-lg bg-pink-500 hover:ring-2 hover:ring-offset-2 hover:ring-pink-500 transition-all" data-color="pink-500"></button>
-                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">لون التصنيف</label>
                     <input type="hidden" id="categoryColor" value="emerald-500">
+                    
+                    <div class="grid grid-cols-5 gap-2 mt-2">
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-blue-500" data-color="blue-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-green-500" data-color="green-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-amber-500" data-color="amber-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-red-500" data-color="red-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-purple-500" data-color="purple-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-emerald-500 selected" data-color="emerald-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-pink-500" data-color="pink-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-indigo-500" data-color="indigo-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-gray-500" data-color="gray-500" onclick="App.selectCategoryColor(this)"></button>
+                        <button type="button" class="category-color-option w-8 h-8 rounded-full bg-cyan-500" data-color="cyan-500" onclick="App.selectCategoryColor(this)"></button>
+                    </div>
                 </div>
                 
-                <div class="flex items-center justify-between mt-6">
-                    <button type="button" id="deleteCategoryBtn" class="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-lg transition hidden">
-                        <i class="fas fa-trash-alt ml-2"></i>حذف
-                    </button>
-                    
-                    <div class="flex gap-2">
-                        <button type="button" id="cancelCategoryBtn" class="py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+                <div class="flex justify-between items-center mt-6">
+                    <div>
+                        <button type="button" id="deleteCategoryBtn" onclick="App.confirmDeleteCategory()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg hidden">
+                            <i class="fas fa-trash-alt ml-1"></i>حذف
+                        </button>
+                    </div>
+                    <div class="flex space-x-2 space-x-reverse">
+                        <button type="button" id="cancelCategoryBtn" onclick="App.hideCategoryModal()" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg">
                             إلغاء
                         </button>
-                        <button type="submit" class="py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition">
-                            <i class="fas fa-save ml-2"></i>حفظ
+                        <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg">
+                            حفظ
                         </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
+    
     <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
-            <div class="text-center mb-4">
-                <div class="text-red-500 text-5xl mb-4">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2" id="confirmationTitle">تأكيد الحذف</h3>
-                <p class="text-gray-600 dark:text-gray-400" id="confirmationMessage">هل أنت متأكد من رغبتك في حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.</p>
-            </div>
+    <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+            <h2 id="confirmationTitle" class="text-xl font-bold text-gray-800 mb-4">تأكيد الحذف</h2>
             
-            <div class="flex items-center justify-center gap-4 mt-6">
-                <button id="confirmCancel" class="py-2 px-6 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition">
+            <p id="confirmationMessage" class="text-gray-600 mb-6">هل أنت متأكد من رغبتك في حذف هذا العنصر؟</p>
+            
+            <div class="flex justify-end space-x-2 space-x-reverse">
+                <button onclick="App.hideConfirmationModal()" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg">
                     إلغاء
                 </button>
-                <button id="confirmAction" class="py-2 px-6 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                <button id="confirmActionBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
                     تأكيد الحذف
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Import File Input (Hidden) -->
-    <input type="file" id="importFileInput" class="hidden" accept=".json">
-
-    <!-- Footer -->
-    <footer class="mt-12 text-center text-gray-500 dark:text-gray-400 text-sm">        
-        <p>© <span id="footerYear">2023</span> قائمة المهام التفاعلية - جميع الحقوق محفوظة</p>
-    </footer>
-
+    
     <script src="js/todo_list.js"></script>
 </body>
 </html>
-
-
- 
