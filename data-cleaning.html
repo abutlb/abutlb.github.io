@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة تنظيف البيانات | Data Cleaning Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'tajawal': ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            font-family: 'Tajawal', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 font-tajawal">
+    <!-- Header -->
+    <header class="p-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-broom text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white">أداة تنظيف البيانات</h1>
+                            <p class="text-blue-100">تحليل وتنظيف البيانات بشكل احترافي</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div class="text-white text-sm">
+                            <i class="fas fa-circle text-green-400 ml-1"></i>
+                            جاهز للاستخدام
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="px-6 mb-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-2 border border-white/20 shadow-xl">
+                <div class="flex space-x-2 space-x-reverse">
+                    <button class="nav-item flex-1 py-3 px-6 rounded-xl text-white font-medium bg-blue-600/80 hover:bg-blue-500/80 transition-all duration-300 transform hover:scale-105" data-section="upload">
+                        <i class="fas fa-upload ml-2"></i>رفع الملف
+                    </button>
+                    <button class="nav-item flex-1 py-3 px-6 rounded-xl text-white font-medium hover:bg-white/20 transition-all duration-300" data-section="analysis">
+                        <i class="fas fa-chart-line ml-2"></i>التحليل
+                    </button>
+                    <button class="nav-item flex-1 py-3 px-6 rounded-xl text-white font-medium hover:bg-white/20 transition-all duration-300" data-section="cleaning">
+                        <i class="fas fa-broom ml-2"></i>التنظيف
+                    </button>
+                    <button class="nav-item flex-1 py-3 px-6 rounded-xl text-white font-medium hover:bg-white/20 transition-all duration-300" data-section="export">
+                        <i class="fas fa-download ml-2"></i>التصدير
+                    </button>
+                    <button class="nav-item flex-1 py-3 px-6 rounded-xl text-white font-medium hover:bg-white/20 transition-all duration-300" data-section="about">
+                        <i class="fas fa-info-circle ml-2"></i>حول الأداة
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="px-6 pb-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Upload Section -->
+            <div id="upload-section" class="content-section">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">رفع ملف البيانات</h2>
+                    
+                    <!-- File Upload Zone -->
+                    <div id="fileDropZone" class="border-2 border-dashed border-white/30 rounded-2xl p-12 text-center mb-6 bg-white/5 hover:bg-white/10 transition-all duration-300 cursor-pointer">
+                        <div class="mb-6">
+                            <i class="fas fa-cloud-upload-alt text-6xl text-white/60"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">اسحب وأفلت ملفك هنا</h3>
+                        <p class="text-blue-100 mb-6">أو انقر لاختيار ملف CSV أو Excel</p>
+                        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" class="hidden">
+                        <button id="selectFileBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-folder-open ml-2"></i>اختر ملف
+                        </button>
+                    </div>
+                    
+                    <!-- File Info -->
+                    <div id="fileInfo" class="hidden bg-gradient-to-r from-emerald-500/20 to-blue-500/20 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                        <h4 class="font-bold text-white mb-4">معلومات الملف</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="text-center bg-white/10 rounded-lg p-4">
+                                <p class="text-blue-200 text-sm">اسم الملف</p>
+                                <p id="fileName" class="font-bold text-white truncate"></p>
+                            </div>
+                            <div class="text-center bg-white/10 rounded-lg p-4">
+                                <p class="text-blue-200 text-sm">حجم الملف</p>
+                                <p id="fileSize" class="font-bold text-white"></p>
+                            </div>
+                            <div class="text-center bg-white/10 rounded-lg p-4">
+                                <p class="text-blue-200 text-sm">عدد الصفوف</p>
+                                <p id="rowCount" class="font-bold text-white"></p>
+                            </div>
+                            <div class="text-center bg-white/10 rounded-lg p-4">
+                                <p class="text-blue-200 text-sm">عدد الأعمدة</p>
+                                <p id="columnCount" class="font-bold text-white"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div id="progressContainer" class="hidden mt-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-white">جاري معالجة الملف...</span>
+                            <span id="progressText" class="text-white">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
+                            <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div id="analysis-section" class="content-section hidden">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">تحليل البيانات</h2>
+                    <div id="analysisContent">
+                        <div class="text-center text-blue-200 py-12">
+                            <i class="fas fa-chart-line text-6xl mb-4 opacity-60"></i>
+                            <p class="text-xl">قم برفع ملف أولاً لعرض التحليل</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cleaning Section -->
+            <div id="cleaning-section" class="content-section hidden">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">تنظيف البيانات</h2>
+                    <div id="cleaningContent">
+                        <div class="text-center text-blue-200 py-12">
+                            <i class="fas fa-broom text-6xl mb-4 opacity-60"></i>
+                            <p class="text-xl">قم برفع ملف أولاً لبدء عملية التنظيف</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Section -->
+            <div id="export-section" class="content-section hidden">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">تصدير البيانات</h2>
+                    <div id="exportContent">
+                        <div class="text-center text-blue-200 py-12">
+                            <i class="fas fa-download text-6xl mb-4 opacity-60"></i>
+                            <p class="text-xl">قم بتنظيف البيانات أولاً لتصديرها</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="about-section" class="content-section hidden">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6">حول الأداة</h2>
+                    <div class="space-y-6 text-white">
+                        <div class="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-xl p-6 border border-white/20">
+                            <h3 class="text-xl font-bold mb-4">
+                                <i class="fas fa-info-circle ml-2 text-blue-400"></i>
+                                نظرة عامة
+                            </h3>
+                            <p class="text-blue-100 leading-relaxed">
+                                أداة تنظيف البيانات هي تطبيق ويب متقدم مصمم لمساعدة محللي البيانات والباحثين في تنظيف وتحليل البيانات بشكل احترافي. 
+                                تدعم الأداة ملفات CSV و Excel وتوفر مجموعة شاملة من الأدوات لتحليل جودة البيانات وتنظيفها.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-xl p-6 border border-white/20">
+                                <h3 class="text-xl font-bold mb-4">
+                                    <i class="fas fa-star ml-2 text-yellow-400"></i>
+                                    المميزات الرئيسية
+                                </h3>
+                                <ul class="space-y-2 text-blue-100">
+                                    <li class="flex items-center"><i class="fas fa-check ml-2 text-green-400"></i>تحليل شامل للبيانات</li>
+                                    <li class="flex items-center"><i class="fas fa-check ml-2 text-green-400"></i>كشف القيم المفقودة والشاذة</li>
+                                    <li class="flex items-center"><i class="fas fa-check ml-2 text-green-400"></i>تحليل أنواع البيانات</li>
+                                    <li class="flex items-center"><i class="fas fa-check ml-2 text-green-400"></i>إحصائات وصفية متقدمة</li>
+                                    <li class="flex items-center"><i class="fas fa-check ml-2 text-green-400"></i>كشف التكرارات</li>
+                                    <li class="flex items-center"><i class="fas fa-check ml-2 text-green-400"></i>تصدير متعدد التنسيقات</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-6 border border-white/20">
+                                <h3 class="text-xl font-bold mb-4">
+                                    <i class="fas fa-cogs ml-2 text-purple-400"></i>
+                                    التقنيات المستخدمة
+                                </h3>
+                                <ul class="space-y-2 text-blue-100">
+                                    <li class="flex items-center"><i class="fas fa-code ml-2 text-blue-400"></i>HTML5 & CSS3</li>
+                                    <li class="flex items-center"><i class="fas fa-code ml-2 text-blue-400"></i>JavaScript ES6+</li>
+                                    <li class="flex items-center"><i class="fas fa-code ml-2 text-blue-400"></i>Tailwind CSS</li>
+                                    <li class="flex items-center"><i class="fas fa-code ml-2 text-blue-400"></i>Chart.js</li>
+                                    <li class="flex items-center"><i class="fas fa-code ml-2 text-blue-400"></i>Papa Parse</li>
+                                    <li class="flex items-center"><i class="fas fa-code ml-2 text-blue-400"></i>SheetJS</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl p-6 border border-white/20">
+                            <h3 class="text-xl font-bold mb-4">
+                                <i class="fas fa-chart-bar ml-2 text-green-400"></i>
+                                الإحصائيات المدعومة
+                            </h3>
+                            <div class="grid md:grid-cols-3 gap-4 text-blue-100">
+                                <div class="bg-white/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2 text-white">الإحصائيات الأساسية</h4>
+                                    <ul class="space-y-1 text-sm">
+                                        <li>• المتوسط الحسابي</li>
+                                        <li>• الوسيط</li>
+                                        <li>• المنوال</li>
+                                        <li>• الانحراف المعياري</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2 text-white">الربعيات</h4>
+                                    <ul class="space-y-1 text-sm">
+                                        <li>• الربع الأول (Q1)</li>
+                                        <li>• الربع الثالث (Q3)</li>
+                                        <li>• المدى الربعي (IQR)</li>
+                                        <li>• الحد الأدنى والأقصى</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2 text-white">كشف الشذوذ</h4>
+                                    <ul class="space-y-1 text-sm">
+                                        <li>• طريقة Z-Score</li>
+                                        <li>• طريقة IQR</li>
+                                        <li>• التصور البياني</li>
+                                        <li>• التقارير التفصيلية</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-xl p-6 border border-white/20">
+                            <h3 class="text-xl font-bold mb-4">
+                                <i class="fas fa-file-alt ml-2 text-orange-400"></i>
+                                التنسيقات المدعومة
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold mb-3 text-blue-200">الاستيراد</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-file-csv ml-2 text-green-400"></i>
+                                            <span>CSV (Comma Separated Values)</span>
+                                        </div>
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-file-excel ml-2 text-green-400"></i>
+                                            <span>Excel (.xlsx, .xls)</span>
+                                        </div>
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-layer-group ml-2 text-blue-400"></i>
+                                            <span>دعم الأوراق المتعددة</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-3 text-blue-200">التصدير</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-file-csv ml-2 text-blue-400"></i>
+                                            <span>CSV</span>
+                                        </div>
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-file-excel ml-2 text-blue-400"></i>
+                                            <span>Excel</span>
+                                        </div>
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-file-code ml-2 text-blue-400"></i>
+                                            <span>JSON</span>
+                                        </div>
+                                        <div class="flex items-center bg-white/10 p-2 rounded">
+                                            <i class="fas fa-file-alt ml-2 text-blue-400"></i>
+                                            <span>تقارير التنظيف</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl p-6 border border-white/20">
+                            <h3 class="text-xl font-bold mb-4">
+                                <i class="fas fa-graduation-cap ml-2 text-red-400"></i>
+                                كيفية الاستخدام
+                            </h3>
+                            <div class="space-y-4 text-blue-100">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center ml-3 mt-1 flex-shrink-0">
+                                        <span class="text-white font-bold text-sm">1</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white">رفع الملف</h4>
+                                        <p class="text-sm">اسحب وأفلت ملف CSV أو Excel أو انقر لاختيار الملف من جهازك</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center ml-3 mt-1 flex-shrink-0">
+                                        <span class="text-white font-bold text-sm">2</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white">مراجعة التحليل</h4>
+                                        <p class="text-sm">استعرض الإحصائيات والمشاكل المكتشفة في البيانات</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center ml-3 mt-1 flex-shrink-0">
+                                        <span class="text-white font-bold text-sm">3</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white">تطبيق التنظيف</h4>
+                                        <p class="text-sm">اختر عمليات التنظيف المناسبة وطبقها على البيانات</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center ml-3 mt-1 flex-shrink-0">
+                                        <span class="text-white font-bold text-sm">4</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white">تصدير النتائج</h4>
+                                        <p class="text-sm">احفظ البيانات المنظفة بالتنسيق المطلوب</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-pink-500/20 to-rose-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <h3 class="text-xl font-bold mb-4">
+                                <i class="fas fa-heart ml-2 text-red-400"></i>
+                                المطور
+                            </h3>
+                            <p class="text-blue-100 mb-4">
+                                تم تطوير هذه الأداة بواسطة <strong class="text-white">عبدالله التويجري</strong>
+                            </p>
+                            
+                            
+                            <!-- Social Media Labels -->
+                            <div class="text-center mb-4">
+                                <p class="text-blue-200 text-sm mb-2">تابعني على وسائل التواصل الاجتماعي</p>
+                                <div class="flex flex-wrap justify-center gap-2 text-xs">
+                                    <a href="https://twitter.com/abutlb" target="_blank" rel="noopener noreferrer" class="group p-3 rounded-full transition-all duration-300 transform hover:scale-110">
+                                        <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full border border-blue-500/30">
+                                            <i class="fab fa-twitter ml-1"></i>Twitter
+                                        </span>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234" target="_blank" rel="noopener noreferrer" class="group p-3 rounded-full transition-all duration-300 transform hover:scale-110">
+                                        <span class="bg-blue-600/20 text-blue-300 px-2 py-1 rounded-full border border-blue-600/30">
+                                            <i class="fab fa-linkedin ml-1"></i>LinkedIn
+                                        </span>
+                                    </a>
+                                    <a href="https://github.com/abutlb" target="_blank" rel="noopener noreferrer" class="group p-3 rounded-full transition-all duration-300 transform hover:scale-110">
+                                        <span class="bg-gray-500/20 text-gray-300 px-2 py-1 rounded-full border border-gray-500/30">
+                                            <i class="fab fa-github ml-1"></i>GitHub
+                                        </span>
+                                    </a>
+                                    <a href="mailto:abutlb10015@gmail.com" class="group p-3 rounded-full transition-all duration-300 transform hover:scale-110 ">
+                                        <span class="bg-red-500/20 text-red-300 px-2 py-1 rounded-full border border-red-500/30">
+                                            <i class="fas fa-envelope ml-1"></i>Email
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-blue-200">
+                                © <span id="currentYear">2025</span> جميع الحقوق محفوظة
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sheet Selection Modal -->
+    <div id="sheetModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 max-w-md w-full mx-4 border border-white/20 shadow-2xl">
+            <h3 class="text-xl font-bold mb-4 text-white">اختر الورقة</h3>
+            <p class="text-blue-200 mb-4">يحتوي الملف على عدة أوراق. اختر الورقة التي تريد تحليلها:</p>
+            <div id="sheetList" class="space-y-2 mb-6"></div>
+            <div class="flex space-x-4 space-x-reverse">
+                <button id="selectSheetBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-check ml-2"></i>اختيار
+                </button>
+                <button id="cancelSheetBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-all duration-300">
+                    <i class="fas fa-times ml-2"></i>إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"></div>
+
+    <script>
+        // Global variables
+        let rawData = [];
+        let cleanedData = [];
+        let dataStats = {};
+        let workbook = null;
+        let selectedSheet = null;
+        let duplicateRows = [];
+        let outlierRows = [];
+        
+        // Navigation functionality
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetSection = item.dataset.section;
+                
+                // Update active nav item
+                navItems.forEach(nav => {
+                    nav.classList.remove('bg-blue-600/80');
+                    nav.classList.add('hover:bg-white/20');
+                });
+                item.classList.add('bg-blue-600/80');
+                item.classList.remove('hover:bg-white/20');
+                
+                // Show target section
+                contentSections.forEach(section => section.classList.add('hidden'));
+                document.getElementById(`${targetSection}-section`).classList.remove('hidden');
+            });
+        });
+        
+        // File upload functionality
+        const fileDropZone = document.getElementById('fileDropZone');
+        const fileInput = document.getElementById('fileInput');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        
+        // Drag and drop events
+        fileDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropZone.classList.add('border-blue-400', 'bg-blue-500/20');
+        });
+        
+        fileDropZone.addEventListener('dragleave', () => {
+            fileDropZone.classList.remove('border-blue-400', 'bg-blue-500/20');
+        });
+        
+        fileDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropZone.classList.remove('border-blue-400', 'bg-blue-500/20');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+        
+        selectFileBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        
+        // Handle file processing
+        function handleFile(file) {
+            const validTypes = ['text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+            
+            if (!validTypes.includes(file.type) && !file.name.match(/\.(csv|xlsx|xls)$/i)) {
+                showNotification('يرجى اختيار ملف CSV أو Excel صالح', 'error');
+                return;
+            }
+            
+            // Show file info
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileInfo').classList.remove('hidden');
+            
+            // Show progress
+            showProgress();
+            
+            // Process file based on type
+            if (file.name.toLowerCase().endsWith('.csv')) {
+                processCSV(file);
+            } else {
+                processExcel(file);
+            }
+        }
+        
+        // Process CSV file
+        function processCSV(file) {
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    rawData = results.data;
+                    updateProgress(100);
+                    setTimeout(() => {
+                        hideProgress();
+                        processData();
+                    }, 500);
+                },
+                error: function(error) {
+                    console.error('Error parsing CSV:', error);
+                    showNotification('خطأ في قراءة ملف CSV', 'error');
+                    hideProgress();
+                }
+            });
+        }
+        
+        // Process Excel file
+        function processExcel(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    workbook = XLSX.read(data, { type: 'array' });
+                    
+                    if (workbook.SheetNames.length > 1) {
+                        showSheetSelection(workbook.SheetNames);
+                    } else {
+                        selectedSheet = workbook.SheetNames[0];
+                        extractDataFromSheet();
+                    }
+                } catch (error) {
+                    console.error('Error parsing Excel:', error);
+                    showNotification('خطأ في قراءة ملف Excel', 'error');
+                    hideProgress();
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // Show sheet selection modal
+        function showSheetSelection(sheetNames) {
+            const modal = document.getElementById('sheetModal');
+            const sheetList = document.getElementById('sheetList');
+            
+            sheetList.innerHTML = '';
+            sheetNames.forEach((name, index) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label class="flex items-center p-3 bg-white/10 rounded-lg cursor-pointer hover:bg-white/20 transition-all duration-300">
+                        <input type="radio" name="sheet" value="${name}" class="ml-3 accent-blue-500" ${index === 0 ? 'checked' : ''}>
+                        <span class="font-medium text-white">${name}</span>
+                    </label>
+                `;
+                sheetList.appendChild(div);
+            });
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        // Sheet selection handlers
+        document.getElementById('selectSheetBtn').addEventListener('click', () => {
+            const selectedRadio = document.querySelector('input[name="sheet"]:checked');
+            if (selectedRadio) {
+                selectedSheet = selectedRadio.value;
+                document.getElementById('sheetModal').classList.add('hidden');
+                document.getElementById('sheetModal').classList.remove('flex');
+                extractDataFromSheet();
+            }
+        });
+        
+        document.getElementById('cancelSheetBtn').addEventListener('click', () => {
+            document.getElementById('sheetModal').classList.add('hidden');
+            document.getElementById('sheetModal').classList.remove('flex');
+            hideProgress();
+        });
+        
+        // Extract data from selected sheet
+        function extractDataFromSheet() {
+            try {
+                const worksheet = workbook.Sheets[selectedSheet];
+                rawData = XLSX.utils.sheet_to_json(worksheet);
+                
+                updateProgress(100);
+                setTimeout(() => {
+                    hideProgress();
+                    processData();
+                }, 500);
+            } catch (error) {
+                console.error('Error extracting sheet data:', error);
+                showNotification('خطأ في استخراج بيانات الورقة', 'error');
+                hideProgress();
+            }
+        }
+        
+        // Process and analyze data
+        function processData() {
+            if (rawData.length === 0) {
+                showNotification('الملف فارغ أو لا يحتوي على بيانات صالحة', 'error');
+                return;
+            }
+            
+            // Update file info
+            document.getElementById('rowCount').textContent = rawData.length.toLocaleString();
+            document.getElementById('columnCount').textContent = Object.keys(rawData[0]).length;
+            
+            // Analyze data
+            analyzeData();
+            
+            // Find duplicates and outliers
+            findDuplicateRows();
+            findOutlierRows();
+            
+            // Generate views
+            generateAnalysisView();
+            generateCleaningView();
+            
+            showNotification('تم تحليل البيانات بنجاح!', 'success');
+        }
+        
+        // Analyze data and generate statistics
+        function analyzeData() {
+            const columns = Object.keys(rawData[0]);
+            dataStats = {};
+            
+            columns.forEach(column => {
+                const values = rawData.map(row => row[column]).filter(val => val !== null && val !== undefined);
+                const nonEmptyValues = values.filter(val => val !== '');
+                
+                dataStats[column] = {
+                    name: column,
+                    totalCount: rawData.length,
+                    nonEmptyCount: nonEmptyValues.length,
+                    emptyCount: rawData.length - nonEmptyValues.length,
+                    emptyPercentage: ((rawData.length - nonEmptyValues.length) / rawData.length * 100).toFixed(2),
+                    dataType: detectDataType(nonEmptyValues),
+                    suggestedType: suggestDataType(nonEmptyValues),
+                    uniqueCount: new Set(nonEmptyValues).size,
+                    duplicateCount: nonEmptyValues.length - new Set(nonEmptyValues).size,
+                    sampleValues: nonEmptyValues.slice(0, 5)
+                };
+                
+                // Calculate statistics for numeric columns
+                if (dataStats[column].dataType === 'numeric') {
+                    const numericValues = nonEmptyValues.map(val => parseFloat(val)).filter(val => !isNaN(val));
+                    if (numericValues.length > 0) {
+                        dataStats[column].statistics = calculateStatistics(numericValues);
+                        dataStats[column].outliers = detectOutliers(numericValues);
+                    }
+                }
+            });
+        }
+        
+        // Find duplicate rows
+        function findDuplicateRows() {
+            duplicateRows = [];
+            const seen = new Map();
+            
+            rawData.forEach((row, index) => {
+                const rowString = JSON.stringify(row);
+                if (seen.has(rowString)) {
+                    duplicateRows.push({
+                        index: index,
+                        originalIndex: seen.get(rowString),
+                        data: row
+                    });
+                } else {
+                    seen.set(rowString, index);
+                }
+            });
+        }
+        
+        // Find outlier rows
+        function findOutlierRows() {
+            outlierRows = [];
+            const numericColumns = Object.keys(dataStats).filter(col => dataStats[col].dataType === 'numeric');
+            
+            rawData.forEach((row, index) => {
+                let isOutlier = false;
+                const outlierDetails = {};
+                
+                numericColumns.forEach(column => {
+                    const value = parseFloat(row[column]);
+                    if (!isNaN(value) && dataStats[column].outliers) {
+                        const stats = dataStats[column].statistics;
+                        const mean = parseFloat(stats.mean);
+                        const stdDev = parseFloat(stats.stdDev);
+                        const q1 = parseFloat(stats.q1);
+                        const q3 = parseFloat(stats.q3);
+                        const iqr = q3 - q1;
+                        
+                        // Z-score method
+                        const zScore = Math.abs((value - mean) / stdDev);
+                        const isZOutlier = zScore > 2;
+                        
+                        // IQR method
+                        const isIQROutlier = value < (q1 - 1.5 * iqr) || value > (q3 + 1.5 * iqr);
+                        
+                        if (isZOutlier || isIQROutlier) {
+                            isOutlier = true;
+                            outlierDetails[column] = {
+                                value: value,
+                                zScore: zScore.toFixed(2),
+                                isZOutlier: isZOutlier,
+                                isIQROutlier: isIQROutlier
+                            };
+                        }
+                    }
+                });
+                
+                if (isOutlier) {
+                    outlierRows.push({
+                        index: index,
+                        data: row,
+                        outlierDetails: outlierDetails
+                    });
+                }
+            });
+        }
+        
+        // Generate analysis view
+        function generateAnalysisView() {
+            const analysisContent = document.getElementById('analysisContent');
+            
+            let html = `
+                <div class="space-y-6">
+                    <!-- Summary Statistics -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${rawData.length.toLocaleString()}</div>
+                            <div class="text-blue-200">إجمالي الصفوف</div>
+                            <i class="fas fa-table text-blue-400 text-2xl mt-2"></i>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${Object.keys(rawData[0]).length}</div>
+                            <div class="text-blue-200">إجمالي الأعمدة</div>
+                            <i class="fas fa-columns text-purple-400 text-2xl mt-2"></i>
+                        </div>
+                        <div class="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${duplicateRows.length.toLocaleString()}</div>
+                            <div class="text-blue-200">الصفوف المكررة</div>
+                            <i class="fas fa-copy text-yellow-400 text-2xl mt-2"></i>
+                        </div>
+                        <div class="bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${outlierRows.length.toLocaleString()}</div>
+                            <div class="text-blue-200">الصفوف الشاذة</div>
+                            <i class="fas fa-exclamation-triangle text-red-400 text-2xl mt-2"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Column Analysis -->
+                    <div class="space-y-6">
+            `;
+            
+            Object.keys(dataStats).forEach(column => {
+                const stats = dataStats[column];
+                html += `
+                    <div class="bg-gradient-to-r from-slate-500/20 to-slate-600/20 rounded-xl p-6 border border-white/20">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">${column}</h3>
+                            <div class="flex space-x-2 space-x-reverse">
+                                <span class="px-3 py-1 text-xs rounded-full ${getTypeColorClasses(stats.dataType)}">${getTypeLabel(stats.dataType)}</span>
+                                ${stats.suggestedType !== stats.dataType ? `<span class="px-3 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">مقترح: ${getTypeLabel(stats.suggestedType)}</span>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
+                            <div class="text-center bg-white/10 p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-white">${stats.totalCount.toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">إجمالي القيم</div>
+                            </div>
+                            <div class="text-center bg-green-500/20 p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-green-300">${stats.nonEmptyCount.toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">القيم المملوءة</div>
+                            </div>
+                            <div class="text-center bg-red-500/20 p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-red-300">${stats.emptyCount.toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">القيم المفقودة</div>
+                            </div>
+                            <div class="text-center bg-purple-500/20 p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-purple-300">${stats.uniqueCount.toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">القيم الفريدة</div>
+                            </div>
+                            <div class="text-center bg-orange-500/20 p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-orange-300">${stats.emptyPercentage}%</div>
+                                <div class="text-blue-200 text-sm">نسبة المفقود</div>
+                            </div>
+                        </div>
+                        
+                        ${stats.statistics ? generateStatisticsHTML(stats.statistics) : ''}
+                        ${stats.outliers ? generateOutliersHTML(stats.outliers) : ''}
+                        
+                        <div class="mt-4">
+                            <div class="text-blue-200 text-sm mb-2">عينة من القيم:</div>
+                            <div class="flex flex-wrap gap-2">
+                                ${stats.sampleValues.map(val => `<span class="px-3 py-1 bg-white/20 rounded-lg text-white text-sm">${val || 'فارغ'}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    
+                    <!-- Data Quality Issues -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl p-6 border border-white/20">
+                            <h3 class="text-xl font-bold text-white mb-4">
+                                <i class="fas fa-copy ml-2 text-yellow-400"></i>
+                                الصفوف المكررة
+                            </h3>
+                            ${duplicateRows.length > 0 ? `
+                                <div class="text-yellow-200 mb-4">تم العثور على ${duplicateRows.length} صف مكرر</div>
+                                <div class="max-h-40 overflow-y-auto space-y-2">
+                                    ${duplicateRows.slice(0, 5).map(dup => `
+                                        <div class="bg-yellow-500/20 p-2 rounded text-sm border border-yellow-500/30">
+                                            <strong>الصف ${dup.index + 1}</strong> مكرر للصف ${dup.originalIndex + 1}
+                                        </div>
+                                    `).join('')}
+                                    ${duplicateRows.length > 5 ? `<div class="text-yellow-200 text-sm">... و ${duplicateRows.length - 5} صف آخر</div>` : ''}
+                                </div>
+                            ` : `
+                                <div class="text-green-200 flex items-center">
+                                    <i class="fas fa-check-circle ml-2 text-green-400"></i>
+                                    لا توجد صفوف مكررة
+                                </div>
+                            `}
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-xl p-6 border border-white/20">
+                            <h3 class="text-xl font-bold text-white mb-4">
+                                <i class="fas fa-exclamation-triangle ml-2 text-red-400"></i>
+                                الصفوف الشاذة
+                            </h3>
+                            ${outlierRows.length > 0 ? `
+                                <div class="text-red-200 mb-4">تم العثور على ${outlierRows.length} صف يحتوي على قيم شاذة</div>
+                                <div class="max-h-40 overflow-y-auto space-y-2">
+                                    ${outlierRows.slice(0, 5).map(outlier => `
+                                        <div class="bg-red-500/20 p-2 rounded text-sm border border-red-500/30">
+                                            <strong>الصف ${outlier.index + 1}</strong>
+                                            <div class="text-xs mt-1 text-red-200">
+                                                ${Object.keys(outlier.outlierDetails).map(col => 
+                                                    `${col}: ${outlier.outlierDetails[col].value}`
+                                                ).join(', ')}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                    ${outlierRows.length > 5 ? `<div class="text-red-200 text-sm">... و ${outlierRows.length - 5} صف آخر</div>` : ''}
+                                </div>
+                            ` : `
+                                <div class="text-green-200 flex items-center">
+                                    <i class="fas fa-check-circle ml-2 text-green-400"></i>
+                                    لا توجد قيم شاذة
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            analysisContent.innerHTML = html;
+        }
+        
+        // Generate cleaning view
+        function generateCleaningView() {
+            const cleaningContent = document.getElementById('cleaningContent');
+            
+            let html = `
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-xl p-6 border border-white/20">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-info-circle text-blue-400 ml-2"></i>
+                            <div class="text-white">اختر العمليات التي تريد تطبيقها على البيانات</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Global Operations -->
+                    <div class="bg-gradient-to-r from-slate-500/20 to-slate-600/20 rounded-xl p-6 border border-white/20">
+                        <h3 class="text-xl font-bold text-white mb-4">العمليات العامة</h3>
+                        <div class="space-y-4">
+                            ${duplicateRows.length > 0 ? `
+                                <div class="border-r-4 border-yellow-400 pl-4 bg-yellow-500/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-yellow-200 mb-2">الصفوف المكررة (${duplicateRows.length})</h4>
+                                    <label class="flex items-center text-white cursor-pointer">
+                                        <input type="checkbox" id="removeDuplicateRows" class="ml-2 accent-blue-500">
+                                        <span>حذف الصفوف المكررة (الاحتفاظ بالأولى)</span>
+                                    </label>
+                                </div>
+                            ` : ''}
+                            
+                            ${outlierRows.length > 0 ? `
+                                <div class="border-r-4 border-red-400 pl-4 bg-red-500/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-red-200 mb-2">الصفوف الشاذة (${outlierRows.length})</h4>
+                                    <label class="flex items-center text-white cursor-pointer">
+                                        <input type="checkbox" id="removeOutlierRows" class="ml-2 accent-blue-500">
+                                        <span>حذف الصفوف التي تحتوي على قيم شاذة</span>
+                                    </label>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Column-specific Operations -->
+            `;
+            
+            Object.keys(dataStats).forEach(column => {
+                const stats = dataStats[column];
+                html += `
+                    <div class="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl p-6 border border-white/20">
+                        <h3 class="text-xl font-bold text-white mb-4">${column}</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Missing Values -->
+                            ${stats.emptyCount > 0 ? `
+                                <div class="border-r-4 border-red-400 pl-4 bg-red-500/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-red-200 mb-2">القيم المفقودة (${stats.emptyCount})</h4>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center text-white cursor-pointer">
+                                            <input type="radio" name="missing_${column}" value="ignore" class="ml-2 accent-blue-500" checked>
+                                            <span>تجاهل (عدم التعديل)</span>
+                                        </label>
+                                        <label class="flex items-center text-white cursor-pointer">
+                                            <input type="radio" name="missing_${column}" value="remove" class="ml-2 accent-blue-500">
+                                            <span>حذف الصفوف التي تحتوي على قيم مفقودة</span>
+                                        </label>
+                                        ${stats.dataType === 'numeric' && stats.statistics ? `
+                                            <label class="flex items-center text-white cursor-pointer">
+                                                <input type="radio" name="missing_${column}" value="mean" class="ml-2 accent-blue-500">
+                                                <span>استبدال بالمتوسط (${stats.statistics.mean})</span>
+                                            </label>
+                                            <label class="flex items-center text-white cursor-pointer">
+                                                <input type="radio" name="missing_${column}" value="median" class="ml-2 accent-blue-500">
+                                                <span>استبدال بالوسيط (${stats.statistics.median})</span>
+                                            </label>
+                                        ` : ''}
+                                        <label class="flex items-center text-white cursor-pointer">
+                                            <input type="radio" name="missing_${column}" value="mode" class="ml-2 accent-blue-500">
+                                            <span>استبدال بالقيمة الأكثر تكراراً</span>
+                                        </label>
+                                        <div class="flex items-center text-white">
+                                            <input type="radio" name="missing_${column}" value="custom" class="ml-2 accent-blue-500">
+                                            <span class="ml-2">استبدال بقيمة مخصصة:</span>
+                                            <input type="text" class="mr-2 px-2 py-1 bg-white/20 border border-white/30 rounded text-sm text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="القيمة المخصصة">
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Data Type Conversion -->
+                            ${stats.suggestedType !== stats.dataType ? `
+                                <div class="border-r-4 border-blue-400 pl-4 bg-blue-500/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-blue-200 mb-2">تحويل نوع البيانات</h4>
+                                    <label class="flex items-center text-white cursor-pointer">
+                                        <input type="checkbox" name="convert_${column}" value="${stats.suggestedType}" class="ml-2 accent-blue-500">
+                                        <span>تحويل من ${getTypeLabel(stats.dataType)} إلى ${getTypeLabel(stats.suggestedType)}</span>
+                                    </label>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Column Outliers -->
+                            ${stats.outliers && (stats.outliers.iqr.count > 0 || stats.outliers.zScore.count > 0) ? `
+                                <div class="border-r-4 border-orange-400 pl-4 bg-orange-500/10 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-orange-200 mb-2">القيم الشاذة في العمود</h4>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center text-white cursor-pointer">
+                                            <input type="checkbox" name="outliers_${column}" value="iqr" class="ml-2 accent-blue-500">
+                                            <span>حذف القيم الشاذة باستخدام IQR (${stats.outliers.iqr.count} قيمة)</span>
+                                        </label>
+                                        <label class="flex items-center text-white cursor-pointer">
+                                            <input type="checkbox" name="outliers_${column}" value="zscore" class="ml-2 accent-blue-500">
+                                            <span>حذف القيم الشاذة باستخدام Z-Score (${stats.outliers.zScore.count} قيمة)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                
+                <div class="flex flex-wrap gap-4 mt-8">
+                    <button id="applyCleaningBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-magic ml-2"></i>تطبيق التنظيف
+                    </button>
+                    <button id="previewCleaningBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105shadow-lg">
+                        <i class="fas fa-eye ml-2"></i>معاينة النتائج
+                    </button>
+                </div>
+                
+                <div id="cleaningResults" class="hidden mt-6">
+                    <div class="bg-gradient-to-r from-emerald-500/20 to-green-500/20 rounded-xl p-6 border border-white/20">
+                        <h3 class="text-xl font-bold text-white mb-4">نتائج التنظيف</h3>
+                        <div id="cleaningResultsContent"></div>
+                    </div>
+                </div>
+            `;
+            
+            cleaningContent.innerHTML = html;
+            
+            // Add event listeners
+            document.getElementById('applyCleaningBtn').addEventListener('click', applyCleaning);
+            document.getElementById('previewCleaningBtn').addEventListener('click', previewCleaning);
+        }
+        
+        // Apply cleaning operations
+        function applyCleaning() {
+            cleanedData = JSON.parse(JSON.stringify(rawData)); // Deep copy
+            const cleaningLog = [];
+            
+            // Remove duplicate rows
+            if (document.getElementById('removeDuplicateRows')?.checked) {
+                const originalLength = cleanedData.length;
+                const seen = new Set();
+                cleanedData = cleanedData.filter(row => {
+                    const rowString = JSON.stringify(row);
+                    if (seen.has(rowString)) {
+                        return false;
+                    } else {
+                        seen.add(rowString);
+                        return true;
+                    }
+                });
+                const removedCount = originalLength - cleanedData.length;
+                if (removedCount > 0) {
+                    cleaningLog.push(`تم حذف ${removedCount} صف مكرر`);
+                }
+            }
+            
+            // Remove outlier rows
+            if (document.getElementById('removeOutlierRows')?.checked) {
+                const originalLength = cleanedData.length;
+                const outlierIndices = new Set(outlierRows.map(row => row.index));
+                cleanedData = cleanedData.filter((row, index) => !outlierIndices.has(index));
+                const removedCount = originalLength - cleanedData.length;
+                if (removedCount > 0) {
+                    cleaningLog.push(`تم حذف ${removedCount} صف يحتوي على قيم شاذة`);
+                }
+            }
+            
+            // Apply column-specific operations
+            Object.keys(dataStats).forEach(column => {
+                const stats = dataStats[column];
+                
+                // Handle missing values
+                const missingAction = document.querySelector(`input[name="missing_${column}"]:checked`)?.value;
+                if (missingAction && missingAction !== 'ignore') {
+                    const result = handleMissingValues(cleanedData, column, missingAction, stats);
+                    if (result.changed) {
+                        cleaningLog.push(result.message);
+                        cleanedData = result.data;
+                    }
+                }
+            });
+            
+            // Show results
+            showCleaningResults(cleaningLog);
+            generateExportView();
+            
+            // Switch to export tab
+            document.querySelector('[data-section="export"]').click();
+        }
+        
+        // Preview cleaning operations
+        function previewCleaning() {
+            const previewData = JSON.parse(JSON.stringify(rawData.slice(0, 100))); // Preview first 100 rows
+            const cleaningLog = [];
+            
+            Object.keys(dataStats).forEach(column => {
+                const stats = dataStats[column];
+                
+                const missingAction = document.querySelector(`input[name="missing_${column}"]:checked`)?.value;
+                if (missingAction && missingAction !== 'ignore') {
+                    const result = handleMissingValues(previewData, column, missingAction, stats);
+                    if (result.changed) {
+                        cleaningLog.push(`معاينة: ${result.message}`);
+                    }
+                }
+            });
+            
+            showCleaningResults(cleaningLog, true);
+        }
+        
+        // Handle missing values
+        function handleMissingValues(data, column, action, stats) {
+            let changed = false;
+            let message = '';
+            let resultData = [...data];
+            
+            switch (action) {
+                case 'remove':
+                    const originalLength = resultData.length;
+                    resultData = resultData.filter(row => 
+                        row[column] !== null && row[column] !== undefined && row[column] !== ''
+                    );
+                    const removedCount = originalLength - resultData.length;
+                    if (removedCount > 0) {
+                        changed = true;
+                        message = `تم حذف ${removedCount} صف يحتوي على قيم مفقودة في العمود "${column}"`;
+                    }
+                    break;
+                    
+                case 'mean':
+                    if (stats.statistics) {
+                        const meanValue = parseFloat(stats.statistics.mean);
+                        let replacedCount = 0;
+                        resultData.forEach(row => {
+                            if (row[column] === null || row[column] === undefined || row[column] === '') {
+                                row[column] = meanValue;
+                                replacedCount++;
+                            }
+                        });
+                        if (replacedCount > 0) {
+                            changed = true;
+                            message = `تم استبدال ${replacedCount} قيمة مفقودة بالمتوسط (${meanValue}) في العمود "${column}"`;
+                        }
+                    }
+                    break;
+                    
+                case 'median':
+                    if (stats.statistics) {
+                        const medianValue = parseFloat(stats.statistics.median);
+                        let replacedCount = 0;
+                        resultData.forEach(row => {
+                            if (row[column] === null || row[column] === undefined || row[column] === '') {
+                                row[column] = medianValue;
+                                replacedCount++;
+                            }
+                        });
+                        if (replacedCount > 0) {
+                            changed = true;
+                            message = `تم استبدال ${replacedCount} قيمة مفقودة بالوسيط (${medianValue}) في العمود "${column}"`;
+                        }
+                    }
+                    break;
+                    
+                case 'custom':
+                    const customInput = document.querySelector(`input[name="missing_${column}"][value="custom"]`).parentElement.querySelector('input[type="text"]');
+                    const customValue = customInput?.value;
+                    if (customValue) {
+                        let replacedCount = 0;
+                        resultData.forEach(row => {
+                            if (row[column] === null || row[column] === undefined || row[column] === '') {
+                                row[column] = customValue;
+                                replacedCount++;
+                            }
+                        });
+                        if (replacedCount > 0) {
+                            changed = true;
+                            message = `تم استبدال ${replacedCount} قيمة مفقودة بالقيمة المخصصة "${customValue}" في العمود "${column}"`;
+                        }
+                    }
+                    break;
+            }
+            
+            return { changed, message, data: resultData };
+        }
+        
+        // Show cleaning results
+        function showCleaningResults(cleaningLog, isPreview = false) {
+            const resultsDiv = document.getElementById('cleaningResults');
+            const resultsContent = document.getElementById('cleaningResultsContent');
+            
+            let html = `
+                <div class="space-y-4">
+                    <h4 class="font-bold text-white">${isPreview ? 'معاينة' : 'نتائج'} عمليات التنظيف</h4>
+                    
+                    ${cleaningLog.length > 0 ? `
+                        <div class="space-y-2">
+                            ${cleaningLog.map(log => `
+                                <div class="flex items-center p-3 bg-green-500/20 rounded-lg border border-green-500/30">
+                                    <i class="fas fa-check-circle text-green-400 ml-2"></i>
+                                    <span class="text-green-200 text-sm">${log}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <div class="text-center text-blue-200 py-8">
+                            <i class="fas fa-info-circle text-4xl mb-4 opacity-60"></i>
+                            <p>لم يتم تطبيق أي عمليات تنظيف</p>
+                        </div>
+                    `}
+                    
+                    ${!isPreview && cleanedData.length > 0 ? `
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                            <div class="text-center p-4 bg-blue-500/20 rounded-lg border border-blue-500/30">
+                                <div class="text-2xl font-bold text-white">${rawData.length.toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">الصفوف الأصلية</div>
+                            </div>
+                            <div class="text-center p-4 bg-green-500/20 rounded-lg border border-green-500/30">
+                                <div class="text-2xl font-bold text-white">${cleanedData.length.toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">الصفوف بعد التنظيف</div>
+                            </div>
+                            <div class="text-center p-4 bg-red-500/20 rounded-lg border border-red-500/30">
+                                <div class="text-2xl font-bold text-white">${(rawData.length - cleanedData.length).toLocaleString()}</div>
+                                <div class="text-blue-200 text-sm">الصفوف المحذوفة</div>
+                            </div>
+                            <div class="text-center p-4 bg-purple-500/20 rounded-lg border border-purple-500/30">
+                                <div class="text-2xl font-bold text-white">${((cleanedData.length / rawData.length) * 100).toFixed(1)}%</div>
+                                <div class="text-blue-200 text-sm">نسبة البيانات المحتفظ بها</div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            resultsContent.innerHTML = html;
+            resultsDiv.classList.remove('hidden');
+        }
+        
+        // Generate export view
+        function generateExportView() {
+            const exportContent = document.getElementById('exportContent');
+            
+            if (cleanedData.length === 0) {
+                exportContent.innerHTML = `
+                    <div class="text-center text-blue-200 py-12">
+                        <i class="fas fa-download text-6xl mb-4 opacity-60"></i>
+                        <p class="text-xl">قم بتنظيف البيانات أولاً لتصديرها</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = `
+                <div class="space-y-6">
+                    <!-- Export Statistics -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${cleanedData.length.toLocaleString()}</div>
+                            <div class="text-blue-200">إجمالي الصفوف</div>
+                            <i class="fas fa-table text-blue-400 text-2xl mt-2"></i>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${Object.keys(cleanedData[0] || {}).length}</div>
+                            <div class="text-blue-200">إجمالي الأعمدة</div>
+                            <i class="fas fa-columns text-purple-400 text-2xl mt-2"></i>
+                        </div>
+                        <div class="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${calculateCleanedMissingValues()}</div>
+                            <div class="text-blue-200">القيم المفقودة المتبقية</div>
+                            <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl mt-2"></i>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-6 text-center border border-white/20">
+                            <div class="text-3xl font-bold text-white mb-2">${((cleanedData.length / rawData.length) * 100).toFixed(1)}%</div>
+                            <div class="text-blue-200">نسبة البيانات المحتفظ بها</div>
+                            <i class="fas fa-chart-pie text-green-400 text-2xl mt-2"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Export Options -->
+                    <div class="bg-gradient-to-r from-slate-500/20 to-slate-600/20 rounded-xl p-6 border border-white/20">
+                        <h3 class="text-xl font-bold text-white mb-6">خيارات التصدير</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-semibold text-blue-200 mb-4">تنسيق الملف</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center text-white cursor-pointer p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all duration-300">
+                                        <input type="radio" name="exportFormat" value="csv" class="ml-3 accent-blue-500" checked>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-file-csv text-green-400 ml-2"></i>
+                                            <span>CSV (Comma Separated Values)</span>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center text-white cursor-pointer p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all duration-300">
+                                        <input type="radio" name="exportFormat" value="xlsx" class="ml-3 accent-blue-500">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-file-excel text-green-600 ml-2"></i>
+                                            <span>Excel (.xlsx)</span>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center text-white cursor-pointer p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-all duration-300">
+                                        <input type="radio" name="exportFormat" value="json" class="ml-3 accent-blue-500">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-file-code text-blue-400 ml-2"></i>
+                                            <span>JSON</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-blue-200 mb-4">خيارات إضافية</h4>
+                                <div class="space-y-3 mb-6">
+                                    <label class="flex items-center text-white cursor-pointer">
+                                        <input type="checkbox" id="includeHeaders" class="ml-3 accent-blue-500" checked>
+                                        <span>تضمين رؤوس الأعمدة</span>
+                                    </label>
+                                    <label class="flex items-center text-white cursor-pointer">
+                                        <input type="checkbox" id="exportReport" class="ml-3 accent-blue-500">
+                                        <span>تصدير تقرير التنظيف</span>
+                                    </label>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-blue-200 text-sm mb-2">اسم الملف:</label>
+                                    <input type="text" id="exportFileName" class="w-full px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent" value="cleaned_data" placeholder="اسم الملف">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Preview -->
+                    <div class="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-xl p-6 border border-white/20">
+                        <h3 class="text-xl font-bold text-white mb-4">معاينة البيانات المنظفة</h3>
+                        <div class="overflow-x-auto">
+                            <div class="max-h-96 overflow-y-auto border border-white/20 rounded-lg bg-black/20">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-white/10 sticky top-0">
+                                        <tr>
+                                            ${Object.keys(cleanedData[0] || {}).map(key => 
+                                                `<th class="px-4 py-3 text-right font-medium text-blue-200 border-b border-white/20">${key}</th>`
+                                            ).join('')}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${cleanedData.slice(0, 20).map((row, index) => 
+                                            `<tr class="border-b border-white/10 hover:bg-white/5 transition-colors duration-200">
+                                                ${Object.values(row).map(value => 
+                                                    `<td class="px-4 py-3 text-white">${value !== null && value !== undefined && value !== '' ? value : '<span class="text-gray-400">-</span>'}</td>`
+                                                ).join('')}
+                                            </tr>`
+                                        ).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        ${cleanedData.length > 20 ? `
+                            <p class="text-blue-200 text-sm mt-3 text-center">
+                                عرض أول 20 صف من ${cleanedData.length.toLocaleString()} صف
+                            </p>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Export Buttons -->
+                    <div class="flex flex-wrap gap-4">
+                        <button id="downloadBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-3 rounded-xl font-medium flex-1 min-w-48 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-download ml-2"></i>تحميل البيانات
+                        </button>
+                        <button id="generateReportBtn" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-medium flex-1 min-w-48 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-file-alt ml-2"></i>إنشاء تقرير
+                        </button>
+                        <button id="shareBtn" class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-8 py-3 rounded-xl font-medium flex-1 min-w-48 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-share-alt ml-2"></i>مشاركة النتائج
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            exportContent.innerHTML = html;
+            
+            // Add event listeners
+            document.getElementById('downloadBtn').addEventListener('click', downloadData);
+            document.getElementById('generateReportBtn').addEventListener('click', generateReport);
+            document.getElementById('shareBtn').addEventListener('click', shareResults);
+        }
+        
+        // Download cleaned data
+        function downloadData() {
+            const format = document.querySelector('input[name="exportFormat"]:checked').value;
+            const fileName = document.getElementById('exportFileName').value || 'cleaned_data';
+            const includeHeaders = document.getElementById('includeHeaders').checked;
+            
+            try {
+                switch (format) {
+                    case 'csv':
+                        downloadCSV(cleanedData, fileName, includeHeaders);
+                        break;
+                    case 'xlsx':
+                        downloadExcel(cleanedData, fileName, includeHeaders);
+                        break;
+                    case 'json':
+                        downloadJSON(cleanedData, fileName);
+                        break;
+                }
+                showNotification('تم تحميل الملف بنجاح!', 'success');
+            } catch (error) {
+                console.error('Error downloading file:', error);
+                showNotification('حدث خطأ أثناء تحميل الملف', 'error');
+            }
+        }
+        
+        // Download as CSV
+        function downloadCSV(data, fileName, includeHeaders) {
+            const csv = Papa.unparse(data, {
+                header: includeHeaders,
+                encoding: 'utf-8'
+            });
+            
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${fileName}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Download as Excel
+        function downloadExcel(data, fileName, includeHeaders) {
+            const ws = XLSX.utils.json_to_sheet(data, { header: includeHeaders ? undefined : [] });
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Cleaned Data');
+            XLSX.writeFile(wb, `${fileName}.xlsx`);
+        }
+        
+        // Download as JSON
+        function downloadJSON(data, fileName) {
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${fileName}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Generate cleaning report
+        function generateReport() {
+            const report = {
+                metadata: {
+                    title: 'تقرير تنظيف البيانات',
+                    generatedAt: new Date().toISOString(),
+                    generatedBy: 'أداة تنظيف البيانات - عبدالله التويجري',
+                    version: '1.0'
+                },
+                originalData: {
+                    rows: rawData.length,
+                    columns: Object.keys(rawData[0] || {}).length,
+                    duplicateRows: duplicateRows.length,
+                    outlierRows: outlierRows.length
+                },
+                cleanedData: {
+                    rows: cleanedData.length,
+                    columns: Object.keys(cleanedData[0] || {}).length,
+                    retentionRate: ((cleanedData.length / rawData.length) * 100).toFixed(2)
+                },
+                columnStatistics: dataStats
+            };
+            
+            const reportJSON = JSON.stringify(report, null, 2);
+            const blob = new Blob([reportJSON], { type: 'application/json;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'data_cleaning_report.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('تم إنشاء التقرير بنجاح!', 'success');
+        }
+        
+        // Share results
+        function shareResults() {
+            const summary = {
+                originalRows: rawData.length,
+                cleanedRows: cleanedData.length,
+                retentionRate: ((cleanedData.length / rawData.length) * 100).toFixed(1)
+            };
+            
+            const shareText = `تم تنظيف البيانات بنجاح!\n\n` +
+                `📊 الصفوف الأصلية: ${summary.originalRows.toLocaleString()}\n` +
+                `✅ الصفوف بعد التنظيف: ${summary.cleanedRows.toLocaleString()}\n` +
+                `📈 نسبة الاحتفاظ: ${summary.retentionRate}%\n\n` +
+                `تم إنشاؤه باستخدام أداة تنظيف البيانات`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'نتائج تنظيف البيانات',
+                    text: shareText
+                }).then(() => {
+                    showNotification('تم مشاركة النتائج بنجاح!', 'success');
+                }).catch(err => {
+                    console.error('Error sharing:', err);
+                    copyToClipboard(shareText);
+                });
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+        
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('تم نسخ النتائج إلى الحافظة!', 'success');
+            }).catch(err => {
+                console.error('Error copying to clipboard:', err);
+                showNotification('حدث خطأ أثناء النسخ', 'error');
+            });
+        }
+        
+        // Helper functions
+        function detectDataType(values) {
+            if (values.length === 0) return 'unknown';
+            
+            let numericCount = 0;
+            let dateCount = 0;
+            let booleanCount = 0;
+            
+            values.forEach(val => {
+                if (!isNaN(parseFloat(val)) && isFinite(val)) {
+                    numericCount++;
+                } else if (isValidDate(val)) {
+                    dateCount++;
+                } else if (['true', 'false', '1', '0', 'yes', 'no', 'نعم', 'لا'].includes(val.toString().toLowerCase())) {
+                    booleanCount++;
+                }
+            });
+            
+            const total = values.length;
+            if (numericCount / total > 0.8) return 'numeric';
+            if (dateCount / total > 0.8) return 'date';
+            if (booleanCount / total > 0.8) return 'boolean';
+            return 'text';
+        }
+        
+        function suggestDataType(values) {
+            if (values.length === 0) return 'text';
+            
+            const numericValues = values.filter(val => !isNaN(parseFloat(val)) && isFinite(val));
+            if (numericValues.length / values.length > 0.9) return 'numeric';
+            
+            const dateValues = values.filter(val => isValidDate(val));
+            if (dateValues.length / values.length > 0.9) return 'date';
+            
+            const booleanValues = values.filter(val => 
+                ['true', 'false', '1', '0', 'yes', 'no', 'نعم', 'لا'].includes(val.toString().toLowerCase())
+            );
+            if (booleanValues.length / values.length > 0.9) return 'boolean';
+            
+            return 'text';
+        }
+        
+        function isValidDate(value) {
+            const date = new Date(value);
+            return date instanceof Date && !isNaN(date) && value.toString().length > 4;
+        }
+        
+        function calculateStatistics(values) {
+            const sorted = [...values].sort((a, b) => a - b);
+            const n = values.length;
+            
+            const sum = values.reduce((a, b) => a + b, 0);
+            const mean = sum / n;
+            
+            const median = n % 2 === 0 
+                ? (sorted[n/2 - 1] + sorted[n/2]) / 2 
+                : sorted[Math.floor(n/2)];
+            
+            const q1 = sorted[Math.floor(n * 0.25)];
+            const q3 = sorted[Math.floor(n * 0.75)];
+            
+            const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
+            const stdDev = Math.sqrt(variance);
+            
+            // Mode calculation
+            const frequency = {};
+            values.forEach(val => frequency[val] = (frequency[val] || 0) + 1);
+            const mode = Object.keys(frequency).reduce((a, b) => frequency[a] > frequency[b] ? a : b);
+            
+            return {
+                count: n,
+                sum: sum.toFixed(2),
+                mean: mean.toFixed(2),
+                median: median.toFixed(2),
+                mode: parseFloat(mode).toFixed(2),
+                min: Math.min(...values).toFixed(2),
+                max: Math.max(...values).toFixed(2),
+                q1: q1.toFixed(2),
+                q3: q3.toFixed(2),
+                stdDev: stdDev.toFixed(2),
+                variance: variance.toFixed(2),
+                range: (Math.max(...values) - Math.min(...values)).toFixed(2)
+            };
+        }
+        
+        function detectOutliers(values) {
+            const sorted = [...values].sort((a, b) => a - b);
+            const n = values.length;
+            const mean = values.reduce((a, b) => a + b, 0) / n;
+            const stdDev = Math.sqrt(values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n);
+            
+            const q1 = sorted[Math.floor(n * 0.25)];
+            const q3 = sorted[Math.floor(n * 0.75)];
+            const iqr = q3 - q1;
+            
+            const iqrOutliers = values.filter(val => 
+                val < (q1 - 1.5 * iqr) || val > (q3 + 1.5 * iqr)
+            );
+            
+            const zScoreOutliers = values.filter(val => 
+                Math.abs((val - mean) / stdDev) > 2
+            );
+            
+            return {
+                iqr: {
+                    count: iqrOutliers.length,
+                    values: iqrOutliers,
+                    lowerBound: (q1 - 1.5 * iqr).toFixed(2),
+                    upperBound: (q3 + 1.5 * iqr).toFixed(2)
+                },
+                zScore: {
+                    count: zScoreOutliers.length,
+                    values: zScoreOutliers,
+                    threshold: 2
+                }
+            };
+        }
+        
+        function generateStatisticsHTML(statistics) {
+            return `
+                <div class="bg-white/10 rounded-lg p-4 mb-4 border border-white/20">
+                    <h4 class="font-semibold text-blue-200 mb-3">الإحصائيات الوصفية</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="text-center bg-blue-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.mean}</div>
+                            <div class="text-blue-200 text-xs">المتوسط</div>
+                        </div>
+                        <div class="text-center bg-green-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.median}</div>
+                            <div class="text-blue-200 text-xs">الوسيط</div>
+                        </div>
+                        <div class="text-center bg-purple-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.mode}</div>
+                            <div class="text-blue-200 text-xs">المنوال</div>
+                        </div>
+                        <div class="text-center bg-orange-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.stdDev}</div>
+                            <div class="text-blue-200 text-xs">الانحراف المعياري</div>
+                        </div>
+                        <div class="text-center bg-red-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.min}</div>
+                            <div class="text-blue-200 text-xs">الحد الأدنى</div>
+                        </div>
+                        <div class="text-center bg-indigo-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.q1}</div>
+                            <div class="text-blue-200 text-xs">الربع الأول</div>
+                        </div>
+                        <div class="text-center bg-pink-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.q3}</div>
+                            <div class="text-blue-200 text-xs">الربع الثالث</div>
+                        </div>
+                        <div class="text-center bg-teal-500/20 p-2 rounded">
+                            <div class="text-lg font-bold text-white">${statistics.max}</div>
+                            <div class="text-blue-200 text-xs">الحد الأقصى</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateOutliersHTML(outliers) {
+            return `
+                <div class="bg-red-500/20 rounded-lg p-4 mb-4 border border-red-500/30">
+                    <h4 class="font-semibold text-red-200 mb-3">القيم الشاذة</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-red-600/20 p-3 rounded">
+                            <div class="text-red-200 font-medium">طريقة IQR</div>
+                            <div class="text-red-100 text-sm">عدد القيم: ${outliers.iqr.count}</div>
+                            <div class="text-red-100 text-sm">النطاق: ${outliers.iqr.lowerBound} - ${outliers.iqr.upperBound}</div>
+                        </div>
+                        <div class="bg-red-600/20 p-3 rounded">
+                            <div class="text-red-200 font-medium">طريقة Z-Score</div>
+                            <div class="text-red-100 text-sm">عدد القيم: ${outliers.zScore.count}</div>
+                            <div class="text-red-100 text-sm">العتبة: ±${outliers.zScore.threshold}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function calculateCleanedMissingValues() {
+            if (cleanedData.length === 0) return 0;
+            
+            let total = 0;
+            Object.keys(cleanedData[0]).forEach(column => {
+                cleanedData.forEach(row => {
+                    if (row[column] === null || row[column] === undefined || row[column] === '') {
+                        total++;
+                    }
+                });
+            });
+            return total;
+        }
+        
+        function getTypeColorClasses(type) {
+            const colors = {
+                'numeric': 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+                'text': 'bg-gray-500/20 text-gray-300 border border-gray-500/30',
+                'date': 'bg-green-500/20 text-green-300 border border-green-500/30',
+                'boolean': 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+                'unknown': 'bg-red-500/20 text-red-300 border border-red-500/30'
+            };
+            return colors[type] || colors['unknown'];
+        }
+        
+        function getTypeLabel(type) {
+            const labels = {
+                'numeric': 'رقمي',
+                'text': 'نصي',
+                'date': 'تاريخ',
+                'boolean': 'منطقي',
+                'unknown': 'غير معروف'
+            };
+            return labels[type] || 'غير معروف';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function showProgress() {
+            document.getElementById('progressContainer').classList.remove('hidden');
+            updateProgress(0);
+        }
+        
+        function hideProgress() {
+            document.getElementById('progressContainer').classList.add('hidden');
+        }
+        
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').textContent = Math.round(percent) + '%';
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                'success': 'bg-green-600 border-green-500',
+                'error': 'bg-red-600 border-red-500',
+                'warning': 'bg-yellow-600 border-yellow-500',
+                'info': 'bg-blue-600 border-blue-500'
+            };
+            
+            const icons = {
+                'success': 'fa-check-circle',
+                'error': 'fa-exclamation-circle',
+                'warning': 'fa-exclamation-triangle',
+                'info': 'fa-info-circle'
+            };
+            
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full border-r-4`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${icons[type]} ml-2"></i>
+                    <span>${message}</span>
+                    <button class="mr-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+        
+        // Initialize theme
+        initTheme();
+        
+        // Set current year in about section
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Add keyboard shortcuts info
+        console.log('أداة تنظيف البيانات جاهزة للاستخدام');
+        console.log('المطور: عبدالله التويجري');
+        console.log('الإصدار: 1.0');
+    </script>
+</body>
+</html>
