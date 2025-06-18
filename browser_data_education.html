@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ما يعرفه المتصفح عنك - دليل حماية الخصوصية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'arabic': ['Tajawal', 'Segoe UI', 'Tahoma', sans-serif]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8fafc;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .gradient-border {
+            border-width: 1px;
+            border-style: solid;
+            border-image: linear-gradient(to bottom, #3b82f6, #8b5cf6) 1;
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .live-data {
+            transition: all 0.3s ease;
+        }
+        .live-data:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 transition-colors duration-300">
+    <!-- Cookie Consent Popup -->
+    <div id="cookiePopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">🍪</div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">مرحباً بك في صفحة تعليم الخصوصية</h2>
+                    <p class="text-gray-600">دعنا نوضح لك ما يحدث عند زيارتك لأي موقع على الإنترنت</p>
+                </div>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl mb-6">
+                    <h3 class="font-bold text-blue-800 mb-3 flex items-center">
+                        <i class="fas fa-info-circle ml-2"></i>
+                        ما هي هذه الصفحة؟
+                    </h3>
+                    <p class="text-blue-700 leading-relaxed mb-4">
+                        هذه صفحة تعليمية تهدف إلى توعيتك بالمعلومات التي يمكن للمواقع الإلكترونية جمعها عنك أثناء تصفحك للإنترنت. 
+                        سنعرض لك المعلومات التي يمكن الحصول عليها من متصفحك بشكل تفاعلي وودود.
+                    </p>
+                    <div class="bg-white p-4 rounded-lg border-2 border-blue-200">
+                        <h4 class="font-medium text-blue-800 mb-2">سنتعرف على:</h4>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• موقعك الجغرافي التقريبي</li>
+                            <li>• معلومات جهازك ومتصفحك</li>
+                            <li>• كيفية عمل الكوكيز وتتبع الإعلانات</li>
+                            <li>• نصائح لحماية خصوصيتك</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-2 border-yellow-200 p-4 rounded-lg mb-6">
+                    <p class="text-yellow-800 text-sm">
+                        <i class="fas fa-shield-alt ml-2"></i>
+                        <strong>تأكيد الخصوصية:</strong> هذه الصفحة تعليمية فقط ولا تحفظ أو تشارك معلوماتك مع أي جهة خارجية.
+                    </p>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="acceptAndStart()" 
+                            class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-play ml-2"></i>
+                        ابدأ التعلم
+                    </button>
+                    <button onclick="closePopup()" 
+                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-times ml-2"></i>
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <!-- Back button (right side in RTL) -->
+            <div class="flex justify-start">
+                <a href="/index.html" class="p-2 bg-purple-100 rounded-full hover:bg-purple-200 transition-colors">
+                    <i class="fas fa-arrow-right text-purple-600"></i>
+                </a>
+            </div>
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">ما يعرفه المتصفح عنك</h1>
+                <p class="text-gray-600">دليل شامل لحماية خصوصيتك على الإنترنت</p>
+            </div>
+            <div class="flex space-x-3 space-x-reverse items-center">
+                <button onclick="refreshData()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-sync-alt ml-2"></i>تحديث البيانات
+                </button>
+                <button onclick="showPrivacyTips()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-shield-alt ml-2"></i>نصائح الحماية
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="glass-card rounded-2xl overflow-hidden shadow-lg transition-all duration-300">
+            <!-- Tabs -->
+            <div class="flex border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity active" data-tab="live-data">
+                    <i class="fas fa-eye ml-2"></i>البيانات المباشرة
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="cookies">
+                    <i class="fas fa-cookie-bite ml-2"></i>الكوكيز والتتبع
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="privacy">
+                    <i class="fas fa-user-shield ml-2"></i>حماية الخصوصية
+                </button>
+                <button class="tab-btn py-4 px-6 font-medium opacity-80 hover:opacity-100 transition-opacity" data-tab="about">
+                    <i class="fas fa-graduation-cap ml-2"></i>تعلم المزيد
+                </button>
+            </div>
+            
+            <!-- Live Data Tab -->
+            <div id="live-data-tab" class="tab-content p-6 block">
+                <div class="mb-6">
+                    <div class="bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-red-800 mb-3 flex items-center">
+                            <i class="fas fa-exclamation-triangle ml-3 text-red-600"></i>
+                            هذا ما يراه الموقع عنك الآن
+                        </h2>
+                        <p class="text-red-700 mb-4">
+                            البيانات التالية متاحة لأي موقع تزوره، وهي تُجمع تلقائياً بمجرد فتح الصفحة:
+                        </p>
+                        <div class="bg-white p-4 rounded-lg">
+                            <div class="flex items-center text-sm text-red-600">
+                                <i class="fas fa-sync-alt animate-spin ml-2"></i>
+                                <span>يتم جمع هذه البيانات مباشرة من متصفحك...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- Location Information -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-map-marker-alt ml-2 text-red-500"></i>
+                            موقعك الجغرافي
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">عنوان IP:</span>
+                                <span id="userIP" class="font-mono text-sm bg-gray-200 px-2 py-1 rounded">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">الدولة:</span>
+                                <span id="userCountry" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">المنطقة:</span>
+                                <span id="userRegion" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">المدينة:</span>
+                                <span id="userCity" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">مقدم الخدمة:</span>
+                                <span id="userISP" class="font-medium">جاري التحميل...</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <p class="text-sm text-yellow-800">
+                                <i class="fas fa-info-circle ml-1"></i>
+                                يمكن للمواقع معرفة موقعك التقريبي من خلال عنوان IP دون طلب إذن
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Device Information -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-laptop ml-2 text-blue-500"></i>
+                            معلومات جهازك
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">نظام التشغيل:</span>
+                                                                <span id="userOS" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">المتصفح:</span>
+                                <span id="userBrowser" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">نوع الجهاز:</span>
+                                <span id="deviceType" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">دقة الشاشة:</span>
+                                <span id="screenResolution" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">اللغة:</span>
+                                <span id="userLanguage" class="font-medium">جاري التحميل...</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p class="text-sm text-blue-800">
+                                <i class="fas fa-info-circle ml-1"></i>
+                                هذه المعلومات تساعد المواقع في تحسين تجربة المستخدم ولكن يمكن استخدامها للتتبع
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Browser Capabilities -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-cogs ml-2 text-green-500"></i>
+                            قدرات المتصفح
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">دعم JavaScript:</span>
+                                <span class="text-green-600 font-medium">
+                                    <i class="fas fa-check-circle"></i> مفعل
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">دعم الكوكيز:</span>
+                                <span id="cookieSupport" class="font-medium">جاري الفحص...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">التخزين المحلي:</span>
+                                <span id="localStorageSupport" class="font-medium">جاري الفحص...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">وقت الزيارة:</span>
+                                <span id="visitTime" class="font-medium">جاري التحميل...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">المنطقة الزمنية:</span>
+                                <span id="userTimezone" class="font-medium">جاري التحميل...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Network Information -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-wifi ml-2 text-purple-500"></i>
+                            معلومات الشبكة
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">نوع الاتصال:</span>
+                                <span id="connectionType" class="font-medium">جاري التحديد...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">سرعة الاتصال:</span>
+                                <span id="connectionSpeed" class="font-medium">جاري القياس...</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">الصفحة المرجعية:</span>
+                                <span id="referrerPage" class="font-medium text-xs">جاري التحميل...</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                            <p class="text-sm text-purple-800">
+                                <i class="fas fa-info-circle ml-1"></i>
+                                هذه المعلومات تساعد في تحليل جودة الخدمة وتحسين الأداء
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permission-Based Data Section -->
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-user-check ml-3 text-orange-500"></i>
+                        البيانات التي تحتاج موافقة
+                    </h2>
+                    <p class="text-gray-600 mb-6">
+                        هذه البيانات تحتاج إذن صريح منك، لكن كثير من الناس يوافقون عليها دون تفكير!
+                    </p>
+                    
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <!-- GPS Location -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-map-marker-alt ml-2 text-red-500"></i>
+                                الموقع الجغرافي الدقيق (GPS)
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">خط الطول:</span>
+                                    <span id="gpsLongitude" class="font-mono text-sm">غير مُطلب</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">خط العرض:</span>
+                                    <span id="gpsLatitude" class="font-mono text-sm">غير مُطلب</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">دقة الموقع:</span>
+                                    <span id="gpsAccuracy" class="font-mono text-sm">غير متاح</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">الارتفاع:</span>
+                                    <span id="gpsAltitude" class="font-mono text-sm">غير متاح</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <button onclick="requestLocation()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg text-sm">
+                                    <i class="fas fa-location-arrow ml-2"></i>طلب الوصول للموقع
+                                </button>
+                                <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="text-xs text-red-800">
+                                        <i class="fas fa-exclamation-triangle ml-1"></i>
+                                        هذا سيكشف موقعك الدقيق! (في حدود أمتار قليلة)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Camera & Microphone -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-camera ml-2 text-blue-500"></i>
+                                الكاميرا والمايكروفون
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">حالة الكاميرا:</span>
+                                    <span id="cameraStatus" class="font-medium">غير مُطلبة</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">حالة المايكروفون:</span>
+                                    <span id="microphoneStatus" class="font-medium">غير مُطلب</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">عدد الكاميرات:</span>
+                                    <span id="cameraCount" class="font-medium">غير معروف</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <button onclick="requestCamera()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm">
+                                    <i class="fas fa-video ml-2"></i>طلب الوصول للكاميرا
+                                </button>
+                                <button onclick="requestMicrophone()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm">
+                                    <i class="fas fa-microphone ml-2"></i>طلب الوصول للمايكروفون
+                                </button>
+                            </div>
+                        </div>
+                    
+                        <!-- Notifications & Other Permissions -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-bell ml-2 text-yellow-500"></i>
+                                الإشعارات والأذونات الأخرى
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">الإشعارات:</span>
+                                    <span id="notificationStatus" class="font-medium">غير مُطلبة</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">الحافظة:</span>
+                                    <span id="clipboardStatus" class="font-medium">غير مُطلبة</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">الجايروسكوب:</span>
+                                    <span id="gyroscopeStatus" class="font-medium">غير مُطلب</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <button onclick="requestNotifications()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-lg text-sm">
+                                    <i class="fas fa-bell ml-2"></i>طلب إذن الإشعارات
+                                </button>
+                                <button onclick="requestClipboard()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg text-sm">
+                                    <i class="fas fa-clipboard ml-2"></i>قراءة الحافظة
+                                </button>
+                            </div>
+                        </div>
+                    
+                        <!-- Motion & Orientation -->
+                        <div class="bg-white rounded-xl shadow-lg p-6 live-data">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-mobile-alt ml-2 text-purple-500"></i>
+                                الحركة والاتجاه
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">التسارع X:</span>
+                                    <span id="accelerationX" class="font-mono text-sm">غير متاح</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">التسارع Y:</span>
+                                    <span id="accelerationY" class="font-mono text-sm">غير متاح</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="text-gray-600">الاتجاه:</span>
+                                    <span id="orientation" class="font-mono text-sm">غير متاح</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 space-y-2">
+                                <button onclick="requestMotion()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg text-sm">
+                                    <i class="fas fa-compass ml-2"></i>طلب بيانات الحركة
+                                </button>
+                                <div class="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                                    <p class="text-xs text-purple-800">
+                                        <i class="fas fa-info-circle ml-1"></i>
+                                        يمكن استخدام هذه البيانات لتتبع حركتك وأنشطتك
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Section -->
+                <div class="mt-8 bg-gradient-to-r from-red-600 to-pink-600 text-white p-6 rounded-xl">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-exclamation-triangle ml-3"></i>
+                        تحذير مهم!
+                    </h3>
+                    <p class="text-lg mb-4">
+                        جميع البيانات المعروضة أعلاه متاحة لأي موقع ويب تزوره دون الحاجة لطلب إذن منك!
+                    </p>
+                    <div class="bg-white/20 p-4 rounded-lg">
+                        <p class="text-sm">
+                            💡 <strong>هل تعلم؟</strong> يمكن للمواقع الجمع بين هذه المعلومات لإنشاء "بصمة رقمية" فريدة لك تمكنهم من تتبعك عبر مواقع مختلفة حتى لو حذفت الكوكيز!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cookies Tab -->
+            <div id="cookies-tab" class="tab-content p-6 hidden">
+                <div class="space-y-6">
+                    <!-- What are Cookies -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-cookie-bite ml-3 text-orange-500"></i>
+                            ما هي الكوكيز؟
+                        </h2>
+                        <p class="text-gray-600 leading-relaxed mb-6">
+                            الكوكيز هي ملفات نصية صغيرة يحفظها الموقع في متصفحك لتذكر معلومات عنك. تُستخدم لأغراض مختلفة من مفيدة إلى مقلقة!
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-green-50 border-2 border-green-200 p-4 rounded-xl">
+                                <h3 class="font-bold text-green-800 mb-3 flex items-center">
+                                    <i class="fas fa-thumbs-up ml-2"></i>
+                                    الكوكيز المفيدة
+                                </h3>
+                                <ul class="space-y-2 text-green-700">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 ml-2 mt-1"></i>
+                                        تذكر تسجيل دخولك للمواقع
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 ml-2 mt-1"></i>
+                                        حفظ إعدادات اللغة والتفضيلات
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 ml-2 mt-1"></i>
+                                        تذكر محتويات سلة التسوق
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 ml-2 mt-1"></i>
+                                        تحسين تجربة الاستخدام
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-red-50 border-2 border-red-200 p-4 rounded-xl">
+                                <h3 class="font-bold text-red-800 mb-3 flex items-center">
+                                    <i class="fas fa-exclamation-triangle ml-2"></i>
+                                    الكوكيز المقلقة
+                                </h3>
+                                <ul class="space-y-2 text-red-700">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 ml-2 mt-1"></i>
+                                        تتبع تصفحك عبر مواقع مختلفة
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 ml-2 mt-1"></i>
+                                        جمع بيانات شخصية للإعلانات
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 ml-2 mt-1"></i>
+                                        مشاركة معلوماتك مع شركات أخرى
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 ml-2 mt-1"></i>
+                                        إنشاء ملف شخصي مفصل عنك
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Cookie Demo -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-flask ml-2 text-blue-500"></i>
+                            تجربة مباشرة مع الكوكيز
+                        </h3>
+                        <p class="text-gray-600 mb-4">جرب هذه الأزرار لترى كيف تعمل الكوكيز:</p>
+                        
+                        <div class="grid md:grid-cols-3 gap-4 mb-4">
+                            <button onclick="setCookie()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-plus ml-2"></i>إنشاء كوكي
+                            </button>
+                            <button onclick="getCookie()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-search ml-2"></i>قراءة الكوكيز
+                            </button>
+                            <button onclick="deleteCookie()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-trash ml-2"></i>حذف الكوكيز
+                            </button>
+                        </div>
+                        
+                        <div id="cookieDemo" class="bg-gray-50 p-4 rounded-lg min-h-[100px]">
+                            <p class="text-gray-600">اضغط على الأزرار أعلاه لترى النتائج هنا...</p>
+                        </div>
+                    </div>
+
+                    <!-- Tracking Methods -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-search ml-2 text-purple-500"></i>
+                            طرق التتبع الأخرى
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="border-2 border-orange-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-orange-800 mb-2 flex items-center">
+                                        <i class="fas fa-fingerprint ml-2"></i>
+                                        البصمة الرقمية
+                                    </h4>
+                                    <p class="text-sm text-orange-700 mb-2">
+                                        الجمع بين معلومات المتصفح، الشاشة، النظام، والخطوط لإنشاء هوية فريدة
+                                    </p>
+                                    <button onclick="generateFingerprint()" class="text-xs bg-orange-100 hover:bg-orange-200 text-orange-800 px-3 py-1 rounded">
+                                        اعرض بصمتي الرقمية
+                                    </button>
+                                </div>
+                                                                
+                                <div class="border-2 border-pink-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-pink-800 mb-2 flex items-center">
+                                        <i class="fas fa-eye ml-2"></i>
+                                        بكسل التتبع
+                                    </h4>
+                                    <p class="text-sm text-pink-700 mb-2">
+                                        صور صغيرة غير مرئية تُحمل من خوادم التتبع لمراقبة زيارتك
+                                    </p>
+                                    <div class="text-xs bg-pink-100 text-pink-800 px-3 py-1 rounded">
+                                        مثال: <span class="font-mono">1x1 pixel</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="border-2 border-blue-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-blue-800 mb-2 flex items-center">
+                                        <i class="fas fa-database ml-2"></i>
+                                        التخزين المحلي
+                                    </h4>
+                                    <p class="text-sm text-blue-700 mb-2">
+                                        حفظ البيانات في متصفحك بطرق أخرى غير الكوكيز
+                                    </p>
+                                    <button onclick="showLocalStorage()" class="text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded">
+                                        اعرض التخزين المحلي
+                                    </button>
+                                </div>
+                                
+                                <div class="border-2 border-green-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-green-800 mb-2 flex items-center">
+                                        <i class="fas fa-chart-line ml-2"></i>
+                                        تحليلات الويب
+                                    </h4>
+                                    <p class="text-sm text-green-700 mb-2">
+                                        أدوات مثل Google Analytics تتبع سلوكك على الموقع
+                                    </p>
+                                    <div class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded">
+                                        الصفحات، الوقت، النقرات
+                                    </div>
+                                </div>
+                                <div class="border-2 border-purple-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-purple-800 mb-2 flex items-center">
+                                        <i class="fas fa-shield-alt ml-2"></i>
+                                        محاكاة الحماية من التتبع
+                                    </h4>
+                                    <p class="text-sm text-purple-700 mb-2">
+                                        اختبر مدى فعالية أدوات الحماية من التتبع في متصفحك
+                                    </p>
+                                    <div class="bg-red-50 border-2 border-red-200 rounded-lg p-3 mb-3">
+                                        <p class="text-xs text-red-800 font-medium text-center">
+                                            ⚠️ النتائج المعروضة تجريبية وعشوائية - للتعلم فقط وليست اختباراً حقيقياً
+                                        </p>
+                                    </div>
+                                    <button onclick="simulateTrackingProtection()" class="text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-1 rounded">
+                                        اختبر الحماية من التتبع (تجريبي)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="trackingResults" class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
+                            <h4 class="font-medium text-gray-800 mb-2">نتائج التجربة:</h4>
+                            <div class="text-sm text-gray-600"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Privacy Tab -->
+            <div id="privacy-tab" class="tab-content p-6 hidden">
+                <div class="space-y-6">
+                    <!-- Privacy Header -->
+                    <div class="text-center mb-8">
+                        <div class="text-6xl mb-4">🛡️</div>
+                        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600 mb-4">
+                            احم خصوصيتك على الإنترنت
+                        </h2>
+                        <p class="text-gray-600 max-w-2xl mx-auto">
+                            إليك أهم النصائح والأدوات لحماية بياناتك الشخصية أثناء تصفح الإنترنت
+                        </p>
+                    </div>
+
+                    <!-- Browser Settings -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-browser ml-3 text-blue-500"></i>
+                            إعدادات المتصفح
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border-2 border-blue-200">
+                                <h4 class="font-bold text-blue-800 mb-3 flex items-center">
+                                    <i class="fas fa-incognito ml-2"></i>
+                                    التصفح الخاص
+                                </h4>
+                                <p class="text-sm text-blue-700 mb-3">
+                                    لا يحفظ التاريخ أو الكوكيز بعد إغلاق النافذة
+                                </p>
+                                <div class="text-xs bg-white p-2 rounded border">
+                                    <strong>الاختصار:</strong> Ctrl+Shift+N
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200">
+                                <h4 class="font-bold text-green-800 mb-3 flex items-center">
+                                    <i class="fas fa-cookie ml-2"></i>
+                                    حظر الكوكيز
+                                </h4>
+                                <p class="text-sm text-green-700 mb-3">
+                                    امنع المواقع من حفظ الكوكيز أو احذفها دورياً
+                                </p>
+                                <button onclick="showCookieSettings()" class="text-xs bg-white hover:bg-gray-50 text-green-800 px-3 py-1 rounded border">
+                                    اعرض الإعدادات
+                                </button>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border-2 border-purple-200">
+                                <h4 class="font-bold text-purple-800 mb-3 flex items-center">
+                                    <i class="fas fa-ad ml-2"></i>
+                                    حظر الإعلانات
+                                </h4>
+                                <p class="text-sm text-purple-700 mb-3">
+                                    استخدم إضافات لحظر الإعلانات والتتبع
+                                </p>
+                                <div class="text-xs bg-white p-2 rounded border">
+                                    <strong>مثال:</strong> uBlock Origin
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VPN and Tools -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-tools ml-3 text-green-500"></i>
+                            أدوات الحماية
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-xl">
+                                    <h4 class="font-bold text-green-800 mb-2 flex items-center">
+                                        <i class="fas fa-shield-alt ml-2"></i>
+                                        VPN - الشبكة الافتراضية الخاصة
+                                    </h4>
+                                    <p class="text-sm text-green-700 mb-3">
+                                        يخفي عنوان IP الحقيقي ويشفر اتصالك بالإنترنت
+                                    </p>
+                                    <div class="bg-white p-3 rounded border">
+                                        <p class="text-xs text-green-600 mb-2"><strong>المميزات:</strong></p>
+                                        <ul class="text-xs text-green-600 space-y-1">
+                                            <li>• إخفاء الموقع الجغرافي</li>
+                                            <li>• تشفير البيانات</li>
+                                            <li>• تجاوز الحجب الجغرافي</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-xl">
+                                    <h4 class="font-bold text-blue-800 mb-2 flex items-center">
+                                        <i class="fas fa-dns ml-2"></i>
+                                        DNS آمن
+                                    </h4>
+                                    <p class="text-sm text-blue-700 mb-3">
+                                        استخدم خوادم DNS تحمي من المواقع الضارة
+                                    </p>
+                                    <div class="bg-white p-3 rounded border">
+                                        <p class="text-xs text-blue-600 mb-1"><strong>أمثلة:</strong></p>
+                                        <p class="text-xs font-mono text-blue-600">1.1.1.1 (Cloudflare)</p>
+                                        <p class="text-xs font-mono text-blue-600">8.8.8.8 (Google)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-orange-500 bg-orange-50 p-4 rounded-r-xl">
+                                    <h4 class="font-bold text-orange-800 mb-2 flex items-center">
+                                        <i class="fas fa-eye-slash ml-2"></i>
+                                        محركات البحث الآمنة
+                                    </h4>
+                                    <p class="text-sm text-orange-700 mb-3">
+                                        لا تتبع عمليات البحث أو تحفظ تاريخك
+                                    </p>
+                                    <div class="bg-white p-3 rounded border">
+                                        <p class="text-xs text-orange-600 mb-2"><strong>أمثلة:</strong></p>
+                                        <ul class="text-xs text-orange-600 space-y-1">
+                                            <li>• DuckDuckGo</li>
+                                            <li>• Startpage</li>
+                                            <li>• Searx</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-l-4 border-red-500 bg-red-50 p-4 rounded-r-xl">
+                                    <h4 class="font-bold text-red-800 mb-2 flex items-center">
+                                        <i class="fas fa-envelope-open-text ml-2"></i>
+                                        البريد الإلكتروني الآمن
+                                    </h4>
+                                    <p class="text-sm text-red-700 mb-3">
+                                        خدمات بريد مشفرة تحمي رسائلك
+                                    </p>
+                                    <div class="bg-white p-3 rounded border">
+                                        <p class="text-xs text-red-600 mb-2"><strong>أمثلة:</strong></p>
+                                        <ul class="text-xs text-red-600 space-y-1">
+                                            <li>• ProtonMail</li>
+                                            <li>• Tutanota</li>
+                                            <li>• Secure Email</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Checklist -->
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-6 flex items-center">
+                            <i class="fas fa-tasks ml-3"></i>
+                            قائمة مراجعة الخصوصية
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                                <h4 class="font-bold mb-4 text-blue-200">الإعدادات الأساسية</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="فعّل التصفح الخاص كإعداد افتراضي">
+                                        <span class="text-sm">استخدام التصفح الخاص</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="احذف الكوكيز عند إغلاق المتصفح">
+                                        <span class="text-sm">حذف الكوكيز تلقائياً</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="منع المواقع من تتبع موقعك">
+                                        <span class="text-sm">حظر طلبات الموقع</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="استخدم محرك بحث لا يتتبعك">
+                                        <span class="text-sm">محرك بحث آمن</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                                <h4 class="font-bold mb-4 text-green-200">الحماية المتقدمة</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="استخدم VPN لحماية هويتك">
+                                        <span class="text-sm">استخدام VPN</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="ثبّت إضافة لحظر الإعلانات والتتبع">
+                                        <span class="text-sm">مانع الإعلانات</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="استخدم كلمات مرور قوية ومختلفة">
+                                        <span class="text-sm">كلمات مرور قوية</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" class="privacy-check ml-2" data-tip="فعّل المصادقة الثنائية حيثما أمكن">
+                                        <span class="text-sm">المصادقة الثنائية</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <div id="privacyScore" class="text-3xl font-bold mb-2">0%</div>
+                            <p class="text-blue-200">مستوى حماية خصوصيتك</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Tab -->
+            <div id="about-tab" class="tab-content p-6 hidden">
+                <div class="space-y-8">
+                    <!-- Main Introduction -->
+                    <div class="text-center mb-8">
+                        <div class="text-6xl mb-4">📚</div>
+                        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+                            تعلم المزيد عن الخصوصية الرقمية
+                        </h2>
+                        <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+                            في عصر البيانات الضخمة، أصبحت حماية الخصوصية الرقمية أمراً بالغ الأهمية. تعلم كيف تحمي نفسك وتفهم حقوقك الرقمية.
+                        </p>
+                    </div>
+
+                    <!-- Why Privacy Matters -->
+                    <div class="bg-gradient-to-r from-red-50 to-pink-50 p-8 rounded-2xl border-l-4 border-red-500 shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6 text-red-800 flex items-center">
+                            <i class="fas fa-heart ml-3 text-red-600"></i>
+                            لماذا الخصوصية مهمة؟
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="bg-white p-4 rounded-xl shadow-sm">
+                                    <h4 class="font-bold text-red-600 mb-2 flex items-center">
+                                        <i class="fas fa-user-secret ml-2"></i>
+                                        الحرية الشخصية
+                                    </h4>
+                                    <p class="text-sm text-gray-700">
+                                        الخصوصية تمنحك الحرية في التعبير والاختيار دون خوف من المراقبة أو الحكم.
+                                    </p>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl shadow-sm">
+                                    <h4 class="font-bold text-orange-600 mb-2 flex items-center">
+                                        <i class="fas fa-shield-alt ml-2"></i>
+                                        الأمان المالي
+                                    </h4>
+                                    <p class="text-sm text-gray-700">
+                                        حماية معلوماتك المالية والشخصية من السرقة والاحتيال الإلكتروني.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="bg-white p-4 rounded-xl shadow-sm">
+                                    <h4 class="font-bold text-blue-600 mb-2 flex items-center">
+                                        <i class="fas fa-balance-scale ml-2"></i>
+                                        العدالة الرقمية
+                                    </h4>
+                                    <p class="text-sm text-gray-700">
+                                        منع التمييز القائم على البيانات في التوظيف، التأمين، والخدمات.
+                                    </p>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl shadow-sm">
+                                    <h4 class="font-bold text-green-600 mb-2 flex items-center">
+                                        <i class="fas fa-democrat ml-2"></i>
+                                        الديمقراطية
+                                    </h4>
+                                    <p class="text-sm text-gray-700">
+                                        الخصوصية ضرورية للمشاركة السياسية الحرة والديمقراطية الصحية.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Common Myths -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                            <i class="fas fa-times-circle ml-3 text-red-500"></i>
+                            خرافات شائعة عن الخصوصية
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="bg-red-50 border-2 border-red-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-red-800 mb-2 flex items-center">
+                                        <i class="fas fa-times ml-2"></i>
+                                        الخرافة
+                                    </h4>
+                                    <p class="text-sm text-red-700 italic mb-3">
+                                        "ليس لدي ما أخفيه، لذا لا أهتم بالخصوصية"
+                                    </p>
+                                    <div class="bg-green-50 border border-green-300 p-3 rounded">
+                                        <h5 class="font-medium text-green-800 mb-1">الحقيقة:</h5>
+                                        <p class="text-xs text-green-700">
+                                            الخصوصية ليست عن إخفاء الأشياء السيئة، بل عن حماية حقك في الاختيار.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-red-50 border-2 border-red-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-red-800 mb-2 flex items-center">
+                                        <i class="fas fa-times ml-2"></i>
+                                        الخرافة
+                                    </h4>
+                                    <p class="text-sm text-red-700 italic mb-3">
+                                        "الشركات تحتاج بياناتي لتحسين الخدمات"
+                                    </p>
+                                    <div class="bg-green-50 border border-green-300 p-3 rounded">
+                                        <h5 class="font-medium text-green-800 mb-1">الحقيقة:</h5>
+                                        <p class="text-xs text-green-700">
+                                            يمكن تحسين الخدمات دون جمع بيانات شخصية محددة أو بيعها لأطراف ثالثة.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-red-50 border-2 border-red-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-red-800 mb-2 flex items-center">
+                                        <i class="fas fa-times ml-2"></i>
+                                        الخرافة
+                                    </h4>
+                                    <p class="text-sm text-red-700 italic mb-3">
+                                        "حماية الخصوصية معقدة جداً"
+                                    </p>
+                                    <div class="bg-green-50 border border-green-300 p-3 rounded">
+                                        <h5 class="font-medium text-green-800 mb-1">الحقيقة:</h5>
+                                        <p class="text-xs text-green-700">
+                                            بضع خطوات بسيطة يمكنها تحسين خصوصيتك بشكل كبير.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-red-50 border-2 border-red-200 p-4 rounded-xl">
+                                    <h4 class="font-bold text-red-800 mb-2 flex items-center">
+                                        <i class="fas fa-times ml-2"></i>
+                                        الخرافة
+                                    </h4>
+                                    <p class="text-sm text-red-700 italic mb-3">
+                                        "البيانات المجهولة آمنة تماماً"
+                                    </p>
+                                    <div class="bg-green-50 border border-green-300 p-3 rounded">
+                                        <h5 class="font-medium text-green-800 mb-1">الحقيقة:</h5>
+                                        <p class="text-xs text-green-700">
+                                            يمكن إعادة تحديد الهوية من البيانات المجهولة بالجمع مع مصادر أخرى.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-2xl border-l-4 border-blue-500 shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-800 flex items-center">
+                            <i class="fas fa-book ml-3 text-blue-600"></i>
+                            مصادر للتعلم أكثر
+                        </h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-xl shadow-sm">
+                                <h4 class="font-bold text-blue-600 mb-2">مواقع تعليمية</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Electronic Frontier Foundation</li>
+                                    <li>• Privacy International</li>
+                                    <li>• Mozilla Privacy Blog</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm">
+                                <h4 class="font-bold text-green-600 mb-2">أدوات مفيدة</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Tor Browser</li>
+                                    <li>• Signal Messenger</li>
+                                    <li>• PrivacyTools.io</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm">
+                                <h4 class="font-bold text-purple-600 mb-2">اختبارات الخصوصية</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Panopticlick</li>
+                                    <li>• Am I Unique?</li>
+                                    <li>• Cover Your Tracks</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Developer Section -->
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-8 rounded-2xl shadow-xl">
+                        <div class="text-center">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center justify-center">
+                                <i class="fas fa-code ml-3 text-blue-200"></i>
+                                المطور
+                            </h3>
+                            <div class="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/20">
+                                <p class="text-lg mb-4">
+                                    تم تطوير هذه الصفحة التعليمية بواسطة <strong class="text-blue-100">عبدالله التويجري</strong>
+                                </p>
+                                <p class="text-blue-200 text-sm mb-6">مطور ومحلل بيانات متخصص في أمن المعلومات والخصوصية الرقمية</p>
+                                
+                                <!-- Social Media Links -->
+                                <div class="text-center mb-6">
+                                    <p class="text-blue-200 text-sm mb-4">تابعني على وسائل التواصل الاجتماعي</p>
+                                    <div class="flex flex-wrap justify-center gap-3">
+                                        <a href="https://twitter.com/abutlb" target="_blank" rel="noopener noreferrer" 
+                                           class="group hover:scale-110 transition-all duration-300">
+                                            <span class="bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 hover:text-white px-4 py-2 rounded-full border border-sky-400/30 hover:border-sky-300 transition-all duration-300 inline-flex items-center">
+                                                <i class="fab fa-twitter ml-2"></i>Twitter
+                                            </span>
+                                        </a>
+                                        <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234" target="_blank" rel="noopener noreferrer" 
+                                           class="group hover:scale-110 transition-all duration-300">
+                                            <span class="bg-blue-700/20 hover:bg-blue-700/30 text-blue-200 hover:text-white px-4 py-2 rounded-full border border-blue-500/30 hover:border-blue-400 transition-all duration-300 inline-flex items-center">
+                                                <i class="fab fa-linkedin ml-2"></i>LinkedIn
+                                            </span>
+                                        </a>
+                                        <a href="https://github.com/abutlb" target="_blank" rel="noopener noreferrer" 
+                                           class="group hover:scale-110 transition-all duration-300">
+                                            <span class="bg-slate-600/20 hover:bg-slate-600/30 text-slate-200 hover:text-white px-4 py-2 rounded-full border border-slate-500/30 hover:border-slate-400 transition-all duration-300 inline-flex items-center">
+                                                <i class="fab fa-github ml-2"></i>GitHub
+                                            </span>
+                                        </a>
+                                        <a href="mailto:abutlb10015@gmail.com" 
+                                           class="group hover:scale-110 transition-all duration-300">
+                                            <span class="bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 hover:text-white px-4 py-2 rounded-full border border-indigo-400/30 hover:border-indigo-300 transition-all duration-300 inline-flex items-center">
+                                                <i class="fas fa-envelope ml-2"></i>Email
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <p class="text-blue-200 text-xs">
+                                        © <span id="copyrightYear">2024</span> جميع الحقوق محفوظة
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© <span id="currentYear">2024</span> دليل حماية الخصوصية الرقمية - جميع الحقوق محفوظة</p>
+        <p class="mt-2 text-xs">هذه الصفحة تعليمية ولا تجمع أو تحفظ بياناتك الشخصية</p>
+    </footer>
+
+    <!-- Privacy Tips Modal -->
+    <div id="privacyModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">نصائح سريعة لحماية الخصوصية</h3>
+                    <button onclick="closePrivacyModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="privacyModalContent" class="space-y-4">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/browser_data_education.js"></script>
+</body>
+</html>
+
