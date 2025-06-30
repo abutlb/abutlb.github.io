@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد مخططات تدفق البيانات الاحترافي | عبدالله التويجري</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'tajawal': ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-gentle': 'bounceGentle 2s infinite',
+                    },
+                    backdropBlur: {
+                        xs: '2px',
+                    }
+                }
+            }
+        }
+        
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            themeVariables: {
+                fontFamily: 'Tajawal, sans-serif',
+                fontSize: '16px',
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-effect-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+        
+        .gradient-border {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899) padding-box,
+                        linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899) border-box;
+            border: 2px solid transparent;
+        }
+        
+        .element-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .element-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+        }
+        
+        .mermaid {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+            direction: ltr;
+        }
+        
+        .dark .mermaid {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+        
+        .floating-element {
+            animation: bounceGentle 3s ease-in-out infinite;
+        }
+        
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #3b82f6;
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+
+<body class="font-tajawal bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 min-h-screen transition-all duration-500">
+    
+    <!-- Floating Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-32 h-32 bg-blue-200 dark:bg-blue-800 rounded-full opacity-20 floating-element"></div>
+        <div class="absolute top-1/2 right-20 w-24 h-24 bg-purple-200 dark:bg-purple-800 rounded-full opacity-20 floating-element" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-1/3 w-28 h-28 bg-pink-200 dark:bg-pink-800 rounded-full opacity-20 floating-element" style="animation-delay: 2s;"></div>
+    </div>
+    
+    <!-- Header -->
+    <header class="relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Navigation -->
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <a href="index.html" 
+                       class="group flex items-center space-x-2 space-x-reverse px-4 py-2 bg-white/20 dark:bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/30 dark:border-slate-700/50 hover:bg-white/30 dark:hover:bg-slate-700/50 transition-all duration-300">
+                        <i class="fas fa-arrow-right text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"></i>
+                        <span class="text-slate-700 dark:text-slate-200 font-medium">العودة للرئيسية</span>
+                    </a>
+                </div>
+                
+                <!-- Title -->
+                <div class="text-center">
+                    <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                        <i class="fas fa-project-diagram ml-3"></i>
+                        مولد مخططات تدفق البيانات
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-300 font-medium">
+                        أداة احترافية لتصميم وإنشاء مخططات تدفق البيانات التفاعلية
+                    </p>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <button id="themeToggle" 
+                            class="relative w-14 h-7 bg-slate-200 dark:bg-slate-700 rounded-full p-1 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+                        <div class="toggle-dot w-5 h-5 bg-white dark:bg-slate-300 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center">
+                            <i class="fas fa-sun text-yellow-500 dark:hidden text-xs"></i>
+                            <i class="fas fa-moon text-slate-600 hidden dark:block text-xs"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        
+        <!-- Control Panel -->
+        <div class="glass-effect dark:glass-effect-dark rounded-2xl p-6 mb-8 animate-fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center">
+                    <i class="fas fa-cogs ml-3 text-blue-600 dark:text-blue-400"></i>
+                    لوحة التحكم
+                </h2>
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <button id="clearAll" 
+                            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-trash"></i>
+                        <span>مسح الكل</span>
+                    </button>
+                    <button id="saveProject" 
+                            class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-save"></i>
+                        <span>حفظ المشروع</span>
+                    </button>
+                    <button id="loadProject" 
+                            class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-folder-open"></i>
+                        <span>تحميل مشروع</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Project Info -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">اسم المشروع</label>
+                    <input type="text" 
+                           id="projectName" 
+                           placeholder="مثال: نظام إدارة المكتبة"
+                           class="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">المؤلف</label>
+                    <input type="text" 
+                           id="projectAuthor" 
+                           placeholder="اسم المؤلف"
+                           class="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300">مستوى المخطط</label>
+                    <select id="diagramLevel" 
+                            class="w-full px-4 py-3 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                        <option value="context">مخطط السياق (Context Diagram)</option>
+                        <option value="level0" selected>المستوى 0 (Level 0)</option>
+                        <option value="level1">المستوى 1 (Level 1)</option>
+                        <option value="level2">المستوى 2 (Level 2)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Elements Panel -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- External Entities -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-green-700 dark:text-green-400 flex items-center">
+                            <i class="fas fa-users ml-2"></i>
+                            الكيانات الخارجية
+                        </h3>
+                        <span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full text-xs font-medium" id="entitiesCount">0</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <input type="text" 
+                                   id="entityInput" 
+                                   placeholder="اسم الكيان (مثل: العميل)"
+                                   class="flex-1 px-3 py-2 bg-white/70 dark:bg-slate-800/70 border border-green-200 dark:border-green-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                            <button onclick="addEntity()" 
+                                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors duration-200 flex items-center">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="entitiesList" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    </div>
+                </div>
+                
+                <!-- Processes -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up" style="animation-delay: 0.1s;">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-blue-700 dark:text-blue-400 flex items-center">
+                            <i class="fas fa-cogs ml-2"></i>
+                            العمليات
+                        </h3>
+                        <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-xs font-medium" id="processesCount">0</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <input type="text" 
+                                   id="processInput" 
+                                   placeholder="اسم العملية (مثل: معالجة الطلب)"
+                                   class="flex-1 px-3 py-2 bg-white/70 dark:bg-slate-800/70 border border-blue-200 dark:border-blue-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                            <button onclick="addProcess()" 
+                                    class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="processesList" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    </div>
+                </div>
+                
+                <!-- Data Stores -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-purple-700 dark:text-purple-400 flex items-center">
+                            <i class="fas fa-database ml-2"></i>
+                            مخازن البيانات
+                        </h3>
+                        <span class="bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full text-xs font-medium" id="datastoresCount">0</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <input type="text" 
+                                   id="datastoreInput" 
+                                   placeholder="اسم مخزن البيانات (مثل: قاعدة بيانات العملاء)"
+                                   class="flex-1 px-3 py-2 bg-white/70 dark:bg-slate-800/70 border border-purple-200 dark:border-purple-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                            <button onclick="addDatastore()" 
+                                    class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors duration-200 flex items-center">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="datastoresList" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    </div>
+                </div>
+                
+                <!-- Data Flows -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up" style="animation-delay: 0.3s;">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-orange-700 dark:text-orange-400 flex items-center">
+                            <i class="fas fa-exchange-alt ml-2"></i>
+                            تدفقات البيانات
+                        </h3>
+                        <span class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 px-2 py-1 rounded-full text-xs font-medium" id="flowsCount">0</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-1 gap-2">
+                            <select id="flowFrom" 
+                                    class="px-3 py-2 bg-white/70 dark:bg-slate-800/70 border border-orange-200 dark:border-orange-700 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <option value="">اختر المصدر</option>
+                            </select>
+                            <input type="text" 
+                                   id="flowData" 
+                                   placeholder="وصف البيانات (مثل: معلومات الطلب)"
+                                   class="px-3 py-2 bg-white/70 dark:bg-slate-800/70 border border-orange-200 dark:border-orange-700 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                            <select id="flowTo" 
+                                    class="px-3 py-2 bg-white/70 dark:bg-slate-800/70 border border-orange-200 dark:border-orange-700 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <option value="">اختر الوجهة</option>
+                            </select>
+                            <button onclick="addFlow()" 
+                                    class="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 space-x-reverse font-medium">
+                                <i class="fas fa-plus"></i>
+                                <span>إضافة التدفق</span>
+                            </button>
+                        </div>
+                        <div id="flowsList" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Diagram Preview -->
+            <div class="lg:col-span-2">
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up" style="animation-delay: 0.4s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 flex items-center">
+                            <i class="fas fa-eye ml-3 text-indigo-600 dark:text-indigo-400"></i>
+                            معاينة المخطط
+                        </h3>
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <button onclick="generateDiagram()" 
+                                    class="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg transition-all duration-200 flex items-center space-x-2 space-x-reverse font-medium shadow-lg hover:shadow-xl">
+                                <i class="fas fa-magic"></i>
+                                <span>إنشاء المخطط</span>
+                            </button>
+                            <div class="relative">
+                                <button id="exportBtn" 
+                                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all duration-200 flex items-center space-x-2 space-x-reverse font-medium">
+                                    <i class="fas fa-download"></i>
+                                    <span>تصدير</span>
+                                </button>
+                                <div id="exportMenu" 
+                                     class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 py-2 z-50">
+                                    <button onclick="exportDiagram('png')" 
+                                            class="w-full text-right px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center space-x-2 space-x-reverse">
+                                        <i class="fas fa-image text-blue-500"></i>
+                                        <span>تصدير كصورة PNG</span>
+                                    </button>
+                                    <button onclick="exportDiagram('svg')" 
+                                            class="w-full text-right px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center space-x-2 space-x-reverse">
+                                        <i class="fas fa-vector-square text-green-500"></i>
+                                        <span>تصدير كـ SVG</span>
+                                    </button>
+                                    <button onclick="exportDiagram('pdf')" 
+                                            class="w-full text-right px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center space-x-2 space-x-reverse">
+                                        <i class="fas fa-file-pdf text-red-500"></i>
+                                        <span>تصدير كـ PDF</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Diagram Container -->
+                    <div id="diagramContainer" 
+                         class="mermaid min-h-[500px] flex items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl">
+                        <div class="text-center text-slate-500 dark:text-slate-400">
+                            <i class="fas fa-project-diagram text-6xl mb-4 opacity-50"></i>
+                            <h4 class="text-xl font-semibold mb-2">ابدأ بإنشاء مخططك</h4>
+                            <p class="text-sm opacity-75">أضف العناصر المطلوبة ثم انقر على "إنشاء المخطط"</p>
+                            <div class="mt-6 flex flex-wrap justify-center gap-4 text-xs">
+                                <div class="flex items-center space-x-2 space-x-reverse bg-white/50 dark:bg-slate-800/50 px-3 py-1 rounded-full">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span>كيانات خارجية</span>
+                                </div>
+                                <div class="flex items-center space-x-2 space-x-reverse bg-white/50 dark:bg-slate-800/50 px-3 py-1 rounded-full">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                    <span>عمليات</span>
+                                </div>
+                                <div class="flex items-center space-x-2 space-x-reverse bg-white/50 dark:bg-slate-800/50 px-3 py-1 rounded-full">
+                                    <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                    <span>مخازن بيانات</span>
+                                </div>
+                                <div class="flex items-center space-x-2 space-x-reverse bg-white/50 dark:bg-slate-800/50 px-3 py-1 rounded-full">
+                                    <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
+                                    <span>تدفقات</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Diagram Info -->
+                    <div id="diagramInfo" class="hidden mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-green-600" id="infoEntities">0</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400">كيانات خارجية</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600" id="infoProcesses">0</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400">عمليات</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-purple-600" id="infoDatastores">0</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400">مخازن بيانات</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-orange-600" id="infoFlows">0</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400">تدفقات</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Help Section -->
+        <div class="mt-8 glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up" style="animation-delay: 0.5s;">
+            <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center">
+                <i class="fas fa-question-circle ml-3 text-amber-500"></i>
+                كيفية الاستخدام
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-users text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">١. أضف الكيانات</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">ابدأ بإضافة الكيانات الخارجية مثل العملاء والمورّدين</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-cogs text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">٢. حدد العمليات</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">أضف العمليات الرئيسية التي يقوم بها النظام</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-database text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">٣. أضف المخازن</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">حدد مخازن البيانات وقواعد البيانات المستخدمة</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-exchange-alt text-orange-600 dark:text-orange-400"></i>
+                    </div>
+                    <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">٤. اربط التدفقات</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">اربط العناصر بتدفقات البيانات المناسبة</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="relative z-10 mt-16 text-center text-slate-500 dark:text-slate-400 pb-8">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-8">
+                <p class="text-sm font-medium">
+                    © <span id="currentYear">2024</span> مولد مخططات تدفق البيانات - 
+                    <span class="text-blue-600 dark:text-blue-400">صُممت بواسطة عبدالله التويجري</span>
+                </p>
+                <p class="text-xs mt-2 opacity-75">
+                    أداة مجانية لإنشاء مخططات تدفق البيانات الاحترافية
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Hidden file input for loading projects -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+    
+    <!-- JavaScript -->
+    <script>
+        // Application State
+        class DFDGenerator {
+            constructor() {
+                this.entities = [];
+                this.processes = [];
+                this.datastores = [];
+                this.flows = [];
+                this.projectInfo = {
+                    name: '',
+                    author: '',
+                    level: 'level0',
+                    created: null,
+                    modified: null
+                };
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.updateCounts();
+                this.updateDropdowns();
+                this.loadTheme();
+                this.setCurrentYear();
+                this.showWelcomeAnimation();
+            }
+            
+            setupEventListeners() {
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', this.toggleTheme.bind(this));
+                
+                // Project controls
+                document.getElementById('clearAll').addEventListener('click', this.clearAll.bind(this));
+                document.getElementById('saveProject').addEventListener('click', this.saveProject.bind(this));
+                document.getElementById('loadProject').addEventListener('click', this.loadProject.bind(this));
+                document.getElementById('fileInput').addEventListener('change', this.handleFileLoad.bind(this));
+                
+                // Export menu
+                document.getElementById('exportBtn').addEventListener('click', this.toggleExportMenu.bind(this));
+                document.addEventListener('click', this.closeExportMenu.bind(this));
+                
+                // Enter key handling for inputs
+                ['entityInput', 'processInput', 'datastoreInput'].forEach(id => {
+                    document.getElementById(id).addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            if (id === 'entityInput') this.addEntity();
+                            else if (id === 'processInput') this.addProcess();
+                            else if (id === 'datastoreInput') this.addDatastore();
+                        }
+                    });
+                });
+                
+                // Project info changes
+                ['projectName', 'projectAuthor', 'diagramLevel'].forEach(id => {
+                    document.getElementById(id).addEventListener('change', this.updateProjectInfo.bind(this));
+                });
+            }
+            
+            showWelcomeAnimation() {
+                setTimeout(() => {
+                    document.querySelectorAll('.animate-slide-up').forEach((el, index) => {
+                        el.style.animationDelay = `${index * 0.1}s`;
+                        el.classList.add('animate-slide-up');
+                    });
+                }, 100);
+            }
+            
+            toggleTheme() {
+                const html = document.documentElement;
+                const isDark = html.classList.contains('dark');
+                
+                if (isDark) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+                
+                // Update mermaid theme
+                this.updateMermaidTheme();
+            }
+            
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            }
+            
+            updateMermaidTheme() {
+                const isDark = document.documentElement.classList.contains('dark');
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: isDark ? 'dark' : 'default',
+                    themeVariables: {
+                        fontFamily: 'Tajawal, sans-serif',
+                        fontSize: '16px',
+                    },
+                    flowchart: {
+                        useMaxWidth: true,
+                        htmlLabels: true,
+                        curve: 'basis'
+                    }
+                });
+            }
+            
+            setCurrentYear() {
+                document.getElementById('currentYear').textContent = new Date().getFullYear();
+            }
+            
+            addEntity() {
+                const input = document.getElementById('entityInput');
+                const value = input.value.trim();
+                
+                if (!value) {
+                    this.showNotification('يرجى إدخال اسم الكيان', 'error');
+                    return;
+                }
+                
+                if (this.entities.includes(value)) {
+                    this.showNotification('هذا الكيان موجود بالفعل', 'warning');
+                    return;
+                }
+                
+                this.entities.push(value);
+                input.value = '';
+                this.renderList('entitiesList', this.entities, 'entity', 'green');
+                this.updateCounts();
+                this.updateDropdowns();
+                this.showNotification(`تم إضافة الكيان: ${value}`, 'success');
+            }
+            
+            addProcess() {
+                const input = document.getElementById('processInput');
+                const value = input.value.trim();
+                
+                if (!value) {
+                    this.showNotification('يرجى إدخال اسم العملية', 'error');
+                    return;
+                }
+                
+                if (this.processes.includes(value)) {
+                    this.showNotification('هذه العملية موجودة بالفعل', 'warning');
+                    return;
+                }
+                
+                this.processes.push(value);
+                input.value = '';
+                this.renderList('processesList', this.processes, 'process', 'blue');
+                this.updateCounts();
+                this.updateDropdowns();
+                this.showNotification(`تم إضافة العملية: ${value}`, 'success');
+            }
+            
+            addDatastore() {
+                const input = document.getElementById('datastoreInput');
+                const value = input.value.trim();
+                
+                if (!value) {
+                    this.showNotification('يرجى إدخال اسم مخزن البيانات', 'error');
+                    return;
+                }
+                
+                if (this.datastores.includes(value)) {
+                    this.showNotification('هذا المخزن موجود بالفعل', 'warning');
+                    return;
+                }
+                
+                this.datastores.push(value);
+                input.value = '';
+                this.renderList('datastoresList', this.datastores, 'datastore', 'purple');
+                this.updateCounts();
+                this.updateDropdowns();
+                this.showNotification(`تم إضافة مخزن البيانات: ${value}`, 'success');
+            }
+            
+            addFlow() {
+                const fromElement = document.getElementById('flowFrom');
+                const dataElement = document.getElementById('flowData');
+                const toElement = document.getElementById('flowTo');
+                
+                const from = fromElement.value;
+                const data = dataElement.value.trim();
+                const to = toElement.value;
+                
+                if (!from || !data || !to) {
+                    this.showNotification('يرجى ملء جميع حقول التدفق', 'error');
+                    return;
+                }
+                
+                if (from === to) {
+                    this.showNotification('لا يمكن أن يكون المصدر والوجهة نفس العنصر', 'error');
+                    return;
+                }
+                
+                const flowExists = this.flows.some(f => f.from === from && f.to === to && f.data === data);
+                if (flowExists) {
+                    this.showNotification('هذا التدفق موجود بالفعل', 'warning');
+                    return;
+                }
+                
+                const flow = { from, data, to };
+                this.flows.push(flow);
+                
+                fromElement.value = '';
+                dataElement.value = '';
+                toElement.value = '';
+                
+                this.renderFlows();
+                this.updateCounts();
+                this.showNotification(`تم إضافة التدفق: ${from} → ${to}`, 'success');
+            }
+            
+            renderList(containerId, list, type, color) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                
+                list.forEach((item, index) => {
+                    const element = document.createElement('div');
+                    element.className = `element-card flex items-center justify-between p-3 bg-${color}-50 dark:bg-${color}-900/20 border border-${color}-200 dark:border-${color}-700/50 rounded-lg`;
+                    
+                    element.innerHTML = `
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <i class="fas ${this.getIconForType(type)} text-${color}-600 dark:text-${color}-400"></i>
+                            <span class="font-medium text-slate-800 dark:text-slate-200">${item}</span>
+                        </div>
+                        <button onclick="dfdApp.removeItem('${type}', ${index})" 
+                                class="p-1 text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition-all duration-200">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    `;
+                    
+                    container.appendChild(element);
+                });
+            }
+            
+            renderFlows() {
+                const container = document.getElementById('flowsList');
+                container.innerHTML = '';
+                
+                this.flows.forEach((flow, index) => {
+                    const element = document.createElement('div');
+                    element.className = 'element-card flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700/50 rounded-lg';
+                    
+                    element.innerHTML = `
+                        <div class="flex items-center space-x-2 space-x-reverse text-sm">
+                            <span class="font-medium text-slate-800 dark:text-slate-200">${flow.from}</span>
+                            <i class="fas fa-arrow-left text-orange-500"></i>
+                            <span class="italic text-slate-600 dark:text-slate-400">${flow.data}</span>
+                            <i class="fas fa-arrow-left text-orange-500"></i>
+                            <span class="font-medium text-slate-800 dark:text-slate-200">${flow.to}</span>
+                        </div>
+                        <button onclick="dfdApp.removeFlow(${index})" 
+                                class="p-1 text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition-all duration-200">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    `;
+                    
+                    container.appendChild(element);
+                });
+            }
+            
+            getIconForType(type) {
+                const icons = {
+                    entity: 'fa-users',
+                    process: 'fa-cogs',
+                    datastore: 'fa-database'
+                };
+                return icons[type] || 'fa-circle';
+            }
+            
+            removeItem(type, index) {
+                const arrays = {
+                    entity: this.entities,
+                    process: this.processes,
+                    datastore: this.datastores
+                };
+                
+                const colors = {
+                    entity: 'green',
+                    process: 'blue',
+                    datastore: 'purple'
+                };
+                
+                const containers = {
+                    entity: 'entitiesList',
+                    process: 'processesList',
+                    datastore: 'datastoresList'
+                };
+                
+                if (arrays[type] && arrays[type][index]) {
+                    const itemName = arrays[type][index];
+                    arrays[type].splice(index, 1);
+                    this.renderList(containers[type], arrays[type], type, colors[type]);
+                    this.updateCounts();
+                    this.updateDropdowns();
+                    this.removeFlowsContaining(itemName);
+                    this.showNotification(`تم حذف: ${itemName}`, 'info');
+                }
+            }
+            
+            removeFlow(index) {
+                if (this.flows[index]) {
+                    const flow = this.flows[index];
+                    this.flows.splice(index, 1);
+                    this.renderFlows();
+                    this.updateCounts();
+                    this.showNotification(`تم حذف التدفق: ${flow.from} → ${flow.to}`, 'info');
+                }
+            }
+            
+            removeFlowsContaining(itemName) {
+                const originalLength = this.flows.length;
+                this.flows = this.flows.filter(flow => flow.from !== itemName && flow.to !== itemName);
+                
+                if (this.flows.length < originalLength) {
+                    this.renderFlows();
+                    this.showNotification('تم حذف التدفقات المرتبطة', 'info');
+                }
+            }
+            
+            updateCounts() {
+                document.getElementById('entitiesCount').textContent = this.entities.length;
+                document.getElementById('processesCount').textContent = this.processes.length;
+                document.getElementById('datastoresCount').textContent = this.datastores.length;
+                document.getElementById('flowsCount').textContent = this.flows.length;
+                
+                // Update diagram info
+                document.getElementById('infoEntities').textContent = this.entities.length;
+                document.getElementById('infoProcesses').textContent = this.processes.length;
+                document.getElementById('infoDatastores').textContent = this.datastores.length;
+                document.getElementById('infoFlows').textContent = this.flows.length;
+            }
+            
+            updateDropdowns() {
+                const allElements = [...this.entities, ...this.processes, ...this.datastores];
+                const fromSelect = document.getElementById('flowFrom');
+                const toSelect = document.getElementById('flowTo');
+                
+                [fromSelect, toSelect].forEach(select => {
+                    const currentValue = select.value;
+                    select.innerHTML = '<option value="">اختر العنصر</option>';
+                    
+                    allElements.forEach(element => {
+                        const option = document.createElement('option');
+                        option.value = element;
+                        option.textContent = element;
+                        if (element === currentValue) option.selected = true;
+                        select.appendChild(option);
+                    });
+                });
+            }
+            
+            generateDiagram() {
+                if (this.entities.length === 0 && this.processes.length === 0 && this.datastores.length === 0) {
+                    this.showNotification('يرجى إضافة عناصر أولاً', 'warning');
+                    return;
+                }
+                
+                const diagramCode = this.generateMermaidCode();
+                const container = document.getElementById('diagramContainer');
+                
+                // Show loading state
+                container.innerHTML = `
+                    <div class="text-center text-slate-500 dark:text-slate-400">
+                        <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+                        <p>جاري إنشاء المخطط...</p>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    try {
+                        // Create a unique ID for this diagram render
+                        const diagramId = 'diagram_' + Date.now();
+                        
+                        // Clear container and create new div for mermaid
+                        container.innerHTML = `<div id="${diagramId}" class="mermaid-diagram">${diagramCode}</div>`;
+                        
+                        // Render the diagram with the specific element
+                        mermaid.init(undefined, document.getElementById(diagramId));
+                        
+                        document.getElementById('diagramInfo').classList.remove('hidden');
+                        this.showNotification('تم إنشاء المخطط بنجاح!', 'success');
+                    } catch (error) {
+                        console.error('Error generating diagram:', error);
+                        container.innerHTML = `
+                            <div class="text-center text-red-500">
+                                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                                <p>حدث خطأ في إنشاء المخطط</p>
+                                <p class="text-sm mt-2">يرجى التحقق من صحة البيانات</p>
+                            </div>
+                        `;
+                        this.showNotification('حدث خطأ في إنشاء المخطط', 'error');
+                    }
+                }, 500);
+            }
+            
+            generateMermaidCode() {
+                let code = 'graph TD\n';
+                const idMap = {};
+                let idCounter = 1;
+                
+                // Add project title if available
+                const projectName = document.getElementById('projectName').value.trim();
+                if (projectName) {
+                    code += `%% ${projectName}\n`;
+                }
+                
+                // Generate entities
+                this.entities.forEach(entity => {
+                    const id = `E${idCounter++}`;
+                    idMap[entity] = id;
+                    code += `    ${id}(["${entity}"])\n`;
+                    code += `    style ${id} fill:#dcfce7,stroke:#16a34a,stroke-width:2px\n`;
+                });
+                
+                // Generate processes
+                this.processes.forEach(process => {
+                    const id = `P${idCounter++}`;
+                    idMap[process] = id;
+                    code += `    ${id}["${process}"]\n`;
+                    code += `    style ${id} fill:#dbeafe,stroke:#2563eb,stroke-width:2px\n`;
+                });
+                
+                // Generate datastores
+                this.datastores.forEach(datastore => {
+                    const id = `D${idCounter++}`;
+                    idMap[datastore] = id;
+                    code += `    ${id}[("${datastore}")]\n`;
+                    code += `    style ${id} fill:#ede9fe,stroke:#7c3aed,stroke-width:2px\n`;
+                });
+                
+                // Generate flows
+                this.flows.forEach(flow => {
+                    const fromId = idMap[flow.from];
+                    const toId = idMap[flow.to];
+                    if (fromId && toId) {
+                        code += `    ${fromId} -->|"${flow.data}"| ${toId}\n`;
+                    }
+                });
+                
+                return code;
+            }
+            
+            clearAll() {
+                if (confirm('هل أنت متأكد من مسح جميع البيانات؟')) {
+                    this.entities = [];
+                    this.processes = [];
+                    this.datastores = [];
+                    this.flows = [];
+                    
+                    this.renderList('entitiesList', this.entities, 'entity', 'green');
+                    this.renderList('processesList', this.processes, 'process', 'blue');
+                    this.renderList('datastoresList', this.datastores, 'datastore', 'purple');
+                    this.renderFlows();
+                    this.updateCounts();
+                    this.updateDropdowns();
+                    
+                    document.getElementById('diagramContainer').innerHTML = `
+                        <div class="text-center text-slate-500 dark:text-slate-400">
+                            <i class="fas fa-project-diagram text-6xl mb-4 opacity-50"></i>
+                            <h4 class="text-xl font-semibold mb-2">ابدأ بإنشاء مخططك</h4>
+                            <p class="text-sm opacity-75">أضف العناصر المطلوبة ثم انقر على "إنشاء المخطط"</p>
+                        </div>
+                    `;
+                    
+                    document.getElementById('diagramInfo').classList.add('hidden');
+                    this.showNotification('تم مسح جميع البيانات', 'info');
+                }
+            }
+            
+            updateProjectInfo() {
+                this.projectInfo.name = document.getElementById('projectName').value;
+                this.projectInfo.author = document.getElementById('projectAuthor').value;
+                this.projectInfo.level = document.getElementById('diagramLevel').value;
+                this.projectInfo.modified = new Date().toISOString();
+            }
+            
+            saveProject() {
+                this.updateProjectInfo();
+                
+                const projectData = {
+                    ...this.projectInfo,
+                    entities: this.entities,
+                    processes: this.processes,
+                    datastores: this.datastores,
+                    flows: this.flows,
+                    created: this.projectInfo.created || new Date().toISOString()
+                };
+                
+                const dataStr = JSON.stringify(projectData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${projectData.name || 'مخطط-تدفق-البيانات'}-${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                
+                URL.revokeObjectURL(url);
+                this.showNotification('تم حفظ المشروع بنجاح', 'success');
+            }
+            
+            loadProject() {
+                document.getElementById('fileInput').click();
+            }
+            
+            handleFileLoad(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const projectData = JSON.parse(e.target.result);
+                        this.loadProjectData(projectData);
+                        this.showNotification('تم تحميل المشروع بنجاح', 'success');
+                    } catch (error) {
+                        this.showNotification('خطأ في قراءة ملف المشروع', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+            
+            loadProjectData(data) {
+                this.entities = data.entities || [];
+                this.processes = data.processes || [];
+                this.datastores = data.datastores || [];
+                this.flows = data.flows || [];
+                this.projectInfo = { ...data };
+                
+                document.getElementById('projectName').value = data.name || '';
+                document.getElementById('projectAuthor').value = data.author || '';
+                document.getElementById('diagramLevel').value = data.level || 'level0';
+                
+                this.renderList('entitiesList', this.entities, 'entity', 'green');
+                this.renderList('processesList', this.processes, 'process', 'blue');
+                this.renderList('datastoresList', this.datastores, 'datastore', 'purple');
+                this.renderFlows();
+                this.updateCounts();
+                this.updateDropdowns();
+            }
+            
+            toggleExportMenu() {
+                const menu = document.getElementById('exportMenu');
+                menu.classList.toggle('hidden');
+            }
+            
+            closeExportMenu(event) {
+                const menu = document.getElementById('exportMenu');
+                const button = document.getElementById('exportBtn');
+                
+                if (!menu.contains(event.target) && !button.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            }
+            
+            exportDiagram(format) {
+                const diagramElement = document.querySelector('#diagramContainer svg');
+                if (!diagramElement) {
+                    this.showNotification('يرجى إنشاء مخطط أولاً', 'warning');
+                    return;
+                }
+                
+                const projectName = document.getElementById('projectName').value || 'مخطط-تدفق-البيانات';
+                
+                switch (format) {
+                    case 'png':
+                        this.exportAsPNG(diagramElement, projectName);
+                        break;
+                    case 'svg':
+                        this.exportAsSVG(diagramElement, projectName);
+                        break;
+                    case 'pdf':
+                        this.exportAsPDF(diagramElement, projectName);
+                        break;
+                }
+                
+                document.getElementById('exportMenu').classList.add('hidden');
+            }
+            
+            exportAsPNG(svgElement, filename) {
+                html2canvas(svgElement.parentElement, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: false
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `${filename}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    this.showNotification('تم تصدير المخطط كصورة PNG', 'success');
+                }).catch(error => {
+                    console.error('Export error:', error);
+                    this.showNotification('حدث خطأ في تصدير المخطط', 'error');
+                });
+            }
+            
+            exportAsSVG(svgElement, filename) {
+                const svgData = new XMLSerializer().serializeToString(svgElement);
+                const blob = new Blob([svgData], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${filename}.svg`;
+                link.click();
+                
+                URL.revokeObjectURL(url);
+                this.showNotification('تم تصدير المخطط كـ SVG', 'success');
+            }
+            
+            exportAsPDF(svgElement, filename) {
+                const { jsPDF } = window.jspdf;
+                
+                html2canvas(svgElement.parentElement, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: false
+                }).then(canvas => {
+                    const pdf = new jsPDF();
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgWidth = 210;
+                    const pageHeight = 295;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    let heightLeft = imgHeight;
+                    
+                    let position = 0;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                    
+                    pdf.save(`${filename}.pdf`);
+                    this.showNotification('تم تصدير المخطط كـ PDF', 'success');
+                }).catch(error => {
+                    console.error('PDF export error:', error);
+                    this.showNotification('حدث خطأ في تصدير PDF', 'error');
+                });
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    warning: 'bg-yellow-500',
+                    info: 'bg-blue-500'
+                };
+                
+                const icons = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+                
+                notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2 space-x-reverse animate-slide-up`;
+                notification.innerHTML = `
+                    <i class="fas ${icons[type]}"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translate(-50%, -20px)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        }
+        
+        // Global functions for onclick handlers
+        window.addEntity = () => dfdApp.addEntity();
+        window.addProcess = () => dfdApp.addProcess();
+        window.addDatastore = () => dfdApp.addDatastore();
+        window.addFlow = () => dfdApp.addFlow();
+        window.generateDiagram = () => dfdApp.generateDiagram();
+        window.exportDiagram = (format) => dfdApp.exportDiagram(format);
+        
+        // Initialize application
+        const dfdApp = new DFDGenerator();
+    </script>
+</body>
+
+</html>
