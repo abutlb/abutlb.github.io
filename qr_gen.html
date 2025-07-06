@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR-Gen | مولد رموز QR العصري</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -152,10 +152,155 @@
                             <h3 class="text-lg font-bold mb-4 text-blue-600 dark:text-blue-400">
                                 <i class="fas fa-pen-to-square ml-2"></i>محتوى رمز QR
                             </h3>
-                            <div>
-                                <textarea id="qr-text" placeholder="أدخل عنوان URL أو نصًا لرمز QR الخاص بك" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                    rows="4"></textarea>
+                            
+                            <!-- QR Type Selector -->
+                            <div class="mb-4">
+                                <label for="qr-type" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">نوع رمز QR</label>
+                                <select id="qr-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="text">نص/رابط</option>
+                                    <option value="url">موقع إلكتروني</option>
+                                    <option value="wifi">شبكة WiFi</option>
+                                    <option value="contact">بطاقة اتصال</option>
+                                    <option value="email">بريد إلكتروني</option>
+                                    <option value="sms">رسالة نصية</option>
+                                    <option value="phone">رقم هاتف</option>
+                                    <option value="location">موقع جغرافي</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Dynamic Input Fields -->
+                            <div id="qr-inputs">
+                                <!-- Text/URL Input (Default) -->
+                                <div id="text-input" class="qr-input-group">
+                                    <textarea id="qr-text" placeholder="أدخل عنوان URL أو نصًا لرمز QR الخاص بك" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        rows="4"></textarea>
+                                </div>
+                                
+                                <!-- WiFi Input -->
+                                <div id="wifi-input" class="qr-input-group hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">اسم الشبكة (SSID)</label>
+                                            <input type="text" id="wifi-ssid" placeholder="اسم الشبكة"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">كلمة المرور</label>
+                                            <input type="password" id="wifi-password" placeholder="كلمة المرور"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">نوع الأمان</label>
+                                        <select id="wifi-security" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="WPA">WPA/WPA2</option>
+                                            <option value="WEP">WEP</option>
+                                            <option value="nopass">بدون كلمة مرور</option>
+                                        </select>
+                                    </div>
+                                    <div class="mt-4 flex items-center">
+                                        <input type="checkbox" id="wifi-hidden" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                        <label for="wifi-hidden" class="mr-2 text-gray-700 dark:text-gray-300">شبكة مخفية</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contact Input -->
+                                <div id="contact-input" class="qr-input-group hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">الاسم الأول</label>
+                                            <input type="text" id="contact-firstname" placeholder="الاسم الأول"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">الاسم الأخير</label>
+                                            <input type="text" id="contact-lastname" placeholder="الاسم الأخير"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">رقم الهاتف</label>
+                                            <input type="tel" id="contact-phone" placeholder="+966501234567"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">البريد الإلكتروني</label>
+                                            <input type="email" id="contact-email" placeholder="example@email.com"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">المنظمة</label>
+                                        <input type="text" id="contact-organization" placeholder="اسم الشركة أو المنظمة"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                </div>
+                                
+                                <!-- Email Input -->
+                                <div id="email-input" class="qr-input-group hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">البريد الإلكتروني</label>
+                                            <input type="email" id="email-address" placeholder="example@email.com"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">الموضوع</label>
+                                            <input type="text" id="email-subject" placeholder="موضوع الرسالة"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">محتوى الرسالة</label>
+                                        <textarea id="email-body" placeholder="محتوى الرسالة"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            rows="3"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <!-- SMS Input -->
+                                <div id="sms-input" class="qr-input-group hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">رقم الهاتف</label>
+                                            <input type="tel" id="sms-phone" placeholder="+966501234567"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">نص الرسالة</label>
+                                        <textarea id="sms-message" placeholder="نص الرسالة"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            rows="3"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <!-- Phone Input -->
+                                <div id="phone-input" class="qr-input-group hidden">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">رقم الهاتف</label>
+                                        <input type="tel" id="phone-number" placeholder="+966501234567"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                </div>
+                                
+                                <!-- Location Input -->
+                                <div id="location-input" class="qr-input-group hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">خط العرض</label>
+                                            <input type="number" id="location-lat" placeholder="24.7136" step="any"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-2">خط الطول</label>
+                                            <input type="number" id="location-lng" placeholder="46.6753" step="any"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -167,29 +312,120 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label for="foreground-color" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">لون المقدمة</label>
-                                    <input type="color" id="foreground-color" value="#000000" 
-                                        class="w-full h-10 rounded-md border border-gray-300 cursor-pointer dark:border-gray-600">
+                                    <div class="flex items-center gap-2">
+                                        <input type="color" id="foreground-color" value="#000000" 
+                                            class="w-12 h-10 rounded-md border border-gray-300 cursor-pointer dark:border-gray-600">
+                                        <input type="text" id="foreground-hex" value="#000000" 
+                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div class="mt-2 flex flex-wrap gap-2">
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #000000" data-color="#000000"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #1f2937" data-color="#1f2937"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #3b82f6" data-color="#3b82f6"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #7c3aed" data-color="#7c3aed"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #dc2626" data-color="#dc2626"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #059669" data-color="#059669"></button>
+                                    </div>
                                 </div>
                                 
                                 <div>
                                     <label for="background-color" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">لون الخلفية</label>
-                                    <input type="color" id="background-color" value="#FFFFFF" 
-                                        class="w-full h-10 rounded-md border border-gray-300 cursor-pointer dark:border-gray-600">
+                                    <div class="flex items-center gap-2">
+                                        <input type="color" id="background-color" value="#FFFFFF" 
+                                            class="w-12 h-10 rounded-md border border-gray-300 cursor-pointer dark:border-gray-600">
+                                        <input type="text" id="background-hex" value="#FFFFFF" 
+                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div class="mt-2 flex flex-wrap gap-2">
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #ffffff" data-color="#ffffff"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #f3f4f6" data-color="#f3f4f6"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #fef3c7" data-color="#fef3c7"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #fee2e2" data-color="#fee2e2"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #dbeafe" data-color="#dbeafe"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors" style="background-color: #ecfdf5" data-color="#ecfdf5"></button>
+                                        <button type="button" class="color-preset w-6 h-6 rounded-full border-2 border-gray-300 hover:border-gray-500 transition-colors bg-transparent" style="background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%); background-size: 8px 8px; background-position: 0 0, 0 4px, 4px -4px, -4px 0px;" data-color="transparent" title="خلفية شفافة"></button>
+                                    </div>
+                                    <div class="mt-2 flex items-center">
+                                        <input type="checkbox" id="transparent-bg" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                        <label for="transparent-bg" class="mr-2 text-sm text-gray-600 dark:text-gray-400">خلفية شفافة</label>
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="mb-4">
-                                <label for="corner-radius" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-                                    نصف قطر الزاوية: <span id="corner-radius-value">0%</span>
-                                </label>
-                                <input type="range" id="corner-radius" min="0" max="50" value="0" 
-                                    class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                                <label for="qr-style" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">نمط رمز QR</label>
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    <button type="button" class="qr-style-btn p-3 border-2 border-blue-500 rounded-lg hover:border-blue-500 transition-colors bg-blue-50 dark:bg-blue-900/30" data-style="square">
+                                        <div class="w-8 h-8 mx-auto mb-2 grid grid-cols-3 gap-1">
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class=""></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                            <div class="bg-gray-800 dark:bg-white"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-600 dark:text-gray-400">مربعات</span>
+                                    </button>
+                                    
+                                    <button type="button" class="qr-style-btn p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 transition-colors" data-style="dots">
+                                        <div class="w-8 h-8 mx-auto mb-2 grid grid-cols-3 gap-1 items-center justify-items-center">
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class=""></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                            <div class="w-2 h-2 bg-gray-800 dark:bg-white rounded-full"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-600 dark:text-gray-400">نقاط</span>
+                                    </button>
+                                    
+                                    <button type="button" class="qr-style-btn p-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 transition-colors" data-style="rounded">
+                                        <div class="w-8 h-8 mx-auto mb-2 grid grid-cols-3 gap-1">
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class=""></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                            <div class="bg-gray-800 dark:bg-white rounded-sm"></div>
+                                        </div>
+                                        <span class="text-xs text-gray-600 dark:text-gray-400">مدورة</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="corner-radius" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="corner-radius" class="text-gray-700 dark:text-gray-300 font-medium">زوايا مدورة للـ QR</label>
+                                </div>
                             </div>
                             
                             <div class="mb-4">
                                 <label for="logo-upload" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">إضافة شعار (اختياري)</label>
                                 <input type="file" id="logo-upload" accept="image/*" 
                                     class="w-full text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 dark:file:bg-blue-900/30 dark:file:text-blue-400 hover:file:bg-blue-100">
+                                <div class="mt-2 flex items-center gap-4">
+                                    <div>
+                                        <label for="logo-size" class="block text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                            حجم الشعار: <span id="logo-size-value">20%</span>
+                                        </label>
+                                        <input type="range" id="logo-size" min="10" max="40" value="20" 
+                                            class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" id="logo-rounded" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="logo-rounded" class="text-sm text-gray-600 dark:text-gray-400">شعار دائري</label>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="mb-4">
@@ -203,12 +439,21 @@
                                 </select>
                             </div>
                             
-                            <div>
-                                <label for="qr-size" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-                                    حجم رمز QR: <span id="qr-size-value">8</span>
-                                </label>
-                                <input type="range" id="qr-size" min="5" max="10" value="8" 
-                                    class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="qr-size" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                                        حجم رمز QR: <span id="qr-size-value">512px</span>
+                                    </label>
+                                    <input type="range" id="qr-size" min="128" max="1024" value="512" step="64"
+                                        class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                                <div>
+                                    <label for="qr-margin" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                                        هامش رمز QR: <span id="qr-margin-value">4</span>
+                                    </label>
+                                    <input type="range" id="qr-margin" min="0" max="20" value="4" 
+                                        class="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                                </div>
                             </div>
                         </div>
                         
