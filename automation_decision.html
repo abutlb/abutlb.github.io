@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد قرار الأتمتة الاحترافي | هل تستحق المهمة أن تُؤتمت؟ | عبدالله التويجري</title>
+
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'tajawal': ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        accent: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        automation: {
+                            excellent: '#22c55e',
+                            good: '#84cc16',
+                            fair: '#eab308',
+                            poor: '#f97316',
+                            critical: '#ef4444',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-gentle': 'pulseGentle 2s ease-in-out infinite',
+                        'bounce-gentle': 'bounceGentle 3s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulseGentle {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes bounceGentle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-effect-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 41, 59, 0.3);
+        }
+
+        .automation-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .automation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
+        }
+
+        .floating-element {
+            animation: bounceGentle 4s ease-in-out infinite;
+        }
+
+        .decision-positive {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-color: #22c55e;
+        }
+
+        .decision-negative {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-color: #ef4444;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .glass-effect,
+            .glass-effect-dark {
+                background: white !important;
+                backdrop-filter: none !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 14px !important;
+                line-height: 1.4 !important;
+            }
+
+            .print-page {
+                page-break-before: always;
+            }
+
+            .print-section {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .max-w-7xl {
+                max-width: 100% !important;
+            }
+
+            .px-4,
+            .px-6 {
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+
+            .py-6,
+            .py-4 {
+                padding-top: 10px !important;
+                padding-bottom: 10px !important;
+            }
+
+            .text-3xl {
+                font-size: 22px !important;
+            }
+
+            .text-xl {
+                font-size: 18px !important;
+            }
+
+            .text-lg {
+                font-size: 16px !important;
+            }
+
+            .grid {
+                display: block !important;
+            }
+
+            .space-y-6>*+*,
+            .space-y-4>*+*,
+            .space-y-3>*+* {
+                margin-top: 15px !important;
+            }
+
+            .mb-8,
+            .mb-6 {
+                margin-bottom: 15px !important;
+            }
+
+            .p-6 {
+                padding: 15px !important;
+            }
+
+            .rounded-xl,
+            .rounded-lg {
+                border-radius: 8px !important;
+            }
+
+            header {
+                margin-bottom: 20px !important;
+            }
+
+            footer {
+                margin-top: 20px !important;
+            }
+
+            .lg\:col-span-1,
+            .lg\:col-span-2 {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .md\:grid-cols-2,
+            .md\:grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .print-header {
+                border-bottom: 3px solid #0ea5e9;
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .print-header h1 {
+                color: #0ea5e9 !important;
+                font-size: 24px !important;
+                font-weight: bold !important;
+                margin-bottom: 8px !important;
+            }
+
+            .print-footer {
+                border-top: 2px solid #e2e8f0;
+                padding-top: 15px;
+                margin-top: 30px;
+                text-align: center;
+                font-size: 12px !important;
+                color: #666 !important;
+            }
+
+            .print-meta {
+                background: #f8fafc !important;
+                padding: 12px !important;
+                border-radius: 6px !important;
+                margin-bottom: 20px !important;
+                border-left: 4px solid #0ea5e9 !important;
+            }
+
+            .print-decision {
+                padding: 20px !important;
+                border-radius: 10px !important;
+                text-align: center !important;
+                margin: 20px 0 !important;
+                border: 2px solid !important;
+            }
+
+            .print-stats {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 15px !important;
+                margin: 20px 0 !important;
+            }
+
+            .print-stat-card {
+                background: #f8fafc !important;
+                padding: 12px !important;
+                border-radius: 6px !important;
+                text-align: center !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+
+            .print-recommendations {
+                background: #fffbeb !important;
+                padding: 15px !important;
+                border: 1px solid #fbbf24 !important;
+                border-radius: 6px !important;
+                margin: 20px 0 !important;
+            }
+
+            .print-recommendations h3 {
+                color: #d97706 !important;
+                margin-bottom: 10px !important;
+                font-size: 16px !important;
+            }
+
+            .print-recommendations ul {
+                list-style: none !important;
+                padding: 0 !important;
+            }
+
+            .print-recommendations li {
+                padding: 5px 0 !important;
+                color: #92400e !important;
+                position: relative !important;
+                padding-right: 20px !important;
+            }
+
+            .print-recommendations li:before {
+                content: "💡" !important;
+                position: absolute !important;
+                right: 0 !important;
+                top: 5px !important;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="font-tajawal bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 min-h-screen transition-all duration-500">
+
+    <!-- Floating Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-20 left-20 w-32 h-32 bg-blue-200 dark:bg-blue-800 rounded-full opacity-20 floating-element">
+        </div>
+        <div class="absolute top-1/2 right-20 w-24 h-24 bg-green-200 dark:bg-green-800 rounded-full opacity-20 floating-element"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-1/3 w-28 h-28 bg-purple-200 dark:bg-purple-800 rounded-full opacity-20 floating-element"
+            style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <!-- Navigation -->
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <a href="index.html"
+                        class="group flex items-center space-x-2 space-x-reverse px-4 py-2 bg-white/20 dark:bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/30 dark:border-slate-700/50 hover:bg-white/30 dark:hover:bg-slate-700/50 transition-all duration-300">
+                        <i
+                            class="fas fa-arrow-right text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"></i>
+                        <span class="text-slate-700 dark:text-slate-200 font-medium">العودة للرئيسية</span>
+                    </a>
+                </div>
+
+                <!-- Title -->
+                <div class="text-center">
+                    <h1
+                        class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                        <i class="fas fa-robot ml-3 text-purple-500"></i>
+                        مساعد قرار الأتمتة
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-300 font-medium">
+                        هل تستحق المهمة أن تُؤتمت؟ أم أن ذلك مضيعة للوقت؟
+                    </p>
+                </div>
+
+                <!-- Theme Toggle -->
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <button id="themeToggle"
+                        class="relative w-14 h-7 bg-slate-200 dark:bg-slate-700 rounded-full p-1 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+                        <div
+                            class="toggle-dot w-5 h-5 bg-white dark:bg-slate-300 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center">
+                            <i class="fas fa-sun text-yellow-500 dark:hidden text-xs"></i>
+                            <i class="fas fa-moon text-slate-600 hidden dark:block text-xs"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+
+        <!-- Quick Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 text-center animate-fade-in">
+                <div
+                    class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-clock text-blue-600 dark:text-blue-400"></i>
+                </div>
+                <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1">الوقت الموفر</h3>
+                <p id="timeSaved-display" class="text-2xl font-bold text-blue-600 dark:text-blue-400">--</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">خلال فترة التقييم</p>
+            </div>
+
+            <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 text-center animate-fade-in"
+                style="animation-delay: 0.1s;">
+                <div
+                    class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-balance-scale text-green-600 dark:text-green-400"></i>
+                </div>
+                <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1">نقطة التعادل</h3>
+                <p id="breakEven-display" class="text-2xl font-bold text-green-600 dark:text-green-400">--</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">الفترة المطلوبة</p>
+            </div>
+
+            <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 text-center animate-fade-in"
+                style="animation-delay: 0.2s;">
+                <div
+                    class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-percentage text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1">العائد على الاستثمار</h3>
+                <p id="roi-display" class="text-2xl font-bold text-purple-600 dark:text-purple-400">--</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">نسبة مئوية</p>
+            </div>
+
+            <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 text-center animate-fade-in"
+                style="animation-delay: 0.3s;">
+                <div
+                    class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-thumbs-up text-yellow-600 dark:text-yellow-400"></i>
+                </div>
+                <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1">التوصية</h3>
+                <p id="recommendation-display" class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">--</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">القرار النهائي</p>
+            </div>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Input Form Panel -->
+            <div class="lg:col-span-1 space-y-6">
+
+                <!-- Basic Task Information -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up">
+                    <div class="flex items-center mb-6">
+                        <div
+                            class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center ml-3">
+                            <i class="fas fa-tasks text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">معلومات المهمة</h3>
+                    </div>
+
+                    <!-- Sample Data Button -->
+                    <div class="mb-6">
+                        <button id="loadSampleBtn" type="button"
+                            class="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white py-3 px-6 rounded-xl font-medium hover:from-green-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+                            <i class="fas fa-magic ml-2"></i>جرب مثال: تقرير أسبوعي
+                        </button>
+                    </div>
+
+                    <form id="automationForm" class="space-y-4">
+                        <!-- Task Name -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="fas fa-tag ml-2 text-purple-400"></i>اسم المهمة (اختياري)
+                            </label>
+                            <input type="text" id="taskName" placeholder="مثال: إعداد تقرير شهري"
+                                class="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                        </div>
+
+                        <!-- Manual Task Time -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="fas fa-stopwatch ml-2 text-red-400"></i>مدة تنفيذ المهمة يدوياً
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" id="manualTime" placeholder="30" min="0" step="1"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <select id="manualTimeUnit"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                    <option value="minutes" selected>دقيقة</option>
+                                    <option value="hours">ساعة</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Build Time -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="fas fa-hammer ml-2 text-orange-400"></i>مدة بناء الأتمتة
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" id="buildTime" placeholder="5" min="0" step="0.5"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <select id="buildTimeUnit"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                    <option value="minutes">دقيقة</option>
+                                    <option value="hours" selected>ساعة</option>
+                                    <option value="days">يوم</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Automated Task Time -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                                <i class="fas fa-bolt ml-2 text-yellow-400"></i>مدة تنفيذ المهمة بعد الأتمتة
+                                <span class="text-xs text-slate-500 block mt-1">الوقت المتوقع لتنفيذ المهمة تلقائياً</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" id="automatedTime" placeholder="30" min="0" step="1" value="0"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <select id="automatedTimeUnit"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                    <option value="seconds" selected>ثانية</option>
+                                    <option value="minutes">دقيقة</option>
+                                    <option value="hours">ساعة</option>
+                                </select>
+                            </div>
+                            <small class="text-slate-500 text-xs mt-1">مثال: 30 ثانية للتقارير المؤتمتة، 5 دقائق للعمليات المعقدة</small>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Frequency Settings -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up"
+                    style="animation-delay: 0.1s;">
+                    <div class="flex items-center mb-6">
+                        <div
+                            class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center ml-3">
+                            <i class="fas fa-repeat text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">تكرار المهمة</h3>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Frequency -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">معدل
+                                التكرار</label>
+                            <select id="frequency"
+                                class="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <option value="daily">يومياً</option>
+                                <option value="weekly" selected>أسبوعياً</option>
+                                <option value="monthly">شهرياً</option>
+                                <option value="yearly">سنوياً</option>
+                                <option value="custom">مخصص</option>
+                            </select>
+                        </div>
+
+                        <!-- Custom Frequency -->
+                        <div id="customFrequency" class="hidden">
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">تكرار
+                                مخصص</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" id="customCount" placeholder="3" min="1"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <select id="customPeriod"
+                                    class="px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                    <option value="days">أيام</option>
+                                    <option value="weeks" selected>أسابيع</option>
+                                    <option value="months">أشهر</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluation Period -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up"
+                    style="animation-delay: 0.2s;">
+                    <div class="flex items-center mb-6">
+                        <div
+                            class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center ml-3">
+                            <i class="fas fa-calendar-alt text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">فترة التقييم</h3>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Evaluation Period -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">المدة
+                                الزمنية للتقييم</label>
+                            <select id="evaluationPeriod"
+                                class="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                                <option value="1">شهر واحد</option>
+                                <option value="6">6 أشهر</option>
+                                <option value="12" selected>سنة واحدة</option>
+                                <option value="custom">مخصص</option>
+                            </select>
+                        </div>
+
+                        <!-- Custom Evaluation -->
+                        <div id="customEvaluation" class="hidden">
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">عدد
+                                الأشهر</label>
+                            <input type="number" id="customEvaluationMonths" placeholder="18" min="1"
+                                class="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-slate-800 dark:text-slate-200">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculate Button -->
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up"
+                    style="animation-delay: 0.3s;">
+                    <button type="submit" form="automationForm"
+                        class="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 space-x-reverse font-bold text-lg shadow-lg hover:shadow-xl">
+                        <i class="fas fa-calculator"></i>
+                        <span>احسب الجدوى!</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="lg:col-span-2">
+                <div class="glass-effect dark:glass-effect-dark rounded-xl p-6 animate-slide-up"
+                    style="animation-delay: 0.4s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200 flex items-center">
+                            <i class="fas fa-chart-line ml-3 text-blue-600 dark:text-blue-400"></i>
+                            نتائج التحليل والتوصية
+                        </h3>
+                        <div class="flex items-center space-x-2 space-x-reverse no-print">
+                            <button onclick="printReport()"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center space-x-2 space-x-reverse">
+                                <i class="fas fa-print"></i>
+                                <span>طباعة التقرير</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Content -->
+                    <div id="resultsContainer" class="space-y-6">
+                        <div class="text-center text-slate-500 dark:text-slate-400 py-12">
+                            <i class="fas fa-robot text-6xl mb-4 opacity-50 animate-pulse-gentle"></i>
+                            <h4 class="text-xl font-semibold mb-2">أدخل تفاصيل المهمة لترى التوصية</h4>
+                            <p class="text-sm opacity-75">سيتم الحساب تلقائياً عند إدخال البيانات</p>
+                        </div>
+                    </div>
+
+                    <!-- Results will be populated here -->
+                    <div id="calculationResults" class="hidden space-y-6 animate-fade-in">
+                        <!-- Decision Card -->
+                        <div id="decisionCard" class="text-center p-6 rounded-xl border-2">
+                            <div id="decisionIcon" class="text-6xl mb-3"></div>
+                            <h3 id="decisionText" class="text-2xl font-bold mb-2"></h3>
+                            <p id="decisionReason" class="text-slate-300 dark:text-slate-400"></p>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white/30 dark:bg-slate-800/30 p-4 rounded-xl text-center backdrop-blur-sm">
+                                <i class="fas fa-clock text-2xl text-blue-400 mb-2"></i>
+                                <p class="text-slate-700 dark:text-slate-300 text-sm">الوقت الموفر</p>
+                                <p id="timeSaved" class="text-slate-800 dark:text-white text-xl font-bold">--</p>
+                            </div>
+                            <div class="bg-white/30 dark:bg-slate-800/30 p-4 rounded-xl text-center backdrop-blur-sm">
+                                <i class="fas fa-balance-scale text-2xl text-green-400 mb-2"></i>
+                                <p class="text-slate-700 dark:text-slate-300 text-sm">نقطة التعادل</p>
+                                <p id="breakEvenPoint" class="text-slate-800 dark:text-white text-xl font-bold">--</p>
+                            </div>
+                        </div>
+
+                        <!-- Chart -->
+                        <div class="bg-white/30 dark:bg-slate-800/30 p-4 rounded-xl backdrop-blur-sm">
+                            <div class="chart-container">
+                                <canvas id="comparisonChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Additional Info -->
+                        <div id="additionalInfo"
+                            class="bg-white/30 dark:bg-slate-800/30 p-4 rounded-xl backdrop-blur-sm">
+                            <h4 class="text-slate-800 dark:text-white font-bold mb-3 flex items-center">
+                                <i class="fas fa-info-circle ml-2 text-blue-400"></i>
+                                تفاصيل إضافية:
+                            </h4>
+                            <ul id="infoList" class="text-slate-700 dark:text-slate-300 space-y-2 text-sm"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div
+            class="glass-effect dark:glass-effect-dark rounded-xl p-6 mt-8 text-center max-w-4xl mx-auto animate-fade-in">
+            <div class="flex items-center justify-center mb-4">
+                <div
+                    class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+                    <i class="fas fa-lightbulb text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                </div>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-3">نصائح مهمة للأتمتة</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-white/20 dark:bg-slate-800/20 p-4 rounded-lg">
+                    <i class="fas fa-check-circle text-green-500 mb-2"></i>
+                    <p class="text-slate-700 dark:text-slate-300"><strong>أتمت فقط عند الجدوى:</strong> إذا كانت المهمة
+                        متكررة ومستقرة</p>
+                </div>
+                <div class="bg-white/20 dark:bg-slate-800/20 p-4 rounded-lg">
+                    <i class="fas fa-times-circle text-red-500 mb-2"></i>
+                    <p class="text-slate-700 dark:text-slate-300"><strong>تجنب الأتمتة:</strong> للمهام التي تتغير
+                        باستمرار</p>
+                </div>
+                <div class="bg-white/20 dark:bg-slate-800/20 p-4 rounded-lg">
+                    <i class="fas fa-balance-scale text-blue-500 mb-2"></i>
+                    <p class="text-slate-700 dark:text-slate-300"><strong>فكر في المستقبل:</strong> احسب التكاليف على
+                        المدى الطويل</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 mt-16 text-center text-slate-500 dark:text-slate-400 pb-8">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-8">
+                <p class="text-sm font-medium">
+                    © <span id="currentYear">2024</span> مساعد قرار الأتمتة -
+                    <span class="text-blue-600 dark:text-blue-400">صُممت بواسطة عبدالله التويجري</span>
+                </p>
+                <p class="text-xs mt-2 opacity-75">
+                    أداة مجانية لمساعدتك في اتخاذ قرارات ذكية حول أتمتة المهام
+                </p>
+
+                <!-- Social Links -->
+                <div class="mt-4 flex justify-center space-x-6 space-x-reverse">
+                    <a href="https://twitter.com/abutlb" target="_blank"
+                        class="text-slate-400 hover:text-blue-400 transition-colors duration-300">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank"
+                        class="text-slate-400 hover:text-blue-600 transition-colors duration-300">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                    <a href="https://github.com/abutlb" target="_blank"
+                        class="text-slate-400 hover:text-slate-200 transition-colors duration-300">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="mailto:abutlb10015@gmail.com"
+                        class="text-slate-400 hover:text-red-400 transition-colors duration-300">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+
+                <div class="mt-4 text-xs text-amber-500 dark:text-amber-400">
+                    <i class="fas fa-exclamation-triangle ml-1"></i>
+                    تذكر: هذه الأداة لاتخاذ قرارات مدروسة حول الأتمتة وليست بديلاً عن التجربة العملية
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/automation_decision.js"></script>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        // Theme Management
+        class ThemeManager {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.loadTheme();
+                this.setupEventListeners();
+                this.setCurrentYear();
+            }
+
+            setupEventListeners() {
+                document.getElementById('themeToggle').addEventListener('click', this.toggleTheme.bind(this));
+            }
+
+            toggleTheme() {
+                const html = document.documentElement;
+                const isDark = html.classList.contains('dark');
+
+                if (isDark) {
+                    html.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+
+                // Update toggle button position
+                this.updateToggleButton(!isDark);
+            }
+
+            updateToggleButton(isDark) {
+                const toggle = document.querySelector('.toggle-dot');
+                if (isDark) {
+                    toggle.style.transform = 'translateX(28px)';
+                } else {
+                    toggle.style.transform = 'translateX(0)';
+                }
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    this.updateToggleButton(true);
+                }
+            }
+
+            setCurrentYear() {
+                document.getElementById('currentYear').textContent = new Date().getFullYear();
+            }
+        }
+
+        // Enhanced Print Function
+        function printReport() {
+            const reportContent = generateProfessionalReportHTML();
+            
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(reportContent);
+            printWindow.document.close();
+            
+            // Wait for content to load then print
+            setTimeout(() => {
+                printWindow.print();
+            }, 1000);
+        }
+
+        function generateProfessionalReportHTML() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-SA', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const timeStr = now.toLocaleTimeString('ar-SA', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Get current results data
+            const timeSaved = document.getElementById('timeSaved-display')?.textContent || '--';
+            const breakEven = document.getElementById('breakEven-display')?.textContent || '--';
+            const roi = document.getElementById('roi-display')?.textContent || '--';
+            const recommendation = document.getElementById('recommendation-display')?.textContent || '--';
+            
+            // Get decision details
+            const decisionText = document.getElementById('decisionText')?.textContent || '';
+            const decisionReason = document.getElementById('decisionReason')?.textContent || '';
+            
+            // Get task details
+            const taskName = document.getElementById('taskName')?.value || 'غير محدد';
+            const buildTime = document.getElementById('buildTime')?.value || '0';
+            const buildTimeUnit = document.getElementById('buildTimeUnit')?.selectedOptions[0]?.text || 'ساعة';
+            const manualTime = document.getElementById('manualTime')?.value || '0';
+            const manualTimeUnit = document.getElementById('manualTimeUnit')?.selectedOptions[0]?.text || 'دقيقة';
+            const automatedTime = document.getElementById('automatedTime')?.value || '0';
+            const automatedTimeUnit = document.getElementById('automatedTimeUnit')?.selectedOptions[0]?.text || 'ثانية';
+            const frequency = document.getElementById('frequency')?.selectedOptions[0]?.text || 'غير محدد';
+            const evaluationPeriod = document.getElementById('evaluationPeriod')?.selectedOptions[0]?.text || 'غير محدد';
+
+            // Determine recommendation type for styling
+            const isRecommended = recommendation.includes('أتمت') || recommendation.includes('ممتاز') || recommendation.includes('جيد');
+            const recommendationClass = isRecommended ? 'positive' : 'negative';
+
+            return `
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير قرار الأتمتة - ${taskName}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            padding: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .report-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+            opacity: 0.3;
+        }
+        
+        .header-section h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-section .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content-section {
+            padding: 40px;
+        }
+        
+        .report-meta {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .report-meta h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .report-meta h3::before {
+            content: "📋";
+            margin-left: 10px;
+            font-size: 24px;
+        }
+        
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .meta-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .meta-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .meta-value {
+            color: #1a202c;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .decision-section {
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            border: 3px solid;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .decision-section.positive {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-color: #22c55e;
+            color: #15803d;
+        }
+        
+        .decision-section.negative {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+        
+        .decision-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .decision-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .decision-reason {
+            font-size: 18px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        
+        .stats-section {
+            margin: 40px 0;
+        }
+        
+        .stats-section h3 {
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .stat-label {
+            color: #4a5568;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .details-section {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .details-section h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .details-section h3::before {
+            content: "📊";
+            margin-left: 10px;
+            font-size: 24px;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .detail-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #1a202c;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .recommendations {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .recommendations h3 {
+            color: #d97706;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .recommendations h3::before {
+            content: "💡";
+            margin-left: 10px;
+            font-size: 24px;
+        }
+        
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .recommendations li {
+            padding: 12px 0;
+            color: #92400e;
+            position: relative;
+            padding-right: 30px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .recommendations li:before {
+            content: "✨";
+            position: absolute;
+            right: 0;
+            top: 12px;
+            font-size: 16px;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 3px solid #e2e8f0;
+            text-align: center;
+            color: #4a5568;
+        }
+        
+        .footer .company-info {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .footer .disclaimer {
+            font-size: 12px;
+            opacity: 0.8;
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right, #e2e8f0, #cbd5e1, #e2e8f0);
+            margin: 30px 0;
+            border-radius: 1px;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .stat-card:hover {
+                transform: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="header-section">
+            <h1>🤖 تقرير قرار الأتمتة الاحترافي</h1>
+            <p class="subtitle">تحليل شامل ومفصل لجدوى أتمتة المهمة</p>
+        </div>
+        
+        <div class="content-section">
+            <div class="report-meta">
+                <h3>معلومات التقرير</h3>
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">📝 اسم المهمة</div>
+                        <div class="meta-value">${taskName}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">📅 تاريخ التقرير</div>
+                        <div class="meta-value">${dateStr}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">⏰ وقت الإنشاء</div>
+                        <div class="meta-value">${timeStr}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">🔧 المُعِد</div>
+                        <div class="meta-value">مساعد قرار الأتمتة</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="decision-section ${recommendationClass}">
+                <div class="decision-icon">${isRecommended ? '✅' : '❌'}</div>
+                <h2>${decisionText}</h2>
+                <p class="decision-reason">${decisionReason}</p>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="stats-section">
+                <h3>📊 الإحصائيات والمؤشرات الرئيسية</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-value">${timeSaved}</div>
+                        <div class="stat-label">الوقت الموفر</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚖️</div>
+                        <div class="stat-value">${breakEven}</div>
+                        <div class="stat-label">نقطة التعادل</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value">${roi}</div>
+                        <div class="stat-label">العائد على الاستثمار</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value">${recommendation.split(' ')[0]}</div>
+                        <div class="stat-label">التوصية النهائية</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="details-section">
+                <h3>تفاصيل المهمة والمعايير</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">🔨 مدة بناء الأتمتة</div>
+                        <div class="detail-value">${buildTime} ${buildTimeUnit}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">👤 مدة التنفيذ اليدوي</div>
+                        <div class="detail-value">${manualTime} ${manualTimeUnit}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">🤖 مدة التنفيذ المؤتمت</div>
+                        <div class="detail-value">${automatedTime} ${automatedTimeUnit}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">🔄 تكرار المهمة</div>
+                        <div class="detail-value">${frequency}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">📅 فترة التقييم</div>
+                        <div class="detail-value">${evaluationPeriod}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="recommendations">
+                <h3>التوصيات والإرشادات المهنية</h3>
+                <ul>
+                    ${isRecommended ? `
+                        <li>ابدأ بتطوير الأتمتة في أقرب وقت ممكن للاستفادة من الوقت الموفر والعائد الإيجابي</li>
+                        <li>تأكد من استقرار المهمة وعدم تغييرها بشكل متكرر قبل بدء التطوير</li>
+                        <li>اختبر الأتمتة بشكل شامل في بيئة آمنة قبل التطبيق الكامل</li>
+                        <li>احتفظ بنسخة احتياطية من العملية اليدوية كخطة بديلة</li>
+                        <li>وثق العملية المؤتمتة بشكل مفصل لسهولة الصيانة والتطوير</li>
+                    ` : `
+                        <li>لا تقم بأتمتة هذه المهمة في الوقت الحالي بسبب عدم جدواها الاقتصادية</li>
+                        <li>فكر في تحسين وتبسيط العملية اليدوية بدلاً من الأتمتة الكاملة</li>
+                        <li>أعد تقييم الجدوى في المستقبل إذا تغيرت ظروف المهمة أو معدل التكرار</li>
+                        <li>ركز الموارد والجهود على مهام أخرى ذات جدوى أكبر للأتمتة</li>
+                        <li>اطلب نصائح من خبراء الأتمتة لاستكشاف بدائل أكثر كفاءة</li>
+                    `}
+                    <li>احرص على مراجعة هذا التحليل بشكل دوري (كل 6 أشهر) لضمان دقة القرار</li>
+                    <li>استشر فريق العمل والإدارة قبل اتخاذ القرار النهائي</li>
+                    <li>ضع في اعتبارك التكاليف الخفية مثل الصيانة والتحديثات المستقبلية</li>
+                </ul>
+            </div>
+            
+            <div class="footer">
+                <div class="company-info">
+                    © 2024 مساعد قرار الأتمتة - تم إنشاؤه بواسطة عبدالله التويجري
+                </div>
+                <div class="disclaimer">
+                    <strong>إخلاء مسؤولية:</strong> هذا التقرير مخصص لأغراض الاستشارة والتوجيه فقط وليس بديلاً عن الخبرة العملية والاستشارة المهنية المتخصصة. يُنصح بمراجعة النتائج مع خبراء الأتمتة قبل اتخاذ قرارات استثمارية مهمة.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+        
+        // Initialize theme manager
+        const themeManager = new ThemeManager();
+    </script>
+</body>
+
+</html>
