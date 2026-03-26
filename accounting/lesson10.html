@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - الترحيل والإقفال</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:relative top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-2">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١</span>
+              <div>
+                <span class="block">مقدمة المحاسبة المالية</span>
+                <span class="text-xs text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢</span>
+              <div>
+                <span class="block">المعادلة المحاسبية الأساسية</span>
+                <span class="text-xs text-blue-300">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٣</span>
+              <div>
+                <span class="block">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-xs text-blue-300">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٤</span>
+              <div>
+                <span class="block">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-xs text-blue-300">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٥</span>
+              <div>
+                <span class="block">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-xs text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٦</span>
+              <div>
+                <span class="block">التقارير المالية الأساسية</span>
+                <span class="text-xs text-blue-300">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٧</span>
+              <div>
+                <span class="block">التبرعات والمنح</span>
+                <span class="text-xs text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٨</span>
+              <div>
+                <span class="block">تسجيل المصاريف والمشتريات</span>
+                <span class="text-xs text-blue-300">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٩</span>
+              <div>
+                <span class="block">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-xs text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson10.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١٠</span>
+              <div>
+                <span class="block">الترحيل والإقفال</span>
+                <span class="text-xs text-blue-200">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١١</span>
+              <div>
+                <span class="block">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-xs text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson12.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١٢</span>
+              <div>
+                <span class="block">مراجعة واختبار عملي</span>
+                <span class="text-xs text-blue-300">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="/accounting/index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ١٠</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="/accounting/index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson10.html" class="text-blue-600 hover:text-blue-800" aria-current="page">الترحيل والإقفال</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">الترحيل والإقفال</h1>
+        <p class="text-gray-600 mt-2">فهم عمليات الترحيل وإقفال الحسابات في نهاية الفترة المالية</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 83.3%"></div>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- First Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-blue-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-exchange-alt ml-3"></i>
+                عملية الترحيل (Posting)
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                الترحيل هو عملية نقل المعلومات من دفتر اليومية (Journal) إلى دفتر الأستاذ (Ledger). تتم هذه العملية بشكل دوري لتحديث أرصدة الحسابات في دفتر الأستاذ.
+              </p>
+              <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">خطوات عملية الترحيل:</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 mr-4">
+                  <li>تحديد الحسابات المتأثرة في قيد اليومية</li>
+                  <li>الانتقال إلى صفحة كل حساب في دفتر الأستاذ</li>
+                  <li>تسجيل المبلغ المدين أو الدائن في الحساب المناسب</li>
+                  <li>الإشارة إلى رقم صفحة اليومية كمرجع</li>
+                  <li>تسجيل رقم صفحة الأستاذ في دفتر اليومية للإشارة إلى اكتمال الترحيل</li>
+                </ol>
+              </div>
+              
+              <div class="mt-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">مثال على الترحيل:</h3>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border">
+                    <thead>
+                      <tr>
+                        <th colspan="5" class="border px-4 py-2 bg-gray-100 text-center">دفتر اليومية</th>
+                      </tr>
+                      <tr>
+                        <th class="border px-4 py-2">التاريخ</th>
+                        <th class="border px-4 py-2">البيان</th>
+                        <th class="border px-4 py-2">رقم الحساب</th>
+                        <th class="border px-4 py-2">مدين</th>
+                        <th class="border px-4 py-2">دائن</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="border px-4 py-2">2023/05/01</td>
+                        <td class="border px-4 py-2">النقدية</td>
+                        <td class="border px-4 py-2">1001</td>
+                        <td class="border px-4 py-2">10,000</td>
+                        <td class="border px-4 py-2"></td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">إيرادات التبرعات</td>
+                        <td class="border px-4 py-2">4001</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">10,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2" colspan="5">تسجيل استلام تبرع نقدي</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-balance-scale ml-3"></i>
+                ميزان المراجعة (Trial Balance)
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                ميزان المراجعة هو قائمة بجميع الحسابات وأرصدتها في نهاية الفترة المحاسبية. يستخدم للتحقق من توازن الجانب المدين والدائن قبل إجراء قيود الإقفال.
+              </p>
+              
+              <div class="bg-green-50 border-r-4 border-green-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">أهداف ميزان المراجعة:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li>التأكد من توازن الجانبين المدين والدائن</li>
+                  <li>كشف الأخطاء الحسابية في عملية الترحيل</li>
+                  <li>توفير قاعدة للتقارير المالية النهائية</li>
+                  <li>تسهيل إعداد قيود التسويات وقيود الإقفال</li>
+                </ul>
+              </div>
+              
+              <div class="mt-4">
+                <p class="text-gray-700 mb-2">
+                  <strong class="text-green-700">ملاحظة هامة:</strong> توازن ميزان المراجعة لا يعني بالضرورة خلو السجلات من الأخطاء، فهناك أخطاء لا يكشفها مثل أخطاء الحذف أو التصنيف الخاطئ.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-purple-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-door-closed ml-3"></i>
+                قيود الإقفال (Closing Entries)
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                قيود الإقفال هي القيود المحاسبية التي تُسجل في نهاية الفترة المالية لتصفير أرصدة الحسابات المؤقتة (الإيرادات والمصروفات) ونقل صافي نتيجة أعمال الفترة إلى حساب صافي الأصول.
+              </p>
+              
+              <div class="bg-purple-50 border-r-4 border-purple-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">الهدف من قيود الإقفال:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li>تصفير أرصدة حسابات الإيرادات والمصروفات</li>
+                  <li>نقل صافي النتيجة (فائض أو عجز) إلى حساب صافي الأصول</li>
+                  <li>تجهيز الحسابات المؤقتة للفترة المالية الجديدة</li>
+                </ul>
+              </div>
+              
+              <div class="mt-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">خطوات إقفال الحسابات:</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 mr-4">
+                  <li>إقفال حسابات الإيرادات بجعلها مدينة ونقل الرصيد إلى حساب ملخص الدخل</li>
+                  <li>إقفال حسابات المصروفات بجعلها دائنة ونقل الرصيد إلى حساب ملخص الدخل</li>
+                  <li>إقفال حساب ملخص الدخل ونقل الرصيد إلى حساب صافي الأصول</li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-amber-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-code ml-3"></i>
+                الترحيل والإقفال في أنظمة المحاسبة البرمجية
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                في الأنظمة المحاسبية الحديثة، تتم عمليات الترحيل والإقفال بشكل آلي، لكن من المهم للمطور فهم المنطق وراء هذه العمليات.
+              </p>
+              
+              <div class="bg-amber-50 border-r-4 border-amber-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-2">اعتبارات برمجية:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li>تصميم قاعدة بيانات تفصل بين الفترات المالية</li>
+                  <li>إنشاء آليات للتأكد من توازن القيود المحاسبية</li>
+                  <li>تطوير وظائف لإنشاء قيود الإقفال آليًا</li>
+                  <li>توفير تقارير لميزان المراجعة قبل وبعد الإقفال</li>
+                  <li>تنفيذ آليات لمنع التعديل على البيانات بعد الإقفال</li>
+                </ul>
+              </div>
+              
+              <div class="mt-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">مثال برمجي بلغة JavaScript:</h3>
+                <pre class="bg-gray-800 text-green-400 p-4 rounded-lg overflow-x-auto text-sm" dir="ltr">
+// دالة لإنشاء قيود الإقفال
+function createClosingEntries(fiscalYearId) {
+  // 1. جمع كل الإيرادات
+  const totalRevenue = calculateTotalRevenue(fiscalYearId);
+  
+  // 2. جمع كل المصروفات
+  const totalExpenses = calculateTotalExpenses(fiscalYearId);
+  
+  // 3. إنشاء قيد إقفال الإيرادات
+  createJournalEntry({
+    date: getFiscalYearEndDate(fiscalYearId),
+    description: "إقفال حسابات الإيرادات",
+    entries: [
+      { accountId: "REVENUE_SUMMARY", debit: totalRevenue, credit: 0 },
+      { accountId: "INCOME_SUMMARY", debit: 0, credit: totalRevenue }
+    ]
+  });
+  
+  // 4. إنشاء قيد إقفال المصروفات
+  createJournalEntry({
+    date: getFiscalYearEndDate(fiscalYearId),
+    description: "إقفال حسابات المصروفات",
+    entries: [
+      { accountId: "INCOME_SUMMARY", debit: totalExpenses, credit: 0 },
+      { accountId: "EXPENSE_SUMMARY", debit: 0, credit: totalExpenses }
+    ]
+  });
+  
+  // 5. حساب صافي الدخل/العجز
+  const netIncome = totalRevenue - totalExpenses;
+  
+  // 6. إقفال ملخص الدخل إلى صافي الأصول
+  createJournalEntry({
+    date: getFiscalYearEndDate(fiscalYearId),
+    description: "إقفال ملخص الدخل إلى صافي الأصول",
+    entries: [
+      { 
+        accountId: netIncome >= 0 ? "INCOME_SUMMARY" : "NET_ASSETS", 
+        debit: Math.abs(netIncome), 
+        credit: 0 
+      },
+      { 
+        accountId: netIncome >= 0 ? "NET_ASSETS" : "INCOME_SUMMARY", 
+        debit: 0, 
+        credit: Math.abs(netIncome) 
+      }
+    ]
+  });
+  
+  // 7. تحديث حالة السنة المالية إلى "مغلقة"
+  updateFiscalYearStatus(fiscalYearId, "CLOSED");
+}
+                </pre>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Summary Section - Full Width -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-gray-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-check-double ml-3"></i>
+            خلاصة الدرس
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+            <p class="text-gray-700 leading-relaxed">
+              عمليات الترحيل والإقفال هي جزء أساسي من الدورة المحاسبية. الترحيل ينقل المعلومات من دفتر اليومية إلى دفتر الأستاذ، بينما تعمل قيود الإقفال على تصفير الحسابات المؤقتة وإعداد النظام المحاسبي للفترة المالية الجديدة.
+            </p>
+          </div>
+          
+          <div class="mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">ما تعلمناه في هذا الدرس:</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border">
+                <tbody>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50 w-1/3">الترحيل</td>
+                    <td class="border px-4 py-3">نقل المعلومات من دفتر اليومية إلى دفتر الأستاذ</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50">ميزان المراجعة</td>
+                    <td class="border px-4 py-3">قائمة بجميع الحسابات وأرصدتها للتحقق من التوازن</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50">قيود الإقفال</td>
+                    <td class="border px-4 py-3">تصفير الحسابات المؤقتة ونقل النتيجة إلى صافي الأصول</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50">الاعتبارات البرمجية</td>
+                    <td class="border px-4 py-3">تصميم أنظمة تدعم الفصل بين الفترات المالية وتنفيذ آليات الإقفال</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Bottom Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="lesson9.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الدرس السابق: بناء دليل حسابات لمنظمة غير ربحية
+        </a>
+        <a href="lesson11.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          الدرس التالي: الموازنة التقديرية مقابل الفعلية
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>

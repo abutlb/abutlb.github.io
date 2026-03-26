@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاسبة من الصفر للمطورين - تسجيل المصاريف والمشتريات</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:relative top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-2">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١</span>
+              <div>
+                <span class="block">مقدمة المحاسبة المالية</span>
+                <span class="text-xs text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢</span>
+              <div>
+                <span class="block">المعادلة المحاسبية الأساسية</span>
+                <span class="text-xs text-blue-300">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٣</span>
+              <div>
+                <span class="block">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-xs text-blue-300">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٤</span>
+              <div>
+                <span class="block">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-xs text-blue-300">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٥</span>
+              <div>
+                <span class="block">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-xs text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٦</span>
+              <div>
+                <span class="block">التقارير المالية الأساسية</span>
+                <span class="text-xs text-blue-300">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٧</span>
+              <div>
+                <span class="block">التبرعات والمنح</span>
+                <span class="text-xs text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٨</span>
+              <div>
+                <span class="block">تسجيل المصاريف والمشتريات</span>
+                <span class="text-xs text-blue-200">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٩</span>
+              <div>
+                <span class="block">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-xs text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson10.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١٠</span>
+              <div>
+                <span class="block">الترحيل والإقفال</span>
+                <span class="text-xs text-blue-300">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١١</span>
+              <div>
+                <span class="block">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-xs text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson12.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١٢</span>
+              <div>
+                <span class="block">مراجعة واختبار عملي</span>
+                <span class="text-xs text-blue-300">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="/accounting/index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ٨</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="/accounting/index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson8.html" class="text-blue-600 hover:text-blue-800" aria-current="page">تسجيل المصاريف والمشتريات</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">تسجيل المصاريف والمشتريات</h1>
+        <p class="text-gray-600 mt-2">فهم كيفية تسجيل وتصنيف المصاريف المختلفة وعمليات الشراء في النظام المحاسبي</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 66.4%"></div>
+      </div>
+
+      <!-- Content Sections -->
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- First Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-blue-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-money-bill-wave ml-3"></i>
+                أنواع المصاريف
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                تتنوع المصاريف في المنظمات غير الربحية، ويجب تصنيفها بشكل صحيح لضمان دقة التقارير المالية.
+              </p>
+              <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">التصنيفات الرئيسية للمصاريف:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li><strong>مصاريف البرامج:</strong> مرتبطة مباشرة بتنفيذ برامج وأنشطة المنظمة</li>
+                  <li><strong>مصاريف إدارية:</strong> تشمل تكاليف الإدارة العامة والموظفين الإداريين</li>
+                  <li><strong>مصاريف جمع التبرعات:</strong> تكاليف حملات جمع التبرعات والتسويق</li>
+                  <li><strong>مصاريف ثابتة:</strong> مثل الإيجار والتأمين والرواتب الأساسية</li>
+                  <li><strong>مصاريف متغيرة:</strong> تتغير حسب حجم النشاط مثل مستلزمات البرامج</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-green-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-file-invoice ml-3"></i>
+                دورة المشتريات والمدفوعات
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                فهم دورة المشتريات والمدفوعات أمر أساسي لتصميم أنظمة محاسبية فعالة.
+              </p>
+              <div class="bg-green-50 border-r-4 border-green-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">خطوات دورة المشتريات:</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 mr-4">
+                  <li><strong>طلب الشراء:</strong> تحديد الاحتياجات والحصول على الموافقات</li>
+                  <li><strong>أمر الشراء:</strong> إرسال طلب رسمي للمورد</li>
+                  <li><strong>استلام البضائع/الخدمات:</strong> التحقق من المطابقة للطلب</li>
+                  <li><strong>استلام الفاتورة:</strong> مراجعة الفاتورة ومطابقتها مع أمر الشراء</li>
+                  <li><strong>سداد المستحقات:</strong> إصدار الدفعة وتسجيلها محاسبيًا</li>
+                </ol>
+              </div>
+              <div class="mt-4">
+                <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="دورة المشتريات" class="rounded-lg shadow-sm w-full">
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="space-y-6">
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-purple-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-book ml-3"></i>
+                القيود المحاسبية للمصاريف
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                كيفية تسجيل المصاريف المختلفة في دفتر اليومية باستخدام القيد المزدوج.
+              </p>
+              <div class="bg-purple-50 border-r-4 border-purple-500 p-5 rounded mb-4">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">أمثلة على قيود المصاريف:</h3>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border">
+                    <thead>
+                      <tr class="bg-gray-100">
+                        <th class="border px-4 py-2 text-right">الحساب</th>
+                        <th class="border px-4 py-2">مدين</th>
+                        <th class="border px-4 py-2">دائن</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="border px-4 py-2 font-bold" colspan="3">مصاريف الإيجار:</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">مصروف الإيجار</td>
+                        <td class="border px-4 py-2">5,000</td>
+                        <td class="border px-4 py-2"></td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">النقد في البنك</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">5,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2 font-bold" colspan="3">شراء أجهزة حاسوب:</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">أصول - أجهزة حاسوب</td>
+                        <td class="border px-4 py-2">15,000</td>
+                        <td class="border px-4 py-2"></td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">النقد في البنك</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">15,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-amber-600 text-white p-4">
+              <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-code ml-3"></i>
+                تطبيق عملي: نظام إدارة المصاريف
+              </h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed mb-4">
+                كيف يمكن للمطورين تصميم نظام فعال لإدارة المصاريف والمشتريات؟
+              </p>
+              <div class="bg-gray-100 p-4 rounded-lg mb-4 overflow-x-auto">
+                <pre class="text-sm text-left" dir="ltr"><code class="language-javascript">// نموذج لهيكل بيانات المصاريف في قاعدة البيانات
+const expenseSchema = {
+  id: "string", // معرف فريد
+  amount: "number", // قيمة المصروف
+  category: "string", // فئة المصروف (برامج، إداري، جمع تبرعات)
+  project: "string", // المشروع المرتبط (إن وجد)
+  payee: {
+    id: "string",
+    name: "string",
+  },
+  paymentMethod: "enum", // نقدي، شيك، تحويل بنكي
+  date: "timestamp", // تاريخ المصروف
+  approvedBy: "string", // الشخص المصرح
+  receipt: "file", // صورة الإيصال
+  notes: "string" // ملاحظات إضافية
+}</code></pre>
+              </div>
+              <div class="bg-amber-50 border-r-4 border-amber-400 p-5 rounded">
+                <h3 class="font-bold text-lg text-gray-800 mb-3">وظائف نظام إدارة المصاريف:</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+                  <li>إنشاء طلبات الشراء وتتبع حالتها</li>
+                  <li>إدارة الموافقات والصلاحيات</li>
+                  <li>تسجيل المصاريف وربطها بالمشاريع والبرامج</li>
+                  <li>تخزين صور الإيصالات والوثائق الداعمة</li>
+                  <li>إعداد تقارير المصاريف حسب الفئة والمشروع والفترة</li>
+                  <li>مراقبة الميزانية ومقارنة المصاريف الفعلية بالمخطط لها</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Summary Section - Full Width -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mt-8">
+        <div class="bg-gray-800 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-check-double ml-3"></i>
+            خلاصة الدرس
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="bg-blue-50 border-r-4 border-blue-500 p-5 rounded">
+            <p class="text-gray-700 leading-relaxed">
+              تسجيل المصاريف والمشتريات بشكل صحيح أمر أساسي لضمان دقة التقارير المالية وتتبع استخدام الموارد. يساعد فهم دورة المشتريات والمدفوعات المطورين على تصميم أنظمة محاسبية تلبي احتياجات المنظمات غير الربحية وتساهم في تحقيق الشفافية المالية.
+            </p>
+          </div>
+          
+          <div class="mt-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-3">ما تعلمناه في هذا الدرس:</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border">
+                <tbody>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50 w-1/3">أنواع المصاريف</td>
+                    <td class="border px-4 py-3">مصاريف البرامج، إدارية، جمع التبرعات، ثابتة، متغيرة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50">دورة المشتريات</td>
+                    <td class="border px-4 py-3">طلب الشراء، أمر الشراء، الاستلام، الفاتورة، السداد</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50">القيود المحاسبية</td>
+                    <td class="border px-4 py-3">تسجيل المصاريف والمشتريات باستخدام القيد المزدوج</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-3 font-bold bg-gray-50">تصميم النظام</td>
+                    <td class="border px-4 py-3">هيكلة البيانات، إدارة الموافقات، التقارير، مراقبة الميزانية</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Bottom Navigation -->
+      <div class="mt-10 flex justify-between">
+        <a href="lesson7.html" class="inline-flex items-center rounded-lg px-5 py-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <i class="fas fa-arrow-right ml-2"></i>
+          الدرس السابق: التبرعات والمنح
+        </a>
+        <a href="lesson9.html" class="inline-flex items-center rounded-lg px-5 py-3 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          الدرس التالي: بناء دليل حسابات لمنظمة غير ربحية
+          <i class="fas fa-arrow-left mr-2"></i>
+        </a>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 المحاسبة من الصفر للمطورين. جميع الحقوق محفوظة.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- JavaScript for mobile menu toggle -->
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>

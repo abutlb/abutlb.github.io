@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مراجعة واختبار عملي - المحاسبة من الصفر للمطورين</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Mobile Menu Button (shows on small screens) -->
+  <div class="md:hidden bg-blue-900 text-white p-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">المحاسبة من الصفر</h1>
+    <button id="menuToggle" class="text-white focus:outline-none">
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gradient-to-b from-blue-900 to-blue-700 text-white w-full md:w-72 md:min-h-screen p-4 transform -translate-x-full md:translate-x-0 fixed md:relative top-0 right-0 h-full z-30 overflow-y-auto transition duration-300 ease-in-out shadow-xl">
+      <div class="text-center py-6 border-b border-blue-600 mb-6">
+        <h2 class="text-2xl font-bold">المحاسبة من الصفر</h2>
+        <p class="text-blue-200 mt-2">للمطورين والمبرمجين</p>
+      </div>
+      
+      <nav>
+        <h3 class="text-blue-300 uppercase text-xs font-bold tracking-wider mb-3">جدول الدروس</h3>
+        <ul class="space-y-2">
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson1.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١</span>
+              <div>
+                <span class="block">مقدمة المحاسبة المالية</span>
+                <span class="text-xs text-blue-300">What is Accounting?</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson2.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٢</span>
+              <div>
+                <span class="block">المعادلة المحاسبية الأساسية</span>
+                <span class="text-xs text-blue-300">Accounting Equation</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson3.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٣</span>
+              <div>
+                <span class="block">الحسابات المالية وتصنيفاتها</span>
+                <span class="text-xs text-blue-300">Chart of Accounts</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson4.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٤</span>
+              <div>
+                <span class="block">القيد المحاسبي وطريقة القيد المزدوج</span>
+                <span class="text-xs text-blue-300">Double-Entry Journal Entry</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson5.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٥</span>
+              <div>
+                <span class="block">دفتر اليومية ودفتر الأستاذ</span>
+                <span class="text-xs text-blue-300">Journal vs General Ledger</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson6.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٦</span>
+              <div>
+                <span class="block">التقارير المالية الأساسية</span>
+                <span class="text-xs text-blue-300">Financial Reports</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson7.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٧</span>
+              <div>
+                <span class="block">التبرعات والمنح</span>
+                <span class="text-xs text-blue-300">Donations & Grants</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson8.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٨</span>
+              <div>
+                <span class="block">تسجيل المصاريف والمشتريات</span>
+                <span class="text-xs text-blue-300">Expenses & Procurement</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson9.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">٩</span>
+              <div>
+                <span class="block">بناء دليل حسابات لمنظمة غير ربحية</span>
+                <span class="text-xs text-blue-300">Nonprofit COA Design</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson10.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١٠</span>
+              <div>
+                <span class="block">الترحيل والإقفال</span>
+                <span class="text-xs text-blue-300">Posting & Closing Entries</span>
+              </div>
+            </a>
+          </li>
+          <li class="hover:bg-blue-800 rounded-lg transition duration-200">
+            <a href="lesson11.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١١</span>
+              <div>
+                <span class="block">الموازنة التقديرية مقابل الفعلية</span>
+                <span class="text-xs text-blue-300">Budget vs Actual</span>
+              </div>
+            </a>
+          </li>
+          <li class="bg-blue-600 rounded-lg">
+            <a href="lesson12.html" class="flex items-center p-3 rounded-lg">
+              <span class="bg-white text-blue-600 text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2">١٢</span>
+              <div>
+                <span class="block">مراجعة واختبار عملي</span>
+                <span class="text-xs text-blue-200">Practical Review & Mini Project</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mt-8 pt-6 border-t border-blue-600">
+        <a href="/accounting/index.html" class="flex items-center justify-center bg-white text-blue-800 rounded-full py-2 px-4 transition hover:bg-blue-100">
+          <i class="fas fa-home ml-2"></i>
+          الصفحة الرئيسية
+        </a>
+      </div>
+    </div>
+    
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-20 hidden md:hidden"></div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 p-4 md:p-8">
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex items-center mb-2">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">الدرس ١٢</span>
+          <nav class="text-sm font-medium">
+            <ol class="list-none p-0 inline-flex">
+              <li class="flex items-center">
+                <a href="/accounting/index.html" class="text-gray-500 hover:text-blue-600">الرئيسية</a>
+                <svg class="w-3 h-3 mx-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              </li>
+              <li>
+                <a href="lesson12.html" class="text-blue-600 hover:text-blue-800" aria-current="page">مراجعة واختبار عملي</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900">مراجعة واختبار عملي</h1>
+        <p class="text-gray-600 mt-2">مراجعة شاملة للمفاهيم الأساسية مع مشروع عملي تطبيقي يجمع كل ما تم تعلمه في الدورة</p>
+      </div>
+
+      <!-- Lesson Progress -->
+      <div class="w-full bg-gray-200 h-1 mb-8 rounded-full">
+        <div class="bg-blue-600 h-1 rounded-full" style="width: 100%"></div>
+      </div>
+
+      <!-- Congratulations Banner -->
+      <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white p-6 rounded-lg shadow-lg mb-8">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/4 text-center mb-4 md:mb-0">
+            <i class="fas fa-award text-6xl text-yellow-300 mb-2"></i>
+            <span class="bg-white text-blue-600 text-xs font-bold px-3 py-1 rounded-full">الدرس الأخير</span>
+          </div>
+          <div class="md:w-3/4 md:pr-6">
+            <h2 class="text-2xl font-bold mb-2">تهانينا! لقد وصلت إلى نهاية الدورة</h2>
+            <p class="text-white text-opacity-90">لقد أكملت بنجاح جميع دروس المحاسبة من الصفر للمطورين. في هذا الدرس الأخير سنراجع المفاهيم الرئيسية ونطبقها في مشروع عملي متكامل.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Review Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="bg-blue-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-book-open ml-3"></i>
+            مراجعة المفاهيم الأساسية
+          </h2>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 leading-relaxed mb-6">
+            لنبدأ بمراجعة سريعة للمفاهيم الرئيسية التي تعلمناها خلال هذه الدورة:
+          </p>
+          
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- First Column -->
+            <div>
+              <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3 border-r-4 border-blue-500 pr-3">المعادلة المحاسبية الأساسية</h3>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                  <p class="text-gray-700 mb-3">الأصول = الخصوم + صافي الأصول</p>
+                  <p class="text-gray-600 text-sm">تشكل هذه المعادلة أساس كل نظام محاسبي، وتوضح العلاقة بين ما تملكه المنظمة (الأصول) وما عليها من التزامات (الخصوم) وما تبقى للمنظمة (صافي الأصول).</p>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3 border-r-4 border-green-500 pr-3">القيد المزدوج</h3>
+                <div class="bg-green-50 p-4 rounded-lg">
+                  <p class="text-gray-700 mb-3">مجموع المدين = مجموع الدائن</p>
+                  <p class="text-gray-600 text-sm">كل معاملة مالية تؤثر على جانبين على الأقل من جوانب المعادلة المحاسبية، حيث يجب أن يتساوى مجموع الجانب المدين مع مجموع الجانب الدائن.</p>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3 border-r-4 border-purple-500 pr-3">دفتر اليومية ودفتر الأستاذ</h3>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                  <p class="text-gray-700 mb-3">دفتر اليومية: تسجيل العمليات المالية بالترتيب الزمني</p>
+                  <p class="text-gray-700 mb-3">دفتر الأستاذ: تجميع وتصنيف العمليات المالية حسب الحساب</p>
+                  <p class="text-gray-600 text-sm">يتم تسجيل المعاملات أولاً في دفتر اليومية ثم ترحيلها إلى دفتر الأستاذ لتجميعها حسب الحساب.</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Second Column -->
+            <div>
+              <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3 border-r-4 border-red-500 pr-3">التقارير المالية الأساسية</h3>
+                <div class="bg-red-50 p-4 rounded-lg">
+                  <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li><span class="font-medium">قائمة المركز المالي (الميزانية):</span> تعرض الأصول والخصوم وصافي الأصول في تاريخ محدد</li>
+                    <li><span class="font-medium">قائمة الأنشطة:</span> تعرض الإيرادات والمصروفات والتغير في صافي الأصول خلال فترة زمنية</li>
+                    <li><span class="font-medium">قائمة التدفقات النقدية:</span> تعرض مصادر واستخدامات النقد خلال فترة زمنية</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3 border-r-4 border-yellow-500 pr-3">دليل الحسابات</h3>
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                  <p class="text-gray-700 mb-3">قائمة منظمة بجميع الحسابات المستخدمة في النظام المحاسبي، مرتبة ومرقمة حسب تصنيفها.</p>
+                  <p class="text-gray-600 text-sm">يساعد دليل الحسابات على تنظيم وتصنيف المعاملات المالية وتسهيل إعداد التقارير المالية.</p>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-800 mb-3 border-r-4 border-indigo-500 pr-3">الدورة المحاسبية</h3>
+                <div class="bg-indigo-50 p-4 rounded-lg">
+                  <ol class="list-decimal list-inside space-y-1 text-gray-700">
+                    <li>تحليل المعاملات المالية</li>
+                    <li>تسجيل القيود في دفتر اليومية</li>
+                    <li>ترحيل القيود إلى دفتر الأستاذ</li>
+                    <li>إعداد ميزان المراجعة</li>
+                    <li>إجراء التسويات الجردية</li>
+                    <li>إعداد التقارير المالية</li>
+                    <li>إقفال الحسابات</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Practical Project Section -->
+      <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="bg-green-600 text-white p-4">
+          <h2 class="text-xl font-bold flex items-center">
+            <i class="fas fa-project-diagram ml-3"></i>
+            المشروع العملي: نظام محاسبي لمنظمة غير ربحية
+          </h2>
+        </div>
+        <div class="p-6">
+          <p class="text-gray-700 leading-relaxed mb-6">
+            في هذا المشروع العملي، سنقوم بتطبيق المفاهيم التي تعلمناها لبناء نظام محاسبي بسيط لمنظمة غير ربحية تعمل في مجال التعليم. سنمر بجميع مراحل الدورة المحاسبية ونستخدم مفاهيم البرمجة لتنفيذ النظام.
+          </p>
+          
+          <div class="bg-green-50 border-r-4 border-green-500 p-5 rounded mb-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-2">معلومات المنظمة:</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700 mr-4">
+              <li><span class="font-medium">اسم المنظمة:</span> جمعية التعليم للجميع</li>
+              <li><span class="font-medium">النشاط الرئيسي:</span> تقديم برامج تعليمية للأطفال في المناطق المحرومة</li>
+              <li><span class="font-medium">مصادر التمويل:</span> تبرعات فردية، منح مؤسسية، رسوم برامج رمزية</li>
+              <li><span class="font-medium">عدد الموظفين:</span> 10 موظفين بدوام كامل، 15 متطوع</li>
+              <li><span class="font-medium">الميزانية السنوية:</span> 1,000,000 ريال</li>
+            </ul>
+          </div>
+          
+          <!-- Step 1: Chart of Accounts -->
+          <div class="mb-8">
+            <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center">
+              <span class="bg-blue-600 text-white rounded-full h-6 w-6 flex items-center justify-center ml-2 text-sm">١</span>
+              إنشاء دليل الحسابات
+            </h3>
+            
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border">
+                <thead>
+                  <tr>
+                    <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                    <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                    <th class="border px-4 py-2 bg-gray-50">نوع الحساب</th>
+                    <th class="border px-4 py-2 bg-gray-50">التصنيف</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Assets (1000-1999) -->
+                  <tr class="bg-blue-50">
+                    <td class="border px-4 py-2 font-bold" colspan="4">الأصول (1000-1999)</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1010</td>
+                    <td class="border px-4 py-2">النقد في البنك - الحساب الجاري</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1020</td>
+                    <td class="border px-4 py-2">النقد في البنك - حساب الادخار</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1030</td>
+                    <td class="border px-4 py-2">الصندوق النثري</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1100</td>
+                    <td class="border px-4 py-2">المنح المستحقة</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1200</td>
+                    <td class="border px-4 py-2">المخزون - مستلزمات تعليمية</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1500</td>
+                    <td class="border px-4 py-2">الأثاث والمعدات</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول ثابتة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">1510</td>
+                    <td class="border px-4 py-2">مجمع الإهلاك - الأثاث والمعدات</td>
+                    <td class="border px-4 py-2">أصول</td>
+                    <td class="border px-4 py-2">أصول ثابتة (سالب)</td>
+                  </tr>
+                  
+                  <!-- Liabilities (2000-2999) -->
+                  <tr class="bg-red-50">
+                    <td class="border px-4 py-2 font-bold" colspan="4">الخصوم (2000-2999)</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">2010</td>
+                    <td class="border px-4 py-2">الذمم الدائنة</td>
+                    <td class="border px-4 py-2">خصوم</td>
+                    <td class="border px-4 py-2">خصوم متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">2020</td>
+                    <td class="border px-4 py-2">الرواتب المستحقة</td>
+                    <td class="border px-4 py-2">خصوم</td>
+                    <td class="border px-4 py-2">خصوم متداولة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">2100</td>
+                    <td class="border px-4 py-2">المنح المقيدة</td>
+                    <td class="border px-4 py-2">خصوم</td>
+                    <td class="border px-4 py-2">خصوم متداولة</td>
+                  </tr>
+                  
+                  <!-- Net Assets (3000-3999) -->
+                  <tr class="bg-green-50">
+                    <td class="border px-4 py-2 font-bold" colspan="4">صافي الأصول (3000-3999)</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">3010</td>
+                    <td class="border px-4 py-2">صافي الأصول غير المقيدة</td>
+                    <td class="border px-4 py-2">صافي أصول</td>
+                    <td class="border px-4 py-2">غير مقيدة</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">3020</td>
+                    <td class="border px-4 py-2">صافي الأصول المقيدة مؤقتاً</td>
+                    <td class="border px-4 py-2">صافي أصول</td>
+                    <td class="border px-4 py-2">مقيدة مؤقتاً</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">3030</td>
+                    <td class="border px-4 py-2">صافي الأصول المقيدة دائماً</td>
+                    <td class="border px-4 py-2">صافي أصول</td>
+                    <td class="border px-4 py-2">مقيدة دائماً</td>
+                  </tr>
+                  
+                  <!-- Revenues (4000-4999) -->
+                  <tr class="bg-yellow-50">
+                    <td class="border px-4 py-2 font-bold" colspan="4">الإيرادات (4000-4999)</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">4010</td>
+                    <td class="border px-4 py-2">التبرعات الفردية</td>
+                    <td class="border px-4 py-2">إيرادات</td>
+                    <td class="border px-4 py-2">تبرعات</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">4020</td>
+                    <td class="border px-4 py-2">المنح المؤسسية</td>
+                    <td class="border px-4 py-2">إيرادات</td>
+                    <td class="border px-4 py-2">منح</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">4030</td>
+                    <td class="border px-4 py-2">رسوم البرامج</td>
+                    <td class="border px-4 py-2">إيرادات</td>
+                    <td class="border px-4 py-2">رسوم خدمات</td>
+                  </tr>
+                  
+                  <!-- Expenses (5000-5999) -->
+                  <tr class="bg-purple-50">
+                    <td class="border px-4 py-2 font-bold" colspan="4">المصروفات (5000-5999)</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">5010</td>
+                    <td class="border px-4 py-2">رواتب الموظفين</td>
+                    <td class="border px-4 py-2">مصروفات</td>
+                    <td class="border px-4 py-2">مصروفات تشغيلية</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">5020</td>
+                    <td class="border px-4 py-2">مستلزمات تعليمية</td>
+                    <td class="border px-4 py-2">مصروفات</td>
+                    <td class="border px-4 py-2">مصروفات برامج</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">5030</td>
+                    <td class="border px-4 py-2">إيجار المقر</td>
+                    <td class="border px-4 py-2">مصروفات</td>
+                    <td class="border px-4 py-2">مصروفات تشغيلية</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">5040</td>
+                    <td class="border px-4 py-2">مرافق (كهرباء، ماء، إنترنت)</td>
+                    <td class="border px-4 py-2">مصروفات</td>
+                    <td class="border px-4 py-2">مصروفات تشغيلية</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">5050</td>
+                    <td class="border px-4 py-2">مصروفات إدارية</td>
+                    <td class="border px-4 py-2">مصروفات</td>
+                    <td class="border px-4 py-2">مصروفات إدارية</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">5060</td>
+                    <td class="border px-4 py-2">إهلاك الأصول الثابتة</td>
+                    <td class="border px-4 py-2">مصروفات</td>
+                    <td class="border px-4 py-2">مصروفات غير نقدية</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="mt-4 text-gray-600 text-sm">
+              <p>ملاحظة: تم تصميم دليل الحسابات بما يتناسب مع احتياجات منظمة غير ربحية صغيرة، ويمكن توسيعه حسب الحاجة.</p>
+            </div>
+          </div>
+          
+          <!-- Step 2: Journal Entries -->
+          <div class="mb-8">
+            <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center">
+              <span class="bg-blue-600 text-white rounded-full h-6 w-6 flex items-center justify-center ml-2 text-sm">٢</span>
+              تسجيل القيود المحاسبية
+            </h3>
+            
+            <p class="text-gray-700 mb-4">لنفترض أن المنظمة قامت بالعمليات التالية خلال شهر يناير 2023:</p>
+            
+            <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 mb-4">
+              <h4 class="font-bold text-md text-gray-800 mb-3">1. استلام منحة مؤسسية بقيمة 200,000 ريال</h4>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr>
+                      <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                      <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                      <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                      <th class="border px-4 py-2 bg-gray-50">الوصف</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/05</td>
+                      <td class="border px-4 py-2">1010</td>
+                      <td class="border px-4 py-2">النقد في البنك - الحساب الجاري</td>
+                      <td class="border px-4 py-2">200,000</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2" rowspan="2">استلام منحة مؤسسية من مؤسسة التنمية الاجتماعية لدعم برامج التعليم</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/05</td>
+                      <td class="border px-4 py-2">4020</td>
+                      <td class="border px-4 py-2">المنح المؤسسية</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2">200,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 mb-4">
+              <h4 class="font-bold text-md text-gray-800 mb-3">2. دفع رواتب الموظفين بقيمة 80,000 ريال</h4>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr>
+                      <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                      <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                      <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                      <th class="border px-4 py-2 bg-gray-50">الوصف</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/15</td>
+                      <td class="border px-4 py-2">5010</td>
+                      <td class="border px-4 py-2">رواتب الموظفين</td>
+                      <td class="border px-4 py-2">80,000</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2" rowspan="2">دفع رواتب الموظفين لشهر يناير 2023</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/15</td>
+                      <td class="border px-4 py-2">1010</td>
+                      <td class="border px-4 py-2">النقد في البنك - الحساب الجاري</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2">80,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 mb-4">
+              <h4 class="font-bold text-md text-gray-800 mb-3">3. شراء مستلزمات تعليمية بقيمة 30,000 ريال</h4>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr>
+                      <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                      <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                      <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                      <th class="border px-4 py-2 bg-gray-50">الوصف</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/20</td>
+                      <td class="border px-4 py-2">1200</td>
+                      <td class="border px-4 py-2">المخزون - مستلزمات تعليمية</td>
+                      <td class="border px-4 py-2">30,000</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2" rowspan="2">شراء كتب ومستلزمات تعليمية للبرامج التعليمية</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/20</td>
+                      <td class="border px-4 py-2">1010</td>
+                      <td class="border px-4 py-2">النقد في البنك - الحساب الجاري</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2">30,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 mb-4">
+              <h4 class="font-bold text-md text-gray-800 mb-3">4. استخدام مستلزمات تعليمية بقيمة 15,000 ريال</h4>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr>
+                      <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                      <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                      <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                      <th class="border px-4 py-2 bg-gray-50">الوصف</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/25</td>
+                      <td class="border px-4 py-2">5020</td>
+                      <td class="border px-4 py-2">مستلزمات تعليمية</td>
+                      <td class="border px-4 py-2">15,000</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2" rowspan="2">استخدام مستلزمات تعليمية في برنامج "القراءة للجميع"</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/25</td>
+                      <td class="border px-4 py-2">1200</td>
+                      <td class="border px-4 py-2">المخزون - مستلزمات تعليمية</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2">15,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+              <h4 class="font-bold text-md text-gray-800 mb-3">5. استلام تبرعات فردية بقيمة 50,000 ريال</h4>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr>
+                      <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                      <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                      <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                      <th class="border px-4 py-2 bg-gray-50">الوصف</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/30</td>
+                      <td class="border px-4 py-2">1010</td>
+                      <td class="border px-4 py-2">النقد في البنك - الحساب الجاري</td>
+                      <td class="border px-4 py-2">50,000</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2" rowspan="2">استلام تبرعات فردية من حملة التبرع الشهرية</td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">2023/01/30</td>
+                      <td class="border px-4 py-2">4010</td>
+                      <td class="border px-4 py-2">التبرعات الفردية</td>
+                      <td class="border px-4 py-2"></td>
+                      <td class="border px-4 py-2">50,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Step 3: Posting to Ledger -->
+          <div class="mb-8">
+            <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center">
+              <span class="bg-blue-600 text-white rounded-full h-6 w-6 flex items-center justify-center ml-2 text-sm">٣</span>
+              الترحيل إلى دفتر الأستاذ
+            </h3>
+            
+            <p class="text-gray-700 mb-4">بعد تسجيل القيود في دفتر اليومية، نقوم بترحيلها إلى دفتر الأستاذ لكل حساب:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+              <!-- Cash Account -->
+              <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                <h4 class="font-bold text-md text-gray-800 mb-3">حساب النقد في البنك - الحساب الجاري (1010)</h4>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border">
+                    <thead>
+                      <tr>
+                        <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                        <th class="border px-4 py-2 bg-gray-50">البيان</th>
+                        <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                        <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                        <th class="border px-4 py-2 bg-gray-50">الرصيد</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/01</td>
+                        <td class="border px-4 py-2">رصيد افتتاحي</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">100,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/05</td>
+                        <td class="border px-4 py-2">استلام منحة مؤسسية</td>
+                        <td class="border px-4 py-2">200,000</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">300,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/15</td>
+                        <td class="border px-4 py-2">دفع رواتب الموظفين</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">80,000</td>
+                        <td class="border px-4 py-2">220,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/20</td>
+                        <td class="border px-4 py-2">شراء مستلزمات تعليمية</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">30,000</td>
+                        <td class="border px-4 py-2">190,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/30</td>
+                        <td class="border px-4 py-2">استلام تبرعات فردية</td>
+                        <td class="border px-4 py-2">50,000</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">240,000</td>
+                      </tr>
+                      <tr class="bg-gray-100 font-bold">
+                        <td class="border px-4 py-2" colspan="2">المجموع</td>
+                        <td class="border px-4 py-2">250,000</td>
+                        <td class="border px-4 py-2">110,000</td>
+                        <td class="border px-4 py-2">240,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              
+              <!-- Inventory Account -->
+              <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                <h4 class="font-bold text-md text-gray-800 mb-3">حساب المخزون - مستلزمات تعليمية (1200)</h4>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full bg-white border">
+                    <thead>
+                      <tr>
+                        <th class="border px-4 py-2 bg-gray-50">التاريخ</th>
+                        <th class="border px-4 py-2 bg-gray-50">البيان</th>
+                        <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                        <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                        <th class="border px-4 py-2 bg-gray-50">الرصيد</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/01</td>
+                        <td class="border px-4 py-2">رصيد افتتاحي</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">10,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/20</td>
+                        <td class="border px-4 py-2">شراء مستلزمات تعليمية</td>
+                        <td class="border px-4 py-2">30,000</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">40,000</td>
+                      </tr>
+                      <tr>
+                        <td class="border px-4 py-2">2023/01/25</td>
+                        <td class="border px-4 py-2">استخدام مستلزمات تعليمية</td>
+                        <td class="border px-4 py-2"></td>
+                        <td class="border px-4 py-2">15,000</td>
+                        <td class="border px-4 py-2">25,000</td>
+                      </tr>
+                      <tr class="bg-gray-100 font-bold">
+                        <td class="border px-4 py-2" colspan="2">المجموع</td>
+                        <td class="border px-4 py-2">30,000</td>
+                        <td class="border px-4 py-2">15,000</td>
+                        <td class="border px-4 py-2">25,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <p class="text-gray-600 text-sm mt-4">ملاحظة: يتم إنشاء صفحة في دفتر الأستاذ لكل حساب من الحسابات المستخدمة في دفتر اليومية.</p>
+          </div>
+          
+          <!-- Step 4: Trial Balance -->
+          <div class="mb-8">
+            <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center">
+              <span class="bg-blue-600 text-white rounded-full h-6 w-6 flex items-center justify-center ml-2 text-sm">٤</span>
+              إعداد ميزان المراجعة
+            </h3>
+            
+            <p class="text-gray-700 mb-4">بعد ترحيل جميع القيود إلى دفتر الأستاذ، نقوم بإعداد ميزان المراجعة للتأكد من توازن الجانب المدين والدائن:</p>
+            
+            <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+              <h4 class="font-bold text-md text-gray-800 mb-3">ميزان المراجعة كما في 31 يناير 2023</h4>
+              <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border">
+                  <thead>
+                    <tr>
+                      <th class="border px-4 py-2 bg-gray-50">رقم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">اسم الحساب</th>
+                      <th class="border px-4 py-2 bg-gray-50">مدين</th>
+                      <th class="border px-4 py-2 bg-gray-50">دائن</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="border px-4 py-2">1010</td>
+                      <td class="border px-4 py-2">النقد في البنك - الحساب الجاري</td>
+                      <td class="border px-4 py-2">240,000</td>
+                      <td class="border px-4 py-2"></td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">1020</td>
+                      <td class="border px-4 py-2">النقد في البنك - حساب الادخار</td>
+                      <td class="border px-4 py-2">50,000</td>
+                      <td class="border px-4 py-2"></td>
+                    </tr>
+                    <tr>
+                      <td class="border px-4 py-2">1030</td>
+                      <td class="border px-4 py-2">الصندوق النثري</td>
+                      <td class="border px-4 py-2">5,000</td>
+                      
