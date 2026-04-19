@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Basics — CheatSheet</title>
+  <meta name="description" content="مرجع تفاعلي شامل لأساسيات Python — المتغيرات، الدوال، OOP، Decorators، Generators وأكثر." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Highlight.js -->
+  <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+  <!-- Shared assets -->
+  <link rel="stylesheet" href="../assets/css/theme.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+
+  <style>
+    /* ══════════════════════════════════════════
+       BASE
+    ══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background .3s ease, color .3s ease;
+    }
+
+    /* ══════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%,
+          var(--accent-bg) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .35rem .9rem;
+      border-radius: 999px;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: .75rem;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 2rem;
+      line-height: 1.75;
+    }
+
+    /* Stats bar */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 2rem;
+    }
+    .hero-stat {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .4rem .85rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: .8rem;
+      color: var(--text-secondary);
+    }
+    .hero-stat strong { color: var(--accent); font-weight: 800; }
+
+    /* Level badges */
+    .hero-levels {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .lvl-badge {
+      padding: .3rem .75rem;
+      border-radius: .5rem;
+      font-size: .75rem;
+      font-weight: 700;
+      border: 1px solid;
+    }
+    .lvl-badge.beginner  { background: rgba(34,197,94,.1);  border-color: rgba(34,197,94,.3);  color: #22c55e; }
+    .lvl-badge.mid       { background: rgba(234,179,8,.1);  border-color: rgba(234,179,8,.3);  color: #eab308; }
+    .lvl-badge.advanced  { background: rgba(239,68,68,.1);  border-color: rgba(239,68,68,.3);  color: #ef4444; }
+
+    /* ══════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════ */
+    .page-wrap {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
+
+    /* ══════════════════════════════════════════
+       SECTION TITLE
+    ══════════════════════════════════════════ */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-title .icon {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: .6rem;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       SEARCH + FILTERS
+    ══════════════════════════════════════════ */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 1.75rem;
+      align-items: center;
+    }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: .6rem 1rem .6rem 2.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      color: var(--text-primary);
+      font-size: .88rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+    .search-icon {
+      position: absolute;
+      right: .85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: .9rem;
+      pointer-events: none;
+    }
+    .filter-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+    }
+    .filter-btn {
+      padding: .45rem .85rem;
+      border-radius: .6rem;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s ease;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ══════════════════════════════════════════
+       TERMS GRID
+    ══════════════════════════════════════════ */
+    .terms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .term-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .term-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        var(--accent-bg) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .25s ease;
+      pointer-events: none;
+    }
+    .term-card:hover {
+      border-color: var(--accent-border);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.15);
+    }
+    .term-card:hover::before { opacity: 1; }
+
+    .term-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+    .term-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: .65rem;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .term-titles { flex: 1; min-width: 0; }
+    .term-title {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .term-en {
+      font-size: .72rem;
+      color: var(--text-muted);
+      margin-top: .15rem;
+      font-style: italic;
+    }
+    .term-level {
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      border: 1px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .term-level.مبتدئ  { background: rgba(34,197,94,.1);  border-color: rgba(34,197,94,.3);  color: #22c55e; }
+    .term-level.متوسط  { background: rgba(234,179,8,.1);  border-color: rgba(234,179,8,.3);  color: #eab308; }
+    .term-level.متقدم  { background: rgba(239,68,68,.1);  border-color: rgba(239,68,68,.3);  color: #ef4444; }
+
+    .term-short {
+      font-size: .82rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: .85rem;
+    }
+    .term-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .term-cat {
+      font-size: .7rem;
+      padding: .2rem .55rem;
+      border-radius: .4rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .term-arrow {
+      font-size: .8rem;
+      color: var(--accent);
+      transition: transform .2s ease;
+    }
+    .term-card:hover .term-arrow { transform: translateX(-4px); }
+
+    /* No results */
+    .no-results {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+
+    /* ══════════════════════════════════════════
+       MODAL
+    ══════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      width: 100%;
+      max-width: 760px;
+      max-height: 88vh;
+      overflow-y: auto;
+      transform: translateY(20px) scale(.97);
+      transition: transform .25s ease;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+      z-index: 1;
+      border-radius: 1.25rem 1.25rem 0 0;
+    }
+    .modal-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: .75rem;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .modal-titles { flex: 1; }
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .modal-en {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: .2rem;
+      font-style: italic;
+    }
+    .modal-close {
+      width: 2rem;
+      height: 2rem;
+      border-radius: .5rem;
+      border: 1px solid var(--border);
+      background: var(--bg-base);
+      color: var(--text-muted);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s ease;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .modal-body { padding: 1.5rem; }
+    .modal-desc {
+      font-size: .9rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+      padding: .85rem 1rem;
+      background: var(--bg-base);
+      border-radius: .75rem;
+      border-right: 3px solid var(--accent);
+    }
+    .modal-label {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: .5rem;
+    }
+    .modal-example {
+      font-size: .85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      padding: .75rem 1rem;
+      background: var(--bg-base);
+      border-radius: .65rem;
+      border: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+    .modal-example strong { color: var(--accent); }
+
+    /* Code block in modal */
+    .code-wrap {
+      position: relative;
+      border-radius: .75rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .copy-btn {
+      position: absolute;
+      top: .6rem;
+      left: .6rem;
+      padding: .3rem .7rem;
+      border-radius: .45rem;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.7);
+      font-size: .72rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s ease;
+      z-index: 2;
+    }
+    .copy-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .copy-btn.copied { background: #22c55e; border-color: #22c55e; color: #fff; }
+
+    .code-wrap pre {
+      margin: 0 !important;
+      border-radius: 0 !important;
+      font-size: .82rem !important;
+      line-height: 1.65 !important;
+      padding: 2.5rem .85rem .85rem !important;
+    }
+
+    .code-wrap pre,
+    .code-wrap code,
+    .sheet-card pre,
+    .sheet-card code {
+      direction: ltr !important;
+      text-align: left !important;
+      unicode-bidi: embed;
+    }
+
+    /* ══════════════════════════════════════════
+       PROCESS STEPS
+    ══════════════════════════════════════════ */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: border-color .2s ease;
+    }
+    .step-card:hover { border-color: var(--accent-border); }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .step-num {
+      font-size: .7rem;
+      font-weight: 900;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: .5rem;
+      padding: .25rem .55rem;
+      letter-spacing: .05em;
+      flex-shrink: 0;
+    }
+    .step-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .step-info { flex: 1; }
+    .step-title {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .step-desc {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: .15rem;
+    }
+    .step-time {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: 999px;
+      padding: .2rem .6rem;
+      flex-shrink: 0;
+    }
+    .step-chevron {
+      color: var(--text-muted);
+      font-size: .85rem;
+      transition: transform .25s ease;
+      flex-shrink: 0;
+    }
+    .step-card.open .step-chevron { transform: rotate(180deg); }
+
+    .step-body {
+      display: none;
+      padding: 0 1.25rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .step-card.open .step-body { display: block; }
+
+    .step-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+    @media (max-width: 600px) {
+      .step-details { grid-template-columns: 1fr; }
+    }
+
+    .step-points {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .step-point {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .step-point::before {
+      content: '▸';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: .05rem;
+    }
+
+    .step-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-content: flex-start;
+    }
+    .step-tool {
+      padding: .25rem .65rem;
+      border-radius: .45rem;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      font-size: .72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════════════════
+       CASE STUDY
+    ══════════════════════════════════════════ */
+    .case-timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 3.5rem;
+    }
+    .case-timeline::before {
+      content: '';
+      position: absolute;
+      right: 1.45rem;
+      top: 2rem;
+      bottom: 2rem;
+      width: 2px;
+      background: linear-gradient(to bottom,
+        var(--accent) 0%, var(--border) 100%);
+      opacity: .35;
+    }
+    .case-item {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+    }
+    .case-item:last-child { padding-bottom: 0; }
+
+    .case-dot {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      background: var(--accent-bg);
+      border: 2px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .case-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: border-color .2s ease;
+    }
+    .case-content:hover { border-color: var(--accent-border); }
+
+    .case-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+    }
+    .case-step-num {
+      font-size: .65rem;
+      font-weight: 900;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: .4rem;
+      padding: .2rem .5rem;
+      letter-spacing: .05em;
+    }
+    .case-title {
+      flex: 1;
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .case-chevron {
+      color: var(--text-muted);
+      font-size: .8rem;
+      transition: transform .25s ease;
+    }
+    .case-content.open .case-chevron { transform: rotate(180deg); }
+
+    .case-body {
+      display: none;
+      padding: 0 1.25rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .case-content.open .case-body { display: block; }
+
+    .case-text {
+      font-size: .85rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      padding: .85rem 0 .75rem;
+    }
+    .case-insight {
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: .65rem;
+      padding: .75rem 1rem;
+      font-size: .8rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      white-space: pre-line;
+      margin-top: .75rem;
+    }
+
+    /* ══════════════════════════════════════════
+       CHEAT SHEETS
+    ══════════════════════════════════════════ */
+    .sheets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+    .sheet-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: border-color .2s ease;
+    }
+    .sheet-card:hover { border-color: var(--accent-border); }
+
+    .sheet-title {
+      padding: .85rem 1.1rem;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sheet-copy {
+      padding: .25rem .6rem;
+      border-radius: .4rem;
+      border: 1px solid var(--border);
+      background: var(--bg-base);
+      color: var(--text-muted);
+      font-size: .7rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s ease;
+    }
+    .sheet-copy:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .sheet-copy.copied { background: #22c55e; color: #fff; border-color: #22c55e; }
+
+    .sheet-card pre {
+      margin: 0 !important;
+      border-radius: 0 !important;
+      font-size: .78rem !important;
+      line-height: 1.65 !important;
+      max-height: 320px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    /* ══════════════════════════════════════════
+       QUIZ
+    ══════════════════════════════════════════ */
+    .quiz-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+    }
+    .quiz-progress-bar {
+      height: 3px;
+      background: var(--bg-base);
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width .4s ease;
+    }
+    .quiz-inner { padding: 1.75rem; }
+
+    .quiz-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .quiz-counter {
+      font-size: .78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .quiz-score-badge {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: 999px;
+      padding: .25rem .7rem;
+    }
+
+    .quiz-q {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      margin-bottom: 1.25rem;
+    }
+    .quiz-opt {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem 1rem;
+      border-radius: .75rem;
+      border: 1px solid var(--border);
+      background: var(--bg-base);
+      cursor: pointer;
+      font-size: .88rem;
+      color: var(--text-secondary);
+      font-family: inherit;
+      text-align: right;
+      transition: all .2s ease;
+      width: 100%;
+    }
+    .quiz-opt:hover:not(:disabled) {
+      border-color: var(--accent-border);
+      background: var(--accent-bg);
+      color: var(--text-primary);
+    }
+    .quiz-opt.correct {
+      border-color: #22c55e;
+      background: rgba(34,197,94,.1);
+      color: #22c55e;
+    }
+    .quiz-opt.wrong {
+      border-color: #ef4444;
+      background: rgba(239,68,68,.1);
+      color: #ef4444;
+    }
+    .opt-indicator {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      transition: all .2s ease;
+    }
+    .quiz-opt.correct .opt-indicator { border-color: #22c55e; background: #22c55e; color: #fff; }
+    .quiz-opt.wrong   .opt-indicator { border-color: #ef4444; background: #ef4444; color: #fff; }
+
+    .quiz-explanation {
+      padding: .85rem 1rem;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: .75rem;
+      font-size: .83rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+      display: none;
+    }
+    .quiz-explanation.show { display: block; }
+
+    .quiz-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .quiz-next-btn {
+      padding: .6rem 1.5rem;
+      border-radius: .75rem;
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s ease;
+      display: none;
+    }
+    .quiz-next-btn.show { display: block; }
+    .quiz-next-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* نتيجة نهائية */
+    .quiz-result {
+      text-align: center;
+      padding: 2rem 1rem;
+      display: none;
+    }
+    .quiz-result.show { display: block; }
+    .result-emoji { font-size: 3.5rem; margin-bottom: .75rem; }
+    .result-score {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent);
+      margin-bottom: .35rem;
+    }
+    .result-msg {
+      font-size: .95rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    .quiz-restart {
+      padding: .65rem 1.75rem;
+      border-radius: .75rem;
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s ease;
+    }
+    .quiz-restart:hover { opacity: .88; }
+
+    /* ══════════════════════════════════════════
+       THEME TOGGLE
+    ══════════════════════════════════════════ */
+    #theme-toggle {
+      position: fixed;
+      top: 1rem;
+      left: 4rem;
+      z-index: 9998;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.15);
+      transition: all .2s ease;
+    }
+    #theme-toggle:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .hero { padding: 4rem 1rem 2.5rem; }
+      .terms-grid { grid-template-columns: 1fr; }
+      .sheets-grid { grid-template-columns: 1fr; }
+      .case-timeline::before { display: none; }
+      .case-item { grid-template-columns: 1fr; }
+      .case-dot { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════
+     THEME TOGGLE
+══════════════════════════════════════════ -->
+<button id="theme-toggle" aria-label="تبديل الثيم">🌙</button>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-badge">
+    <span>🐍</span>
+    <span>Python Basics CheatSheet</span>
+  </div>
+
+  <h1>أساسيات <span>Python</span><br/>في مكان واحد</h1>
+
+  <p>
+    من المتغيرات والقوائم وصولاً إلى Decorators وAsync —
+    مرجع تفاعلي شامل مع أمثلة كود قابلة للنسخ.
+  </p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span>📚</span>
+      <strong id="stat-terms">14</strong>
+      <span>مصطلح</span>
+    </div>
+    <div class="hero-stat">
+      <span>💻</span>
+      <strong>6</strong>
+      <span>Cheat Sheet</span>
+    </div>
+    <div class="hero-stat">
+      <span>🧩</span>
+      <strong>8</strong>
+      <span>سؤال كويز</span>
+    </div>
+    <div class="hero-stat">
+      <span>⚡</span>
+      <strong>5</strong>
+      <span>خطوات تعلم</span>
+    </div>
+  </div>
+
+  <div class="hero-levels">
+    <span class="lvl-badge beginner">🟢 مبتدئ</span>
+    <span class="lvl-badge mid">🟡 متوسط</span>
+    <span class="lvl-badge advanced">🔴 متقدم</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
+<main class="page-wrap">
+
+  <!-- ─── 1. TERMS ─── -->
+  <section id="sec-terms">
+    <h2 class="section-title">
+      <span class="icon">📚</span>
+      المصطلحات والمفاهيم
+    </h2>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="ابحث عن مصطلح..."
+          autocomplete="off"
+        />
+      </div>
+      <div class="filter-btns" id="filter-btns">
+        <button class="filter-btn active" data-filter="all">الكل</button>
+        <button class="filter-btn" data-filter="basics">الأساسيات</button>
+        <button class="filter-btn" data-filter="structures">هياكل البيانات</button>
+        <button class="filter-btn" data-filter="control">التحكم</button>
+        <button class="filter-btn" data-filter="functions">الدوال</button>
+        <button class="filter-btn" data-filter="oop">OOP</button>
+        <button class="filter-btn" data-filter="advanced">متقدم</button>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="terms-grid" id="terms-grid"></div>
+  </section>
+
+  <!-- ─── 2. PROCESS STEPS ─── -->
+  <section id="sec-steps">
+    <h2 class="section-title">
+      <span class="icon">🗺️</span>
+      خارطة تعلم Python
+    </h2>
+    <div class="steps-list" id="steps-list"></div>
+  </section>
+
+  <!-- ─── 3. CASE STUDY ─── -->
+  <section id="sec-case">
+    <h2 class="section-title">
+      <span class="icon">🔬</span>
+      دراسة حالة — تحليل بيانات المبيعات
+    </h2>
+    <div class="case-timeline" id="case-timeline"></div>
+  </section>
+
+  <!-- ─── 4. CHEAT SHEETS ─── -->
+  <section id="sec-sheets">
+    <h2 class="section-title">
+      <span class="icon">⚡</span>
+      Cheat Sheets سريعة
+    </h2>
+    <div class="sheets-grid" id="sheets-grid"></div>
+  </section>
+
+  <!-- ─── 5. QUIZ ─── -->
+  <section id="sec-quiz">
+    <h2 class="section-title">
+      <span class="icon">🧩</span>
+      اختبر معلوماتك
+    </h2>
+    <div class="quiz-wrap" id="quiz-wrap"></div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════
+     MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <div class="modal-icon" id="m-icon"></div>
+      <div class="modal-titles">
+        <div class="modal-title" id="m-title"></div>
+        <div class="modal-en"    id="m-en"></div>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-desc"  id="m-desc"></div>
+      <div class="modal-label">💻 مثال كود</div>
+      <div class="code-wrap">
+        <button class="copy-btn" id="m-copy">نسخ</button>
+        <pre><code class="language-python" id="m-code"></code></pre>
+      </div>
+      <div class="modal-example" id="m-example"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<div id="cs-footer"></div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script src="data.js"></script>
+<script src="../pages.js"></script>
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/footer.js"></script>
+
+<script>
+/* ════════════════════════════════════════════
+   APP.JS — Python Basics
+════════════════════════════════════════════ */
+
+/* ── Helpers ── */
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+function copyText(text, btn, label = 'نسخ') {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ تم';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = label;
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+
+/* ══════════════════════════════════════════
+   1. TERMS
+══════════════════════════════════════════ */
+let activeFilter = 'all';
+let searchQuery  = '';
+
+function renderTerms() {
+  const grid = document.getElementById('terms-grid');
+  const filtered = TERMS.filter(t => {
+    const matchFilter = activeFilter === 'all' || t.category === activeFilter;
+    const q = searchQuery.toLowerCase();
+    const matchSearch = !q ||
+      t.title.includes(q) ||
+      t.en.toLowerCase().includes(q) ||
+      t.short.includes(q);
+    return matchFilter && matchSearch;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results">🔍 لا توجد نتائج لـ "${escHtml(searchQuery)}"</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(t => `
+    <div class="term-card" data-id="${t.id}" role="button" tabindex="0"
+         aria-label="عرض تفاصيل ${escHtml(t.title)}">
+      <div class="term-card-head">
+        <div class="term-icon">${t.icon}</div>
+        <div class="term-titles">
+          <div class="term-title">${escHtml(t.title)}</div>
+          <div class="term-en">${escHtml(t.en)}</div>
+        </div>
+        <span class="term-level ${t.level}">${t.level}</span>
+      </div>
+      <p class="term-short">${escHtml(t.short)}</p>
+      <div class="term-footer">
+        <span class="term-cat">${escHtml(t.category)}</span>
+        <span class="term-arrow">←</span>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.term-card').forEach(card => {
+    card.addEventListener('click', () => openModal(+card.dataset.id));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') openModal(+card.dataset.id);
+    });
+  });
+}
+
+/* Filters */
+document.getElementById('filter-btns').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  renderTerms();
+});
+
+/* Search */
+document.getElementById('search-input').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  renderTerms();
+});
+
+/* ══════════════════════════════════════════
+   2. MODAL
+══════════════════════════════════════════ */
+function openModal(id) {
+  const t = TERMS.find(x => x.id === id);
+  if (!t) return;
+
+  document.getElementById('m-icon').textContent  = t.icon;
+  document.getElementById('m-title').textContent = t.title;
+  document.getElementById('m-en').textContent    = t.en;
+  document.getElementById('m-desc').textContent  = t.desc;
+
+  const codeEl = document.getElementById('m-code');
+  codeEl.textContent = t.code;
+  hljs.highlightElement(codeEl);
+
+  const exEl = document.getElementById('m-example');
+  exEl.innerHTML = `<strong>💡 مثال:</strong> ${escHtml(t.example)}`;
+
+  document.getElementById('m-copy').onclick = function() {
+    copyText(t.code, this);
+  };
+
+  const overlay = document.getElementById('modal-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ══════════════════════════════════════════
+   3. PROCESS STEPS
+══════════════════════════════════════════ */
+function renderSteps() {
+  const list = document.getElementById('steps-list');
+  list.innerHTML = PROCESS_STEPS.map((s, i) => `
+    <div class="step-card" id="step-${i}">
+      <div class="step-header" onclick="toggleStep(${i})">
+        <span class="step-num">${s.num}</span>
+        <span class="step-icon">${s.icon}</span>
+        <div class="step-info">
+          <div class="step-title">${escHtml(s.title)}</div>
+          <div class="step-desc">${escHtml(s.desc)}</div>
+        </div>
+        <span class="step-time">${s.time}</span>
+        <span class="step-chevron">▼</span>
+      </div>
+      <div class="step-body">
+        <div class="step-details">
+          <div class="step-points">
+            ${s.details.map(d => `<div class="step-point">${escHtml(d)}</div>`).join('')}
+          </div>
+          <div>
+            <div class="modal-label" style="margin-bottom:.5rem">🛠️ الأدوات</div>
+            <div class="step-tools">
+              ${s.tools.map(t => `<span class="step-tool">${escHtml(t)}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleStep(i) {
+  document.getElementById(`step-${i}`).classList.toggle('open');
+}
+
+/* ══════════════════════════════════════════
+   4. CASE STUDY
+══════════════════════════════════════════ */
+function renderCase() {
+  const tl = document.getElementById('case-timeline');
+  tl.innerHTML = CASE_STEPS.map((s, i) => `
+    <div class="case-item">
+      <div class="case-dot">${s.icon}</div>
+      <div class="case-content" id="case-${i}">
+        <div class="case-head" onclick="toggleCase(${i})">
+          <span class="case-step-num">${s.step}</span>
+          <span class="case-title">${escHtml(s.title)}</span>
+          <span class="case-chevron">▼</span>
+        </div>
+        <div class="case-body">
+          <p class="case-text">${escHtml(s.content)}</p>
+          ${s.code ? `
+            <div class="code-wrap" style="margin-bottom:.75rem">
+              <button class="copy-btn" onclick="copyCase(${i}, this)">نسخ</button>
+              <pre><code class="language-python case-code-${i}">${escHtml(s.code)}</code></pre>
+            </div>
+          ` : ''}
+          ${s.insight ? `<div class="case-insight">${escHtml(s.insight)}</div>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  /* highlight */
+  tl.querySelectorAll('code[class^="language-"]').forEach(el => hljs.highlightElement(el));
+}
+
+function toggleCase(i) {
+  document.getElementById(`case-${i}`).classList.toggle('open');
+}
+
+function copyCase(i, btn) {
+  copyText(CASE_STEPS[i].code, btn);
+}
+
+/* ══════════════════════════════════════════
+   5. CHEAT SHEETS
+══════════════════════════════════════════ */
+function renderSheets() {
+  const grid = document.getElementById('sheets-grid');
+  grid.innerHTML = CHEAT_SHEETS.map((s, i) => `
+    <div class="sheet-card">
+      <div class="sheet-title">
+        <span>${s.title}</span>
+        <button class="sheet-copy" onclick="copySheet(${i}, this)">نسخ</button>
+      </div>
+      <pre><code class="language-python sheet-code-${i}">${escHtml(s.code)}</code></pre>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('code[class^="language-"]').forEach(el => hljs.highlightElement(el));
+}
+
+function copySheet(i, btn) {
+  copyText(CHEAT_SHEETS[i].code, btn);
+}
+
+/* ══════════════════════════════════════════
+   6. QUIZ
+══════════════════════════════════════════ */
+let quizIndex  = 0;
+let quizScore  = 0;
+let quizDone   = false;
+
+function renderQuiz() {
+  const wrap = document.getElementById('quiz-wrap');
+
+  if (quizIndex >= QUIZ.length) {
+    showQuizResult(wrap);
+    return;
+  }
+
+  const q   = QUIZ[quizIndex];
+  const pct = (quizIndex / QUIZ.length) * 100;
+
+  wrap.innerHTML = `
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" style="width:${pct}%"></div>
+    </div>
+    <div class="quiz-inner">
+      <div class="quiz-meta">
+        <span class="quiz-counter">السؤال ${quizIndex + 1} من ${QUIZ.length}</span>
+        <span class="quiz-score-badge">⭐ ${quizScore} / ${QUIZ.length}</span>
+      </div>
+      <p class="quiz-q">${escHtml(q.q)}</p>
+      <div class="quiz-options">
+        ${q.options.map((opt, i) => `
+          <button class="quiz-opt" data-idx="${i}" onclick="answerQuiz(${i})">
+            <span class="opt-indicator">${i + 1}</span>
+            <span>${escHtml(opt)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-explanation" id="quiz-exp">${escHtml(q.explanation)}</div>
+      <div class="quiz-actions">
+        <button class="quiz-next-btn" id="quiz-next" onclick="nextQuestion()">
+          ${quizIndex + 1 < QUIZ.length ? 'السؤال التالي ←' : 'عرض النتيجة 🏆'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function answerQuiz(selected) {
+  const q    = QUIZ[quizIndex];
+  const opts = document.querySelectorAll('.quiz-opt');
+
+  opts.forEach(btn => btn.disabled = true);
+
+  opts[selected].classList.add(selected === q.correct ? 'correct' : 'wrong');
+  opts[selected].querySelector('.opt-indicator').textContent =
+    selected === q.correct ? '✓' : '✕';
+
+  if (selected === q.correct) {
+    quizScore++;
+  } else {
+    opts[q.correct].classList.add('correct');
+    opts[q.correct].querySelector('.opt-indicator').textContent = '✓';
+  }
+
+  document.getElementById('quiz-exp').classList.add('show');
+  document.getElementById('quiz-next').classList.add('show');
+}
+
+function nextQuestion() {
+  quizIndex++;
+  renderQuiz();
+}
+
+function showQuizResult(wrap) {
+  const pct   = Math.round((quizScore / QUIZ.length) * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '👍' : '📚';
+  const msg   = pct >= 80
+    ? 'ممتاز! أنت تتقن أساسيات Python 🎉'
+    : pct >= 60
+    ? 'جيد جداً! راجع المصطلحات المتقدمة'
+    : 'استمر في التعلم — راجع الـ CheatSheets أعلاه';
+
+  wrap.innerHTML = `
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" style="width:100%"></div>
+    </div>
+    <div class="quiz-inner">
+      <div class="quiz-result show">
+        <div class="result-emoji">${emoji}</div>
+        <div class="result-score">${quizScore} / ${QUIZ.length}</div>
+        <div style="font-size:1.5rem;font-weight:900;color:var(--accent);margin-bottom:.35rem">${pct}%</div>
+        <p class="result-msg">${msg}</p>
+        <button class="quiz-restart" onclick="restartQuiz()">إعادة الاختبار 🔄</button>
+      </div>
+    </div>
+  `;
+}
+
+function restartQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  renderQuiz();
+}
+
+/* ══════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════ */
+(function() {
+  const btn  = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  function applyTheme(dark) {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('cs-theme', dark ? 'dark' : 'light');
+  }
+
+  const saved = localStorage.getItem('cs-theme');
+  applyTheme(saved ? saved === 'dark' : true);
+
+  btn.addEventListener('click', () => {
+    applyTheme(root.getAttribute('data-theme') !== 'dark');
+  });
+})();
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderTerms();
+  renderSteps();
+  renderCase();
+  renderSheets();
+  renderQuiz();
+});
+</script>
+
+</body>
+</html>

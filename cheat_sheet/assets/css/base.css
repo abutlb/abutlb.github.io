@@ -1,0 +1,213 @@
+/* ============================================================
+   BASE STYLES — مشترك بين جميع الصفحات
+============================================================ */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+/* ── Glass card ── */
+.glass {
+  background: var(--accent-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-border);
+}
+
+/* ── Surface card ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+/* ── Code block ── */
+.code-block {
+  background:    var(--code-bg);
+  border:        1px solid var(--code-border);
+  border-radius: 0.75rem;
+  font-family:   'Courier New', Courier, monospace;
+  font-size:     0.8rem;
+  color:         var(--code-text);
+  direction:     ltr;
+  text-align:    left;
+  overflow-x:    auto;
+}
+.code-block pre { margin: 0; white-space: pre; }
+
+/* ── Badge ── */
+.badge {
+  display:      inline-flex;
+  align-items:  center;
+  gap:          4px;
+  padding:      2px 10px;
+  border-radius:999px;
+  font-size:    11px;
+  font-weight:  600;
+  background:   var(--badge-bg);
+  color:        var(--badge-text);
+  border:       1px solid var(--badge-border);
+}
+
+/* ── Section animations ── */
+.section-hidden  { display: none; }
+.section-visible {
+  display:   block;
+  animation: csPageFadeIn 0.35s ease;
+}
+@keyframes csPageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Progress bar ── */
+.progress-bar { transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+
+/* ── Accent button ── */
+.btn-accent {
+  background:  var(--accent);
+  color:       #fff;
+  border:      none;
+  padding:     0.6rem 1.4rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor:      pointer;
+  transition:  filter 0.2s ease, transform 0.2s ease;
+}
+.btn-accent:hover {
+  filter:    brightness(1.12);
+  transform: translateY(-1px);
+}
+
+/* ── Tab button ── */
+.tab-btn {
+  padding:       0.55rem 1.2rem;
+  border-radius: 0.75rem;
+  font-size:     0.85rem;
+  font-weight:   600;
+  cursor:        pointer;
+  border:        1px solid var(--border);
+  background:    var(--bg-card);
+  color:         var(--text-secondary);
+  transition:    all 0.25s ease;
+}
+.tab-btn:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+.tab-btn.active {
+  background:  var(--accent);
+  color:       #fff;
+  border-color:var(--accent);
+  box-shadow:  var(--glow);
+}
+
+/* ── Input ── */
+.cs-input {
+  background:   var(--bg-card);
+  border:       1px solid var(--border);
+  color:        var(--text-primary);
+  border-radius:0.75rem;
+  padding:      0.65rem 1rem;
+  font-size:    0.875rem;
+  width:        100%;
+  outline:      none;
+  transition:   border-color 0.2s ease;
+}
+.cs-input:focus { border-color: var(--accent); }
+.cs-input::placeholder { color: var(--text-muted); }
+
+/* ── Modal overlay ── */
+.modal-overlay {
+  position:        fixed;
+  inset:           0;
+  background:      var(--overlay);
+  backdrop-filter: blur(6px);
+  z-index:         50;
+  display:         none;
+  align-items:     center;
+  justify-content: center;
+  padding:         1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background:    var(--bg-surface);
+  border:        1px solid var(--border);
+  border-radius: 1.25rem;
+  max-width:     520px;
+  width:         100%;
+  padding:       1.5rem;
+  animation:     csPageFadeIn 0.3s ease;
+  box-shadow:    var(--shadow);
+}
+
+/* ── Theme switcher widget ── */
+#cs-theme-switcher {
+  display:     flex;
+  align-items: center;
+  gap:         6px;
+  background:  var(--bg-card);
+  border:      1px solid var(--border);
+  border-radius:999px;
+  padding:     4px 8px;
+  box-shadow:  var(--shadow-card);
+}
+.theme-dot {
+  width:         26px;
+  height:        26px;
+  border-radius: 50%;
+  cursor:        pointer;
+  border:        2px solid transparent;
+  transition:    transform 0.2s ease, border-color 0.2s ease;
+  position:      relative;
+}
+.theme-dot:hover         { transform: scale(1.15); }
+.theme-dot.active        { border-color: var(--accent); transform: scale(1.1); }
+.theme-dot[data-t="dark"]   { background: linear-gradient(135deg,#1e1b4b,#6366f1); }
+.theme-dot[data-t="light"]  { background: linear-gradient(135deg,#e0e7ff,#6366f1); }
+.theme-dot[data-t="warm"]   { background: linear-gradient(135deg,#fef3c7,#dc2626); }
+.theme-dot[data-t="forest"] { background: linear-gradient(135deg,#dcfce7,#16a34a); }
+
+/* ── Header ── */
+.cs-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.cs-header h1 { color: var(--header-text); }
+.cs-header .subtitle { color: var(--header-sub); }
+
+/* ── Glow text ── */
+.glow-text { text-shadow: var(--glow); }
+
+/* ── Divider ── */
+.cs-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 1.5rem 0;
+}
+
+/* ── Section heading ── */
+.cs-section-title {
+  font-size:   1.4rem;
+  font-weight: 800;
+  color:       var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+.cs-section-sub {
+  font-size: 0.875rem;
+  color:     var(--text-secondary);
+  margin-bottom: 1.5rem;
+}

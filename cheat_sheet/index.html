@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-page="home">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CheatSheet Hub — مراجع تفاعلية</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/theme.css"/>
+  <link rel="stylesheet" href="assets/css/base.css"/>
+  <style>
+
+    /* ════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════ */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: blobFloat 8s ease-in-out infinite;
+    }
+    .hero-blob-1 {
+      top: -80px; right: -100px;
+      width: 500px; height: 500px;
+      background: var(--accent);
+      opacity: .07;
+      animation-delay: 0s;
+    }
+    .hero-blob-2 {
+      bottom: -60px; left: -80px;
+      width: 380px; height: 380px;
+      background: var(--accent-light);
+      opacity: .06;
+      animation-delay: -4s;
+    }
+    @keyframes blobFloat {
+      0%,100% { transform: translateY(0)   scale(1);   }
+      50%      { transform: translateY(20px) scale(1.05); }
+    }
+
+    /* ════════════════════════════════════════
+       STAT CARDS
+    ════════════════════════════════════════ */
+    .stat-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 1rem;
+      padding: 1.1rem .85rem;
+      text-align: center;
+      transition: transform .3s ease;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      display: block;
+    }
+    .stat-lbl {
+      font-size: .72rem;
+      color: rgba(255,255,255,.65);
+      margin-top: .3rem;
+      display: block;
+    }
+
+    /* ════════════════════════════════════════
+       SEARCH
+    ════════════════════════════════════════ */
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+      max-width: 420px;
+    }
+    .search-icon {
+      position: absolute;
+      right: .9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .95rem;
+      pointer-events: none;
+      color: var(--text-muted);
+    }
+    #searchInput {
+      width: 100%;
+      padding: .65rem 2.5rem .65rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      color: var(--text-primary);
+      font-size: .875rem;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+      font-family: inherit;
+    }
+    #searchInput:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-bg);
+    }
+    #searchInput::placeholder { color: var(--text-muted); }
+
+    /* ════════════════════════════════════════
+       FILTER BUTTONS
+    ════════════════════════════════════════ */
+    .filter-btn {
+      padding: .45rem 1.1rem;
+      border-radius: .65rem;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      transition: all .2s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ════════════════════════════════════════
+       PAGE CARDS
+    ════════════════════════════════════════ */
+    .page-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: transform .35s ease,
+                  box-shadow .35s ease,
+                  border-color .35s ease;
+      position: relative;
+    }
+    .page-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.25);
+    }
+
+    /* خط اللون العلوي */
+    .page-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 1.25rem 1.25rem 0 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .35s ease;
+    }
+    .page-card:hover::after { transform: scaleX(1); }
+
+    .color-indigo::after,
+    .page-card:hover.color-indigo { border-color: rgba(99,102,241,.35); }
+    .color-indigo::after { background: #6366f1; }
+
+    .color-purple::after,
+    .page-card:hover.color-purple { border-color: rgba(168,85,247,.35); }
+    .color-purple::after { background: #a855f7; }
+
+    .color-yellow::after,
+    .page-card:hover.color-yellow { border-color: rgba(234,179,8,.35); }
+    .color-yellow::after { background: #eab308; }
+
+    .color-green::after,
+    .page-card:hover.color-green { border-color: rgba(34,197,94,.35); }
+    .color-green::after { background: #22c55e; }
+
+    .color-blue::after,
+    .page-card:hover.color-blue { border-color: rgba(59,130,246,.35); }
+    .color-blue::after { background: #3b82f6; }
+
+    .color-pink::after,
+    .page-card:hover.color-pink { border-color: rgba(236,72,153,.35); }
+    .color-pink::after { background: #ec4899; }
+
+    /* ── صورة البطاقة ── */
+    .pc-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--bg-base);
+    }
+    .pc-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s ease;
+    }
+    .page-card:hover .pc-img { transform: scale(1.07); }
+
+    .pc-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0)    25%,
+        rgba(0,0,0,0.6)  100%
+      );
+      pointer-events: none;
+      transition: background .35s ease;
+    }
+    .page-card:hover .pc-img-overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.72) 100%
+      );
+    }
+
+    .pc-img-badges {
+      position: absolute;
+      top: .8rem;
+      right: .8rem;
+      left: .8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pc-icon-bubble {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: .7rem;
+      background: rgba(0,0,0,0.38);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+    .pc-status-badge {
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      background: rgba(0,0,0,0.38) !important;
+      border: 1px solid rgba(255,255,255,0.2) !important;
+      color: #fff !important;
+      font-size: .68rem !important;
+      padding: .25rem .7rem !important;
+      border-radius: 999px !important;
+      font-weight: 600 !important;
+    }
+    .pc-img-title {
+      position: absolute;
+      bottom: .9rem;
+      right: 1rem;
+      left: 1rem;
+    }
+
+    /* Fallback gradient */
+    .pc-gradient.color-indigo { background: linear-gradient(135deg,#312e81,#6366f1); }
+    .pc-gradient.color-purple { background: linear-gradient(135deg,#4a1d96,#a855f7); }
+    .pc-gradient.color-yellow { background: linear-gradient(135deg,#78350f,#eab308); }
+    .pc-gradient.color-green  { background: linear-gradient(135deg,#064e3b,#22c55e); }
+    .pc-gradient.color-blue   { background: linear-gradient(135deg,#1e3a8a,#3b82f6); }
+    .pc-gradient.color-pink   { background: linear-gradient(135deg,#831843,#ec4899); }
+
+    /* ── body البطاقة ── */
+    .pc-body {
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      flex: 1;
+    }
+    .pc-desc {
+      font-size: .84rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0;
+      flex: 1;
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: .68rem;
+      font-weight: 600;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      transition: border-color .2s ease, color .2s ease;
+    }
+    .page-card:hover .tag-chip {
+      border-color: var(--accent-border);
+      color: var(--text-secondary);
+    }
+    .pc-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: .75rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .pc-meta {
+      display: flex;
+      gap: 1rem;
+    }
+    .pc-meta-item {
+      font-size: .75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+    .pc-meta-item strong { color: var(--text-secondary); }
+    .pc-open-btn {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      transition: gap .2s ease;
+    }
+    .page-card:hover .pc-open-btn { gap: .5rem; }
+
+    /* ════════════════════════════════════════
+       GRID
+    ════════════════════════════════════════ */
+    #cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1.35rem;
+    }
+
+    /* ════════════════════════════════════════
+       EMPTY STATE
+    ════════════════════════════════════════ */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 0;
+      color: var(--text-muted);
+    }
+    .empty-state-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: emptyBounce 2s ease-in-out infinite;
+    }
+    @keyframes emptyBounce {
+      0%,100% { transform: translateY(0);   }
+      50%      { transform: translateY(-8px); }
+    }
+
+    /* ════════════════════════════════════════
+       SECTION TITLE
+    ════════════════════════════════════════ */
+    .section-label {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin-bottom: .4rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0 0 .4rem;
+      line-height: 1.3;
+    }
+    .section-sub {
+      font-size: .875rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* ════════════════════════════════════════
+       CARD ENTRANCE ANIMATION
+    ════════════════════════════════════════ */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+    .card-animate {
+      animation: cardIn .4s ease both;
+    }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      #cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<header style="position:relative;overflow:hidden;
+               background:linear-gradient(135deg,
+                 var(--bg-surface) 0%,
+                 var(--bg-card)    100%);
+               border-bottom:1px solid var(--border)">
+
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div style="position:relative;max-width:1200px;margin:0 auto;
+              padding:3.5rem 1.5rem 3rem">
+
+    <!-- Top bar: brand + theme -->
+    <div style="display:flex;align-items:center;
+                justify-content:space-between;margin-bottom:2.75rem;
+                flex-wrap:wrap;gap:1rem">
+
+      <!-- Brand -->
+      <div style="display:flex;align-items:center;gap:.85rem">
+        <div style="width:3rem;height:3rem;border-radius:.85rem;
+                    background:var(--accent);display:flex;
+                    align-items:center;justify-content:center;
+                    font-size:1.5rem;box-shadow:0 4px 14px var(--accent-border)">
+          📊
+        </div>
+        <div>
+          <div style="font-size:1.25rem;font-weight:900;
+                      color:var(--text-primary);line-height:1.1">
+            CheatSheet Hub
+          </div>
+          <div style="font-size:.72rem;color:var(--text-muted);margin-top:.15rem">
+            Interactive Reference Series
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme switcher slot -->
+      <div id="cs-theme-slot"></div>
+
+    </div>
+
+    <!-- Hero content -->
+    <div style="display:grid;grid-template-columns:1fr auto;
+                gap:2rem;align-items:end;flex-wrap:wrap"
+         class="hero-inner">
+
+      <div>
+        <!-- Label -->
+        <div style="display:inline-flex;align-items:center;gap:.5rem;
+                    background:var(--accent-bg);border:1px solid var(--accent-border);
+                    border-radius:999px;padding:.3rem .9rem;margin-bottom:1.1rem">
+          <span style="width:6px;height:6px;border-radius:50%;
+                       background:var(--accent);display:inline-block;
+                       animation:pulse 2s ease infinite"></span>
+          <span style="font-size:.72rem;font-weight:700;color:var(--accent)">
+            مراجع تفاعلية للمطورين
+          </span>
+        </div>
+
+        <h1 style="font-size:clamp(2rem,5vw,3.25rem);font-weight:900;
+                   color:var(--text-primary);line-height:1.15;
+                   margin:0 0 .85rem">
+          كل ما تحتاجه<br/>
+          <span style="color:var(--accent)">في مكان واحد</span>
+        </h1>
+
+        <p style="font-size:1rem;color:var(--text-secondary);
+                  line-height:1.7;margin:0;max-width:500px">
+          مجموعة مراجع تفاعلية شاملة تغطي تحليل البيانات، تعلم الآلة،
+          SQL، وأكثر — منظّمة، قابلة للبحث، مع كود جاهز للنسخ.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats-grid"
+           style="display:grid;grid-template-columns:repeat(4,1fr);
+                  gap:.65rem;min-width:260px">
+        <div class="stat-card">
+          <span class="stat-num" id="hs-pages">0</span>
+          <span class="stat-lbl">صفحة</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="hs-published">0</span>
+          <span class="stat-lbl">منشورة</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="hs-terms">0</span>
+          <span class="stat-lbl">مصطلح</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="hs-snippets">0</span>
+          <span class="stat-lbl">كود</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<main style="max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 4rem">
+
+  <!-- ── Toolbar ── -->
+  <div style="display:flex;flex-wrap:wrap;align-items:center;
+              gap:.85rem;margin-bottom:2rem">
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="searchInput" type="text"
+             placeholder="ابحث عن صفحة أو تقنية..."
+             oninput="renderCards()"/>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap" id="filterBtns">
+      <button class="filter-btn active" data-filter="all"
+              onclick="setFilter('all',this)">
+        🗂️ الكل
+      </button>
+      <button class="filter-btn" data-filter="published"
+              onclick="setFilter('published',this)">
+        ✅ منشور
+      </button>
+      <button class="filter-btn" data-filter="wip"
+              onclick="setFilter('wip',this)">
+        🔧 قيد البناء
+      </button>
+      <button class="filter-btn" data-filter="coming-soon"
+              onclick="setFilter('coming-soon',this)">
+        🔜 قريباً
+      </button>
+    </div>
+
+    <!-- Count badge -->
+    <span id="results-count"
+          style="margin-right:auto;font-size:.78rem;
+                 color:var(--text-muted);white-space:nowrap"></span>
+
+  </div>
+
+  <!-- ── Section heading ── -->
+  <div style="margin-bottom:1.5rem">
+    <p class="section-label">المكتبة</p>
+    <h2 class="section-title">استعرض المراجع</h2>
+    <p class="section-sub">اختر الموضوع الذي تريد تعلّمه أو مراجعته</p>
+  </div>
+
+  <!-- ── Cards Grid ── -->
+  <div id="cards-grid"></div>
+
+</main>
+
+<!-- ── Footer slot ── -->
+<div id="cs-footer"></div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script src="pages.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/footer.js"></script>
+<script>
+
+/* ════════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════════ */
+const STATUS_CFG = {
+  'published':   { text: '✅ منشور',       cls: 'status-published'   },
+  'wip':         { text: '🔧 قيد البناء',  cls: 'status-wip'         },
+  'coming-soon': { text: '🔜 قريباً',      cls: 'status-coming-soon' },
+};
+
+let activeFilter = 'all';
+
+/* ════════════════════════════════════════════
+   ANIMATED COUNTER
+════════════════════════════════════════════ */
+function animateCount(id, target, duration = 1000) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = performance.now();
+  const tick  = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3);          /* ease-out-cubic */
+    el.textContent = Math.round(e * target);
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+/* ════════════════════════════════════════════
+   HERO STATS
+════════════════════════════════════════════ */
+function updateHeroStats() {
+  const published = PAGES_DATA.filter(p => p.status === 'published').length;
+  const terms     = PAGES_DATA.reduce((s, p) => s + (p.terms    || 0), 0);
+  const snippets  = PAGES_DATA.reduce((s, p) => s + (p.snippets || 0), 0);
+
+  animateCount('hs-pages',     PAGES_DATA.length);
+  animateCount('hs-published', published);
+  animateCount('hs-terms',     terms);
+  animateCount('hs-snippets',  snippets);
+}
+
+/* ════════════════════════════════════════════
+   FILTER
+════════════════════════════════════════════ */
+function setFilter(val, btn) {
+  activeFilter = val;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+/* ════════════════════════════════════════════
+   BUILD SINGLE CARD
+════════════════════════════════════════════ */
+function buildCard(p, index) {
+  const isLive = p.status === 'published';
+  const href   = isLive ? `./${p.slug}/index.html` : '#';
+  const status = STATUS_CFG[p.status] || STATUS_CFG['coming-soon'];
+
+  /* ── صورة أو gradient ── */
+  const imgSection = p.image
+    ? `<div class="pc-img-wrap">
+         <img
+           src="${p.image.src}"
+           alt="${p.image.alt}"
+           class="pc-img"
+           loading="lazy"
+           onerror="this.closest('.pc-img-wrap').classList.add('pc-gradient','color-${p.color}');this.remove();this.nextElementSibling&&this.nextElementSibling.remove()"/>
+         <div class="pc-img-overlay"></div>
+         <div class="pc-img-badges">
+           <span class="pc-icon-bubble">${p.icon}</span>
+           <span class="pc-status-badge">${status.text}</span>
+         </div>
+         <div class="pc-img-title">
+           <div style="font-size:1.05rem;font-weight:800;color:#fff;
+                       text-shadow:0 1px 6px rgba(0,0,0,.6);
+                       line-height:1.2">${p.title}</div>
+           <div style="font-size:.72rem;color:rgba(255,255,255,.75);
+                       margin-top:.15rem">${p.subtitle}</div>
+         </div>
+       </div>`
+    : `<div class="pc-img-wrap pc-gradient color-${p.color}">
+         <div class="pc-img-overlay"></div>
+         <div class="pc-img-badges">
+           <span class="pc-icon-bubble">${p.icon}</span>
+           <span class="pc-status-badge">${status.text}</span>
+         </div>
+         <div class="pc-img-title">
+           <div style="font-size:1.05rem;font-weight:800;color:#fff;
+                       line-height:1.2">${p.title}</div>
+           <div style="font-size:.72rem;color:rgba(255,255,255,.75);
+                       margin-top:.15rem">${p.subtitle}</div>
+         </div>
+       </div>`;
+
+  /* ── الكارت كاملة ── */
+  return `
+    <a href="${href}"
+       class="page-card color-${p.color} card-animate"
+       style="animation-delay:${index * 60}ms;
+              ${!isLive ? 'opacity:.72;cursor:default' : ''}"
+       ${!isLive ? 'onclick="return false"' : ''}
+       aria-label="فتح صفحة ${p.title}">
+
+      ${imgSection}
+
+      <div class="pc-body">
+
+        <!-- Description -->
+        <p class="pc-desc">${p.desc}</p>
+
+        <!-- Tags -->
+        <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+          ${p.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')}
+        </div>
+
+        <!-- Footer -->
+        <div class="pc-footer">
+          <div class="pc-meta">
+            <span class="pc-meta-item">
+              📚 <strong>${p.terms || 0}</strong> مصطلح
+            </span>
+            <span class="pc-meta-item">
+              ⚡ <strong>${p.snippets || 0}</strong> كود
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem">
+            <span style="font-size:.7rem;color:var(--text-muted)">${p.level}</span>
+            ${isLive
+              ? `<span class="pc-open-btn">فتح <span>←</span></span>`
+              : `<span style="font-size:.75rem;color:var(--text-muted)">قريباً</span>`}
+          </div>
+        </div>
+
+        <!-- Updated date -->
+        ${p.updated
+          ? `<div style="font-size:.65rem;color:var(--text-muted);
+                         margin-top:-.25rem">
+               🕐 آخر تحديث: ${p.updated}
+             </div>`
+          : ''}
+
+      </div>
+    </a>`;
+}
+
+/* ════════════════════════════════════════════
+   RENDER CARDS
+════════════════════════════════════════════ */
+function renderCards() {
+  const q      = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const grid   = document.getElementById('cards-grid');
+  const countEl = document.getElementById('results-count');
+
+  const filtered = PAGES_DATA.filter(p => {
+    const matchFilter = activeFilter === 'all' || p.status === activeFilter;
+    const matchSearch = !q
+      || p.title.toLowerCase().includes(q)
+      || p.subtitle.toLowerCase().includes(q)
+      || p.desc.toLowerCase().includes(q)
+      || p.tags.some(t => t.toLowerCase().includes(q));
+    return matchFilter && matchSearch;
+  });
+
+  /* عداد النتائج */
+  if (countEl) {
+    countEl.textContent = filtered.length
+      ? `${filtered.length} صفحة`
+      : '';
+  }
+
+  /* Empty state */
+  if (!filtered.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <span class="empty-state-icon">🔍</span>
+        <p style="font-size:1rem;font-weight:600;
+                  color:var(--text-secondary);margin:0 0 .4rem">
+          لا توجد نتائج مطابقة
+        </p>
+        <p style="font-size:.85rem;margin:0">
+          جرّب كلمة بحث مختلفة أو غيّر الفلتر
+        </p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => buildCard(p, i)).join('');
+}
+
+/* ════════════════════════════════════════════
+   BOOT
+════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateHeroStats();
+  renderCards();
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+/* ============================================================
+   THEME SYSTEM — cheat_sheet project
+   يُستخدم في جميع الصفحات
+============================================================ */
+
+/* ── DARK ── */
+[data-theme="dark"] {
+  --bg-base:        #030712;
+  --bg-surface:     #111827;
+  --bg-card:        #1f2937;
+  --bg-card-hover:  #374151;
+  --border:         #374151;
+  --border-subtle:  #1f2937;
+  --text-primary:   #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted:     #6b7280;
+  --accent:         #6366f1;
+  --accent-light:   #818cf8;
+  --accent-bg:      rgba(99,102,241,0.12);
+  --accent-border:  rgba(99,102,241,0.30);
+  --code-bg:        #0d1117;
+  --code-border:    #30363d;
+  --code-text:      #86efac;
+  --header-bg:      linear-gradient(135deg,#1e1b4b,#312e81,#1e1b4b);
+  --header-text:    #e0e7ff;
+  --header-sub:     #a5b4fc;
+  --badge-bg:       rgba(99,102,241,0.2);
+  --badge-text:     #a5b4fc;
+  --badge-border:   rgba(99,102,241,0.4);
+  --scrollbar-track:#111827;
+  --scrollbar-thumb:#6366f1;
+  --shadow:         0 4px 24px rgba(0,0,0,0.40);
+  --shadow-card:    0 2px 12px rgba(0,0,0,0.30);
+  --glow:           0 0 20px rgba(99,102,241,0.35);
+  --overlay:        rgba(0,0,0,0.75);
+}
+
+/* ── LIGHT ── */
+[data-theme="light"] {
+  --bg-base:        #f8fafc;
+  --bg-surface:     #ffffff;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #f1f5f9;
+  --border:         #e2e8f0;
+  --border-subtle:  #f1f5f9;
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --accent:         #4f46e5;
+  --accent-light:   #6366f1;
+  --accent-bg:      rgba(79,70,229,0.07);
+  --accent-border:  rgba(79,70,229,0.20);
+  --code-bg:        #1e293b;
+  --code-border:    #334155;
+  --code-text:      #86efac;
+  --header-bg:      linear-gradient(135deg,#eef2ff,#e0e7ff,#ede9fe);
+  --header-text:    #1e1b4b;
+  --header-sub:     #4338ca;
+  --badge-bg:       rgba(79,70,229,0.10);
+  --badge-text:     #4338ca;
+  --badge-border:   rgba(79,70,229,0.25);
+  --scrollbar-track:#e2e8f0;
+  --scrollbar-thumb:#6366f1;
+  --shadow:         0 4px 24px rgba(0,0,0,0.08);
+  --shadow-card:    0 2px 12px rgba(0,0,0,0.06);
+  --glow:           0 0 20px rgba(79,70,229,0.15);
+  --overlay:        rgba(0,0,0,0.50);
+}
+
+/* ── WARM (أبيض + أحمر + ذهبي) ── */
+[data-theme="warm"] {
+  --bg-base:        #fffbf5;
+  --bg-surface:     #ffffff;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #fff7ed;
+  --border:         #fed7aa;
+  --border-subtle:  #ffedd5;
+  --text-primary:   #1c0a00;
+  --text-secondary: #92400e;
+  --text-muted:     #b45309;
+  --accent:         #dc2626;
+  --accent-light:   #ef4444;
+  --accent-bg:      rgba(220,38,38,0.07);
+  --accent-border:  rgba(220,38,38,0.25);
+  --code-bg:        #1c1917;
+  --code-border:    #44403c;
+  --code-text:      #fde68a;
+  --header-bg:      linear-gradient(135deg,#fff7ed,#fef3c7,#fee2e2);
+  --header-text:    #7f1d1d;
+  --header-sub:     #b91c1c;
+  --badge-bg:       rgba(220,38,38,0.10);
+  --badge-text:     #b91c1c;
+  --badge-border:   rgba(220,38,38,0.30);
+  --scrollbar-track:#ffedd5;
+  --scrollbar-thumb:#dc2626;
+  --shadow:         0 4px 24px rgba(220,38,38,0.10);
+  --shadow-card:    0 2px 12px rgba(220,38,38,0.07);
+  --glow:           0 0 20px rgba(220,38,38,0.20);
+  --overlay:        rgba(28,10,0,0.60);
+}
+
+/* ── FOREST (أخضر هادئ) ── */
+[data-theme="forest"] {
+  --bg-base:        #f0fdf4;
+  --bg-surface:     #ffffff;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #dcfce7;
+  --border:         #bbf7d0;
+  --border-subtle:  #dcfce7;
+  --text-primary:   #052e16;
+  --text-secondary: #166534;
+  --text-muted:     #15803d;
+  --accent:         #16a34a;
+  --accent-light:   #22c55e;
+  --accent-bg:      rgba(22,163,74,0.08);
+  --accent-border:  rgba(22,163,74,0.25);
+  --code-bg:        #052e16;
+  --code-border:    #14532d;
+  --code-text:      #86efac;
+  --header-bg:      linear-gradient(135deg,#dcfce7,#bbf7d0,#d1fae5);
+  --header-text:    #052e16;
+  --header-sub:     #15803d;
+  --badge-bg:       rgba(22,163,74,0.10);
+  --badge-text:     #15803d;
+  --badge-border:   rgba(22,163,74,0.30);
+  --scrollbar-track:#dcfce7;
+  --scrollbar-thumb:#16a34a;
+  --shadow:         0 4px 24px rgba(22,163,74,0.10);
+  --shadow-card:    0 2px 12px rgba(22,163,74,0.07);
+  --glow:           0 0 20px rgba(22,163,74,0.20);
+  --overlay:        rgba(5,46,22,0.60);
+}
+
+/* ============================================================
+   TRANSITIONS — كل العناصر تتحول بسلاسة عند تغيير الثيم
+============================================================ */
+*, *::before, *::after {
+  transition:
+    background-color 0.3s ease,
+    border-color     0.3s ease,
+    color            0.3s ease,
+    box-shadow       0.3s ease;
+}

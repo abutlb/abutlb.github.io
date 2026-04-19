@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تحليل البيانات — المرجع التفاعلي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ثيمات + ستايل مشترك -->
+  <link rel="stylesheet" href="../assets/css/theme.css"/>
+  <link rel="stylesheet" href="../assets/css/base.css"/>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="cs-header">
+  <!-- خلفية زخرفية -->
+  <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute top-8 right-16 w-64 h-64 rounded-full blur-3xl" style="background:var(--accent)"></div>
+    <div class="absolute bottom-0 left-8 w-80 h-40 rounded-full blur-3xl" style="background:var(--accent-light)"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 py-10">
+    <div class="flex items-start justify-between flex-wrap gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-4xl">📊</span>
+          <span class="badge">Data Science Series · Vol. 01</span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black glow-text leading-tight">تحليل البيانات</h1>
+        <p class="subtitle text-base mt-1">المرجع التفاعلي الشامل · من المصطلح إلى التطبيق</p>
+      </div>
+      <!-- حاوية الثيم — يحقنها theme.js تلقائياً -->
+      <div id="cs-theme-slot" class="flex items-center"></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="flex flex-wrap gap-4 mt-5 text-sm" style="color:var(--text-secondary)">
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block"></span>16 مصطلح أساسي</span>
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse inline-block"></span>دراسة حالة تفاعلية</span>
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse inline-block"></span>أمثلة بكود Python</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex flex-wrap gap-2 mt-6">
+      <button class="tab-btn active" id="tab-terms"     onclick="showSection('terms')">📚 المصطلحات</button>
+      <button class="tab-btn"        id="tab-process"   onclick="showSection('process')">🔄 خطوات التحليل</button>
+      <button class="tab-btn"        id="tab-casestudy" onclick="showSection('casestudy')">🏪 دراسة الحالة</button>
+      <button class="tab-btn"        id="tab-cheatsheet"onclick="showSection('cheatsheet')">⚡ Cheat Sheet</button>
+      <button class="tab-btn"        id="tab-quiz"      onclick="showSection('quiz')">🧠 اختبر نفسك</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main class="max-w-7xl mx-auto px-6 py-10">
+
+  <!-- TERMS -->
+  <div id="section-terms" class="section-visible">
+    <div class="flex flex-wrap gap-3 mb-8 items-center">
+      <div class="relative flex-1 min-w-56">
+        <span class="absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-muted)">🔍</span>
+        <input id="searchInput" type="text" placeholder="ابحث عن مصطلح..." class="cs-input pr-10" onkeyup="filterTerms()"/>
+      </div>
+      <div class="flex gap-2 flex-wrap" id="catFilters"></div>
+    </div>
+    <div id="termsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+  </div>
+
+  <!-- PROCESS -->
+  <div id="section-process" class="section-hidden">
+    <p class="cs-section-title">🔄 خطوات تحليل البيانات</p>
+    <p class="cs-section-sub">كل مرحلة قابلة للنقر لعرض التفاصيل والأدوات</p>
+    <div class="space-y-4" id="processSteps"></div>
+  </div>
+
+  <!-- CASE STUDY -->
+  <div id="section-casestudy" class="section-hidden">
+    <div class="glass rounded-2xl p-5 mb-6">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🏪</span>
+        <div>
+          <h2 class="cs-section-title mb-0">دراسة حالة: تحليل مبيعات متجر إلكتروني</h2>
+          <p style="color:var(--text-secondary);font-size:.875rem">سيناريو واقعي خطوة بخطوة</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4" id="caseSteps"></div>
+      <div class="space-y-4">
+        <div class="card p-5">
+          <h3 class="font-bold mb-4" style="color:var(--text-primary)">📋 ملخص المشروع</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span style="color:var(--text-muted)">الهدف</span><span style="color:var(--accent)">زيادة المبيعات 20%</span></div>
+            <div class="flex justify-between"><span style="color:var(--text-muted)">حجم البيانات</span><span style="color:var(--accent-light)">50,000 سجل</span></div>
+            <div class="flex justify-between"><span style="color:var(--text-muted)">المدة</span><span style="color:var(--text-secondary)">3 أسابيع</span></div>
+            <div class="flex justify-between"><span style="color:var(--text-muted)">الأدوات</span><span style="color:var(--accent)">Python + SQL</span></div>
+          </div>
+        </div>
+        <div class="card p-5">
+          <h3 class="font-bold mb-4" style="color:var(--text-primary)">📊 النتائج</h3>
+          <div class="space-y-3 text-xs">
+            <div>
+              <div class="flex justify-between mb-1"><span style="color:var(--text-secondary)">تحسن المبيعات</span><span style="color:var(--accent)">+23%</span></div>
+              <div style="background:var(--border);border-radius:999px;height:6px">
+                <div class="progress-bar" data-width="23%" style="width:0%;height:6px;border-radius:999px;background:var(--accent)"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span style="color:var(--text-secondary)">رضا العملاء</span><span style="color:var(--accent-light)">+18%</span></div>
+              <div style="background:var(--border);border-radius:999px;height:6px">
+                <div class="progress-bar" data-width="18%" style="width:0%;height:6px;border-radius:999px;background:var(--accent-light)"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-1"><span style="color:var(--text-secondary)">تقليل التكلفة</span><span style="color:var(--text-secondary)">-15%</span></div>
+              <div style="background:var(--border);border-radius:999px;height:6px">
+                <div class="progress-bar" data-width="15%" style="width:0%;height:6px;border-radius:999px;background:var(--text-muted)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHEAT SHEET -->
+  <div id="section-cheatsheet" class="section-hidden">
+    <p class="cs-section-title">⚡ Cheat Sheet سريع</p>
+    <p class="cs-section-sub">كود Python جاهز للنسخ والاستخدام الفوري</p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" id="cheatSheetGrid"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="section-quiz" class="section-hidden">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-8">
+        <p class="cs-section-title">🧠 اختبر معرفتك</p>
+        <p class="cs-section-sub">5 أسئلة سريعة على المصطلحات</p>
+        <div class="flex justify-center gap-2 mt-3" id="quizProgress"></div>
+      </div>
+      <div id="quizContainer"></div>
+      <div id="quizResult" class="hidden text-center py-10">
+        <div class="text-6xl mb-4" id="resultEmoji">🎉</div>
+        <h3 class="text-2xl font-bold mb-2" style="color:var(--text-primary)" id="resultTitle"></h3>
+        <p style="color:var(--text-secondary)" class="mb-6" id="resultScore"></p>
+        <button class="btn-accent" onclick="resetQuiz()">🔄 إعادة الاختبار</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div id="termModal" class="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <span id="modalIcon" class="text-3xl"></span>
+        <div>
+          <h3 id="modalTitle" class="font-bold text-lg" style="color:var(--text-primary)"></h3>
+          <span id="modalBadge" class="badge text-xs mt-1"></span>
+        </div>
+      </div>
+      <button onclick="closeModal()" style="color:var(--text-muted)" class="hover:opacity-70 text-xl leading-none">✕</button>
+    </div>
+    <p id="modalDesc" class="text-sm leading-relaxed mb-4" style="color:var(--text-secondary)"></p>
+    <div id="modalFormula" class="mb-4"></div>
+    <div id="modalCode" class="code-block p-4 mb-4 hidden"></div>
+    <div id="modalExample" class="text-sm p-4 rounded-xl" style="background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--text-secondary)"></div>
+  </div>
+</div>
+
+<!-- سكربت الثيم أولاً -->
+<script src="../assets/js/theme.js"></script>
+<!-- بيانات الصفحة -->
+<script src="data.js"></script>
+<!-- منطق الصفحة -->
+<script src="app.js"></script>
+<script src="../assets/js/footer.js"></script>
+</body>
+</html>
