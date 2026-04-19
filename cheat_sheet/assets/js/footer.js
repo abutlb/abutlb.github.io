@@ -147,7 +147,7 @@ function isHomePage() {
 
             <!-- Social -->
             <div class="csf-socials">
-              <a href="#" class="csf-social" title="GitHub" target="_blank" rel="noopener">
+              <a href="https://github.com/abutlb" class="csf-social" title="GitHub" target="_blank" rel="noopener">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18
                   6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703
@@ -163,7 +163,7 @@ function isHomePage() {
                   .18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
                 </svg>
               </a>
-              <a href="#" class="csf-social" title="Twitter / X" target="_blank" rel="noopener">
+              <a href="https://x.com/abutlb" class="csf-social" title="Twitter / X" target="_blank" rel="noopener">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17
                   l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L2.25 2.25h6.865
@@ -171,7 +171,7 @@ function isHomePage() {
                   L17.083 19.77z"/>
                 </svg>
               </a>
-              <a href="#" class="csf-social" title="LinkedIn" target="_blank" rel="noopener">
+              <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" class="csf-social" title="LinkedIn" target="_blank" rel="noopener">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037
                   -1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414
