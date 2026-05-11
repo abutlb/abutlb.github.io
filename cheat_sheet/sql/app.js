@@ -11,12 +11,13 @@ let quizAnswered   = false;
 
 /* ─── Category labels ─── */
 const CAT_LABELS = {
-  all:   'الكل',
-  stats: '📈 إحصاء',
-  data:  '🗄️ بيانات',
-  ml:    '🤖 تعلم آلة',
-  viz:   '🎨 تصوير'
+  all:      'الكل',
+  'أساسيات': '🗃️ أساسيات',
+  'متقدم':   '🚀 متقدم',
+  'ORM':     '🤖 ORM',
+  'أداء':    '⚡ أداء',
 };
+
 
 /* ─── Level badge styles ─── */
 const LEVEL_STYLE = {

@@ -11,11 +11,13 @@ let quizAnswered   = false;
 
 /* ─── Category labels ─── */
 const CAT_LABELS = {
-  all:   'الكل',
-  stats: '📈 إحصاء',
-  data:  '🗄️ بيانات',
-  ml:    '🤖 تعلم آلة',
-  viz:   '🎨 تصوير'
+  all:        'الكل',
+  basics:     '🐍 الأساسيات',
+  structures: '📦 هياكل البيانات',
+  control:    '🔄 التحكم',
+  functions:  '⚙️ الدوال',
+  oop:        '🏗️ OOP',
+  advanced:   '🚀 متقدم'
 };
 
 /* ─── Level badge styles ─── */
@@ -219,8 +221,11 @@ function openModal(id) {
   /* الكود */
   const cEl = document.getElementById('modalCode');
   if (t.code) {
-    cEl.style.display = 'block';
-    cEl.textContent   = t.code;
+    // في openModal داخل app.js — جزء عرض الكود
+    cEl.style.display    = 'block';
+    cEl.style.whiteSpace = 'pre';        // ← هذا المهم
+    cEl.style.fontFamily = 'monospace';
+    cEl.textContent      = t.code.trim();
   } else {
     cEl.style.display = 'none';
   }

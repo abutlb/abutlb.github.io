@@ -3,61 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Python — المرجع التفاعلي</title>
-
+  <title>تصوير البيانات — المرجع التفاعلي</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
-
   <link rel="stylesheet" href="../assets/css/theme.css"/>
   <link rel="stylesheet" href="../assets/css/base.css"/>
-
-  <style>
-    /* ── كود Python: اتجاه LTR ── */
-    .code-block pre,
-    .code-block code,
-    .hljs {
-      direction: ltr !important;
-      text-align: left !important;
-      unicode-bidi: embed;
-    }
-    .code-block {
-      position: relative;
-      border-radius: .75rem;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .code-block pre {
-      margin: 0 !important;
-      font-size: .82rem !important;
-      line-height: 1.65 !important;
-      padding: 2.75rem .85rem .85rem !important;
-      max-height: 340px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-    .copy-btn {
-      position: absolute;
-      top: .55rem;
-      left: .55rem;
-      padding: .28rem .65rem;
-      border-radius: .4rem;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.08);
-      color: rgba(255,255,255,.7);
-      font-size: .7rem;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all .2s ease;
-      z-index: 2;
-    }
-    .copy-btn:hover  { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .copy-btn.copied { background: #22c55e; border-color: #22c55e; color: #fff; }
-  </style>
 </head>
 <body>
 
@@ -72,11 +21,11 @@
     <div class="flex items-start justify-between flex-wrap gap-4">
       <div>
         <div class="flex items-center gap-3 mb-2">
-          <span class="text-4xl">🐍</span>
-          <span class="badge">Data Science Series · Vol. 01</span>
+          <span class="text-4xl">🎨</span>
+          <span class="badge">Data Science Series · Vol. 05</span>
         </div>
-        <h1 class="text-4xl md:text-5xl font-black glow-text leading-tight">Python</h1>
-        <p class="subtitle text-base mt-1">المرجع التفاعلي الشامل · من الأساسيات إلى المتقدم</p>
+        <h1 class="text-4xl md:text-5xl font-black glow-text leading-tight">تصوير البيانات</h1>
+        <p class="subtitle text-base mt-1">المرجع التفاعلي الشامل · من Matplotlib إلى Plotly</p>
       </div>
       <div id="cs-theme-slot" class="flex items-center"></div>
     </div>
@@ -89,18 +38,18 @@
       </span>
       <span class="flex items-center gap-1.5">
         <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse inline-block"></span>
-        دراسة حالة تحليل مبيعات
+        دراسة حالة: تقرير أداء متجر إلكتروني
       </span>
       <span class="flex items-center gap-1.5">
         <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse inline-block"></span>
-        من مبتدئ إلى متقدم
+        Matplotlib · Seaborn · Plotly
       </span>
     </div>
 
     <!-- Tabs -->
     <div class="flex flex-wrap gap-2 mt-6">
       <button class="tab-btn active" id="tab-terms"      onclick="showSection('terms')">📚 المصطلحات</button>
-      <button class="tab-btn"        id="tab-process"    onclick="showSection('process')">🗺️ خارطة التعلم</button>
+      <button class="tab-btn"        id="tab-process"    onclick="showSection('process')">🗺️ خارطة العمل</button>
       <button class="tab-btn"        id="tab-casestudy"  onclick="showSection('casestudy')">🔬 دراسة الحالة</button>
       <button class="tab-btn"        id="tab-cheatsheet" onclick="showSection('cheatsheet')">⚡ Cheat Sheet</button>
       <button class="tab-btn"        id="tab-quiz"       onclick="showSection('quiz')">🧩 اختبر نفسك</button>
@@ -126,8 +75,8 @@
 
   <!-- PROCESS -->
   <div id="section-process" class="section-hidden">
-    <p class="cs-section-title">🗺️ خارطة تعلم Python</p>
-    <p class="cs-section-sub">5 مراحل منظمة من الصفر إلى الاحتراف</p>
+    <p class="cs-section-title">🗺️ خارطة عمل تصوير البيانات</p>
+    <p class="cs-section-sub">5 مراحل من السؤال إلى المخطط الاحترافي</p>
     <div class="space-y-4" id="processSteps"></div>
   </div>
 
@@ -137,8 +86,8 @@
       <div class="flex items-center gap-3">
         <span class="text-3xl">🔬</span>
         <div>
-          <h2 class="cs-section-title mb-0">دراسة حالة: تحليل بيانات المبيعات</h2>
-          <p style="color:var(--text-secondary);font-size:.875rem">من 50,000 سجل خام إلى تقرير جاهز — بدون مكتبات خارجية</p>
+          <h2 class="cs-section-title mb-0">دراسة حالة: تقرير أداء المتجر الإلكتروني</h2>
+          <p style="color:var(--text-secondary);font-size:.875rem">من 12,000 طلب خام إلى لوحة تحكم بصرية شاملة</p>
         </div>
       </div>
     </div>
@@ -150,52 +99,52 @@
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
               <span style="color:var(--text-muted)">البيانات</span>
-              <span style="color:#f87171">50,000 سجل</span>
+              <span style="color:var(--accent)">12,000 طلب</span>
             </div>
             <div class="flex justify-between">
-              <span style="color:var(--text-muted)">بعد التنظيف</span>
-              <span style="color:var(--accent)">47,832 سجل</span>
+              <span style="color:var(--text-muted)">المنتجات</span>
+              <span style="color:var(--accent-light)">50 منتج</span>
+            </div>
+            <div class="flex justify-between">
+              <span style="color:var(--text-muted)">العملاء</span>
+              <span style="color:var(--text-secondary)">8,000 عميل</span>
             </div>
             <div class="flex justify-between">
               <span style="color:var(--text-muted)">الأدوات</span>
-              <span style="color:var(--accent)">Python فقط</span>
-            </div>
-            <div class="flex justify-between">
-              <span style="color:var(--text-muted)">وقت التنفيذ</span>
-              <span style="color:var(--accent-light)">1.2 ثانية</span>
+              <span style="color:var(--accent)">Matplotlib · Seaborn</span>
             </div>
           </div>
         </div>
         <div class="card p-5">
-          <h3 class="font-bold mb-4" style="color:var(--text-primary)">📊 نتائج التحليل</h3>
+          <h3 class="font-bold mb-4" style="color:var(--text-primary)">📊 الاكتشافات</h3>
           <div class="space-y-3 text-xs">
             <div>
               <div class="flex justify-between mb-1">
-                <span style="color:var(--text-secondary)">البيانات النظيفة</span>
-                <span style="color:var(--accent)">95.7%</span>
+                <span style="color:var(--text-secondary)">ذروة المبيعات</span>
+                <span style="color:var(--accent)">نوفمبر</span>
               </div>
               <div style="background:var(--border);border-radius:999px;height:6px">
-                <div class="progress-bar" data-width="95.7%"
+                <div class="progress-bar" data-width="92%"
                      style="width:0%;height:6px;border-radius:999px;background:var(--accent)"></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-1">
-                <span style="color:var(--text-secondary)">تغطية أفضل 10 منتجات</span>
-                <span style="color:var(--accent-light)">68%</span>
+                <span style="color:var(--text-secondary)">أعلى يوم مبيعات</span>
+                <span style="color:var(--accent-light)">الجمعة</span>
               </div>
               <div style="background:var(--border);border-radius:999px;height:6px">
-                <div class="progress-bar" data-width="68%"
+                <div class="progress-bar" data-width="78%"
                      style="width:0%;height:6px;border-radius:999px;background:var(--accent-light)"></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-1">
-                <span style="color:var(--text-secondary)">سرعة المعالجة</span>
-                <span style="color:var(--text-secondary)">41K سجل/ث</span>
+                <span style="color:var(--text-secondary)">تغطية أفضل منتج</span>
+                <span style="color:var(--text-secondary)">الهاتف — 30%</span>
               </div>
               <div style="background:var(--border);border-radius:999px;height:6px">
-                <div class="progress-bar" data-width="82%"
+                <div class="progress-bar" data-width="30%"
                      style="width:0%;height:6px;border-radius:999px;background:var(--text-muted)"></div>
               </div>
             </div>
@@ -217,7 +166,7 @@
     <div class="max-w-2xl mx-auto">
       <div class="text-center mb-8">
         <p class="cs-section-title">🧩 اختبر معرفتك</p>
-        <p class="cs-section-sub">8 أسئلة على أساسيات Python</p>
+        <p class="cs-section-sub">5 أسئلة على تصوير البيانات</p>
         <div class="flex justify-center gap-2 mt-3" id="quizProgress"></div>
       </div>
       <div id="quizContainer"></div>
@@ -248,12 +197,11 @@
     </div>
     <p id="modalDesc" class="text-sm leading-relaxed mb-4"
        style="color:var(--text-secondary)"></p>
-    <div id="modalCode" class="code-block mb-4 hidden">
-      <button class="copy-btn" id="modalCopyBtn">نسخ</button>
-      <pre><code id="modalCodeContent" class="language-python"></code></pre>
-    </div>
+    <div id="modalFormula" class="mb-4"></div>
+    <div id="modalCode" class="code-block p-4 mb-4 hidden"></div>
     <div id="modalExample" class="text-sm p-4 rounded-xl"
-         style="background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--text-secondary)"></div>
+         style="background:var(--accent-bg);border:1px solid var(--accent-border);
+                color:var(--text-secondary)"></div>
   </div>
 </div>
 
@@ -262,8 +210,5 @@
 <script src="data.js"></script>
 <script src="app.js"></script>
 <script src="../assets/js/footer.js"></script>
-
-
-
 </body>
 </html>

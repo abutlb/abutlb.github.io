@@ -1,4 +1,40 @@
 const PAGES_DATA = [
+    {
+    slug:        "python_basics",
+    icon:        "🐍",
+    title:       "Python الأساسيات",
+    subtitle:    "Python Fundamentals",
+    desc:        "البنى الأساسية، الدوال، OOP، والمكتبات الأكثر استخداماً في تحليل البيانات.",
+    tags:        ["Python 3", "OOP", "List Comprehension"],
+    level:       "مبتدئ",
+    terms:       22,
+    snippets:    12,
+    status:      "published",
+    color:       "blue",
+    updated:     "2026-04-19",
+    image: {
+      src: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=600&q=80&auto=format&fit=crop",
+      alt: "Python Programming"
+    }
+  },
+  {
+    slug:        "sql",
+    icon:        "🗃️",
+    title:       "SQL",
+    subtitle:    "Structured Query Language",
+    desc:        "استعلامات SQL من الأساسيات إلى المتقدم — Joins، Subqueries، Window Functions.",
+    tags:        ["PostgreSQL", "MySQL", "SQLite"],
+    level:       "مبتدئ → متوسط",
+    terms:       18,
+    snippets:    10,
+    status:      "published",
+    color:       "yellow",
+    updated:     "2026-05-11",
+    image: {
+      src: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600&q=80&auto=format&fit=crop",
+      alt: "Database SQL"
+    }
+  },
   {
     slug:        "data_analysis",
     icon:        "📊",
@@ -18,78 +54,6 @@ const PAGES_DATA = [
     }
   },
   {
-    slug:        "machine-learning",
-    icon:        "🤖",
-    title:       "تعلم الآلة",
-    subtitle:    "Machine Learning",
-    desc:        "الخوارزميات الأساسية، مقاييس التقييم، pipeline كامل من البيانات للنموذج.",
-    tags:        ["Scikit-learn", "XGBoost", "Neural Nets"],
-    level:       "متوسط → متقدم",
-    terms:       20,
-    snippets:    8,
-    status:      "coming-soon",
-    color:       "purple",
-    updated:     null,
-    image: {
-      src: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=80&auto=format&fit=crop",
-      alt: "Machine Learning AI"
-    }
-  },
-  {
-    slug:        "sql",
-    icon:        "🗃️",
-    title:       "SQL",
-    subtitle:    "Structured Query Language",
-    desc:        "استعلامات SQL من الأساسيات إلى المتقدم — Joins، Subqueries، Window Functions.",
-    tags:        ["PostgreSQL", "MySQL", "SQLite"],
-    level:       "مبتدئ → متوسط",
-    terms:       18,
-    snippets:    10,
-    status:      "coming-soon",
-    color:       "yellow",
-    updated:     null,
-    image: {
-      src: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600&q=80&auto=format&fit=crop",
-      alt: "Database SQL"
-    }
-  },
-  {
-    slug:        "data-visualization",
-    icon:        "📈",
-    title:       "تصوير البيانات",
-    subtitle:    "Data Visualization",
-    desc:        "أنواع المخططات، متى تستخدم كل منها، وكيف تبني لوحة تحكم احترافية.",
-    tags:        ["Matplotlib", "Seaborn", "Plotly", "Tableau"],
-    level:       "مبتدئ → متوسط",
-    terms:       14,
-    snippets:    7,
-    status:      "coming-soon",
-    color:       "green",
-    updated:     null,
-    image: {
-      src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&auto=format&fit=crop",
-      alt: "Data Visualization Charts"
-    }
-  },
-  {
-    slug:        "python_basics",
-    icon:        "🐍",
-    title:       "Python الأساسيات",
-    subtitle:    "Python Fundamentals",
-    desc:        "البنى الأساسية، الدوال، OOP، والمكتبات الأكثر استخداماً في تحليل البيانات.",
-    tags:        ["Python 3", "OOP", "List Comprehension"],
-    level:       "مبتدئ",
-    terms:       22,
-    snippets:    12,
-    status:      "published",
-    color:       "blue",
-    updated:     "2026-04-19",
-    image: {
-      src: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=600&q=80&auto=format&fit=crop",
-      alt: "Python Programming"
-    }
-  },
-  {
     slug:        "statistics",
     icon:        "📐",
     title:       "الإحصاء",
@@ -99,14 +63,87 @@ const PAGES_DATA = [
     level:       "متوسط → متقدم",
     terms:       24,
     snippets:    8,
-    status:      "coming-soon",
+    status:      "published",
     color:       "pink",
-    updated:     null,
+    updated:     "2026-05-11",
     image: {
       src: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80&auto=format&fit=crop",
       alt: "Statistics Math"
     }
+  },
+  {
+    slug:        "data_visualization",
+    icon:        "📈",
+    title:       "تصوير البيانات",
+    subtitle:    "Data Visualization",
+    desc:        "أنواع المخططات، متى تستخدم كل منها، وكيف تبني لوحة تحكم احترافية.",
+    tags:        ["Matplotlib", "Seaborn", "Plotly", "Tableau"],
+    level:       "مبتدئ → متوسط",
+    terms:       14,
+    snippets:    5,
+    status:      "published",
+    color:       "green",
+    updated:     "2026-05-11",
+    image: {
+      src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&auto=format&fit=crop",
+      alt: "Data Visualization Charts"
+    }
+  },
+  {
+    slug:        "machine_learning",
+    icon:        "🤖",
+    title:       "تعلم الآلة",
+    subtitle:    "Machine Learning",
+    desc:        "الخوارزميات الأساسية، مقاييس التقييم، pipeline كامل من البيانات للنموذج.",
+    tags:        ["Scikit-learn", "XGBoost", "Neural Nets"],
+    level:       "متوسط → متقدم",
+    terms:       20,
+    snippets:    8,
+    status:      "published",
+    color:       "purple",
+    updated:     "2026-05-11",
+    image: {
+      src: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=80&auto=format&fit=crop",
+      alt: "Machine Learning AI"
+    }
+  },
+    {
+    slug:        "data_cleaning",
+    icon:        "🧹",
+    title:       "تنظيف البيانات",
+    subtitle:    "Data Cleaning",
+    desc:        "معالجة القيم المفقودة، الشذوذ، التكرارات، وهندسة الميزات — أساس أي مشروع بيانات.",
+    tags:        ["Pandas", "NumPy", "Scikit-learn", "Feature Engineering"],
+    level:       "مبتدئ → متوسط",
+    terms:       16,
+    snippets:    8,
+    status:      "coming_soon",
+    color:       "orange",
+    updated:     "2026-05-11",
+    image: {
+      src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=80&auto=format&fit=crop",
+      alt: "Data Cleaning Pipeline"
+    }
+  },
+  {
+    slug:        "databases",
+    icon:        "🗄️",
+    title:       "قواعد البيانات",
+    subtitle:    "Databases",
+    desc:        "تصميم قواعد البيانات العلائقية، PostgreSQL، NoSQL، وأنماط الاستعلام المتقدمة.",
+    tags:        ["PostgreSQL", "MongoDB", "Redis", "Schema Design"],
+    level:       "متوسط",
+    terms:       18,
+    snippets:    10,
+    status:      "coming_soon",
+    color:       "teal",
+    updated:     "2026-05-11",
+    image: {
+      src: "https://images.unsplash.com/photo-1775259690399-22879d21e926?q=80&w=1170&auto=format&fit=crop",
+      alt: "Database Architecture"
+    }
   }
+
 ];
 
 document.dispatchEvent(new CustomEvent('pages-loaded'));

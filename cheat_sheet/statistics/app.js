@@ -11,12 +11,17 @@ let quizAnswered   = false;
 
 /* ─── Category labels ─── */
 const CAT_LABELS = {
-  all:   'الكل',
-  stats: '📈 إحصاء',
-  data:  '🗄️ بيانات',
-  ml:    '🤖 تعلم آلة',
-  viz:   '🎨 تصوير'
+  descriptive:        "📊 إحصاء وصفي",
+  inferential:        "🔍 إحصاء استدلالي",
+  distributions:      "📈 توزيعات الاحتمال",
+  hypothesis:         "🧪 اختبارات الفرضيات",
+  correlation:        "🔗 الارتباط والانحدار",
+  sampling:           "🎯 أخذ العينات",
+  central_tendency:   "📌 مقاييس النزعة المركزية",
+  dispersion:         "📏 مقاييس التشتت",
 };
+
+
 
 /* ─── Level badge styles ─── */
 const LEVEL_STYLE = {

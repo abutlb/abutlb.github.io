@@ -11,12 +11,15 @@ let quizAnswered   = false;
 
 /* ─── Category labels ─── */
 const CAT_LABELS = {
-  all:   'الكل',
-  stats: '📈 إحصاء',
-  data:  '🗄️ بيانات',
-  ml:    '🤖 تعلم آلة',
-  viz:   '🎨 تصوير'
+  all:       'الكل',
+  charts:    '📊 المخططات',
+  design:    '🎨 التصميم',
+  layout:    '📐 التخطيط',
+  libraries: '📦 المكتبات'
 };
+
+
+
 
 /* ─── Level badge styles ─── */
 const LEVEL_STYLE = {
