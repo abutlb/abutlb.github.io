@@ -1,0 +1,135 @@
+/* ===== Base ===== */
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: #f0f9ff;
+    overflow-x: hidden;
+}
+
+/* ===== Floating Icons (Font Awesome) ===== */
+.floating-icon {
+    position: fixed;
+    opacity: 0;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    color: #3b82f6;
+}
+
+.floating-icon:nth-child(even) {
+    color: #8b5cf6;
+}
+
+.floating-icon:nth-child(3n) {
+    color: #10b981;
+}
+
+@keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+    8%   { opacity: 0.08; }
+    92%  { opacity: 0.06; }
+    100% { transform: translateY(-120px) rotate(20deg); opacity: 0; }
+}
+
+/* ===== Glass ===== */
+.glass {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 8px 32px rgba(31,38,135,0.08);
+    border-radius: 20px;
+}
+
+.dark .glass {
+    background: rgba(30,41,59,0.7);
+    border-color: rgba(30,41,59,0.35);
+}
+
+/* ===== Gradient Text ===== */
+.grad-text {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ===== Cards ===== */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 16px;
+}
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px -8px rgba(59,130,246,0.25);
+}
+
+/* ===== Skill Badges ===== */
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+.skill-badge:hover { transform: scale(1.08); }
+
+/* ===== Fade-in ===== */
+.fade-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== Heartbeat ===== */
+@keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    25%,75%  { transform: scale(1.15); }
+}
+.heartbeat { animation: heartbeat 1.5s infinite; display: inline-block; }
+
+/* ===== Toggle ===== */
+.toggle-dark {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 9999px;
+    transition: background 0.3s;
+}
+.toggle-dark:hover { background: rgba(59,130,246,0.1); }
+
+/* ===== Bubbles ===== */
+.bubble {
+    position: fixed;
+    border-radius: 50%;
+    background: linear-gradient(to right,
+        rgba(59,130,246,0.07),
+        rgba(147,51,234,0.07));
+    animation: bubbleFloat ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+@keyframes bubbleFloat {
+    0%,100% { transform: translateY(0) translateX(0); }
+    50%      { transform: translateY(-30px) translateX(15px); }
+}
+
+/* ===== Nav ===== */
+.nav-link {
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+.nav-link:hover,
+.nav-link.active {
+    background: linear-gradient(to right,
+        rgba(59,130,246,0.15),
+        rgba(139,92,246,0.15));
+    color: #3b82f6;
+    font-weight: 700;
+}

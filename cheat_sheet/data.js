@@ -145,5 +145,3 @@ const sheetsPages  = [
   }
 
 ];
-const PAGES_DATA = sheetsPages;
-document.dispatchEvent(new CustomEvent('pages-loaded'));

@@ -3,571 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أدواتي الرقمية المفيدة | عبدالله التويجري</title>
+    <title>عبدالله التويجري | محلل بيانات</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f0f9ff;
-            position: relative;
-            overflow-x: hidden;
-        }
-        .dark-mode {
-            background-color: #0f172a;
-            color: #e2e8f0;
-        }
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2), 0 8px 10px -6px rgba(59, 130, 246, 0.2);
-        }
-        
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
-            animation: float 8s ease-in-out infinite;
-            z-index: -1;
-        }
-        
-        .bubble:nth-child(odd) {
-            background: linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0) translateX(0) rotate(0deg); }
-            33% { transform: translateY(-20px) translateX(10px) rotate(10deg); }
-            66% { transform: translateY(10px) translateX(-10px) rotate(-5deg); }
-            100% { transform: translateY(0) translateX(0) rotate(0deg); }
-        }
-        
-        .glass-container {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-        }
-        
-        .dark .glass-container {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(30, 41, 59, 0.3);
-        }
-        
-        .nav-link {
-            display: block;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-        }
-        
-        .nav-link.active {
-            background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
-            font-weight: bold;
-            color: #3b82f6;
-        }
-        
-        .section-title {
-            padding-top: 80px;
-            margin-top: -80px;
-        }
-        
-        /* Heartbeat animation for the heart icon */
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .heartbeat {
-            animation: heartbeat 1.5s infinite;
-            display: inline-block;
-        }
-        
-        /* Dark mode toggle button */
-        .toggle-dark {
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 9999px;
-            transition: all 0.3s ease;
-        }
-        
-        .toggle-dark:hover {
-            background-color: rgba(59, 130, 246, 0.1);
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="portfolio.css">
 </head>
-<body class="min-h-screen py-8 transition-colors duration-300">
-    <div id="bubbles-container"></div>
-    
-    <div class="max-w-6xl mx-auto px-4">
-        <!-- Header -->
-        <div class="text-center mb-12 glass-container p-8">
-            <div class="flex justify-between items-center mb-4">
-                <div></div> <!-- Empty div for spacing -->
-                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">أدواتي الرقمية المفيدة</h1>
-                <!-- Dark Mode Toggle -->
-                <div class="toggle-dark" id="darkModeToggle">
-                    <i class="fas fa-moon text-gray-600 dark:text-yellow-300 text-xl"></i>
-                </div>
-            </div>
-            <p class="text-gray-600 dark:text-gray-400 mt-2">مجموعة من الأدوات والحاسبات لمساعدتك في اتخاذ قرارات أفضل في مختلف جوانب الحياة</p>
-            <p class="text-sm text-blue-500 dark:text-blue-400 mt-3">صُممت بواسطة عبدالله التويجري <span class="heartbeat text-yellow-500"><i class="fas fa-cog"></i></span> لتبسيط التخطيط والحسابات اليومية</p>
+<body class="min-h-screen transition-colors duration-300">
+
+<!-- Floating Font Awesome Icons -->
+<div id="floating-icons-container"></div>
+
+<!-- Bubbles -->
+<div id="bubbles-container"></div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass px-6 py-3 flex items-center justify-between rounded-none border-x-0 border-t-0">
+    <span class="font-bold text-lg grad-text">عبدالله التويجري</span>
+    <div class="flex items-center gap-2 text-gray-700 dark:text-gray-200">
+        <a href="#about"    class="nav-link active">عني</a>
+        <a href="#skills"   class="nav-link">المهارات</a>
+        <a href="#work"     class="nav-link">أعمالي</a>
+        <a href="#projects" class="nav-link">مشاريع</a>
+        <div class="toggle-dark mr-2" id="darkModeToggle">
+            <i class="fas fa-moon text-gray-600 text-lg"></i>
         </div>
-        
-        <!-- Main Content with Sidebar -->
-        <div class="grid grid-cols-4 gap-6">
-            <!-- Side Navigation (on the right in RTL) -->
-            <div class="col-span-1">
-                <div class="sticky top-8 glass-container p-4">
-                    <ul class="space-y-4 text-right">
-                        <li>
-                            <a href="#data-tools" class="nav-link active">
-                                <i class="fas fa-database ml-2"></i>
-                                أدوات البيانات
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#calculators" class="nav-link">
-                                <i class="fas fa-calculator ml-2"></i>
-                                الحاسبات والأدوات
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#planning-tools" class="nav-link">
-                                <i class="fas fa-tasks ml-2"></i>
-                                أدوات التخطيط
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#design-tools" class="nav-link">
-                                <i class="fas fa-palette ml-2"></i>
-                                أدوات التصميم
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#utility-tools" class="nav-link">
-                                <i class="fas fa-tools ml-2"></i>
-                                أدوات متنوعة
-                            </a>
-                        </li>
-                        <!-- Add this to the sidebar navigation list -->
-                        <li>
-                            <a href="#privacy-tools" class="nav-link">
-                                <i class="fas fa-shield-alt ml-2"></i>
-                                أدوات الخصوصية
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Main Content -->
-            <div class="col-span-3">
-                <!-- Section 1: Data Tools -->
-                <section id="data-tools" class="mb-16">
-                    <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-green-600 section-title">
-                        <i class="fas fa-database ml-2"></i>أدوات البيانات
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Data Quality Card -->
-                        <a href="data_quality.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-500 to-green-500 flex items-center justify-center">
-                                <i class="fas fa-database text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مقياس جودة البيانات 📊</h2>
-                                <p class="text-gray-600 dark:text-gray-400">تحليل وتنظيف وتحسين جودة البيانات الخاصة بك بطريقة فعالة</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Data Cleaning Tool Card -->
-                        <a href="data-cleaning.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-slate-700 via-blue-800 to-indigo-900 flex items-center justify-center">
-                                <i class="fas fa-broom text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">أداة تنظيف البيانات 🧹</h2>
-                                <p class="text-gray-600 dark:text-gray-400">تحليل شامل وتنظيف احترافي للبيانات مع كشف القيم الشاذة والمكررة</p>
-                            </div>
-                        </a>
-
-                        <!-- Regex Designer Card -->
-                        <a href="regex_designer.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
-                                <i class="fas fa-code text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مصمم التعابير النمطية 🔍</h2>
-                                <p class="text-gray-600 dark:text-gray-400">تصميم واختبار التعابير النمطية (Regex) لمعالجة وتحليل النصوص</p>
-                            </div>
-                        </a>
-
-                        <!-- Sample Size Calculator Card -->
-                        <a href="sample_size_calculator.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                                <i class="fas fa-chart-bar text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">حاسبة حجم العينة 📈</h2>
-                                <p class="text-gray-600 dark:text-gray-400">احسب حجم العينة المثالي للدراسات والبحوث الإحصائية بدقة علمية</p>
-                            </div>
-                        </a>
-
-                        <!-- AI Prompt Engineering Card -->
-                        <a href="prompt_engineering/index.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-600 to-violet-600 flex items-center justify-center">
-                                <i class="fas fa-robot text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">نظام أوامر الإخراج للذكاء الاصطناعي 🤖</h2>
-                                <p class="text-gray-600 dark:text-gray-400">مجموعة من أوامر الإخراج المصممة بشكل احترافي لتحسين التفاعل مع نماذج الذكاء الاصطناعي</p>
-                            </div>
-                        </a>
-
-                        <!-- Data Flow Diagram Generator Card -->
-                        <a href="data_flow_diagram_generator.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 flex items-center justify-center">
-                                <i class="fas fa-project-diagram text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مولد مخططات تدفق البيانات 🔀</h2>
-                                <p class="text-gray-600 dark:text-gray-400">أداة احترافية لإنشاء وتصميم مخططات تدفق البيانات التفاعلية مع إمكانيات تصدير متقدمة</p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-                
-                <!-- Section 2: Calculators -->
-                <section id="calculators" class="mb-16">
-                    <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 section-title">
-                        <i class="fas fa-calculator ml-2"></i>الحاسبات والأدوات
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Commute Calculator Card -->
-                        <a href="commute-calculator.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                                <i class="fas fa-car text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">وفّر فلوسك في التنقل! 🚗</h2>
-                                <p class="text-gray-600 dark:text-gray-400">اكتشف كم توفر من وقتك وفلوسك وتأثيرك على البيئة في مشاوريك اليومية</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Family Housing Calculator Card -->
-                        <a href="family_housing_calculator.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-600 to-green-600 flex items-center justify-center">
-                                <i class="fas fa-home text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">بيت العيلة 🏡</h2>
-                                <p class="text-gray-600 dark:text-gray-400">أشتري ولا أستأجر؟ حاسبة ذكية تساعدك تختار الأفضل لعائلتك المتنامية</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Health Calculator Card -->
-                        <a href="health_calculator.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
-                                <i class="fas fa-heartbeat text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">حاسبة الصحة 💚</h2>
-                                <p class="text-gray-600 dark:text-gray-400">احسب مؤشر كتلة الجسم ومعدل الأيض الأساسي والسعرات اليومية المطلوبة</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Automation Decision Tool Card -->
-                        <a href="automation_decision.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 flex items-center justify-center">
-                                <i class="fas fa-robot text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مساعد قرار الأتمتة 🤖</h2>
-                                <p class="text-gray-600 dark:text-gray-400">هل تستحق المهمة أن تُؤتمت؟ أداة ذكية لاتخاذ قرار الأتمتة بناءً على الوقت والتكرار</p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-                
-                <!-- Section 3: Planning Tools -->
-                <section id="planning-tools" class="mb-16">
-                    <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 section-title">
-                        <i class="fas fa-tasks ml-2"></i>أدوات التخطيط والإنتاجية
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Content Calendar Card -->
- <a href="content_calendar.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-violet-500 to-purple-600 flex items-center justify-center">
-                                <i class="fas fa-calendar-alt text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">تقويم المحتوى 📅</h2>
-                                <p class="text-gray-600 dark:text-gray-400">تخطيط وتنظيم جدول المحتوى الخاص بك على جميع منصات التواصل الاجتماعي</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Schedule Builder Card -->
-                        <a href="schedule_builder.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-600 to-purple-500 flex items-center justify-center">
-                                <i class="fas fa-calendar-alt text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">جدول الأسبوعي 📅</h2>
-                                <p class="text-gray-600 dark:text-gray-400">تصميم وتنظيم جدولك الأسبوعي بطريقة مرنة وسهلة مع قوالب جاهزة</p>
-                            </div>
-                        </a>
-                        
-                        <!-- To-Do List Card -->
-                        <a href="todo_list.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-emerald-500 to-cyan-500 flex items-center justify-center">
-                                <i class="fas fa-tasks text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">قائمة المهام التفاعلية ✅</h2>
-                                <p class="text-gray-600 dark:text-gray-400">نظّم مهامك وزِد من إنتاجيتك مع إمكانية السحب والإفلات والمهام الفرعية</p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-                
-                <!-- Section 4: Design Tools -->
-                <section id="design-tools" class="mb-16">
-                    <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-orange-600 section-title">
-                        <i class="fas fa-palette ml-2"></i>أدوات التصميم
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Color Picker Card -->
-                        <a href="color_picker.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-pink-500 to-orange-500 flex items-center justify-center">
-                                <i class="fas fa-eye-dropper text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مستخرج الألوان 🎨</h2>
-                                <p class="text-gray-600 dark:text-gray-400">استخرج الألوان من الصور واحصل على أكواد الألوان بسهولة</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Color Palette Generator Card -->
-                        <a href="color_palette.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-pink-500 to-orange-500 flex items-center justify-center">
-                                <i class="fas fa-palette text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مولد لوحات الألوان 🎨</h2>
-                                <p class="text-gray-600 dark:text-gray-400">إنشاء مجموعات ألوان متناسقة لمشاريعك التصميمية</p>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-                
-                <!-- Section 5: Utility Tools -->
-                <section id="utility-tools" class="mb-16">
-                    <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 section-title">
-                        <i class="fas fa-tools ml-2"></i>أدوات متنوعة
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- QR Generator Card -->
-                        <a href="qr_gen.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                                <i class="fas fa-qrcode text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مولد رموز QR 📱</h2>
-                                <p class="text-gray-600 dark:text-gray-400">أنشئ رموز QR مخصصة لموقعك الإلكتروني أو عملك أو استخدامك الشخصي بسهولة</p>
-                            </div>
-                        </a>
-                        
-                        <!-- Email Signature Card -->
-                        <a href="email_signature.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-indigo-500 to-blue-500 flex items-center justify-center">
-                                <i class="fas fa-signature text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">مولد توقيع البريد الإلكتروني ✒️</h2>
-                                <p class="text-gray-600 dark:text-gray-400">إنشاء توقيعات بريد إلكتروني احترافية وجذابة بسهولة</p>
-                            </div>
-                        </a>
-
-                                                <!-- Image Position Checker Card -->
-                        <a href="imagePosCheck.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
-                                <i class="fas fa-crosshairs text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">محدد الإحداثيات 🎯</h2>
-                                <p class="text-gray-600 dark:text-gray-400">أداة تساعدك في تحديد إحداثيات النقاط على الصور بدقة عالية لمشاريع التصميم</p>
-                            </div>
-                        </a>
-
-                    </div>
-                </section>
-
-                <!-- Add this as a new section before the existing utility tools section -->
-
-                <!-- Section: Privacy & Security Tools -->
-                <section id="privacy-tools" class="mb-16">
-                    <h2 class="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-pink-600 section-title">
-                        <i class="fas fa-shield-alt ml-2"></i>أدوات الخصوصية والأمان
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Browser Data Education Card -->
-                        <a href="browser_data_education.html" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md card-hover">
-                            <div class="h-40 bg-gradient-to-r from-red-500 to-pink-600 flex items-center justify-center">
-                                <i class="fas fa-user-secret text-white text-5xl"></i>
-                            </div>
-                            <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">ما يعرفه المتصفح عنك 🔍</h2>
-                                <p class="text-gray-600 dark:text-gray-400">اكتشف المعلومات التي يمكن للمواقع جمعها عنك وتعلم كيفية حماية خصوصيتك الرقمية</p>
-                            </div>
-                        </a>
-
-                        <!-- You can add more privacy/security tools here in the future -->
-                    </div>
-                </section>
-
-            </div>
-        </div>
-        
-        <!-- Footer (copied from index.html) -->
-        <footer class="fixed bottom-0 left-0 right-0 mt-16 py-4 px-6 text-center text-gray-500 dark:text-gray-400 text-sm glass-container backdrop-blur-md">
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                <div class="text-center md:text-right">
-                    <p>صنع بواسطة عبدالله التويجري © <span id="currentYear">2023</span></p>
-                    <p class="mt-1">أدوات لتبسيط التخطيط والحسابات اليومية</p>
-                </div>
-                
-                <div class="text-center">
-                    <p class="mb-2">تواصل معي</p>
-                    <div class="flex justify-center space-x-4 space-x-reverse">
-                        <a href="https://twitter.com/abutlb" target="_blank" class="text-blue-400 hover:text-blue-500 transition-colors">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank" class="text-blue-700 hover:text-blue-800 transition-colors">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="https://github.com/abutlb" target="_blank" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="mailto:abutlb10015@gmail.com" class="text-red-500 hover:text-red-600 transition-colors">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="text-center md:text-left">
-                    <p>جميع الأدوات مجانية للاستخدام</p>
-                    <p class="mt-1">استمتع واستفد! 😊</p>
-                </div>
-            </div>
-        </footer>
-
-        <!-- Add padding at the bottom to prevent content from being hidden behind the fixed footer -->
-        <div class="pb-32"></div>
     </div>
+</nav>
 
-    <script>
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Dark mode toggle functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        
-        // Function to toggle dark mode
-        function toggleDarkMode() {
-            if (document.documentElement.classList.contains('dark')) {
-                // Switch to light mode
-                document.documentElement.classList.remove('dark');
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-                darkModeToggle.innerHTML = '<i class="fas fa-moon text-gray-600 text-xl"></i>';
-            } else {
-                // Switch to dark mode
-                document.documentElement.classList.add('dark');
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-                darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300 text-xl"></i>';
-            }
-        }
-        
-        // Add click event to toggle
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-        
-        // Check for dark mode preference
-        if (localStorage.getItem('theme') === 'dark' || 
-            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            document.body.classList.add('dark-mode');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300 text-xl"></i>';
-        } else {
-            darkModeToggle.innerHTML = '<i class="fas fa-moon text-gray-600 text-xl"></i>';
-        }
-        
-        // Scrollspy functionality
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                
-                if (pageYOffset >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-        
-        // Create bubbles
-        function createBubbles() {
-            const container = document.getElementById('bubbles-container');
-            const bubbleCount = 15;
-            
-            for (let i = 0; i < bubbleCount; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                
-                // Random size between 50px and 200px
-                const size = Math.random() * 150 + 50;
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                
-                // Random position
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                bubble.style.left = `${posX}%`;
-                bubble.style.top = `${posY}%`;
-                
-                // Random animation delay
-                bubble.style.animationDelay = `${Math.random() * 8}s`;
-                
-                // Random opacity
-                bubble.style.opacity = Math.random() * 0.5 + 0.1;
-                
-                container.appendChild(bubble);
-            }
-        }
-        
-        // Call the function when the page loads
-        window.addEventListener('load', createBubbles);
-    </script>
+<div class="max-w-5xl mx-auto px-4 pt-24 pb-32 relative z-10">
+
+    <!-- ===== HERO ===== -->
+    <section id="about" class="fade-section mb-20 glass p-10 text-center">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600
+                    flex items-center justify-center text-white text-3xl font-bold
+                    mx-auto mb-6 shadow-lg">
+            ع.ت
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-extrabold grad-text mb-3">عبدالله التويجري</h1>
+        <p class="text-xl text-blue-600 dark:text-blue-400 font-semibold mb-4">
+            محلل بيانات · ذكاء أعمال · مطوّر Python & Django
+        </p>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed text-lg">
+            أبني حلولًا رقمية تعتمد على البيانات لتبسيط التعقيد وتحويل الأفكار إلى نتائج قابلة للقياس.
+            أهتم بالتفاصيل، وتجربة المستخدم، وصناعة أدوات تبدو بسيطة من الخارج…
+            لكنها مدروسة بعمق من الداخل.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 mt-8">
+            <a href="mytools/index.html"
+               class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600
+                      text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all">
+                <i class="fas fa-tools ml-2"></i>أدواتي
+            </a>
+            <a href="cheat_sheet/index.html"
+               class="px-6 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500
+                      text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all">
+                <i class="fas fa-book-open ml-2"></i>المراجع التفاعلية
+            </a>
+            <a href="https://github.com/abutlb" target="_blank"
+               class="px-6 py-3 rounded-full border-2 border-blue-400 text-blue-500 font-bold
+                      hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:scale-105 transition-all">
+                <i class="fab fa-github ml-2"></i>GitHub
+            </a>
+        </div>
+
+        <div class="flex justify-center gap-5 mt-6 text-xl">
+            <a href="https://twitter.com/abutlb" target="_blank"
+               class="text-sky-400 hover:text-sky-500 transition-colors hover:scale-110 inline-block">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank"
+               class="text-blue-700 hover:text-blue-800 transition-colors hover:scale-110 inline-block">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="mailto:abutlb10015@gmail.com"
+               class="text-red-500 hover:text-red-600 transition-colors hover:scale-110 inline-block">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section id="skills" class="fade-section mb-20">
+        <h2 class="text-2xl font-bold grad-text mb-8 text-center">
+            <i class="fas fa-layer-group ml-2"></i>المهارات والأدوات
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="glass p-6">
+                <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4 text-center">
+                    <i class="fas fa-chart-pie text-blue-500 ml-2"></i>البيانات وذكاء الأعمال
+                </h3>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <span class="skill-badge bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+                        <i class="fas fa-chart-bar"></i> Power BI
+                    </span>
+                    <span class="skill-badge bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
+                        <i class="fas fa-table"></i> Excel
+                    </span>
+                    <span class="skill-badge bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300">
+                        <i class="fas fa-database"></i> SQL
+                    </span>
+                    <span class="skill-badge bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">
+                        <i class="fas fa-chart-line"></i> Tableau
+                    </span>
+                </div>
+            </div>
+
+            <div class="glass p-6">
+                <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4 text-center">
+                    <i class="fas fa-code text-purple-500 ml-2"></i>البرمجة والتطوير
+                </h3>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <span class="skill-badge bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300">
+                        <i class="fab fa-python"></i> Python
+                    </span>
+                    <span class="skill-badge bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300">
+                        <i class="fas fa-leaf"></i> Django
+                    </span>
+                    <span class="skill-badge bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+                        <i class="fab fa-js"></i> JavaScript
+                    </span>
+                    <span class="skill-badge bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300">
+                        <i class="fab fa-html5"></i> HTML/CSS
+                    </span>
+                </div>
+            </div>
+
+            <div class="glass p-6">
+                <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4 text-center">
+                    <i class="fas fa-brain text-emerald-500 ml-2"></i>أسلوب التفكير
+                </h3>
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <span class="skill-badge bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">
+                        <i class="fas fa-user-check"></i> يفهم المستخدم
+                    </span>
+                    <span class="skill-badge bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300">
+                        <i class="fas fa-wand-magic-sparkles"></i> تبسيط التعقيد
+                    </span>
+                    <span class="skill-badge bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
+                        <i class="fas fa-cubes"></i> بناء تجارب تفاعلية
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== MY WORK ===== -->
+    <section id="work" class="fade-section mb-20">
+        <h2 class="text-2xl font-bold grad-text mb-2 text-center">
+            <i class="fas fa-hammer ml-2"></i>أعمالي
+        </h2>
+        <p class="text-center text-gray-500 dark:text-gray-400 mb-8">أحدث ما بنيته — يتحدث عن نفسه</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="glass p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="font-bold text-lg text-gray-700 dark:text-gray-200">
+                        <i class="fas fa-tools text-blue-500 ml-2"></i>أدواتي الرقمية
+                    </h3>
+                    <a href="mytools/index.html" class="text-sm text-blue-500 hover:underline">عرض الكل ←</a>
+                </div>
+                <div id="tools-preview" class="space-y-3">
+                    <div class="animate-pulse space-y-3">
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="font-bold text-lg text-gray-700 dark:text-gray-200">
+                        <i class="fas fa-book-open text-emerald-500 ml-2"></i>المراجع التفاعلية
+                    </h3>
+                    <a href="cheat_sheet/index.html" class="text-sm text-emerald-500 hover:underline">عرض الكل ←</a>
+                </div>
+                <div id="sheets-preview" class="space-y-3">
+                    <div class="animate-pulse space-y-3">
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                        <div class="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects" class="fade-section mb-20">
+        <h2 class="text-2xl font-bold grad-text mb-2 text-center">
+            <i class="fas fa-heart ml-2"></i>مشاريع بدأت من مشكلة حقيقية
+        </h2>
+        <p class="text-center text-gray-500 dark:text-gray-400 mb-8">
+            تجارب تفاعلية صممت لتبسيط المعرفة والمساعدة على الفهم بشكل أوضح.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <a href="KL-accounting/index.html" class="glass card block overflow-hidden group">
+                <div class="h-36 bg-gradient-to-r from-amber-500 to-orange-500
+                            flex items-center justify-center relative overflow-hidden">
+                    <i class="fas fa-book-reader text-white text-5xl
+                              group-hover:scale-110 transition-transform duration-300"></i>
+                    <div class="absolute top-3 left-3 bg-white/20 text-white text-xs
+                                px-3 py-1 rounded-full backdrop-blur-sm">
+                        مشروع شخصي
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-2">
+                        كتاب كين لو — تفاعلي 📚
+                    </h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        بدل المذكرات التقليدية، حوّلت مقرر المحاسبة المتوسطة إلى تجربة تفاعلية
+                        تساعد على الفهم والمراجعة بشكل أسرع وأكثر وضوحًا.
+                    </p>
+                    <div class="mt-3 flex gap-2 flex-wrap">
+                        <span class="text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 px-2 py-1 rounded-full">محاسبة</span>
+                        <span class="text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 px-2 py-1 rounded-full">تعليم تفاعلي</span>
+                        <span class="text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-2 py-1 rounded-full">12 فصل</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="accounting/index.html" class="glass card block overflow-hidden group">
+                <div class="h-36 bg-gradient-to-r from-slate-600 to-blue-700
+                            flex items-center justify-center relative overflow-hidden">
+                    <i class="fas fa-code text-white text-5xl
+                              group-hover:scale-110 transition-transform duration-300"></i>
+                    <div class="absolute top-3 left-3 bg-white/20 text-white text-xs
+                                px-3 py-1 rounded-full backdrop-blur-sm">
+                        مشروع مجتمعي
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-2">
+                        المحاسبة للمطورين 💻
+                    </h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                        صفحة تفاعلية تساعد المطورين على فهم المفاهيم المحاسبية
+                        عبر أمثلة مرتبطة بعالم البرمجة.
+                    </p>
+                    <div class="mt-3 flex gap-2 flex-wrap">
+                        <span class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2 py-1 rounded-full">للمطورين</span>
+                        <span class="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">محاسبة مبسطة</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="fade-section glass p-8 text-center">
+        <h2 class="text-2xl font-bold grad-text mb-3">تواصل معي</h2>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">
+            فكرة، سؤال، أو مشكلة تحتاج حلاً مختلفاً — أنا هنا
+        </p>
+        <div class="flex justify-center gap-6 text-2xl">
+            <a href="https://twitter.com/abutlb" target="_blank"
+               class="text-sky-400 hover:text-sky-500 hover:scale-125 transition-all">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank"
+               class="text-blue-700 hover:text-blue-800 hover:scale-125 transition-all">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/abutlb" target="_blank"
+               class="text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:scale-125 transition-all">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:abutlb10015@gmail.com"
+               class="text-red-500 hover:text-red-600 hover:scale-125 transition-all">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+    </section>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="fixed bottom-0 left-0 right-0 glass py-3 px-6 text-center
+               text-gray-500 dark:text-gray-400 text-sm
+               rounded-none border-x-0 border-b-0 z-50">
+    <p>
+        صنع بـ <span class="heartbeat text-red-500 inline-block">❤️</span>
+        بواسطة عبدالله التويجري ·
+        <span id="currentYear"></span>
+    </p>
+</footer>
+<script src="mytools/data.js"></script>
+<script src="cheat_sheet/data.js"></script>
+<script src="portfolio.js"></script>
 </body>
 </html>
