@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محلل جودة البيانات — DQA</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- SheetJS للـ Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
+    <!-- تنسيقاتنا المخصصة -->
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        // Dark Mode — قبل أي شيء لتجنب الوميض
+        if (localStorage.getItem("theme") === "dark" ||
+            (!localStorage.getItem("theme") &&
+             window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.add("dark");
+        }
+
+        // Tailwind Config
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50 : "#EFF6FF",
+                            100: "#DBEAFE",
+                            500: "#3B82F6",
+                            600: "#2563EB",
+                            700: "#1D4ED8",
+                            900: "#1E3A8A"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-200
+             min-h-screen transition-colors duration-300">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  HEADER                                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<header class="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-40
+               border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700
+                        rounded-xl flex items-center justify-center shadow">
+                <i class="fas fa-database text-white text-sm"></i>
+            </div>
+            <div>
+                <h1 class="text-base font-black text-gray-800 dark:text-gray-100
+                           leading-tight">
+                    محلل جودة البيانات
+                </h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">
+                    Data Quality Analyzer — DAMA
+                </p>
+            </div>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-3">
+
+            <!-- حالة الملف -->
+            <div id="file-status" class="hidden items-center gap-2 px-3 py-1.5
+                 bg-green-50 dark:bg-green-900/30 rounded-lg border
+                 border-green-200 dark:border-green-800">
+                <i class="fas fa-check-circle text-green-500 text-sm"></i>
+                <span id="file-status-text"
+                      class="text-xs font-medium text-green-700
+                             dark:text-green-400">
+                </span>
+            </div>
+
+            <!-- Dark Mode Toggle -->
+            <button id="theme-toggle"
+                class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800
+                       flex items-center justify-center
+                       hover:bg-gray-200 dark:hover:bg-gray-700
+                       transition-colors">
+                <i id="theme-icon"
+                   class="fas fa-moon text-gray-600 dark:text-yellow-400 text-sm">
+                </i>
+            </button>
+
+            <!-- رفع ملف جديد -->
+            <button id="new-file-btn"
+                class="hidden py-1.5 px-3 bg-blue-600 hover:bg-blue-700
+                       text-white text-sm font-medium rounded-lg transition">
+                <i class="fas fa-plus ml-1"></i>ملف جديد
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  PROGRESS BAR                                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="progress-bar-container"
+     class="hidden fixed top-[57px] right-0 left-0 z-30 h-1 bg-gray-200
+            dark:bg-gray-800">
+    <div id="progress-bar"
+         class="h-1 bg-gradient-to-l from-blue-400 to-blue-600
+                transition-all duration-300 ease-out"
+         style="width: 0%">
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  UPLOAD SCREEN                                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="upload-screen" class="max-w-2xl mx-auto px-4 py-16">
+
+    <!-- Hero -->
+    <div class="text-center mb-10">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700
+                    rounded-2xl flex items-center justify-center
+                    shadow-lg mx-auto mb-5">
+            <i class="fas fa-chart-line text-white text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-800 dark:text-gray-100 mb-2">
+            ابدأ بتحليل بياناتك
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">
+            ارفع ملفك وسنحلل جودته وفق معايير DAMA الدولية
+        </p>
+    </div>
+
+    <!-- Drop Zone -->
+    <div id="drop-zone"
+         class="relative border-2 border-dashed border-blue-300
+                dark:border-blue-700 rounded-2xl p-10 text-center
+                bg-white dark:bg-gray-900 cursor-pointer
+                hover:border-blue-500 dark:hover:border-blue-500
+                hover:bg-blue-50 dark:hover:bg-blue-950/30
+                transition-all duration-200 group">
+
+        <input type="file" id="data-upload"
+               accept=".csv,.json,.xlsx,.xls"
+               class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+
+        <div id="drop-zone-content">
+            <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/50 rounded-xl
+                        flex items-center justify-center mx-auto mb-4
+                        group-hover:scale-110 transition-transform">
+                <i class="fas fa-cloud-upload-alt text-blue-500 text-2xl"></i>
+            </div>
+            <p class="text-base font-bold text-gray-700 dark:text-gray-300 mb-1">
+                اسحب الملف هنا أو انقر للاختيار
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                يدعم: CSV · JSON · Excel (xlsx, xls)
+            </p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                الحد الأقصى: 50MB
+            </p>
+        </div>
+
+        <!-- حالة السحب -->
+        <div id="drop-zone-dragging"
+             class="hidden absolute inset-0 bg-blue-50 dark:bg-blue-950/50
+                    rounded-2xl flex items-center justify-center">
+            <div class="text-center">
+                <i class="fas fa-download text-blue-500 text-3xl mb-2"></i>
+                <p class="text-blue-600 dark:text-blue-400 font-bold">
+                    أفلت الملف هنا
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- صيغ الملفات -->
+    <div class="grid grid-cols-3 gap-3 mt-6">
+
+        <!-- CSV -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-3 text-center
+                    border border-gray-200 dark:border-gray-800">
+            <i class="fas fa-file-csv text-green-500 text-xl mb-1"></i>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">CSV</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">
+                فواصل، Tab، Semicolon
+            </p>
+        </div>
+
+        <!-- JSON -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-3 text-center
+                    border border-gray-200 dark:border-gray-800">
+            <i class="fas fa-file-code text-yellow-500 text-xl mb-1"></i>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">JSON</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">
+                Array، Object، Nested
+            </p>
+        </div>
+
+        <!-- Excel -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-3 text-center
+                    border border-gray-200 dark:border-gray-800">
+            <i class="fas fa-file-excel text-emerald-500 text-xl mb-1"></i>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Excel</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">
+                xlsx، xls، متعدد الأوراق
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Loading State -->
+    <div id="upload-loading" class="hidden mt-6">
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-5 border
+                    border-gray-200 dark:border-gray-800">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="spinner"></div>
+                <span id="loading-text"
+                      class="text-sm font-medium text-gray-700
+                             dark:text-gray-300">
+                    جاري قراءة الملف...
+                </span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                <div id="upload-progress-fill"
+                     class="h-1.5 bg-blue-500 rounded-full transition-all duration-300"
+                     style="width: 0%">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="upload-error" class="hidden mt-4 p-4 bg-red-50 dark:bg-red-900/20
+         border border-red-200 dark:border-red-800 rounded-xl">
+        <div class="flex items-start gap-3">
+            <i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i>
+            <div>
+                <p class="text-sm font-bold text-red-700 dark:text-red-400">
+                    خطأ في قراءة الملف
+                </p>
+                <p id="error-text"
+                   class="text-xs text-red-600 dark:text-red-400 mt-1">
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  MAIN APP (يظهر بعد رفع الملف)                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="main-app" class="hidden max-w-7xl mx-auto px-4 py-6">
+
+    <!-- ── File Info Bar ── -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-4 mb-5 border
+                border-gray-200 dark:border-gray-800
+                flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg
+                        flex items-center justify-center">
+                <i id="file-type-icon"
+                   class="fas fa-file text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <div>
+                <p id="file-name-display"
+                   class="font-bold text-gray-800 dark:text-gray-200 text-sm">
+                </p>
+                <p id="file-meta-display"
+                   class="text-xs text-gray-500 dark:text-gray-400">
+                </p>
+            </div>
+        </div>
+
+        <!-- Warnings Badge -->
+        <div id="warnings-badge" class="hidden items-center gap-2 px-3 py-1.5
+             bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border
+             border-yellow-200 dark:border-yellow-800 cursor-pointer"
+             onclick="toggleWarnings()">
+            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm"></i>
+            <span id="warnings-count"
+                  class="text-xs font-medium text-yellow-700
+                         dark:text-yellow-400">
+            </span>
+        </div>
+
+        <!-- Warnings List -->
+        <div id="warnings-list"
+             class="hidden w-full mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/20
+                    rounded-lg border border-yellow-200 dark:border-yellow-800">
+        </div>
+
+        <!-- Analyze Button -->
+        <button id="analyze-btn" disabled
+            class="py-2 px-5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40
+                   disabled:cursor-not-allowed text-white font-bold text-sm
+                   rounded-lg transition flex items-center gap-2">
+            <i class="fas fa-play"></i>
+            تشغيل التحليل
+        </button>
+    </div>
+
+    <!-- ── Tab Navigation ── -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl border
+                border-gray-200 dark:border-gray-800 overflow-hidden">
+
+        <!-- Tabs Header -->
+        <div class="flex overflow-x-auto border-b border-gray-200
+            dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+
+    <!-- نظرة عامة -->
+    <button data-tab="overview"
+        class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+               font-medium whitespace-nowrap transition-all border-b-2
+               text-blue-600 dark:text-blue-400
+               border-blue-600 dark:border-blue-400
+               bg-white dark:bg-gray-900">
+        <i class="fas fa-tachometer-alt text-xs"></i>
+        نظرة عامة
+    </button>
+
+    <!-- تحليل الأعمدة -->
+    <button data-tab="profiler"
+        class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+               font-medium whitespace-nowrap transition-all border-b-2
+               border-transparent text-gray-500 dark:text-gray-400
+               hover:text-gray-700 dark:hover:text-gray-300">
+        <i class="fas fa-search text-xs"></i>
+        تحليل الأعمدة
+    </button>
+
+    <!-- قواعد الجودة -->
+    <button data-tab="rules"
+        class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+               font-medium whitespace-nowrap transition-all border-b-2
+               border-transparent text-gray-500 dark:text-gray-400
+               hover:text-gray-700 dark:hover:text-gray-300">
+        <i class="fas fa-ruler-combined text-xs"></i>
+        قواعد الجودة
+    </button>
+
+    <!-- التنظيف -->
+    <button data-tab="cleaning"
+        class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+               font-medium whitespace-nowrap transition-all border-b-2
+               border-transparent text-gray-500 dark:text-gray-400
+               hover:text-gray-700 dark:hover:text-gray-300">
+        <i class="fas fa-broom text-xs"></i>
+        التنظيف
+    </button>
+
+    <!-- التقرير -->
+    <button data-tab="report"
+        class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+               font-medium whitespace-nowrap transition-all border-b-2
+               border-transparent text-gray-500 dark:text-gray-400
+               hover:text-gray-700 dark:hover:text-gray-300">
+        <i class="fas fa-file-alt text-xs"></i>
+        التقرير
+    </button>
+
+</div>
+
+
+        <!-- Tabs Content -->
+        <div class="p-5">
+
+            <!-- ── Tab: نظرة عامة ── -->
+            <div id="tab-overview" class="tab-content">
+
+                <!-- DAMA Score Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="col-span-2 md:col-span-1 bg-gradient-to-br
+                                from-blue-500 to-blue-700 rounded-xl p-5
+                                text-white text-center shadow-lg">
+                        <p id="overall-score"
+                           class="text-5xl font-black mb-1">—</p>
+                        <p class="text-blue-100 text-sm">درجة الجودة</p>
+                        <p id="overall-grade"
+                           class="text-lg font-bold mt-2">—</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4
+                                border border-gray-200 dark:border-gray-700
+                                text-center">
+                        <p id="stat-rows"
+                           class="text-2xl font-black text-gray-800
+                                  dark:text-gray-200">—</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            سجل
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4
+                                border border-gray-200 dark:border-gray-700
+                                text-center">
+                        <p id="stat-cols"
+                           class="text-2xl font-black text-gray-800
+                                  dark:text-gray-200">—</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            عمود
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4
+                                border border-gray-200 dark:border-gray-700
+                                text-center">
+                        <p id="stat-empty"
+                           class="text-2xl font-black text-gray-800
+                                  dark:text-gray-200">—</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            % قيم مفقودة
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DAMA Dimensions -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-bold text-gray-600
+                               dark:text-gray-400 mb-3 uppercase tracking-wide">
+                        أبعاد DAMA السبعة
+                    </h3>
+                    <div id="dama-dimensions-grid"
+                         class="grid grid-cols-1 md:grid-cols-2
+                                lg:grid-cols-4 gap-3">
+                        <!-- تُملأ بـ JS -->
+                        ${Array(7).fill(0).map(() => `
+                        <div class="dama-card-skeleton bg-gray-100
+                                    dark:bg-gray-800 rounded-xl h-24
+                                    animate-pulse">
+                        </div>`).join("")}
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-600
+                               dark:text-gray-400 mb-3 uppercase tracking-wide">
+                        التوصيات
+                    </h3>
+                    <div id="overview-recommendations" class="space-y-2">
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-xl
+                                    h-16 animate-pulse"></div>
+                        <div class="bg-gray-100 dark:bg-gray-800 rounded-xl
+                                    h-16 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Tab: تحليل الأعمدة ── -->
+            <div id="tab-profiler" class="tab-content hidden">
+
+                <!-- فلتر وبحث -->
+                <div class="flex flex-wrap gap-3 mb-4">
+                    <div class="relative flex-1 min-w-48">
+                        <i class="fas fa-search absolute right-3 top-1/2
+                                  -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="col-search"
+                               placeholder="بحث في الأعمدة..."
+                               class="w-full pr-9 pl-3 py-2 text-sm border
+                                      rounded-lg bg-white dark:bg-gray-800
+                                      border-gray-200 dark:border-gray-700
+                                      text-gray-700 dark:text-gray-300
+                                      focus:outline-none focus:ring-2
+                                      focus:ring-blue-500">
+                    </div>
+                    <select id="col-type-filter"
+                        class="py-2 px-3 text-sm border rounded-lg
+                               bg-white dark:bg-gray-800
+                               border-gray-200 dark:border-gray-700
+                               text-gray-700 dark:text-gray-300">
+                        <option value="">كل الأنواع</option>
+                        <option value="number">رقمي</option>
+                        <option value="text">نصي</option>
+                        <option value="date">تاريخ</option>
+                        <option value="boolean">منطقي</option>
+                    </select>
+                    <select id="col-health-filter"
+                        class="py-2 px-3 text-sm border rounded-lg
+                               bg-white dark:bg-gray-800
+                               border-gray-200 dark:border-gray-700
+                               text-gray-700 dark:text-gray-300">
+                        <option value="">كل الحالات</option>
+                        <option value="good">جيد (>90%)</option>
+                        <option value="warning">يحتاج مراجعة</option>
+                        <option value="critical">حرج (<50%)</option>
+                    </select>
+                </div>
+
+                <!-- جدول الأعمدة -->
+                <div class="overflow-x-auto rounded-xl border
+                            border-gray-200 dark:border-gray-700">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    العمود
+                                </th>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    النوع
+                                </th>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    الاكتمال
+                                </th>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    فريد
+                                </th>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    القيم المتطرفة
+                                </th>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    الحالة
+                                </th>
+                                <th class="py-3 px-4 text-right font-semibold
+                                           text-gray-600 dark:text-gray-400">
+                                    تفاصيل
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="profiler-table-body"
+                               class="divide-y divide-gray-200
+                                      dark:divide-gray-700 bg-white
+                                      dark:bg-gray-900">
+                        </tbody>
+                    </table>
+                </div>
+
+                
+            </div>
+
+            <!-- ── Tab: قواعد الجودة ── -->
+            <div id="tab-rules" class="tab-content hidden">
+                <div id="rule-builder-container"></div>
+            </div>
+
+            <!-- ── Tab: التنظيف ── -->
+            <div id="tab-cleaning" class="tab-content hidden">
+                <div id="cleaner-tab-container"></div>
+            </div>
+
+            <!-- ── Tab: التقرير ── -->
+            <div id="tab-report" class="tab-content hidden">
+                <div id="report-tab-container"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TOAST CONTAINER                                          -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="toast-container"
+     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 space-y-2">
+</div>
+
+
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!--  COLUMN DETAIL MODAL  ← هنا بالضبط                       -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <div id="col-detail-modal"
+             class="hidden fixed inset-0 z-[999] flex items-center
+                    justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl
+                        w-full max-w-2xl max-h-[85vh] overflow-y-auto
+                        relative">
+
+                <!-- Header ثابت -->
+                <div class="sticky top-0 bg-white dark:bg-gray-900
+                            border-b border-gray-200 dark:border-gray-800
+                            p-4 flex justify-between items-center
+                            rounded-t-2xl z-10">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/50
+                                    rounded-lg flex items-center justify-center">
+                            <i class="fas fa-columns text-blue-600
+                                      dark:text-blue-400 text-sm"></i>
+                        </div>
+                        <h3 id="modal-col-name"
+                            class="font-black text-gray-800
+                                   dark:text-gray-200 text-lg">
+                        </h3>
+                    </div>
+                    <button onclick="closeModal()"
+                        class="w-8 h-8 rounded-lg bg-gray-100
+                               dark:bg-gray-800 flex items-center
+                               justify-center hover:bg-red-100
+                               dark:hover:bg-red-900/30
+                               hover:text-red-500 transition group">
+                        <i class="fas fa-times text-gray-500
+                                  group-hover:text-red-500 text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Content -->
+                <div id="modal-content" class="p-5"></div>
+
+            </div>
+        </div>
+
+
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  APP SCRIPT                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
