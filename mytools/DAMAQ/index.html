@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محلل جودة البيانات — DQA</title>
+    <title>محرك جودة البيانات — DAMAQ</title>
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -64,12 +64,11 @@
                 <i class="fas fa-database text-white text-sm"></i>
             </div>
             <div>
-                <h1 class="text-base font-black text-gray-800 dark:text-gray-100
-                           leading-tight">
-                    محلل جودة البيانات
+                <h1 class="text-base font-black text-gray-800 dark:text-gray-100 leading-tight">
+                    محرك جودة البيانات
                 </h1>
                 <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">
-                    Data Quality Analyzer — DAMA
+                    Data Quality Engine — DAMAQ
                 </p>
             </div>
         </div>
@@ -135,10 +134,11 @@
             <i class="fas fa-chart-line text-white text-3xl"></i>
         </div>
         <h2 class="text-2xl font-black text-gray-800 dark:text-gray-100 mb-2">
-            ابدأ بتحليل بياناتك
+            محرك جودة البيانات
         </h2>
+
         <p class="text-gray-500 dark:text-gray-400 text-sm">
-            ارفع ملفك وسنحلل جودته وفق معايير DAMA الدولية
+            قم برفع ملفك ليتم فحصه ومعالجته تلقائياً عبر محرك DAMAQ وفق معايير جودة البيانات العالمية
         </p>
     </div>
 
@@ -303,13 +303,12 @@
                     rounded-lg border border-yellow-200 dark:border-yellow-800">
         </div>
 
-        <!-- Analyze Button -->
         <button id="analyze-btn" disabled
             class="py-2 px-5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40
                    disabled:cursor-not-allowed text-white font-bold text-sm
                    rounded-lg transition flex items-center gap-2">
-            <i class="fas fa-play"></i>
-            تشغيل التحليل
+            <i class="fas fa-cogs"></i>
+            تشغيل DAMAQ Engine
         </button>
     </div>
 
@@ -332,14 +331,14 @@
         نظرة عامة
     </button>
 
-    <!-- تحليل الأعمدة -->
+    <!-- فحص الأعمدة -->
     <button data-tab="profiler"
         class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
                font-medium whitespace-nowrap transition-all border-b-2
                border-transparent text-gray-500 dark:text-gray-400
                hover:text-gray-700 dark:hover:text-gray-300">
         <i class="fas fa-search text-xs"></i>
-        تحليل الأعمدة
+        فحص الأعمدة
     </button>
 
     <!-- قواعد الجودة -->
@@ -425,22 +424,53 @@
                 </div>
 
                 <!-- DAMA Dimensions -->
-                <div class="mb-6">
-                    <h3 class="text-sm font-bold text-gray-600
-                               dark:text-gray-400 mb-3 uppercase tracking-wide">
-                        أبعاد DAMA السبعة
-                    </h3>
-                    <div id="dama-dimensions-grid"
-                         class="grid grid-cols-1 md:grid-cols-2
-                                lg:grid-cols-4 gap-3">
-                        <!-- تُملأ بـ JS -->
-                        ${Array(7).fill(0).map(() => `
-                        <div class="dama-card-skeleton bg-gray-100
-                                    dark:bg-gray-800 rounded-xl h-24
-                                    animate-pulse">
-                        </div>`).join("")}
-                    </div>
-                </div>
+<div class="mb-6">
+    <h3 class="text-sm font-bold text-gray-600
+               dark:text-gray-400 mb-3 uppercase tracking-wide">
+        أبعاد DAMA السبعة
+    </h3>
+    <div id="dama-dimensions-grid"
+         class="grid grid-cols-1 md:grid-cols-2
+                lg:grid-cols-4 gap-3">
+
+        <!-- Skeleton 1 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+        <!-- Skeleton 2 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+        <!-- Skeleton 3 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+        <!-- Skeleton 4 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+        <!-- Skeleton 5 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+        <!-- Skeleton 6 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+        <!-- Skeleton 7 -->
+        <div class="dama-card-skeleton bg-gray-100
+                    dark:bg-gray-800 rounded-xl h-24 animate-pulse">
+        </div>
+
+    </div>
+</div>
+
 
                 <!-- Recommendations -->
                 <div>
@@ -457,7 +487,7 @@
                 </div>
             </div>
 
-            <!-- ── Tab: تحليل الأعمدة ── -->
+            <!-- ── Tab: فحص الأعمدة ── -->
             <div id="tab-profiler" class="tab-content hidden">
 
                 <!-- فلتر وبحث -->

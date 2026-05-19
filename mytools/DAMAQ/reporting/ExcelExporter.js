@@ -48,7 +48,9 @@ export class ExcelExporter {
         const fileName = options.fileName
             || `DQA_Report_${new Date().toISOString().slice(0, 10)}.xlsx`;
 
-        XLSX.writeFile(wb, fileName);
+        XLSX.writeFile(wb, fileName,{
+        bookType: "xlsx", 
+        type: "binary"});
     }
 
     // ── ورقة البيانات ────────────────────────────────────────────
@@ -57,7 +59,7 @@ export class ExcelExporter {
             columns,
             ...data.map(row => columns.map(c => row[c] ?? ""))
         ];
-        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const ws = XLSX.utils.json_to_sheet(rows);
 
         // تنسيق الـ Header
         columns.forEach((_, i) => {
@@ -111,7 +113,7 @@ export class ExcelExporter {
             ])
         ];
 
-        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const ws = XLSX.utils.json_to_sheet(rows);
         ws["!cols"] = [{ wch: 20 }, { wch: 12 }, { wch: 50 }, { wch: 10 }];
         XLSX.utils.book_append_sheet(wb, ws, "تقرير DAMA");
     }
@@ -146,7 +148,7 @@ export class ExcelExporter {
             })
         ];
 
-        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const ws = XLSX.utils.json_to_sheet(rows);
         ws["!cols"] = headers.map(() => ({ wch: 14 }));
         XLSX.utils.book_append_sheet(wb, ws, "تحليل الأعمدة");
     }
@@ -166,7 +168,7 @@ export class ExcelExporter {
             ])
         ];
 
-        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const ws = XLSX.utils.json_to_sheet(rows);
         ws["!cols"] = [{ wch: 35 }, { wch: 15 }, { wch: 10 }, { wch: 10 }, { wch: 40 }];
         XLSX.utils.book_append_sheet(wb, ws, "نتائج القواعد");
     }
@@ -188,7 +190,7 @@ export class ExcelExporter {
             ])
         ];
 
-        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const ws = XLSX.utils.json_to_sheet(rows);
         ws["!cols"] = [
             { wch: 5 }, { wch: 22 }, { wch: 18 },
             { wch: 20 }, { wch: 18 }, { wch: 10 }, { wch: 50 }

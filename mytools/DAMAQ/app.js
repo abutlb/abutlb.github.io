@@ -661,6 +661,34 @@ function buildModalContent(p, colName) {
             <h4 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
                 أنماط البيانات
             </h4>
+
+            <!-- Legend ثابتة -->
+            <div class="flex flex-wrap gap-2 mb-4 p-3
+                        bg-gray-50 dark:bg-gray-800/60
+                        border border-gray-200 dark:border-gray-700
+                        rounded-xl">
+                ${[
+                    { symbol: "ع", label: "حرف عربي"      , color: "text-purple-500" },
+                    { symbol: "a", label: "حرف إنجليزي"   , color: "text-blue-500"   },
+                    { symbol: "9", label: "رقم"            , color: "text-green-500"  },
+                    { symbol: "_", label: "مسافة"          , color: "text-gray-400"   },
+                    { symbol: ".", label: "نقطة"           , color: "text-orange-400" },
+                    { symbol: "-", label: "شرطة"           , color: "text-red-400"    },
+                    { symbol: "@", label: "رمز @"          , color: "text-pink-500"   },
+                ].map(item => `
+                <div class="flex items-center gap-1.5">
+                    <code class="font-mono font-black text-sm ${item.color}
+                                 bg-white dark:bg-gray-900
+                                 border border-gray-200 dark:border-gray-700
+                                 rounded px-1.5 py-0.5 min-w-[1.6rem]
+                                 text-center">
+                        ${item.symbol}
+                    </code>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                        ${item.label}
+                    </span>
+                </div>`).join("")}
+            </div>
             <div class="space-y-1.5">
                 ${p.patterns.map(pt => `
                 <div class="flex items-center justify-between text-xs
