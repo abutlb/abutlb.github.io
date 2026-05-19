@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فكرة — MVP Designer</title>
+    <meta name="description" content="صمّم مشروعك من الفكرة للـ MVP في دقائق">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts — Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        // ── Dark Mode (قبل أي render لتجنب الوميض) ──
+        if (localStorage.getItem("fikra_theme") === "dark" ||
+            (!localStorage.getItem("fikra_theme") &&
+             window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+            document.documentElement.classList.replace("light", "dark");
+        }
+
+        // ── Tailwind Config ──
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ["Cairo", "sans-serif"]
+                    },
+                    colors: {
+                        brand: {
+                            50 : "#F0FDF4",
+                            100: "#DCFCE7",
+                            200: "#BBF7D0",
+                            400: "#4ADE80",
+                            500: "#22C55E",
+                            600: "#16A34A",
+                            700: "#15803D",
+                            900: "#14532D"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="font-cairo bg-gray-50 dark:bg-gray-950
+             text-gray-800 dark:text-gray-200
+             min-h-screen transition-colors duration-300">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  HEADER                                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<header id="app-header"
+        class="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-40
+               border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 py-3
+                flex items-center justify-between">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer"
+             id="logo-btn">
+            <div class="w-9 h-9 bg-gradient-to-br from-brand-500 to-brand-700
+                        rounded-xl flex items-center justify-center shadow">
+                <i class="fas fa-lightbulb text-white text-sm"></i>
+            </div>
+            <div>
+                <h1 class="text-base font-black text-gray-800
+                           dark:text-gray-100 leading-tight">
+                    فكرة
+                </h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400
+                          leading-tight">
+                    MVP Designer
+                </p>
+            </div>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-2">
+
+            <!-- Project Name Badge (يظهر بعد البداية) -->
+            <div id="project-badge"
+                 class="hidden items-center gap-2 px-3 py-1.5
+                        bg-brand-50 dark:bg-brand-900/30 rounded-lg
+                        border border-brand-200 dark:border-brand-800">
+                <i class="fas fa-folder text-brand-500 text-xs"></i>
+                <span id="project-badge-name"
+                      class="text-xs font-bold text-brand-700
+                             dark:text-brand-400 max-w-32 truncate">
+                </span>
+            </div>
+
+            <!-- Dark Mode Toggle -->
+            <button id="theme-toggle"
+                class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800
+                       flex items-center justify-center
+                       hover:bg-gray-200 dark:hover:bg-gray-700
+                       transition-colors"
+                aria-label="تبديل الوضع">
+                <i id="theme-icon"
+                   class="fas fa-moon text-gray-500
+                          dark:text-yellow-400 text-sm"></i>
+            </button>
+
+            <!-- New Project -->
+            <button id="new-project-btn"
+                class="hidden items-center gap-2 py-1.5 px-3
+                       bg-gray-100 dark:bg-gray-800
+                       hover:bg-gray-200 dark:hover:bg-gray-700
+                       text-gray-600 dark:text-gray-300
+                       text-sm font-medium rounded-lg transition">
+                <i class="fas fa-plus text-xs"></i>
+                جديد
+            </button>
+
+            <!-- Export Button -->
+            <button id="export-btn"
+                class="hidden items-center gap-2 py-1.5 px-3
+                       bg-brand-600 hover:bg-brand-700
+                       text-white text-sm font-bold rounded-lg transition">
+                <i class="fas fa-file-export text-xs"></i>
+                تصدير
+            </button>
+
+        </div>
+    </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  PROGRESS BAR (wizard steps)                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="progress-bar-wrap"
+     class="hidden sticky top-[57px] z-30
+            bg-white dark:bg-gray-900
+            border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-4xl mx-auto px-4 py-3">
+
+        <!-- Steps -->
+        <div id="steps-indicator"
+             class="flex items-center justify-between gap-1">
+            <!-- تُملأ بـ ProgressBar.js -->
+        </div>
+
+        <!-- Bar -->
+        <div class="mt-2 w-full bg-gray-200 dark:bg-gray-700
+                    rounded-full h-1">
+            <div id="progress-fill"
+                 class="h-1 bg-gradient-to-l from-brand-400 to-brand-600
+                        rounded-full transition-all duration-500"
+                 style="width: 0%">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  MAIN CONTENT                                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- ── SCREEN: Landing ── -->
+    <div id="screen-landing">
+
+        <!-- Hero -->
+        <div class="text-center mb-12">
+            <div class="w-24 h-24 bg-gradient-to-br from-brand-400 to-brand-700
+                        rounded-3xl flex items-center justify-center
+                        shadow-xl mx-auto mb-6
+                        animate-bounce-slow">
+                <i class="fas fa-lightbulb text-white text-4xl"></i>
+            </div>
+            <h2 class="text-4xl font-black text-gray-800
+                       dark:text-gray-100 mb-3">
+                حوّل فكرتك لـ MVP
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 text-lg
+                      max-w-md mx-auto leading-relaxed">
+                قالب احترافي يساعدك توثّق مشروعك
+                من الفكرة للخطة الكاملة — وتصدّره PDF بلحظة
+            </p>
+        </div>
+
+        <!-- CTA Card -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl p-8
+                    border border-gray-200 dark:border-gray-800
+                    shadow-sm max-w-md mx-auto mb-8">
+
+            <label class="block text-sm font-bold text-gray-700
+                          dark:text-gray-300 mb-2">
+                اسم مشروعك
+            </label>
+            <input type="text"
+                   id="landing-project-name"
+                   placeholder="مثال: تطبيق توصيل، منصة تعليمية..."
+                   maxlength="60"
+                   class="w-full px-4 py-3 rounded-xl border
+                          border-gray-200 dark:border-gray-700
+                          bg-gray-50 dark:bg-gray-800
+                          text-gray-800 dark:text-gray-200
+                          placeholder-gray-400 dark:placeholder-gray-500
+                          focus:outline-none focus:ring-2
+                          focus:ring-brand-500 focus:border-transparent
+                          text-sm transition mb-4">
+
+            <button id="start-btn"
+                class="w-full py-3 bg-brand-600 hover:bg-brand-700
+                       text-white font-black text-base rounded-xl
+                       transition-all duration-200
+                       flex items-center justify-center gap-2
+                       shadow-lg shadow-brand-500/20
+                       hover:shadow-brand-500/40
+                       disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled>
+                <i class="fas fa-rocket"></i>
+                ابدأ التصميم
+            </button>
+
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-4
+                        border border-gray-200 dark:border-gray-800
+                        text-center">
+                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/40
+                            rounded-xl flex items-center justify-center
+                            mx-auto mb-3">
+                    <i class="fas fa-layer-group text-blue-500"></i>
+                </div>
+                <p class="text-sm font-bold text-gray-700
+                          dark:text-gray-300 mb-1">
+                    7 أقسام منظمة
+                </p>
+                <p class="text-xs text-gray-400 dark:text-gray-500">
+                    من المشكلة للخطة التقنية
+                </p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-4
+                        border border-gray-200 dark:border-gray-800
+                        text-center">
+                <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/40
+                            rounded-xl flex items-center justify-center
+                            mx-auto mb-3">
+                    <i class="fas fa-palette text-purple-500"></i>
+                </div>
+                <p class="text-sm font-bold text-gray-700
+                          dark:text-gray-300 mb-1">
+                    3 قوالب احترافية
+                </p>
+                <p class="text-xs text-gray-400 dark:text-gray-500">
+                    Modern · Minimal · Dark
+                </p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-4
+                        border border-gray-200 dark:border-gray-800
+                        text-center">
+                <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/40
+                            rounded-xl flex items-center justify-center
+                            mx-auto mb-3">
+                    <i class="fas fa-file-pdf text-brand-500"></i>
+                </div>
+                <p class="text-sm font-bold text-gray-700
+                          dark:text-gray-300 mb-1">
+                    تصدير PDF فوري
+                </p>
+                <p class="text-xs text-gray-400 dark:text-gray-500">
+                    جاهز للعرض والمشاركة
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ── SCREEN: Wizard ── -->
+    <div id="screen-wizard" class="hidden">
+        <!-- يُملأ بـ SectionRenderer.js -->
+    </div>
+
+    <!-- ── SCREEN: Preview ── -->
+    <div id="screen-preview" class="hidden">
+        <!-- يُملأ بـ PreviewBuilder.js -->
+    </div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  MODAL OVERLAY                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="modal-overlay"
+     class="hidden fixed inset-0 z-[999]
+            flex items-center justify-center p-4
+            bg-black/60 backdrop-blur-sm">
+    <div id="modal-box"
+         class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl
+                w-full max-w-lg max-h-[85vh] overflow-y-auto relative">
+        <!-- يُملأ بـ ModalManager.js -->
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TOAST CONTAINER                                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="toast-container"
+     class="fixed bottom-6 left-1/2 -translate-x-1/2
+            z-50 flex flex-col items-center gap-2 pointer-events-none">
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  APP ENTRY                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
