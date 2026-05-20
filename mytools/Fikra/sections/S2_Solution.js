@@ -260,8 +260,8 @@ export default {
 
         this._initCharCounters();
         this._initValuePropExamples();
-        this._initCompetitorChips();
         this._initComparisonCard();
+        this._initCompetitorChips();
     },
 
 

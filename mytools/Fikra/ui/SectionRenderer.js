@@ -2,33 +2,20 @@
  * FIKRA — ui/SectionRenderer.js
  * ─────────────────────────────────────────────
  * المحرك الرئيسي لعرض أقسام الـ Wizard
- *
- * المسؤوليات:
- *  1. تحميل section من مجلد sections/
- *  2. حقن البيانات من Store في الـ inputs
- *  3. ربط الـ inputs بالـ Store (two-way binding)
- *  4. ربط أزرار Next / Back
- *  5. تشغيل الـ Validator على كل قسم
- *
- * الاستخدام:
- *   import SectionRenderer from "./ui/SectionRenderer.js";
- *   SectionRenderer.init();
- *   SectionRenderer.render(1);
- * ─────────────────────────────────────────────
  */
 
-import Bus,       { EVENTS } from "../core/EventBus.js";
-import Store                 from "../core/Store.js";
-import Router,    { STEPS  } from "../core/Router.js";
-import Validator             from "../core/Validator.js";
-import Toast                 from "./ToastManager.js";
-import ProgressBar           from "./ProgressBar.js";
+import Bus,    { EVENTS } from "../core/EventBus.js";
+import Store              from "../core/Store.js";
+import Router, { STEPS  } from "../core/Router.js";
+import Validator          from "../core/Validator.js";
+import Toast              from "./ToastManager.js";
+import ProgressBar        from "./ProgressBar.js";
 
 
-/* ─────────────────────────────────────────────────────────
-   SECTION REGISTRY — خريطة الأقسام
-───────────────────────────────────────────────────────── */
-const SECTIONS = {
+/* ─────────────────────────────────────────────────────
+   SECTION REGISTRY
+───────────────────────────────────────────────────── */
+const SECTION_LOADERS = {
     1: () => import("../sections/S1_Problem.js"),
     2: () => import("../sections/S2_Solution.js"),
     3: () => import("../sections/S3_Features.js"),
@@ -39,12 +26,12 @@ const SECTIONS = {
     8: () => import("../sections/S8_Summary.js"),
 };
 
-const TOTAL_STEPS = Object.keys(SECTIONS).length;
+const TOTAL_STEPS = Object.keys(SECTION_LOADERS).length;
 
 
-/* ─────────────────────────────────────────────────────────
-   SECTION RENDERER CLASS
-───────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────
+   CLASS
+───────────────────────────────────────────────────── */
 class SectionRenderer {
 
     constructor() {
@@ -71,9 +58,15 @@ class SectionRenderer {
     init() {
         if (this._initialized) return;
 
-        this._app = document.getElementById("app");
+        // ← الـ container الصحيح من index.html
+        this._app = document.getElementById("screen-wizard");
 
-        // الاستماع للأحداث
+        if (!this._app) {
+            console.error("[SectionRenderer] #screen-wizard غير موجود في الـ DOM");
+            return;
+        }
+
+        // الاستماع لأحداث الـ Router
         Bus.on(EVENTS.STEP_CHANGED, ({ to, from }) => {
             this._animateTransition(from, to);
         });
@@ -85,12 +78,11 @@ class SectionRenderer {
     /* ─────────────────────────────────────────
        render — عرض قسم محدد
     ───────────────────────────────────────── */
-    /**
-     * @param {number}  stepId
-     * @param {boolean} skipAnim
-     */
     async render(stepId, skipAnim = false) {
-        if (!this._app) return;
+        if (!this._app) {
+            console.error("[SectionRenderer] لم يتم استدعاء init() بعد");
+            return;
+        }
 
         // إلغاء أي render سابق لم يكتمل
         this._abortCtrl?.abort();
@@ -100,14 +92,14 @@ class SectionRenderer {
         this._current = stepId;
 
         try {
-            // ── تحميل الـ section module ──────
+            // تحميل الـ section module
             const section = await this._loadSection(stepId);
             if (signal.aborted) return;
 
-            // ── بناء الـ HTML ─────────────────
+            // بناء الـ HTML
             const html = this._buildShell(stepId, section);
 
-            // ── حقن في الـ DOM ────────────────
+            // حقن في الـ DOM
             if (!skipAnim) {
                 await this._swapContent(html);
             } else {
@@ -116,24 +108,27 @@ class SectionRenderer {
 
             if (signal.aborted) return;
 
-            // ── hydrate: ربط البيانات ─────────
+            // ربط البيانات
             this._hydrate(stepId, section);
 
-            // ── ربط الأزرار ───────────────────
+            // ربط أزرار التنقل
             this._bindNavButtons(stepId);
 
-            // ── تشغيل onMount للـ section ──────
+            // تشغيل onMount للـ section
             section.onMount?.({
-                el      : this._app,
-                store   : Store,
-                bus     : Bus,
+                el    : this._app,
+                store : Store,
+                bus   : Bus,
                 stepId,
             });
 
-            // ── تحديث الـ ProgressBar ─────────
+            // تحديث الـ ProgressBar
             ProgressBar.setStep(stepId);
 
-            // ── scroll للأعلى ─────────────────
+            // حفظ الخطوة الحالية
+            Store.set("meta.currentSection", stepId);
+
+            // scroll للأعلى
             window.scrollTo({ top: 0, behavior: "smooth" });
 
         } catch (err) {
@@ -145,47 +140,40 @@ class SectionRenderer {
 
 
     /* ─────────────────────────────────────────
-       _loadSection — تحميل الـ module
+       _loadSection
     ───────────────────────────────────────── */
     async _loadSection(stepId) {
-        // من الـ cache أولاً
         if (this._cache.has(stepId)) {
             return this._cache.get(stepId);
         }
 
-        const loader = SECTIONS[stepId];
+        const loader = SECTION_LOADERS[stepId];
         if (!loader) throw new Error(`Section ${stepId} غير موجود`);
 
-        const mod = await loader();
-
-        // نتحقق أن الـ module فيه default export
+        const mod     = await loader();
         const section = mod.default ?? mod;
-        this._cache.set(stepId, section);
 
+        this._cache.set(stepId, section);
         return section;
     }
 
 
     /* ─────────────────────────────────────────
-       _buildShell — بناء HTML الهيكل الكامل
+       _buildShell — HTML الهيكل الكامل
     ───────────────────────────────────────── */
-    /**
-     * @param {number} stepId
-     * @param {object} section — { key, label, icon, template() }
-     * @returns {string}
-     */
     _buildShell(stepId, section) {
         const isFirst = stepId === 1;
         const isLast  = stepId === TOTAL_STEPS;
-        const step    = STEPS.find(s => s.id === stepId);
+
+        // بيانات القسم من الـ Store
+        const sectionData = Store.getSection?.(section.key) ?? {};
 
         return `
-            <!-- ── Section Wrapper ── -->
             <div class="section-wrapper"
                  data-section="${section.key}"
                  data-step="${stepId}">
 
-                <!-- ── Section Header ── -->
+                <!-- Header -->
                 <div class="section-header">
                     <div class="section-icon-wrap">
                         <i class="fas ${section.icon}"></i>
@@ -200,43 +188,35 @@ class SectionRenderer {
                     </div>
                 </div>
 
-                <!-- ── Section Body (محتوى الـ section) ── -->
+                <!-- Body -->
                 <div class="section-body">
-                    ${section.template(Store.getSection(section.key))}
+                    ${section.template(sectionData)}
                 </div>
 
-                <!-- ── Section Footer (أزرار التنقل) ── -->
+                <!-- Footer -->
                 <div class="section-footer">
 
-                    <!-- زر الرجوع -->
                     <button
                         id="btn-back"
                         type="button"
-                        class="btn-nav btn-back
-                               ${isFirst ? "invisible" : ""}"
+                        class="btn-nav btn-back ${isFirst ? "invisible" : ""}"
                         ${isFirst ? "tabindex='-1'" : ""}
                         aria-label="الخطوة السابقة">
                         <i class="fas fa-arrow-right text-sm"></i>
                         <span>السابق</span>
                     </button>
 
-                    <!-- مؤشر الخطوة (وسط) -->
-                    <span class="text-xs text-gray-400
-                                 dark:text-gray-500 font-medium">
+                    <span class="text-xs text-gray-400 dark:text-gray-500 font-medium">
                         ${stepId} / ${TOTAL_STEPS}
                     </span>
 
-                    <!-- زر التالي / إنهاء -->
                     <button
                         id="btn-next"
                         type="button"
                         class="btn-nav btn-next"
                         aria-label="${isLast ? "إنهاء وعرض الملخص" : "الخطوة التالية"}">
                         <span>${isLast ? "إنهاء 🎉" : "التالي"}</span>
-                        ${isLast
-                            ? ""
-                            : `<i class="fas fa-arrow-left text-sm"></i>`
-                        }
+                        ${isLast ? "" : `<i class="fas fa-arrow-left text-sm"></i>`}
                     </button>
 
                 </div>
@@ -249,22 +229,15 @@ class SectionRenderer {
     /* ─────────────────────────────────────────
        _hydrate — ربط البيانات بالـ inputs
     ───────────────────────────────────────── */
-    /**
-     * يملأ الـ inputs بالبيانات المحفوظة
-     * ويربطها بالـ Store عند التغيير
-     *
-     * @param {number} stepId
-     * @param {object} section
-     */
     _hydrate(stepId, section) {
         const sectionEl = this._app.querySelector(
             `[data-section="${section.key}"]`
         );
         if (!sectionEl) return;
 
-        const sectionData = Store.getSection(section.key);
+        const sectionData = Store.getSection?.(section.key) ?? {};
 
-        // ── ملء الـ inputs ────────────────────
+        // ملء الـ inputs بالبيانات المحفوظة
         sectionEl.querySelectorAll("[data-field]").forEach(el => {
             const field = el.getAttribute("data-field");
             const value = this._getNestedValue(sectionData, field);
@@ -275,107 +248,75 @@ class SectionRenderer {
                 el.value = value;
             } else if (el.tagName === "SELECT") {
                 el.value = value;
-            } else if (el.dataset.type === "chips") {
-                // الـ chips تتعامل معها الـ section نفسها في onMount
             }
+            // الـ chips تتعامل معها الـ section في onMount
         });
 
-        // ── ربط التغييرات بالـ Store ──────────
+        // ربط التغييرات بالـ Store
         sectionEl.querySelectorAll("[data-field]").forEach(el => {
-            const field    = el.getAttribute("data-field");
-            const saveKey  = `${section.key}.${field}`;
+            const field   = el.getAttribute("data-field");
+            const saveKey = `${section.key}.${field}`;
 
-            const handler = this._debounce((e) => {
-                const val = el.type === "checkbox"
-                    ? el.checked
-                    : el.value;
-
+            const handler = this._debounce(() => {
+                const val = el.type === "checkbox" ? el.checked : el.value;
                 Store.set(saveKey, val);
-
-                // live validation
-                Validator.attachLiveValidation(el, section.key, field);
-
+                Bus.emit(EVENTS.STORE_CHANGED, { key: saveKey, value: val });
             }, 300);
 
             el.addEventListener("input",  handler);
             el.addEventListener("change", handler);
         });
-
-        // ── live validation للـ inputs ────────
-        sectionEl.querySelectorAll("[data-field]").forEach(el => {
-            const field = el.getAttribute("data-field");
-            if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
-                Validator.attachLiveValidation(el, section.key, field);
-            }
-        });
     }
 
 
     /* ─────────────────────────────────────────
-       _bindNavButtons — ربط أزرار التنقل
+       _bindNavButtons
     ───────────────────────────────────────── */
     _bindNavButtons(stepId) {
         const btnNext = this._app.querySelector("#btn-next");
         const btnBack = this._app.querySelector("#btn-back");
 
-        // ── زر التالي ─────────────────────────
+        // زر التالي
         btnNext?.addEventListener("click", async () => {
-            const section    = await this._loadSection(stepId);
-            const sectionKey = section.key;
-            const data       = Store.getSection(sectionKey);
+            const section = await this._loadSection(stepId);
+            const data    = Store.getSection?.(section.key) ?? {};
 
-            // تشغيل الـ validation
-            const { valid, errors, warnings } =
-                Validator.validate(sectionKey, data);
+            const result = Validator.validate(section.key, data);
 
-            if (!valid) {
-                Validator.showErrors(sectionKey, errors, warnings);
+            // دعم كلا الشكلين: { valid, errors } أو errors مباشرة
+            const isValid = result?.valid ?? (Object.keys(result ?? {}).length === 0);
+            const errors  = result?.errors ?? result;
+
+            if (!isValid) {
+                Validator.showErrors?.(section.key, errors);
                 Toast.error("أكمل الحقول المطلوبة أولاً");
-
-                // scroll لأول خطأ
                 this._scrollToFirstError();
                 return;
             }
 
-            // مسح الأخطاء
-            Validator.clearErrors(sectionKey);
-
-            // تعليم الخطوة كمكتملة
-            ProgressBar.markDone(stepId);
+            Validator.clearErrors?.(section.key);
+            ProgressBar.markDone?.(stepId);
             Bus.emit(EVENTS.STEP_COMPLETED, { stepId });
 
-            // الانتقال للتالي
-            Router.next();
-        });
-
-        // ── زر الرجوع ─────────────────────────
-        btnBack?.addEventListener("click", () => {
-            Router.back();
-        });
-
-        // ── keyboard shortcut ─────────────────
-        // Enter = التالي (لو مش داخل textarea)
-        document.addEventListener("keydown", this._keyHandler = (e) => {
-            if (
-                e.key      === "Enter"  &&
-                e.ctrlKey  === false    &&
-                e.metaKey  === false    &&
-                document.activeElement?.tagName !== "TEXTAREA" &&
-                document.activeElement?.tagName !== "BUTTON"
-            ) {
-                btnNext?.click();
+            if (stepId < TOTAL_STEPS) {
+                Router.next?.() ?? this.render(stepId + 1);
+            } else {
+                // آخر خطوة → عرض الملخص / Preview
+                Bus.emit(EVENTS.WIZARD_COMPLETE);
+                Toast.success("أحسنت! مشروعك جاهز 🎉");
             }
-        }, { once: true });
+        });
+
+        // زر الرجوع
+        btnBack?.addEventListener("click", () => {
+            Router.back?.() ?? this.render(stepId - 1);
+        });
     }
 
 
     /* ─────────────────────────────────────────
-       _animateTransition — animation الانتقال
+       _animateTransition
     ───────────────────────────────────────── */
-    /**
-     * @param {number} from
-     * @param {number} to
-     */
     async _animateTransition(from, to) {
         if (!this._app) return;
 
@@ -383,36 +324,30 @@ class SectionRenderer {
         const outClass     = goingForward ? "slide-out-left"  : "slide-out-right";
         const inClass      = goingForward ? "slide-in-right"  : "slide-in-left";
 
-        // ── خروج المحتوى الحالي ───────────────
         const current = this._app.querySelector(".section-wrapper");
         if (current) {
             current.classList.add(outClass);
             await this._wait(200);
         }
 
-        // ── عرض الـ section الجديد ────────────
         await this.render(to, true);
 
-        // ── دخول المحتوى الجديد ───────────────
         const next = this._app.querySelector(".section-wrapper");
         if (next) {
             next.classList.add(inClass);
             requestAnimationFrame(() => {
                 next.classList.remove(inClass);
                 next.classList.add("slide-in-active");
-                setTimeout(() =>
-                    next.classList.remove("slide-in-active"), 300
-                );
+                setTimeout(() => next.classList.remove("slide-in-active"), 300);
             });
         }
     }
 
 
     /* ─────────────────────────────────────────
-       _swapContent — تبديل المحتوى بـ fade
+       _swapContent — fade transition
     ───────────────────────────────────────── */
     async _swapContent(html) {
-        // fade out
         this._app.style.transition = "opacity 0.15s ease";
         this._app.style.opacity    = "0";
 
@@ -420,7 +355,6 @@ class SectionRenderer {
 
         this._app.innerHTML = html;
 
-        // fade in
         requestAnimationFrame(() => {
             this._app.style.opacity = "1";
         });
@@ -428,28 +362,26 @@ class SectionRenderer {
 
 
     /* ─────────────────────────────────────────
-       _renderError — عرض رسالة خطأ
+       _renderError
     ───────────────────────────────────────── */
     _renderError(stepId) {
+        if (!this._app) return;
         this._app.innerHTML = `
             <div class="flex flex-col items-center justify-center
                         min-h-[300px] gap-4 text-center p-8">
                 <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30
                             rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-circle-exclamation
-                               text-red-500 text-2xl"></i>
+                    <i class="fas fa-circle-exclamation text-red-500 text-2xl"></i>
                 </div>
-                <h3 class="text-lg font-black text-gray-700
-                           dark:text-gray-200">
-                    تعذّر تحميل هذه الخطوة
+                <h3 class="text-lg font-black text-gray-700 dark:text-gray-200">
+                    تعذّر تحميل الخطوة ${stepId}
                 </h3>
                 <p class="text-sm text-gray-400 dark:text-gray-500">
-                    تحقق من الاتصال أو أعد تحميل الصفحة
+                    تحقق من الـ Console أو أعد تحميل الصفحة
                 </p>
                 <button onclick="window.location.reload()"
                     class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700
-                           text-white text-sm font-bold rounded-xl
-                           transition">
+                           text-white text-sm font-bold rounded-xl transition">
                     إعادة التحميل
                 </button>
             </div>
@@ -458,31 +390,20 @@ class SectionRenderer {
 
 
     /* ─────────────────────────────────────────
-       _scrollToFirstError
+       Helpers
     ───────────────────────────────────────── */
     _scrollToFirstError() {
-        const firstError = this._app.querySelector(
+        const firstError = this._app?.querySelector(
             ".fikra-input.error, .fikra-textarea.error"
         );
-        firstError?.scrollIntoView({
-            behavior: "smooth",
-            block   : "center",
-        });
+        firstError?.scrollIntoView({ behavior: "smooth", block: "center" });
         firstError?.focus({ preventScroll: true });
     }
 
-
-    /* ─────────────────────────────────────────
-       _getNestedValue
-    ───────────────────────────────────────── */
     _getNestedValue(obj, path) {
         return path.split(".").reduce((acc, key) => acc?.[key], obj);
     }
 
-
-    /* ─────────────────────────────────────────
-       _debounce
-    ───────────────────────────────────────── */
     _debounce(fn, delay) {
         let timer;
         return (...args) => {
@@ -491,28 +412,22 @@ class SectionRenderer {
         };
     }
 
-
-    /* ─────────────────────────────────────────
-       _wait — promise-based setTimeout
-    ───────────────────────────────────────── */
     _wait(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // alias لـ render() للتوافق مع app.js
+    // ── Aliases ──────────────────────────────
     goTo(stepId) {
         return this.render(stepId);
     }
-    
+
     currentSection() {
         return this._current;
     }
-
 }
 
 
-/* ─────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────
    Singleton Export
-───────────────────────────────────────────────────────── */
-const SectionRendererInstance = new SectionRenderer();
-export default SectionRendererInstance;
+───────────────────────────────────────────────────── */
+export default new SectionRenderer();

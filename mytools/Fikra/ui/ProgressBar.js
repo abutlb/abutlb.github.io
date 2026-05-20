@@ -99,60 +99,56 @@ class ProgressBar {
     /* ─────────────────────────────────────────
        _buildSteps — بناء الـ DOM مرة واحدة
     ───────────────────────────────────────── */
-    _buildSteps() {
-        if (!this._stepsEl) return;
+_buildSteps() {
+    if (!this._stepsEl) return;
 
-        this._stepsEl.innerHTML = "";
+    this._stepsEl.innerHTML = "";
 
-        STEPS.forEach((step, index) => {
+    // الـ container نفسه يكون flex + items-center
+    this._stepsEl.className = "flex items-center w-full px-4";
 
-            // ── Step Wrapper ──────────────────
-            const wrapper = document.createElement("div");
-            wrapper.className = "flex flex-col items-center gap-0.5 flex-shrink-0";
-            wrapper.setAttribute("data-step-wrapper", step.id);
+    STEPS.forEach((step, index) => {
 
-            // ── Dot ───────────────────────────
-            const dot = document.createElement("button");
-            dot.className        = "step-dot pending";
-            dot.setAttribute("data-step-dot", step.id);
-            dot.setAttribute("aria-label", `الخطوة ${step.id}: ${step.label}`);
-            dot.setAttribute("type", "button");
-            dot.innerHTML        = `
-                <span class="step-dot-content">
-                    ${step.id}
-                </span>
-            `;
+        // ── Step Wrapper ──────────────────────────
+        const wrapper = document.createElement("div");
+        wrapper.className = "flex flex-col items-center gap-0.5 flex-shrink-0";
+        wrapper.setAttribute("data-step-wrapper", step.id);
 
-            // click على الـ dot → navigate
-            dot.addEventListener("click", () => {
-                Router.goTo(step.id);
-            });
+        // ── Dot ──────────────────────────────────
+        const dot = document.createElement("button");
+        dot.className = "step-dot pending";
+        dot.setAttribute("data-step-dot", step.id);
+        dot.setAttribute("aria-label", `الخطوة ${step.id}: ${step.label}`);
+        dot.setAttribute("type", "button");
+        dot.innerHTML = `<span class="step-dot-content">${step.id}</span>`;
 
-            // ── Label ─────────────────────────
-            const label = document.createElement("span");
-            label.className = "step-label pending";
-            label.setAttribute("data-step-label", step.id);
-
-            // نخفي الـ labels على الشاشات الصغيرة
-            label.classList.add("hidden", "sm:block");
-            label.textContent = step.label;
-
-            wrapper.appendChild(dot);
-            wrapper.appendChild(label);
-            this._stepsEl.appendChild(wrapper);
-
-            // ── Connector Line (بين الـ steps) ──
-            if (index < STEPS.length - 1) {
-                const line = document.createElement("div");
-                line.className = "step-line pending mt-[-14px]";
-                line.setAttribute("data-step-line", step.id);
-                this._stepsEl.appendChild(line);
-            }
+        dot.addEventListener("click", () => {
+            Router.goTo(step.id);
         });
 
-        // أول render
-        this._render();
-    }
+        // ── Label ─────────────────────────────────
+        const label = document.createElement("span");
+        label.className = "step-label pending hidden sm:block";
+        label.setAttribute("data-step-label", step.id);
+        label.textContent = step.label;
+
+        wrapper.appendChild(dot);
+        wrapper.appendChild(label);
+        this._stepsEl.appendChild(wrapper);
+
+        // ── Connector Line ────────────────────────
+        // flex-1 يجعلها تملأ المساحة المتبقية بين الـ steps
+        if (index < STEPS.length - 1) {
+            const line = document.createElement("div");
+            line.className = "step-line pending flex-1 mx-1";
+            line.setAttribute("data-step-line", step.id);
+            this._stepsEl.appendChild(line);
+        }
+    });
+
+    this._render();
+}
+
 
 
     /* ─────────────────────────────────────────

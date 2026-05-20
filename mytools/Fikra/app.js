@@ -53,214 +53,55 @@ function init() {
     // 3. Modal
     ModalManager.init();
 
-    // 4. Store
-    // Store.init();
-
-    // 5. Progress Bar
-    ProgressBar.init({
-        container: document.querySelector("#progress-bar"),
-        sections : SECTIONS,
-    });
-
-    // 6. Section Renderer
-    SectionRenderer.init({
-        container: document.querySelector("#section-container"),
-        sections : SECTIONS,
-        onNext   : _handleNext,
-        onPrev   : _handlePrev,
-    });
-
-    // 7. Router
-    Router.init({
-        sections: SECTIONS,
-        onChange: (idx) => {
-            SectionRenderer.goTo(idx);
-            ProgressBar.update(idx);
-        },
-    });
-
-    // 8. Auto-save
+    // 4. Auto-save (قبل أي شيء آخر)
     _initAutoSave();
 
-    // 9. Store → UI sync
-    _bindStoreSync();
-
-    // 10. Project Name
-    _initProjectName();
-
-    // 11. Keyboard shortcuts
+    // 5. Keyboard shortcuts
     _initKeyboardShortcuts();
 
-    // 12. Render أول قسم
-    const savedIdx = Store.get("meta.currentSection") ?? 0;
-    SectionRenderer.goTo(savedIdx);
-    ProgressBar.update(savedIdx);
+    // 6. Project Name + زر البداية
+    _initProjectName();
+
+    // 7. New Project button
+    _initNewProjectBtn();
 }
 
 
 /* ─────────────────────────────────────────────────────
-   NAVIGATION HANDLERS
-───────────────────────────────────────────────────── */
-function _handleNext(currentIdx, data) {
-
-    const section = SECTIONS[currentIdx];
-    const errors  = Validator.validate(section.key, data);
-
-    if (errors && Object.keys(errors).length > 0) {
-        Validator.showErrors(
-            document.querySelector("#section-container"),
-            errors
-        );
-        ToastManager.error("أكمل الحقول المطلوبة أولاً");
-        return false;
-    }
-
-    _saveSection(section.key, data);
-
-    const nextIdx = currentIdx + 1;
-    if (nextIdx < SECTIONS.length) {
-        SectionRenderer.goTo(nextIdx);
-        ProgressBar.update(nextIdx);
-        Store.set("meta.currentSection", nextIdx);
-        Router.push(nextIdx);
-
-        if (nextIdx === SECTIONS.length - 1) {
-            ToastManager.success("وصلت للملخص النهائي! 🎉");
-        }
-    }
-
-    return true;
-}
-
-function _handlePrev(currentIdx) {
-    const prevIdx = currentIdx - 1;
-    if (prevIdx >= 0) {
-        SectionRenderer.goTo(prevIdx);
-        ProgressBar.update(prevIdx);
-        Store.set("meta.currentSection", prevIdx);
-        Router.push(prevIdx);
-    }
-}
-
-
-/* ─────────────────────────────────────────────────────
-   SAVE SECTION DATA
-───────────────────────────────────────────────────── */
-function _saveSection(key, data) {
-    if (!data || typeof data !== "object") return;
-
-    Object.entries(data).forEach(([field, value]) => {
-        Store.set(`${key}.${field}`, value);
-    });
-
-    Bus.emit(EVENTS.STORE_CHANGED, { key });
-}
-
-
-/* ─────────────────────────────────────────────────────
-   STORE → UI SYNC
-───────────────────────────────────────────────────── */
-function _bindStoreSync() {
-    const container = document.querySelector("#section-container");
-    if (!container) return;
-
-    container.addEventListener("input",  _onFieldChange);
-    container.addEventListener("change", _onFieldChange);
-}
-
-function _onFieldChange(e) {
-    const el    = e.target;
-    const field = el.getAttribute("data-field");
-    if (!field) return;
-
-    const section = SectionRenderer.currentSection();
-    if (!section) return;
-
-    const key   = `${section.key}.${field}`;
-    const value = el.type === "checkbox" ? el.checked : el.value;
-
-    Store.set(key, value);
-    Bus.emit(EVENTS.STORE_CHANGED, { key, value });
-}
-
-
-/* ─────────────────────────────────────────────────────
-   AUTO-SAVE
-───────────────────────────────────────────────────── */
-function _initAutoSave() {
-    window.addEventListener("beforeunload", () => {
-        Store.persist();
-    });
-
-    setInterval(() => {
-        Store.persist();
-        _showSaveIndicator();
-    }, 30_000);
-
-    Bus.on(EVENTS.STORE_CHANGED, () => {
-        Store.persist();
-    });
-}
-
-function _showSaveIndicator() {
-    const indicator = document.querySelector("#save-indicator");
-    if (!indicator) return;
-
-    indicator.classList.remove("opacity-0");
-    indicator.classList.add("opacity-100");
-
-    setTimeout(() => {
-        indicator.classList.remove("opacity-100");
-        indicator.classList.add("opacity-0");
-    }, 2000);
-}
-
-
-/* ─────────────────────────────────────────────────────
-   PROJECT NAME
+   PROJECT NAME + START BUTTON
 ───────────────────────────────────────────────────── */
 function _initProjectName() {
-
     const nameInput = document.querySelector("#landing-project-name");
     const startBtn  = document.querySelector("#start-btn");
 
     if (!nameInput || !startBtn) return;
 
-    // ── تفعيل/تعطيل زر البداية حسب الإدخال ──
+    // تفعيل/تعطيل الزر بناءً على الإدخال
     const toggleBtn = () => {
-        const hasValue = nameInput.value.trim().length > 0;
-        startBtn.disabled = !hasValue;
+        startBtn.disabled = nameInput.value.trim().length === 0;
     };
-
     nameInput.addEventListener("input", toggleBtn);
-    toggleBtn(); // حالة أولية
+    toggleBtn();
 
-    // ── Enter يشغّل الزر ──
+    // Enter يضغط الزر
     nameInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !startBtn.disabled) {
-            startBtn.click();
-        }
+        if (e.key === "Enter" && !startBtn.disabled) startBtn.click();
     });
 
-    // ── الضغط على زر البداية ──
+    // الضغط على "ابدأ التصميم"
     startBtn.addEventListener("click", () => {
         const name = nameInput.value.trim();
         if (!name) return;
 
-        // حفظ اسم المشروع
-        Store.initProject(name);
+        // حفظ الاسم
+        Store.set("meta.projectName", name);
+        Store.persist();
 
         // تحديث عنوان الصفحة
         document.title = `${name} — فكرة`;
 
-        // إظهار badge الاسم في الهيدر
-        const badge     = document.querySelector("#project-badge");
-        const badgeName = document.querySelector("#project-badge-name");
-        if (badge && badgeName) {
-            badgeName.textContent = name;
-            badge.classList.remove("hidden");
-            badge.classList.add("flex");
-        }
+        // badge الهيدر
+        _showProjectBadge(name);
 
         // إظهار أزرار الهيدر
         document.querySelector("#new-project-btn")
@@ -278,20 +119,114 @@ function _initProjectName() {
         document.querySelector("#progress-bar-wrap")
             ?.classList.remove("hidden");
 
-        // تهيئة الـ Wizard وعرض أول قسم
-        ProgressBar.init();
-        SectionRenderer.init();
-        SectionRenderer.render(1);
+        // تشغيل الـ Wizard
+        _startWizard();
     });
 
-    // ── لو في مشروع محفوظ → اعرضه مباشرة ──
-    if (Store.hasProject()) {
-        const savedName = Store.get("meta.projectName");
+    // لو في مشروع محفوظ → اعرضه مباشرة
+    const savedName = Store.get("meta.projectName");
+    if (savedName) {
         nameInput.value = savedName;
         toggleBtn();
     }
 }
 
+
+/* ─────────────────────────────────────────────────────
+   START WIZARD
+───────────────────────────────────────────────────── */
+function _startWizard() {
+
+    // تهيئة SectionRenderer
+    SectionRenderer.init();
+
+    // تهيئة ProgressBar
+    ProgressBar.init({
+        container: document.querySelector("#steps-indicator"),
+        fill     : document.querySelector("#progress-fill"),
+        sections : SECTIONS,
+    });
+
+    // تهيئة Router
+    Router.init({
+        sections: SECTIONS,
+        onChange: (idx) => {
+            SectionRenderer.render(idx);
+            ProgressBar.setStep(idx);
+        },
+    });
+
+    // عرض أول قسم (أو القسم المحفوظ)
+    const savedIdx = Store.get("meta.currentSection") ?? 1;
+    SectionRenderer.render(savedIdx);
+    ProgressBar.setStep(savedIdx);
+}
+
+
+/* ─────────────────────────────────────────────────────
+   SHOW PROJECT BADGE
+───────────────────────────────────────────────────── */
+function _showProjectBadge(name) {
+    const badge     = document.querySelector("#project-badge");
+    const badgeName = document.querySelector("#project-badge-name");
+    if (!badge || !badgeName) return;
+
+    badgeName.textContent = name;
+    badge.classList.remove("hidden");
+    badge.classList.add("flex");
+}
+
+
+/* ─────────────────────────────────────────────────────
+   NEW PROJECT BUTTON
+───────────────────────────────────────────────────── */
+function _initNewProjectBtn() {
+    const btn = document.querySelector("#new-project-btn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        ModalManager.confirm({
+            title  : "بدء مشروع جديد",
+            message: "سيتم مسح بيانات المشروع الحالي. هل أنت متأكد؟",
+            onConfirm: () => {
+                Store.clear();
+                window.location.reload();
+            },
+        });
+    });
+}
+
+
+/* ─────────────────────────────────────────────────────
+   AUTO-SAVE
+───────────────────────────────────────────────────── */
+function _initAutoSave() {
+    // حفظ عند إغلاق الصفحة
+    window.addEventListener("beforeunload", () => {
+        Store.persist();
+    });
+
+    // حفظ كل 30 ثانية
+    setInterval(() => {
+        Store.persist();
+        _showSaveIndicator();
+    }, 30_000);
+
+    // حفظ عند أي تغيير في الـ Store
+    Bus.on(EVENTS.STORE_CHANGED, () => {
+        Store.persist();
+    });
+}
+
+function _showSaveIndicator() {
+    const indicator = document.querySelector("#save-indicator");
+    if (!indicator) return;
+
+    indicator.classList.replace("opacity-0", "opacity-100");
+    setTimeout(() => {
+        indicator.classList.replace("opacity-100", "opacity-0");
+    }, 2000);
+}
 
 
 /* ─────────────────────────────────────────────────────
@@ -308,19 +243,18 @@ function _initKeyboardShortcuts() {
             return;
         }
 
-        // Alt + ← / → → التنقل
-        if (e.altKey) {
-            const current = Store.get("meta.currentSection") ?? 0;
+        // Alt + ← → الخطوة السابقة
+        if (e.altKey && e.key === "ArrowLeft") {
+            e.preventDefault();
+            Router.back?.();
+            return;
+        }
 
-            if (e.key === "ArrowLeft") {
-                e.preventDefault();
-                _handlePrev(current);
-            }
-
-            if (e.key === "ArrowRight") {
-                e.preventDefault();
-                document.querySelector("#btn-next")?.click();
-            }
+        // Alt + → → الخطوة التالية
+        if (e.altKey && e.key === "ArrowRight") {
+            e.preventDefault();
+            document.querySelector("#btn-next")?.click();
+            return;
         }
 
         // Escape → إغلاق الـ Modal

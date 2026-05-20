@@ -1805,3 +1805,127 @@ body.print-mode .section-wrap {
     overflow          : hidden;
 }
 
+.step-line {
+    height: 2px;
+    min-width: 12px;      /* ← لا تتقلص أكثر من كذا */
+    align-self: center;   /* ← تتمركز مع الـ dots */
+    margin-top: 0 !important; /* ← احذف mt-[-14px] القديم */
+}
+
+
+/* ─────────────────────────────────────────────────────
+   6b. STEP INDICATOR (dots + labels + lines)
+───────────────────────────────────────────────────── */
+
+/* الـ container */
+#steps-indicator {
+    display    : flex;
+    align-items: center;
+    width      : 100%;
+    padding    : 0 0.5rem;
+    overflow-x : auto;
+    scrollbar-width: none;
+}
+#steps-indicator::-webkit-scrollbar { display: none; }
+
+/* ── Dot ─────────────────────────────────────────── */
+.step-dot {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    width          : 1.75rem;
+    height         : 1.75rem;
+    border-radius  : 50%;
+    border         : 2px solid #e5e7eb;
+    background     : #fff;
+    color          : #9ca3af;
+    font-size      : 0.72rem;
+    font-weight    : 700;
+    cursor         : pointer;
+    flex-shrink    : 0;
+    transition     : all var(--transition);
+    padding        : 0;
+    font-family    : inherit;
+}
+
+.step-dot.active {
+    border-color: var(--brand-500);
+    background  : var(--brand-500);
+    color       : #fff;
+    box-shadow  : 0 0 0 4px rgba(61,90,254,.15);
+    transform   : scale(1.1);
+}
+
+.step-dot.done {
+    border-color: #10b981;
+    background  : #10b981;
+    color       : #fff;
+}
+
+.step-dot.pending {
+    border-color: #e5e7eb;
+    background  : #fff;
+    color       : #9ca3af;
+}
+
+.step-dot:hover:not(.active) {
+    border-color: var(--brand-300);
+    color        : var(--brand-500);
+    transform    : scale(1.05);
+}
+
+/* Dark */
+.dark .step-dot.pending {
+    background  : #1a1f2e;
+    border-color: #2d3448;
+    color       : #6b7280;
+}
+.dark .step-dot.active {
+    background  : var(--brand-500);
+    border-color: var(--brand-500);
+    box-shadow  : 0 0 0 4px rgba(61,90,254,.2);
+}
+
+/* ── Label ───────────────────────────────────────── */
+.step-label {
+    font-size  : 0.65rem;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-top : 0.2rem;
+    transition : color var(--transition);
+}
+
+.step-label.active  { color: var(--brand-600); }
+.step-label.done    { color: #059669; }
+.step-label.pending { color: #9ca3af; }
+
+.dark .step-label.active  { color: var(--brand-400); }
+.dark .step-label.done    { color: #34d399; }
+.dark .step-label.pending { color: #4b5563; }
+
+/* ── Connector Line ──────────────────────────────── */
+.step-line {
+    flex       : 1;
+    height     : 2px;
+    min-width  : 8px;
+    border-radius: 1px;
+    align-self : center;
+    margin     : 0 2px;
+    margin-bottom: 1.1rem; /* ← محاذاة مع منتصف الـ dot */
+    transition : background var(--transition);
+}
+
+.step-line.done    { background: #10b981; }
+.step-line.pending { background: #e5e7eb; }
+
+.dark .step-line.done    { background: #059669; }
+.dark .step-line.pending { background: #2d3448; }
+
+/* ── Step dot content (الرقم أو الـ check) ───────── */
+.step-dot-content {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    line-height    : 1;
+}
+
