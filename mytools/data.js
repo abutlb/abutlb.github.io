@@ -1,11 +1,24 @@
 const toolsPages = [
+
+    // ──────────── أدوات البيانات ────────────
+    {
+        slug:     'DAMAQ',
+        title:    'محرك DAMAQ لجودة البيانات',
+        desc:     'تحليل احترافي لجودة البيانات وفق أبعاد DAMA السبعة مع تقارير تفاعلية قابلة للتصدير',
+        icon:     'fa-magnifying-glass-chart',
+        color:    'from-blue-700 to-indigo-600',
+        category: 'data',
+        status:   'published',
+        updated:  '2025-06-17',
+        level:    'متقدم',
+    },
     {
         slug:     'data_quality',
         title:    'مقياس جودة البيانات',
         desc:     'تحليل وتنظيف وتحسين جودة البيانات الخاصة بك بطريقة فعالة',
         icon:     'fa-database',
         color:    'from-blue-500 to-green-500',
-        category: 'data',          // ← أضف هذا
+        category: 'data',
         status:   'published',
         updated:  '2025-01-10',
         level:    'متقدم',
@@ -16,10 +29,21 @@ const toolsPages = [
         desc:     'تحليل شامل وتنظيف احترافي للبيانات مع كشف القيم الشاذة والمكررة',
         icon:     'fa-broom',
         color:    'from-slate-700 to-indigo-900',
-        category: 'data',          // ← أضف هذا
+        category: 'data',
         status:   'published',
         updated:  '2025-01-15',
         level:    'متقدم',
+    },
+    {
+        slug:     'text-analyzer',
+        title:    'محلل النصوص المفتوحة',
+        desc:     'تحليل احترافي للنصوص وإحصاءاتها وتوزيع الكلمات والأنماط اللغوية',
+        icon:     'fa-align-left',
+        color:    'from-violet-600 to-purple-700',
+        category: 'data',
+        status:   'published',
+        updated:  '2025-03-10',
+        level:    'متوسط',
     },
     {
         slug:     'regex_designer',
@@ -27,32 +51,10 @@ const toolsPages = [
         desc:     'تصميم واختبار التعابير النمطية (Regex) لمعالجة وتحليل النصوص',
         icon:     'fa-code',
         color:    'from-indigo-500 to-purple-500',
-        category: 'data',          // ← أضف هذا
+        category: 'data',
         status:   'published',
         updated:  '2025-01-08',
         level:    'متوسط',
-    },
-    {
-        slug:     'sample_size_calculator',
-        title:    'حاسبة حجم العينة',
-        desc:     'احسب حجم العينة المثالي للدراسات والبحوث الإحصائية بدقة علمية',
-        icon:     'fa-chart-bar',
-        color:    'from-purple-500 to-pink-500',
-        category: 'calculators',   // ← أضف هذا
-        status:   'published',
-        updated:  '2025-01-05',
-        level:    'متوسط',
-    },
-    {
-        slug:     'prompt_engineering',
-        title:    'نظام أوامر الذكاء الاصطناعي',
-        desc:     'مجموعة من أوامر الإخراج المصممة بشكل احترافي لتحسين التفاعل مع نماذج الذكاء الاصطناعي',
-        icon:     'fa-robot',
-        color:    'from-blue-600 to-violet-600',
-        category: 'utility',       // ← أضف هذا
-        status:   'published',
-        updated:  '2025-02-01',
-        level:    'مبتدئ',
     },
     {
         slug:     'data_flow_diagram_generator',
@@ -60,18 +62,31 @@ const toolsPages = [
         desc:     'أداة احترافية لإنشاء وتصميم مخططات تدفق البيانات التفاعلية',
         icon:     'fa-project-diagram',
         color:    'from-cyan-500 to-indigo-600',
-        category: 'data',          // ← أضف هذا
+        category: 'data',
         status:   'published',
         updated:  '2025-01-20',
         level:    'متقدم',
     },
+
+    // ──────────── الحاسبات ────────────
+    {
+        slug:     'sample_size_calculator',
+        title:    'حاسبة حجم العينة',
+        desc:     'احسب حجم العينة المثالي للدراسات والبحوث الإحصائية بدقة علمية',
+        icon:     'fa-chart-bar',
+        color:    'from-purple-500 to-pink-500',
+        category: 'calculators',
+        status:   'published',
+        updated:  '2025-01-05',
+        level:    'متوسط',
+    },
     {
         slug:     'commute-calculator',
-        title:    'وفّر فلوسك في التنقل!',
+        title:    'وفّر فلوسك في التنقل',
         desc:     'اكتشف كم توفر من وقتك وفلوسك وتأثيرك على البيئة في مشاوريك اليومية',
         icon:     'fa-car',
         color:    'from-blue-500 to-purple-600',
-        category: 'calculators',   // ← أضف هذا
+        category: 'calculators',
         status:   'published',
         updated:  '2025-01-12',
         level:    'مبتدئ',
@@ -82,10 +97,21 @@ const toolsPages = [
         desc:     'أشتري ولا أستأجر؟ حاسبة ذكية تساعدك تختار الأفضل لعائلتك المتنامية',
         icon:     'fa-home',
         color:    'from-blue-600 to-green-600',
-        category: 'calculators',   // ← أضف هذا
+        category: 'calculators',
         status:   'published',
         updated:  '2025-01-18',
         level:    'مبتدئ',
+    },
+    {
+        slug:     'buy_or_rent',
+        title:    'أشتري أم أستأجر؟',
+        desc:     'حاسبة مالية تقارن بين تملك وتأجير المسكن بناءً على وضعك الفعلي',
+        icon:     'fa-scale-balanced',
+        color:    'from-emerald-600 to-teal-500',
+        category: 'calculators',
+        status:   'published',
+        updated:  '2025-04-01',
+        level:    'متوسط',
     },
     {
         slug:     'health_calculator',
@@ -93,21 +119,23 @@ const toolsPages = [
         desc:     'احسب مؤشر كتلة الجسم ومعدل الأيض الأساسي والسعرات اليومية المطلوبة',
         icon:     'fa-heartbeat',
         color:    'from-green-500 to-emerald-600',
-        category: 'calculators',   // ← أضف هذا
+        category: 'calculators',
         status:   'published',
         updated:  '2025-01-09',
         level:    'مبتدئ',
     },
+
+    // ──────────── التخطيط ────────────
     {
-        slug:     'automation_decision',
-        title:    'مساعد قرار الأتمتة',
-        desc:     'هل تستحق المهمة أن تُؤتمت؟ أداة ذكية لاتخاذ قرار الأتمتة',
-        icon:     'fa-robot',
-        color:    'from-purple-500 to-red-500',
-        category: 'utility',       // ← أضف هذا
+        slug:     'balanced_time_manager',
+        title:    'مدير وقتي المتوازن',
+        desc:     'نظّم وقتك بذكاء وحقق التوازن بين العمل والراحة والنمو الشخصي',
+        icon:     'fa-stopwatch',
+        color:    'from-teal-500 to-cyan-600',
+        category: 'planning',
         status:   'published',
-        updated:  '2025-01-22',
-        level:    'متوسط',
+        updated:  '2025-03-20',
+        level:    'مبتدئ',
     },
     {
         slug:     'content_calendar',
@@ -115,7 +143,7 @@ const toolsPages = [
         desc:     'تخطيط وتنظيم جدول المحتوى الخاص بك على جميع منصات التواصل الاجتماعي',
         icon:     'fa-calendar-alt',
         color:    'from-violet-500 to-purple-600',
-        category: 'planning',      // ← أضف هذا
+        category: 'planning',
         status:   'published',
         updated:  '2025-01-25',
         level:    'مبتدئ',
@@ -126,7 +154,7 @@ const toolsPages = [
         desc:     'تصميم وتنظيم جدولك الأسبوعي بطريقة مرنة وسهلة مع قوالب جاهزة',
         icon:     'fa-calendar-alt',
         color:    'from-blue-600 to-purple-500',
-        category: 'planning',      // ← أضف هذا
+        category: 'planning',
         status:   'published',
         updated:  '2025-01-14',
         level:    'مبتدئ',
@@ -137,18 +165,20 @@ const toolsPages = [
         desc:     'نظّم مهامك وزِد من إنتاجيتك مع إمكانية السحب والإفلات والمهام الفرعية',
         icon:     'fa-tasks',
         color:    'from-emerald-500 to-cyan-500',
-        category: 'planning',      // ← أضف هذا
+        category: 'planning',
         status:   'published',
         updated:  '2025-01-30',
         level:    'مبتدئ',
     },
+
+    // ──────────── التصميم ────────────
     {
         slug:     'color_picker',
         title:    'مستخرج الألوان',
         desc:     'استخرج الألوان من الصور واحصل على أكواد الألوان بسهولة',
         icon:     'fa-eye-dropper',
         color:    'from-pink-500 to-orange-500',
-        category: 'design',        // ← أضف هذا
+        category: 'design',
         status:   'published',
         updated:  '2025-01-07',
         level:    'مبتدئ',
@@ -159,18 +189,53 @@ const toolsPages = [
         desc:     'إنشاء مجموعات ألوان متناسقة لمشاريعك التصميمية',
         icon:     'fa-palette',
         color:    'from-pink-500 to-orange-500',
-        category: 'design',        // ← أضف هذا
+        category: 'design',
         status:   'published',
         updated:  '2025-01-11',
         level:    'مبتدئ',
     },
+
+    // ──────────── أدوات متنوعة ────────────
+    {
+        slug:     'fikra',
+        title:    'فكرة — مصمم MVP',
+        desc:     'حوّل فكرتك إلى خطة MVP قابلة للتنفيذ مع تحليل المتطلبات والمخاطر والجمهور',
+        icon:     'fa-lightbulb',
+        color:    'from-amber-500 to-orange-500',
+        category: 'utility',
+        status:   'published',
+        updated:  '2025-05-01',
+        level:    'متوسط',
+    },
+    {
+        slug:     'prompt_engineering',
+        title:    'نظام أوامر الذكاء الاصطناعي',
+        desc:     'مجموعة من الأوامر المصممة احترافياً لتحسين تفاعلك مع نماذج الذكاء الاصطناعي',
+        icon:     'fa-robot',
+        color:    'from-blue-600 to-violet-600',
+        category: 'utility',
+        status:   'published',
+        updated:  '2025-02-01',
+        level:    'مبتدئ',
+    },
+    {
+        slug:     'automation_decision',
+        title:    'مساعد قرار الأتمتة',
+        desc:     'هل تستحق المهمة أن تُؤتمت؟ أداة ذكية لاتخاذ قرار الأتمتة',
+        icon:     'fa-robot',
+        color:    'from-purple-500 to-red-500',
+        category: 'utility',
+        status:   'published',
+        updated:  '2025-01-22',
+        level:    'متوسط',
+    },
     {
         slug:     'qr_gen',
         title:    'مولد رموز QR',
-        desc:     'أنشئ رموز QR مخصصة لموقعك الإلكتروني أو عملك أو استخدامك الشخصي بسهولة',
+        desc:     'أنشئ رموز QR مخصصة لموقعك أو عملك أو استخدامك الشخصي بسهولة',
         icon:     'fa-qrcode',
         color:    'from-blue-500 to-purple-600',
-        category: 'utility',       // ← أضف هذا
+        category: 'utility',
         status:   'published',
         updated:  '2025-01-06',
         level:    'مبتدئ',
@@ -181,7 +246,7 @@ const toolsPages = [
         desc:     'إنشاء توقيعات بريد إلكتروني احترافية وجذابة بسهولة',
         icon:     'fa-signature',
         color:    'from-indigo-500 to-blue-500',
-        category: 'utility',       // ← أضف هذا
+        category: 'utility',
         status:   'published',
         updated:  '2025-01-13',
         level:    'مبتدئ',
@@ -192,18 +257,20 @@ const toolsPages = [
         desc:     'أداة تساعدك في تحديد إحداثيات النقاط على الصور بدقة عالية',
         icon:     'fa-crosshairs',
         color:    'from-blue-500 to-cyan-500',
-        category: 'utility',       // ← أضف هذا
+        category: 'utility',
         status:   'published',
         updated:  '2025-01-16',
         level:    'متوسط',
     },
+
+    // ──────────── الخصوصية ────────────
     {
         slug:     'browser_data_education',
         title:    'ما يعرفه المتصفح عنك',
         desc:     'اكتشف المعلومات التي يمكن للمواقع جمعها عنك وتعلم كيفية حماية خصوصيتك الرقمية',
         icon:     'fa-user-secret',
         color:    'from-red-500 to-pink-600',
-        category: 'privacy',       // ← أضف هذا
+        category: 'privacy',
         status:   'published',
         updated:  '2025-02-05',
         level:    'مبتدئ',
