@@ -13,14 +13,15 @@ export class DAMAEngine {
     };
 
     static evaluate(data, columns, profileResults, options = {}) {
-        const weights = options.weights || this.DEFAULT_WEIGHTS;
+        const weights  = options.weights  || this.DEFAULT_WEIGHTS;
+        const metadata = options.metadata || {};
 
         const dimensions = {
             completeness : this.calcCompleteness(data, columns, profileResults),
             validity     : this.calcValidity(data, columns, profileResults),
             consistency  : this.calcConsistency(data, columns, profileResults),
             accuracy     : this.calcAccuracy(data, columns, profileResults),
-            timeliness   : this.calcTimeliness(data, columns, profileResults),
+            timeliness   : this.calcTimeliness(data, columns, profileResults, metadata),
             uniqueness   : this.calcUniqueness(data, columns, profileResults),
             integrity    : this.calcIntegrity(data, columns, profileResults),
         };
@@ -62,41 +63,53 @@ export class DAMAEngine {
 
     // ── 2. Validity ─────────────────────────────────────────────
     static calcValidity(data, columns, profile) {
-        let valid = 0, total = 0;
         const issues = [];
+        let totalPenalty = 0;
+        let colsChecked  = 0;
 
         columns.forEach(col => {
             const p = profile[col];
-            if (!p) return;
+            if (!p || p.nonEmpty === 0) return;
+            colsChecked++;
 
-            // Mixed types = مشكلة validity
+            let colPenalty = 0;
+
+            // أنواع بيانات مختلطة
             if (p.mixedTypes?.hasMixed) {
                 issues.push({
                     column : col,
                     issue  : `أنواع بيانات مختلطة: ${p.mixedTypes.types.join(", ")}`
                 });
+                colPenalty += 30;
             }
 
-            // Unicode issues
+            // مشاكل Unicode
             if (p.unicodeIssues?.hasIssues) {
+                const unicodePct = (p.unicodeIssues.count / p.nonEmpty) * 100;
                 issues.push({
                     column : col,
-                    issue  : `مشاكل Unicode في ${p.unicodeIssues.count} قيمة`
+                    issue  : `مشاكل Unicode في ${p.unicodeIssues.count} قيمة (${unicodePct.toFixed(1)}%)`
                 });
+                colPenalty += Math.min(20, unicodePct);
             }
 
-            // نحسب نسبة القيم الصالحة
-            const colValid = p.nonEmpty - (p.mixedTypes?.hasMixed ? p.rareValues?.length || 0 : 0);
-            valid += Math.max(0, colValid);
-            total += p.total;
+            // مسافات مخفية كثيرة
+            if (p.hiddenSpaces?.pct > 10) {
+                colPenalty += Math.min(15, p.hiddenSpaces.pct * 0.3);
+            }
+
+            totalPenalty += Math.min(colPenalty, 100);
         });
 
-        const score = total > 0 ? (valid / total) * 100 : 100;
+        const avgPenalty = colsChecked > 0 ? totalPenalty / colsChecked : 0;
+        const score      = Math.max(0, 100 - avgPenalty);
 
         return {
             score  : +score.toFixed(1),
             issues,
-            details: `${issues.length} مشكلة validity مكتشفة`
+            details: issues.length === 0
+                ? "لا مشاكل validity — البيانات صالحة"
+                : `${issues.length} مشكلة validity مكتشفة`
         };
     }
 
@@ -174,17 +187,53 @@ export class DAMAEngine {
     }
 
     // ── 5. Timeliness ───────────────────────────────────────────
-    static calcTimeliness(data, columns, profile) {
+    static calcTimeliness(data, columns, profile, metadata = {}) {
         const dateCols = columns.filter(c => profile[c]?.type === "date");
 
+        // ── لا توجد أعمدة تاريخ: نستخدم metadata الملف ──────────
         if (dateCols.length === 0) {
+            if (metadata.fileLastModified) {
+                const ageDays = (Date.now() - new Date(metadata.fileLastModified).getTime())
+                    / 86400000;
+
+                const score =
+                    ageDays <=  30 ? 100 :
+                    ageDays <=  90 ?  90 :
+                    ageDays <= 180 ?  75 :
+                    ageDays <= 365 ?  60 :
+                    ageDays <= 730 ?  35 : 15;
+
+                const ageText =
+                    ageDays <  30  ? `${Math.round(ageDays)} يوماً` :
+                    ageDays < 365  ? `${Math.round(ageDays / 30)} شهراً` :
+                                     `${(ageDays / 365).toFixed(1)} سنة`;
+
+                const statusText =
+                    score >= 90 ? "حديثة" :
+                    score >= 75 ? "مقبولة" :
+                    score >= 60 ? "قديمة نسبياً" : "قديمة جداً";
+
+                return {
+                    score  : score,
+                    ageDays: Math.round(ageDays),
+                    issues : score < 60 ? [{
+                        issue: `الملف لم يُعدَّل منذ ${ageText} — البيانات قد تكون قديمة`
+                    }] : [],
+                    details: `عمر الملف ${ageText} — البيانات ${statusText}`,
+                    source : "fileMetadata"
+                };
+            }
+
+            // لا أعمدة تاريخ ولا metadata
             return {
-                score  : 85,
-                details: "لا توجد أعمدة تاريخ — تقييم افتراضي",
-                issues : []
+                score  : 100,
+                details: "لا توجد أعمدة تاريخ — لا ينطبق هذا البُعد",
+                issues : [],
+                skipped: true
             };
         }
 
+        // ── أعمدة تاريخ موجودة: قياس نسبة التواريخ الحديثة ──────
         const now    = Date.now();
         let recent   = 0;
         let total    = 0;
@@ -211,7 +260,8 @@ export class DAMAEngine {
             score  : +score.toFixed(1),
             dateCols,
             issues : issues.slice(0, 10),
-            details: `${recent} من ${total} تاريخ خلال السنة الماضية`
+            details: `${recent} من ${total} تاريخ خلال السنة الماضية`,
+            source : "dateColumns"
         };
     }
 
@@ -318,6 +368,16 @@ export class DAMAEngine {
                 dimension: "السلامة",
                 action   : `حذف الأعمدة الثابتة: ${dimensions.integrity.constantCols.join(", ")}`
             });
+
+        // توصية الحداثة — بناءً على عمر الملف أو أعمدة التاريخ
+        const tl = dimensions.timeliness;
+        if (!tl.skipped && tl.score < 75) {
+            const priority = tl.score < 40 ? "عالية" : "متوسطة";
+            const action   = tl.source === "fileMetadata"
+                ? `تحديث البيانات — الملف قديم (${tl.details.split("—")[0].trim()})`
+                : `مراجعة التواريخ القديمة — ${tl.issues?.length || 0} تاريخ تجاوز 3 سنوات`;
+            recs.push({ priority, dimension: "الحداثة", action });
+        }
 
         return recs.sort((a, b) =>
             ["عالية","متوسطة","منخفضة"].indexOf(a.priority) -

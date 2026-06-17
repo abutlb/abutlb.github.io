@@ -12,8 +12,16 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- SheetJS للـ Excel -->
+    <!-- SheetJS للقراءة فقط -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
+    <!-- ExcelJS للتصدير مع الألوان والتنسيق الكامل -->
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+
+    <!-- خط Tajawal العربي -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
     <!-- تنسيقاتنا المخصصة -->
     <link rel="stylesheet" href="style.css">
@@ -53,22 +61,28 @@
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  HEADER                                                   -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<header class="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-40
-               border-b border-gray-200 dark:border-gray-800">
+<header class="bg-white dark:bg-gray-900 sticky top-0 z-40
+               border-b border-gray-200 dark:border-gray-800
+               shadow-[0_1px_12px_rgba(37,99,235,0.08)]">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
         <!-- Logo -->
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700
-                        rounded-xl flex items-center justify-center shadow">
-                <i class="fas fa-database text-white text-sm"></i>
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700
+                        rounded-xl flex items-center justify-center shadow-md shadow-blue-200
+                        dark:shadow-blue-900/40">
+                <i class="fas fa-chart-bar text-white text-base"></i>
             </div>
             <div>
                 <h1 class="text-base font-black text-gray-800 dark:text-gray-100 leading-tight">
                     محرك جودة البيانات
+                    <span class="text-xs font-bold text-blue-500 dark:text-blue-400 mr-1
+                                 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">
+                        DAMAQ
+                    </span>
                 </h1>
                 <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">
-                    Data Quality Engine — DAMAQ
+                    تحليل الجودة · التنظيف · التقارير
                 </p>
             </div>
         </div>
@@ -128,18 +142,44 @@
 
     <!-- Hero -->
     <div class="text-center mb-10">
-        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700
-                    rounded-2xl flex items-center justify-center
-                    shadow-lg mx-auto mb-5">
-            <i class="fas fa-chart-line text-white text-3xl"></i>
+        <div class="relative w-24 h-24 mx-auto mb-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-600
+                        rounded-3xl opacity-20 blur-xl scale-110"></div>
+            <div class="relative w-24 h-24 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700
+                        rounded-3xl flex items-center justify-center shadow-xl
+                        shadow-blue-300/40 dark:shadow-blue-900/50">
+                <i class="fas fa-chart-bar text-white text-4xl"></i>
+            </div>
         </div>
-        <h2 class="text-2xl font-black text-gray-800 dark:text-gray-100 mb-2">
+        <h2 class="text-3xl font-black text-gray-800 dark:text-gray-100 mb-2">
             محرك جودة البيانات
         </h2>
-
-        <p class="text-gray-500 dark:text-gray-400 text-sm">
-            قم برفع ملفك ليتم فحصه ومعالجته تلقائياً عبر محرك DAMAQ وفق معايير جودة البيانات العالمية
+        <p class="text-blue-600 dark:text-blue-400 font-bold text-sm mb-3">
+            Data Quality Engine — DAMAQ
         </p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
+            ارفع ملفك وسيتم فحصه تلقائياً وفق <strong class="text-gray-700 dark:text-gray-300">7 أبعاد DAMA</strong>
+            العالمية مع توصيات وتنظيف ذكي
+        </p>
+
+        <!-- ميزات سريعة -->
+        <div class="flex justify-center gap-4 mt-5 flex-wrap">
+            <span class="text-xs px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30
+                         text-blue-600 dark:text-blue-400 font-medium border border-blue-100
+                         dark:border-blue-800">
+                <i class="fas fa-shield-alt ml-1"></i>٧ أبعاد DAMA
+            </span>
+            <span class="text-xs px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30
+                         text-emerald-600 dark:text-emerald-400 font-medium border border-emerald-100
+                         dark:border-emerald-800">
+                <i class="fas fa-magic ml-1"></i>تنظيف ذكي
+            </span>
+            <span class="text-xs px-3 py-1.5 rounded-full bg-purple-50 dark:bg-purple-900/30
+                         text-purple-600 dark:text-purple-400 font-medium border border-purple-100
+                         dark:border-purple-800">
+                <i class="fas fa-file-export ml-1"></i>تقارير HTML & Excel
+            </span>
+        </div>
     </div>
 
     <!-- Drop Zone -->
@@ -323,7 +363,7 @@
     <!-- نظرة عامة -->
     <button data-tab="overview"
         class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
-               font-medium whitespace-nowrap transition-all border-b-2
+               font-bold whitespace-nowrap transition-all border-b-2
                text-blue-600 dark:text-blue-400
                border-blue-600 dark:border-blue-400
                bg-white dark:bg-gray-900">
@@ -336,7 +376,8 @@
         class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
                font-medium whitespace-nowrap transition-all border-b-2
                border-transparent text-gray-500 dark:text-gray-400
-               hover:text-gray-700 dark:hover:text-gray-300">
+               hover:text-gray-700 dark:hover:text-gray-200
+               hover:bg-white/60 dark:hover:bg-gray-800/60">
         <i class="fas fa-search text-xs"></i>
         فحص الأعمدة
     </button>
@@ -346,7 +387,8 @@
         class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
                font-medium whitespace-nowrap transition-all border-b-2
                border-transparent text-gray-500 dark:text-gray-400
-               hover:text-gray-700 dark:hover:text-gray-300">
+               hover:text-gray-700 dark:hover:text-gray-200
+               hover:bg-white/60 dark:hover:bg-gray-800/60">
         <i class="fas fa-ruler-combined text-xs"></i>
         قواعد الجودة
     </button>
@@ -356,7 +398,8 @@
         class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
                font-medium whitespace-nowrap transition-all border-b-2
                border-transparent text-gray-500 dark:text-gray-400
-               hover:text-gray-700 dark:hover:text-gray-300">
+               hover:text-gray-700 dark:hover:text-gray-200
+               hover:bg-white/60 dark:hover:bg-gray-800/60">
         <i class="fas fa-broom text-xs"></i>
         التنظيف
     </button>
@@ -366,8 +409,9 @@
         class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
                font-medium whitespace-nowrap transition-all border-b-2
                border-transparent text-gray-500 dark:text-gray-400
-               hover:text-gray-700 dark:hover:text-gray-300">
-        <i class="fas fa-file-alt text-xs"></i>
+               hover:text-gray-700 dark:hover:text-gray-200
+               hover:bg-white/60 dark:hover:bg-gray-800/60">
+        <i class="fas fa-file-chart-line text-xs"></i>
         التقرير
     </button>
 
@@ -382,44 +426,56 @@
 
                 <!-- DAMA Score Cards -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="col-span-2 md:col-span-1 bg-gradient-to-br
-                                from-blue-500 to-blue-700 rounded-xl p-5
-                                text-white text-center shadow-lg">
+                    <!-- بطاقة الدرجة الرئيسية -->
+                    <div class="col-span-2 md:col-span-1 relative overflow-hidden
+                                bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700
+                                rounded-2xl p-5 text-white text-center shadow-lg
+                                shadow-blue-300/30 dark:shadow-blue-900/50">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-white/5
+                                    rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                        <div class="absolute bottom-0 left-0 w-16 h-16 bg-white/5
+                                    rounded-full translate-y-1/2 -translate-x-1/2"></div>
                         <p id="overall-score"
-                           class="text-5xl font-black mb-1">—</p>
-                        <p class="text-blue-100 text-sm">درجة الجودة</p>
+                           class="relative text-5xl font-black mb-1 drop-shadow">—</p>
+                        <p class="relative text-blue-100 text-xs font-medium">درجة الجودة / 100</p>
                         <p id="overall-grade"
-                           class="text-lg font-bold mt-2">—</p>
+                           class="relative text-base font-bold mt-2 text-white/90">—</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4
-                                border border-gray-200 dark:border-gray-700
-                                text-center">
+                    <!-- بطاقة السجلات -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4
+                                border border-gray-100 dark:border-gray-700
+                                text-center shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-9 h-9 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl
+                                    flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-list-ul text-emerald-600 dark:text-emerald-400 text-sm"></i>
+                        </div>
                         <p id="stat-rows"
-                           class="text-2xl font-black text-gray-800
-                                  dark:text-gray-200">—</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            سجل
-                        </p>
+                           class="text-2xl font-black text-gray-800 dark:text-gray-200">—</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">سجل</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4
-                                border border-gray-200 dark:border-gray-700
-                                text-center">
+                    <!-- بطاقة الأعمدة -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4
+                                border border-gray-100 dark:border-gray-700
+                                text-center shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-9 h-9 bg-purple-100 dark:bg-purple-900/40 rounded-xl
+                                    flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-columns text-purple-600 dark:text-purple-400 text-sm"></i>
+                        </div>
                         <p id="stat-cols"
-                           class="text-2xl font-black text-gray-800
-                                  dark:text-gray-200">—</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            عمود
-                        </p>
+                           class="text-2xl font-black text-gray-800 dark:text-gray-200">—</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">عمود</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4
-                                border border-gray-200 dark:border-gray-700
-                                text-center">
+                    <!-- بطاقة القيم المفقودة -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4
+                                border border-gray-100 dark:border-gray-700
+                                text-center shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-9 h-9 bg-orange-100 dark:bg-orange-900/40 rounded-xl
+                                    flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-exclamation text-orange-600 dark:text-orange-400 text-sm"></i>
+                        </div>
                         <p id="stat-empty"
-                           class="text-2xl font-black text-gray-800
-                                  dark:text-gray-200">—</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            % قيم مفقودة
-                        </p>
+                           class="text-2xl font-black text-gray-800 dark:text-gray-200">—</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">% قيم مفقودة</p>
                     </div>
                 </div>
 

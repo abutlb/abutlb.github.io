@@ -577,20 +577,82 @@ export class CleanerTab {
     // ── ملخص التنظيف التلقائي ────────────────────────────────────
     _showAutoCleanSummary(result) {
         if (result.actions.length === 0) {
-            alert("✅ البيانات نظيفة — لم تكن هناك حاجة لأي تعديل");
+            this._showModal(
+                "✅ البيانات نظيفة",
+                `<p class="text-gray-600 dark:text-gray-400 text-sm text-center py-4">
+                    لم تكن هناك حاجة لأي تعديل — بياناتك نظيفة بالفعل!
+                 </p>`,
+                "success"
+            );
             return;
         }
 
-        const msg = [
-            `✅ اكتمل التنظيف التلقائي`,
-            ``,
-            `الإجراءات المنفذة (${result.actions.length}):`,
-            ...result.actions.map(a => `• ${a}`),
-            ``,
-            `إجمالي الخلايا المعدلة: ${result.auditLog.totalAffected}`
-        ].join("\n");
+        const actionsHTML = result.actions.map(a => `
+            <div class="flex items-start gap-2 py-2 border-b border-gray-100
+                        dark:border-gray-700 last:border-0">
+                <i class="fas fa-check-circle text-green-500 mt-0.5 flex-shrink-0"></i>
+                <span class="text-sm text-gray-700 dark:text-gray-300">${a}</span>
+            </div>`).join("");
 
-        alert(msg);
+        this._showModal(
+            `✅ اكتمل التنظيف التلقائي`,
+            `<div class="space-y-1">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    تم تنفيذ <strong class="text-blue-600 dark:text-blue-400">
+                    ${result.actions.length}</strong> إجراء،
+                    وتعديل <strong class="text-blue-600 dark:text-blue-400">
+                    ${result.auditLog.totalAffected}</strong> خلية إجمالاً.
+                </p>
+                ${actionsHTML}
+             </div>`,
+            "success"
+        );
+    }
+
+    // ── Modal مساعد ───────────────────────────────────────────────
+    _showModal(title, bodyHTML, type = "info") {
+        const existing = document.getElementById("auto-clean-modal");
+        if (existing) existing.remove();
+
+        const iconMap  = { success: "fas fa-check-circle text-green-500",
+                           info   : "fas fa-info-circle text-blue-500",
+                           warning: "fas fa-exclamation-triangle text-yellow-500" };
+        const modal = document.createElement("div");
+        modal.id = "auto-clean-modal";
+        modal.className = `fixed inset-0 z-[999] flex items-center justify-center
+                           p-4 bg-black/60 backdrop-blur-sm`;
+        modal.innerHTML = `
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl
+                        w-full max-w-md max-h-[80vh] overflow-y-auto">
+                <div class="flex items-center gap-3 p-4 border-b
+                            border-gray-200 dark:border-gray-700">
+                    <i class="${iconMap[type] || iconMap.info} text-xl"></i>
+                    <h3 class="font-bold text-gray-800 dark:text-gray-200 flex-1">
+                        ${title}
+                    </h3>
+                    <button onclick="document.getElementById('auto-clean-modal').remove()"
+                        class="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-800
+                               flex items-center justify-center
+                               hover:bg-red-100 dark:hover:bg-red-900/30
+                               hover:text-red-500 transition text-gray-500">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+                <div class="p-4">${bodyHTML}</div>
+                <div class="p-4 pt-0 flex justify-end">
+                    <button onclick="document.getElementById('auto-clean-modal').remove()"
+                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700
+                               text-white text-sm font-medium rounded-lg transition">
+                        حسناً
+                    </button>
+                </div>
+            </div>`;
+
+        modal.addEventListener("click", e => {
+            if (e.target === modal) modal.remove();
+        });
+
+        document.body.appendChild(modal);
     }
 }
 

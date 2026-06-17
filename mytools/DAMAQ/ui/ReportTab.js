@@ -370,58 +370,99 @@ export class ReportTab {
     _bindEvents() {
         document.getElementById("preview-report-btn")
             ?.addEventListener("click", () => {
-                this.engine.preview();
+                try {
+                    this.engine.preview();
+                } catch (err) {
+                    console.error("Preview error:", err);
+                    this._showToast("❌ خطأ في بناء التقرير: " + err.message);
+                }
             });
 
         document.getElementById("export-html-btn")
             ?.addEventListener("click", () => {
-                this.engine.exportHTML();
-                this._showToast("✅ تم تحميل تقرير HTML");
+                try {
+                    this.engine.exportHTML();
+                    this._showToast("✅ تم تحميل تقرير HTML");
+                } catch (err) {
+                    console.error("HTML export error:", err);
+                    this._showToast("❌ خطأ: " + err.message);
+                }
             });
 
         document.getElementById("export-pdf-btn")
             ?.addEventListener("click", () => {
-                this.engine.exportPDF();
-                this._showToast("🖨️ جاري فتح نافذة الطباعة...");
+                try {
+                    this.engine.exportPDF();
+                    this._showToast("🖨️ جاري فتح نافذة الطباعة...");
+                } catch (err) {
+                    console.error("PDF export error:", err);
+                    this._showToast("❌ خطأ: " + err.message);
+                }
             });
 
         document.getElementById("export-excel-btn")
-            ?.addEventListener("click", () => {
-                this.engine.exportExcel();
-                this._showToast("✅ تم تحميل ملف Excel");
+            ?.addEventListener("click", async () => {
+                const btn = document.getElementById("export-excel-btn");
+                const orig = btn.innerHTML;
+                btn.disabled  = true;
+                btn.innerHTML = `<i class="fas fa-spinner fa-spin ml-1"></i>جاري التصدير...`;
+                try {
+                    await this.engine.exportExcel();
+                    this._showToast("✅ تم تحميل ملف Excel");
+                } catch (err) {
+                    console.error("Excel export error:", err);
+                    this._showToast("❌ خطأ Excel: " + err.message);
+                } finally {
+                    btn.disabled  = false;
+                    btn.innerHTML = orig;
+                }
             });
 
         document.getElementById("export-all-btn")
-            ?.addEventListener("click", () => {
-                this.engine.exportAll();
-                this._showToast("✅ جاري تصدير الكل...");
+            ?.addEventListener("click", async () => {
+                const btn = document.getElementById("export-all-btn");
+                const orig = btn.innerHTML;
+                btn.disabled  = true;
+                btn.innerHTML = `<i class="fas fa-spinner fa-spin ml-2"></i>جاري التصدير...`;
+                try {
+                    await this.engine.exportAll();
+                    this._showToast("✅ تم تصدير Excel + HTML");
+                } catch (err) {
+                    console.error("Export all error:", err);
+                    this._showToast("❌ خطأ: " + err.message);
+                } finally {
+                    btn.disabled  = false;
+                    btn.innerHTML = orig;
+                }
             });
     }
 
     // ── Toast Notification ────────────────────────────────────────
     _showToast(message) {
-        const toast = document.createElement("div");
-        toast.className = `
-            fixed bottom-6 left-1/2 -translate-x-1/2
-            bg-gray-900 text-white text-sm font-medium
-            px-5 py-3 rounded-xl shadow-lg z-50
-            transition-all duration-300 opacity-0
-        `;
+        const isError = message.startsWith("❌");
+        const toast   = document.createElement("div");
+        toast.className = [
+            "fixed bottom-6 left-1/2 -translate-x-1/2",
+            "text-sm font-medium px-5 py-3 rounded-xl shadow-lg z-50",
+            "transition-all duration-300 opacity-0 max-w-sm text-center",
+            isError
+                ? "bg-red-600 text-white"
+                : "bg-gray-900 text-white"
+        ].join(" ");
         toast.textContent = message;
         document.body.appendChild(toast);
 
-        // ظهور
         requestAnimationFrame(() => {
             toast.classList.remove("opacity-0");
             toast.classList.add("opacity-100");
         });
 
-        // اختفاء بعد 3 ثوانٍ
+        const delay = isError ? 5000 : 3000;
         setTimeout(() => {
             toast.classList.remove("opacity-100");
             toast.classList.add("opacity-0");
-            setTimeout(() => document.body.removeChild(toast), 300);
-        }, 3000);
+            setTimeout(() => toast.remove(), 300);
+        }, delay);
     }
 }
 

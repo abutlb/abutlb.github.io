@@ -27,13 +27,16 @@ export class DataStore {
         this.workingData  = JSON.parse(JSON.stringify(parseResult.data));
         this.columns      = [...parseResult.columns];
         this.metadata     = {
-            fileName    : fileInfo.name,
-            fileSize    : fileInfo.size,
-            fileType    : fileInfo.type,
-            uploadedAt  : new Date().toISOString(),
-            rowCount    : parseResult.rowCount,
-            columnCount : parseResult.columnCount,
-            warnings    : parseResult.warnings || [],
+            fileName        : fileInfo.name,
+            fileSize        : fileInfo.size,
+            fileType        : fileInfo.type,
+            fileLastModified: fileInfo.lastModified
+                ? new Date(fileInfo.lastModified).toISOString()
+                : null,
+            uploadedAt      : new Date().toISOString(),
+            rowCount        : parseResult.rowCount,
+            columnCount     : parseResult.columnCount,
+            warnings        : parseResult.warnings || [],
             ...parseResult.metadata
         };
     }

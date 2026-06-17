@@ -161,6 +161,9 @@ async function handleFile(file) {
 
         showToast(`✅ تم تحميل ${parsed.rowCount.toLocaleString("ar-SA")} سجل`, "success");
 
+        // تشغيل التحليل تلقائياً
+        setTimeout(() => document.getElementById("analyze-btn")?.click(), 200);
+
     } catch (err) {
         hideLoading();
         hideProgress();
@@ -277,7 +280,8 @@ document.getElementById("analyze-btn").addEventListener("click", () => {
             const dama = DAMAEngine.evaluate(
                 store.workingData,
                 store.columns,
-                profile
+                profile,
+                { metadata: store.metadata }
             );
             store.damaResults = dama;
             setProgress(85);

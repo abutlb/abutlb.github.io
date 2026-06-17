@@ -2,6 +2,11 @@
    style.css — تنسيقات مخصصة
 ══════════════════════════════════════════ */
 
+/* ── خط Tajawal لكل العناصر ── */
+*, body {
+    font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+}
+
 /* ── Spinner ── */
 .spinner {
     width        : 18px;
