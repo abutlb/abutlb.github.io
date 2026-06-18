@@ -1,471 +1,398 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="light">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محاكي قرار السكن — BOR</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أشتري أم أستأجر؟ — محاكي قرار السكن</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 
-<!-- Dark mode قبل أي شيء لمنع الوميض -->
-<script>
-    if (localStorage.getItem('theme') === 'dark' ||
-        (!localStorage.getItem('theme') &&
-         window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    }
-    tailwind = { config: { darkMode: 'class' } };
-</script>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config = { darkMode: 'class' };</script>
+    <style>
+        body {
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+            transition: background .2s, color .2s;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+        input[type=number] { -moz-appearance: textfield; }
+        @media (max-width:580px) {
+            #keyNumbers { grid-template-columns: repeat(2,1fr) !important; }
+        }
+    </style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
-<link rel="stylesheet" href="style.css">
+    <script>
+        (function(){
+            const t = localStorage.getItem('theme');
+            const p = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (t === 'dark' || (!t && p)) document.documentElement.classList.add('dark');
+        })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
+<body>
 
-<body class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-200 min-h-screen transition-colors duration-300">
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  HEADER                                                   -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<header class="bg-white dark:bg-gray-900 sticky top-0 z-40
-               border-b border-gray-200 dark:border-gray-800
-               shadow-[0_1px_12px_rgba(16,185,129,0.07)]">
-<div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
-
-    <!-- Logo -->
-    <div class="flex items-center gap-3 flex-shrink-0">
-        <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700
-                    rounded-xl flex items-center justify-center
-                    shadow-md shadow-emerald-200 dark:shadow-emerald-900/40">
-            <i class="fas fa-scale-balanced text-white text-base"></i>
+<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+<header class="site-header">
+    <div class="header-inner">
+        <div class="logo-wrap">
+            <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+                <div class="logo-icon"><i class="fas fa-scale-balanced"></i></div>
+                <div>
+                    <div class="logo-name">أشتري أم أستأجر؟</div>
+                    <div class="logo-sub">محاكي قرار السكن الذكي</div>
+                </div>
+            </a>
         </div>
-        <div>
-            <h1 class="text-base font-black text-gray-800 dark:text-gray-100 leading-tight">
-                محاكي قرار السكن
-                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mr-1
-                             bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full">BOR</span>
-            </h1>
-            <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">شراء · إيجار · استثمار</p>
+
+        <div class="header-actions">
+            <div id="liveIndicator" style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted)">
+                <span class="live-dot"></span>
+                <span id="liveText">لحظي</span>
+            </div>
+
+            <button id="pdfBtn" class="btn-pill" style="display:none" title="تصدير PDF">
+                <i class="fas fa-file-pdf" style="margin-left:4px"></i>PDF
+            </button>
+
+            <button id="themeToggle" class="btn-icon" title="تبديل الثيم">
+                <i id="themeIcon" class="fas fa-moon" style="font-size:.85rem"></i>
+            </button>
         </div>
     </div>
-
-    <!-- Scenario Pills -->
-    <div class="flex items-center gap-2">
-        <button class="sc-pill active" data-sc="personal">
-            <i class="fas fa-user ml-1 text-[.65rem]"></i>شخصي
-        </button>
-        <button class="sc-pill" data-sc="family">
-            <i class="fas fa-users ml-1 text-[.65rem]"></i>عائلي
-        </button>
-        <button class="sc-pill" data-sc="investment">
-            <i class="fas fa-chart-line ml-1 text-[.65rem]"></i>استثماري
-        </button>
-    </div>
-
-    <!-- Actions -->
-    <div class="flex items-center gap-3 flex-shrink-0">
-        <a href="../index.html"
-           class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-            <i class="fas fa-arrow-right ml-1"></i>الأدوات
-        </a>
-        <button id="pdfBtn"
-            class="hidden text-xs font-bold px-3 py-1.5 rounded-lg
-                   bg-emerald-50 dark:bg-emerald-900/20
-                   text-emerald-700 dark:text-emerald-400
-                   hover:bg-emerald-100 dark:hover:bg-emerald-900/40
-                   transition-colors border border-emerald-200 dark:border-emerald-800">
-            <i class="fas fa-print ml-1"></i>طباعة
-        </button>
-        <button id="themeToggle"
-            class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800
-                   flex items-center justify-center
-                   hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-yellow-400 text-sm"></i>
-        </button>
-    </div>
-
-</div>
 </header>
 
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  MAIN                                                     -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="max-w-7xl mx-auto px-4 py-6">
-<div class="layout flex gap-5 items-start">
 
-    <!-- ══ SIDEBAR: المدخلات ══ -->
-    <aside class="w-72 flex-shrink-0 sticky top-20"
-           style="max-height: calc(100vh - 5.5rem); overflow-y: auto;">
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<main class="page-wrap">
 
-        <!-- العقار -->
-        <div class="inp-card">
-            <div class="sec-hdr"><i class="fas fa-home text-[.65rem]"></i> العقار</div>
-            <div class="space-y-3">
-                <div>
-                    <label class="inp-lbl" for="propertyType">نوع العقار</label>
-                    <select id="propertyType" class="inp">
-                        <option value="apartment">شقة</option>
-                        <option value="villa">فيلا</option>
-                        <option value="duplex">دوبلكس</option>
-                        <option value="land">أرض</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="inp-lbl" for="propertyPrice">سعر العقار (﷼)</label>
-                    <input type="number" id="propertyPrice" class="inp" value="900000" step="10000" min="0">
-                </div>
-                <div>
-                    <label class="inp-lbl" for="downPaymentPct">الدفعة المقدمة (%)</label>
-                    <input type="number" id="downPaymentPct" class="inp" value="20" step="1" min="0" max="100">
-                    <p class="inp-hint" id="downHint">= 180,000 ﷼</p>
-                </div>
-                <div>
-                    <label class="inp-lbl" for="loanYears">مدة التمويل (سنوات)</label>
-                    <input type="number" id="loanYears" class="inp" value="25" step="1" min="1" max="30">
-                </div>
-                <div>
-                    <label class="inp-lbl" for="interestRate">نسبة الفائدة السنوية (%)</label>
-                    <input type="number" id="interestRate" class="inp" value="5.0" step="0.1" min="0" max="20">
-                </div>
+    <!-- ── اختيار السيناريو ─────────────────────────────── -->
+    <div class="scenario-bar">
+        <span class="scenario-bar-label">السيناريو</span>
+        <button class="sc-btn active" data-sc="personal">
+            <i class="fas fa-user" style="margin-left:5px;font-size:.75em"></i>شخصي
+        </button>
+        <button class="sc-btn" data-sc="family">
+            <i class="fas fa-users" style="margin-left:5px;font-size:.75em"></i>عائلي
+        </button>
+        <button class="sc-btn" data-sc="investment">
+            <i class="fas fa-chart-line" style="margin-left:5px;font-size:.75em"></i>استثماري
+        </button>
+    </div>
+
+
+    <!-- ── المدخلات ──────────────────────────────────────── -->
+    <div class="card">
+
+        <div class="sec-label" style="margin-bottom:16px">
+            <i class="fas fa-sliders" style="color:var(--primary)"></i>
+            البيانات الأساسية
+        </div>
+
+        <div class="fields-grid">
+            <div>
+                <label class="field-lbl" for="propertyPrice">سعر العقار (ريال)</label>
+                <input class="field" type="number" id="propertyPrice" value="1000000" min="0">
+            </div>
+            <div>
+                <label class="field-lbl" for="downPaymentPct">الدفعة المقدمة (%)</label>
+                <input class="field" type="number" id="downPaymentPct" value="20" min="0" max="100">
+                <div class="field-hint" id="downHint"></div>
+            </div>
+            <div>
+                <label class="field-lbl" for="loanYears">مدة التمويل (سنة)</label>
+                <input class="field" type="number" id="loanYears" value="25" min="1" max="30">
+            </div>
+            <div>
+                <label class="field-lbl" for="interestRate">نسبة الفائدة (%)</label>
+                <input class="field" type="number" id="interestRate" value="4.5" min="0" step="0.1">
+            </div>
+            <div>
+                <label class="field-lbl" for="monthlyRent">الإيجار الشهري (ريال)</label>
+                <input class="field" type="number" id="monthlyRent" value="4000" min="0">
+            </div>
+            <div>
+                <label class="field-lbl" for="rentIncrease">زيادة الإيجار السنوية (%)</label>
+                <input class="field" type="number" id="rentIncrease" value="3" min="0" step="0.5">
+            </div>
+            <div>
+                <label class="field-lbl" for="holdYears">مدة الاحتفاظ (سنة)</label>
+                <input class="field" type="number" id="holdYears" value="10" min="1" max="30">
+            </div>
+            <div>
+                <label class="field-lbl" for="appreciation">تقدير العقار/سنة (%)</label>
+                <input class="field" type="number" id="appreciation" value="3" min="0" step="0.5">
             </div>
         </div>
 
-        <!-- الإيجار -->
-        <div class="inp-card">
-            <div class="sec-hdr"><i class="fas fa-key text-[.65rem]"></i> الإيجار البديل</div>
-            <div class="space-y-3">
-                <div>
-                    <label class="inp-lbl" for="monthlyRent">الإيجار الشهري (﷼)</label>
-                    <input type="number" id="monthlyRent" class="inp" value="3500" step="100" min="0">
+        <!-- حقول العائلي -->
+        <div id="inputs-family" class="sc-inputs">
+            <div style="grid-column:1/-1">
+                <div class="sec-label" style="font-size:.63rem;margin-bottom:8px">
+                    <i class="fas fa-users" style="color:var(--primary)"></i>بيانات العائلة
                 </div>
-                <div>
-                    <label class="inp-lbl" for="rentIncrease">زيادة الإيجار السنوية (%)</label>
-                    <input type="number" id="rentIncrease" class="inp" value="3" step="0.5" min="0" max="30">
-                </div>
+            </div>
+            <div>
+                <label class="field-lbl" for="familySize">حجم الأسرة</label>
+                <input class="field" type="number" id="familySize" value="4" min="1">
+            </div>
+            <div>
+                <label class="field-lbl" for="currentAge">عمرك الحالي</label>
+                <input class="field" type="number" id="currentAge" value="32" min="18" max="70">
+            </div>
+            <div>
+                <label class="field-lbl" for="childrenCount">عدد الأطفال</label>
+                <input class="field" type="number" id="childrenCount" value="2" min="0">
             </div>
         </div>
 
-        <!-- السوق -->
-        <div class="inp-card">
-            <div class="sec-hdr"><i class="fas fa-chart-area text-[.65rem]"></i> السوق والمدة</div>
-            <div class="space-y-3">
-                <div>
-                    <label class="inp-lbl" for="appreciation">نمو قيمة العقار سنوياً (%)</label>
-                    <input type="number" id="appreciation" class="inp" value="3" step="0.5" min="-5" max="20">
-                </div>
-                <div>
-                    <label class="inp-lbl" for="holdYears">مدة الاحتفاظ (سنوات)</label>
-                    <input type="number" id="holdYears" class="inp" value="15" step="1" min="1" max="50">
+        <!-- حقول الاستثماري -->
+        <div id="inputs-investment" class="sc-inputs">
+            <div style="grid-column:1/-1">
+                <div class="sec-label" style="font-size:.63rem;margin-bottom:8px">
+                    <i class="fas fa-building" style="color:var(--primary)"></i>بيانات الاستثمار
                 </div>
             </div>
-        </div>
-
-        <!-- سيناريو: العائلي -->
-        <div id="sc-family" class="inp-card sc-section">
-            <div class="sec-hdr"><i class="fas fa-users text-[.65rem]"></i> بيانات الأسرة</div>
-            <div class="space-y-3">
-                <div>
-                    <label class="inp-lbl" for="familySize">عدد أفراد الأسرة</label>
-                    <input type="number" id="familySize" class="inp" value="4" step="1" min="1" max="15">
-                </div>
-                <div>
-                    <label class="inp-lbl" for="currentAge">عمرك الحالي</label>
-                    <input type="number" id="currentAge" class="inp" value="32" step="1" min="18" max="70">
-                </div>
-                <div>
-                    <label class="inp-lbl" for="childrenCount">عدد الأطفال</label>
-                    <input type="number" id="childrenCount" class="inp" value="2" step="1" min="0" max="10">
-                </div>
+            <div>
+                <label class="field-lbl" for="invRent">الإيجار المتوقع/شهر (ريال)</label>
+                <input class="field" type="number" id="invRent" value="5000" min="0">
             </div>
-        </div>
-
-        <!-- سيناريو: الاستثماري -->
-        <div id="sc-investment" class="inp-card sc-section">
-            <div class="sec-hdr"><i class="fas fa-chart-line text-[.65rem]"></i> بيانات الاستثمار</div>
-            <div class="space-y-3">
-                <div>
-                    <label class="inp-lbl" for="invRent">الإيجار الشهري المتوقع (﷼)</label>
-                    <input type="number" id="invRent" class="inp" value="4500" step="100" min="0">
-                    <p class="inp-hint">ما ستقبضه من مستأجرك</p>
-                </div>
-                <div>
-                    <label class="inp-lbl" for="vacancyRate">نسبة الشواغر السنوية (%)</label>
-                    <input type="number" id="vacancyRate" class="inp" value="8" step="1" min="0" max="100">
-                </div>
-                <div>
-                    <label class="inp-lbl" for="mgmtFee">رسوم إدارة العقار (%)</label>
-                    <input type="number" id="mgmtFee" class="inp" value="5" step="1" min="0" max="30">
-                </div>
+            <div>
+                <label class="field-lbl" for="vacancyRate">نسبة الشغور (%)</label>
+                <input class="field" type="number" id="vacancyRate" value="8" min="0" max="100" step="0.5">
+            </div>
+            <div>
+                <label class="field-lbl" for="mgmtFee">رسوم الإدارة (%)</label>
+                <input class="field" type="number" id="mgmtFee" value="5" min="0" max="50" step="0.5">
             </div>
         </div>
 
         <!-- إعدادات متقدمة -->
-        <div class="inp-card">
-            <details>
-                <summary class="cursor-pointer text-xs font-bold text-gray-400 dark:text-gray-500
-                                hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors
-                                select-none list-none flex items-center gap-2 py-1">
-                    <i class="fas fa-cog text-[.6rem]"></i>
-                    إعدادات متقدمة
-                    <i class="fas fa-chevron-down text-[.55rem] mr-auto"></i>
+        <details style="margin-top:14px">
+            <summary class="adv-toggle">
+                <i class="fas fa-cog" style="font-size:.75em"></i>
+                إعدادات متقدمة
+                <i class="fas fa-chevron-down" style="font-size:.65em;margin-right:auto"></i>
+            </summary>
+            <div class="fields-grid" style="margin-top:14px">
+                <div>
+                    <label class="field-lbl" for="maintenance">صيانة سنوية (% من سعر العقار)</label>
+                    <input class="field" type="number" id="maintenance" value="1" min="0" step="0.1">
+                </div>
+                <div>
+                    <label class="field-lbl" for="closingCosts">تكاليف الإغلاق (%)</label>
+                    <input class="field" type="number" id="closingCosts" value="2" min="0" step="0.1">
+                </div>
+                <div>
+                    <label class="field-lbl" for="sellingCosts">تكاليف البيع (%)</label>
+                    <input class="field" type="number" id="sellingCosts" value="3" min="0" step="0.1">
+                </div>
+                <div>
+                    <label class="field-lbl" for="insuranceRate">تأمين سنوي (%)</label>
+                    <input class="field" type="number" id="insuranceRate" value="0.5" min="0" step="0.1">
+                </div>
+                <div>
+                    <label class="field-lbl" for="inflation">معدل التضخم (%)</label>
+                    <input class="field" type="number" id="inflation" value="2.5" min="0" step="0.1">
+                </div>
+                <div>
+                    <label class="field-lbl" for="investRate">عائد الاستثمار البديل (%)</label>
+                    <input class="field" type="number" id="investRate" value="5" min="0" step="0.1">
+                </div>
+                <div>
+                    <label class="field-lbl" for="monthlyIncome">الدخل الشهري (ريال)</label>
+                    <input class="field" type="number" id="monthlyIncome" value="20000" min="0">
+                </div>
+            </div>
+        </details>
+    </div>
+
+
+    <!-- ═══════════════════ RESULTS ═══════════════════ -->
+    <div id="resultsArea" class="hidden">
+
+        <!-- الحكم والمقياس -->
+        <div class="section-gap">
+            <div class="sec-label">
+                <i class="fas fa-gavel" style="color:var(--primary)"></i>
+                الحكم والتوصية
+            </div>
+
+            <div id="verdictCard" class="verdict-card verdict-neutral fade-up">
+                <div class="verdict-row">
+                    <div id="verdictEmoji" class="verdict-emoji">⚖️</div>
+                    <div style="flex:1;min-width:0">
+                        <div class="verdict-label">قرار BOR</div>
+                        <div id="verdictTitle" class="verdict-title">جاري الحساب...</div>
+                        <div id="verdictText" class="verdict-text"></div>
+                    </div>
+                    <div class="verdict-diff">
+                        <div id="verdictDiffAmt" class="verdict-diff-amount"></div>
+                        <div id="verdictDiffLbl" class="verdict-diff-label">الفارق</div>
+                    </div>
+                </div>
+
+                <!-- dir=ltr: ضروري لأن absolute positioning لا يتأثر بـ RTL -->
+                <div class="meter-wrap" dir="ltr">
+                    <div class="meter-labels">
+                        <span>إيجار</span>
+                        <span id="meterScoreLabel">متقاربان</span>
+                        <span>تملك</span>
+                    </div>
+                    <div class="meter-track">
+                        <div id="meterFill" class="meter-fill" style="width:50%"></div>
+                        <div id="meterDot" class="meter-dot" style="left:50%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div id="kpiRow" class="kpi-row" style="margin-top:12px">
+            <div class="kpi-item">
+                <div class="kpi-icon" style="background:color-mix(in srgb,var(--primary) 12%,transparent)">
+                    <i class="fas fa-house" style="color:var(--primary)"></i>
+                </div>
+                <div id="kpiOwn" class="kpi-val">—</div>
+                <div class="kpi-lbl">صافي التملك</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-icon" style="background:color-mix(in srgb,var(--rent) 12%,transparent)">
+                    <i class="fas fa-key" style="color:var(--rent)"></i>
+                </div>
+                <div id="kpiRent" class="kpi-val">—</div>
+                <div class="kpi-lbl">إجمالي الإيجار</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-icon" style="background:color-mix(in srgb,var(--buy) 12%,transparent)">
+                    <i class="fas fa-money-bill-wave" style="color:var(--buy)"></i>
+                </div>
+                <div id="kpiMonthly" class="kpi-val">—</div>
+                <div class="kpi-lbl">القسط الشهري</div>
+            </div>
+            <div class="kpi-item">
+                <div class="kpi-icon" style="background:color-mix(in srgb,var(--rent) 12%,transparent)">
+                    <i class="fas fa-chart-line" style="color:var(--rent)"></i>
+                </div>
+                <div id="kpiFuture" class="kpi-val">—</div>
+                <div class="kpi-lbl">القيمة المستقبلية</div>
+            </div>
+        </div>
+
+        <!-- أرقام إضافية -->
+        <div id="keyNumbers" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px"></div>
+
+        <!-- الرسوم البيانية -->
+        <div class="section-gap">
+            <div class="sec-label">
+                <i class="fas fa-chart-area" style="color:var(--primary)"></i>
+                التحليل المالي
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">التكاليف التراكمية بمرور الزمن (ريال)</div>
+                <canvas id="lineChart" height="200"></canvas>
+            </div>
+            <div class="charts-2col">
+                <div class="chart-card">
+                    <div class="chart-title">تفصيل تكاليف التملك</div>
+                    <canvas id="pieChart" height="200"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">المقارنة السنوية</div>
+                    <canvas id="barChart" height="200"></canvas>
+                </div>
+            </div>
+            <div class="chart-card" style="margin-top:12px">
+                <div class="chart-title">صافي الثروة: التملك مقابل الاستثمار</div>
+                <canvas id="netWorthChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- مقارنة تفصيلية -->
+        <div class="section-gap">
+            <div class="sec-label">
+                <i class="fas fa-table-columns" style="color:var(--primary)"></i>
+                مقارنة التكاليف التفصيلية
+            </div>
+            <div class="card" style="padding:0;overflow:hidden">
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th>البند</th>
+                            <th style="text-align:center">🏠 التملك</th>
+                            <th style="text-align:center">🔑 الإيجار</th>
+                        </tr>
+                    </thead>
+                    <tbody id="compTableBody"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td style="font-weight:900">الصافي النهائي</td>
+                            <td id="compTotalOwn" style="text-align:center;font-weight:900;color:var(--primary)">—</td>
+                            <td id="compTotalRent" style="text-align:center;font-weight:900;color:var(--primary)">—</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- تكلفة الفرصة -->
+        <div class="section-gap">
+            <div class="sec-label">
+                <i class="fas fa-coins" style="color:var(--primary)"></i>
+                تكلفة الفرصة البديلة
+            </div>
+            <div id="oppContent" class="opp-grid"></div>
+        </div>
+
+        <!-- السيناريو الخاص (عائلي / استثماري) -->
+        <div id="scenarioSection" class="section-gap" style="display:none">
+            <div id="scenarioContent"></div>
+        </div>
+
+        <!-- الجدول السنوي (مخفي بشكل افتراضي) -->
+        <div class="section-gap">
+            <details class="details-toggle">
+                <summary>
+                    <span>
+                        <i class="fas fa-table" style="color:var(--primary);margin-left:8px"></i>
+                        الجدول السنوي التفصيلي
+                    </span>
+                    <i class="fas fa-chevron-down"></i>
                 </summary>
-                <div class="space-y-3 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-                    <div>
-                        <label class="inp-lbl" for="inflation">التضخم السنوي (%)</label>
-                        <input type="number" id="inflation" class="inp" value="2.5" step="0.1" min="0" max="20">
-                    </div>
-                    <div>
-                        <label class="inp-lbl" for="investRate">عائد الاستثمار البديل (%)</label>
-                        <input type="number" id="investRate" class="inp" value="6" step="0.1" min="0" max="30">
-                        <p class="inp-hint">لو استثمرت الدفعة المقدمة</p>
-                    </div>
-                    <div>
-                        <label class="inp-lbl" for="monthlyIncome">دخلك الشهري (﷼) — اختياري</label>
-                        <input type="number" id="monthlyIncome" class="inp" value="0" step="1000" min="0">
-                        <p class="inp-hint">لحساب نسبة القسط للراتب</p>
-                    </div>
-                    <div>
-                        <label class="inp-lbl" for="maintenance">الصيانة السنوية (% من القيمة)</label>
-                        <input type="number" id="maintenance" class="inp" value="1.0" step="0.1" min="0" max="10">
-                    </div>
-                    <div>
-                        <label class="inp-lbl" for="closingCosts">رسوم التوثيق والشراء (%)</label>
-                        <input type="number" id="closingCosts" class="inp" value="2.0" step="0.1" min="0" max="10">
-                    </div>
-                    <div>
-                        <label class="inp-lbl" for="sellingCosts">تكاليف البيع المستقبلي (%)</label>
-                        <input type="number" id="sellingCosts" class="inp" value="2.0" step="0.1" min="0" max="10">
-                    </div>
-                    <div>
-                        <label class="inp-lbl" for="insuranceRate">تأمين العقار السنوي (%)</label>
-                        <input type="number" id="insuranceRate" class="inp" value="0.3" step="0.05" min="0" max="5">
-                    </div>
+                <div class="table-wrap">
+                    <table class="year-table">
+                        <thead>
+                            <tr>
+                                <th>السنة</th>
+                                <th>القسط / الإيجار</th>
+                                <th>إجمالي التملك</th>
+                                <th>إجمالي الإيجار</th>
+                                <th>حقوق الملكية</th>
+                                <th>قيمة العقار</th>
+                                <th>الأفضل</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearTableBody"></tbody>
+                    </table>
                 </div>
             </details>
         </div>
 
-        <button id="calcBtn" class="calc-btn">
-            <i class="fas fa-calculator ml-2"></i>احسب وحلل
-        </button>
+    </div><!-- /resultsArea -->
 
-    </aside>
+</main>
 
-    <!-- ══ MAIN CONTENT: النتائج ══ -->
-    <main class="flex-1 min-w-0">
+<!-- Toast -->
+<div id="toastContainer" style="
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;gap:8px;z-index:9999;pointer-events:none;
+"></div>
 
-        <!-- Placeholder -->
-        <div id="placeholder" class="placeholder">
-            <div class="w-24 h-24 rounded-3xl bg-gray-200 dark:bg-gray-800
-                        flex items-center justify-center">
-                <i class="fas fa-scale-balanced text-5xl text-gray-300 dark:text-gray-700"></i>
-            </div>
-            <p class="text-xl font-black text-gray-300 dark:text-gray-700">أدخل البيانات واضغط احسب</p>
-            <p class="text-sm text-gray-200 dark:text-gray-800 max-w-xs">
-                مقارنة مالية شاملة · رسوم بيانية · جدول سنوي · ٣ سيناريوهات
-            </p>
-        </div>
-
-        <!-- منطقة النتائج -->
-        <div id="resultsArea" class="hidden fade-in">
-
-            <!-- شريط المعلومات -->
-            <div class="flex items-center gap-3 mb-4 flex-wrap">
-                <span id="scBadge"
-                      class="text-xs font-bold px-3 py-1 rounded-full
-                             bg-emerald-50 dark:bg-emerald-900/30
-                             text-emerald-700 dark:text-emerald-400
-                             border border-emerald-200 dark:border-emerald-800">
-                </span>
-                <span id="metaTime" class="text-xs text-gray-400 dark:text-gray-500"></span>
-                <span id="breakevenBadge"
-                      class="hidden text-xs font-bold px-3 py-1 rounded-full
-                             bg-blue-50 dark:bg-blue-900/30
-                             text-blue-700 dark:text-blue-400
-                             border border-blue-200 dark:border-blue-800">
-                </span>
-            </div>
-
-            <!-- لوحة التبويبات -->
-            <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
-
-                <!-- رأس التبويبات -->
-                <div class="flex overflow-x-auto border-b border-gray-200 dark:border-gray-800
-                            bg-gray-50 dark:bg-gray-900/50">
-                    <button class="tab-btn active" data-tab="summary">
-                        <i class="fas fa-tachometer-alt text-[.65rem]"></i> ملخص
-                    </button>
-                    <button class="tab-btn" data-tab="analysis">
-                        <i class="fas fa-chart-bar text-[.65rem]"></i> التحليل المالي
-                    </button>
-                    <button class="tab-btn" data-tab="yearly">
-                        <i class="fas fa-table text-[.65rem]"></i> الجدول السنوي
-                    </button>
-                    <button id="scTabBtn" class="tab-btn hidden" data-tab="scenario">
-                        <i class="fas fa-layer-group text-[.65rem]"></i>
-                        <span id="scTabLabel">السيناريو</span>
-                    </button>
-                </div>
-
-                <!-- محتوى التبويبات -->
-                <div class="p-5">
-
-                    <!-- ── تبويب الملخص ── -->
-                    <div id="tab-summary" class="tab-content fade-in">
-                        <!-- بطاقة الحكم -->
-                        <div id="verdictCard" class="mb-5"></div>
-
-                        <!-- KPIs -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-                            <div id="kpiOwn"     class="kpi-card"></div>
-                            <div id="kpiRent"    class="kpi-card"></div>
-                            <div id="kpiMonthly" class="kpi-card"></div>
-                            <div id="kpiFuture"  class="kpi-card"></div>
-                        </div>
-
-                        <!-- مقياس القرار -->
-                        <div class="ch-card mb-5">
-                            <div class="ch-title">مقياس القرار</div>
-                            <div class="flex justify-between text-xs font-bold mb-2 text-gray-500 dark:text-gray-400">
-                                <span>إيجار</span>
-                                <span id="meterLabel" class="font-black text-sm text-gray-500 dark:text-gray-400">—</span>
-                                <span>تملك</span>
-                            </div>
-                            <div class="meter-track mx-2">
-                                <div class="meter-cursor" id="meterCursor" style="left:50%"></div>
-                            </div>
-                        </div>
-
-                        <!-- الأرقام الرئيسية -->
-                        <div id="keyNumbers" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4"></div>
-
-                        <!-- ملخص السيناريو (يظهر لغير الشخصي) -->
-                        <div id="scenarioSummaryBox" class="hidden mt-4">
-                            <!-- يُملأ بـ SummaryTab.js -->
-                        </div>
-                    </div>
-
-                    <!-- ── تبويب التحليل المالي ── -->
-                    <div id="tab-analysis" class="tab-content hidden">
-                        <!-- خط التكاليف التراكمية -->
-                        <div class="ch-card">
-                            <div class="ch-title">التكاليف التراكمية عبر السنوات</div>
-                            <canvas id="lineChart" height="160"></canvas>
-                        </div>
-                        <!-- دائري + أعمدة -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                            <div class="ch-card" style="margin-bottom:0">
-                                <div class="ch-title">توزيع تكاليف التملك</div>
-                                <canvas id="pieChart" height="230"></canvas>
-                            </div>
-                            <div class="ch-card" style="margin-bottom:0">
-                                <div class="ch-title">تكلفة سنوية: تملك مقابل إيجار</div>
-                                <canvas id="barChart" height="230"></canvas>
-                            </div>
-                        </div>
-                        <!-- جدول المقارنة -->
-                        <div class="ch-card">
-                            <div class="ch-title">مقارنة تفصيلية</div>
-                            <div class="tbl-wrap">
-                                <table class="tbl">
-                                    <thead>
-                                        <tr>
-                                            <th>البند</th>
-                                            <th><i class="fas fa-home ml-1 text-blue-500"></i> التملك</th>
-                                            <th><i class="fas fa-key ml-1 text-purple-500"></i> الإيجار</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="compTableBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <!-- الفرصة البديلة -->
-                        <div class="ch-card" style="margin-bottom:0">
-                            <div class="ch-title">تكلفة الفرصة البديلة</div>
-                            <div id="oppContent"></div>
-                        </div>
-                    </div>
-
-                    <!-- ── تبويب الجدول السنوي ── -->
-                    <div id="tab-yearly" class="tab-content hidden">
-                        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                مقارنة تراكمية سنة بسنة مع حقوق الملكية ونقطة التعادل
-                            </p>
-                            <div class="flex items-center gap-2">
-                                <label class="text-xs text-gray-500 dark:text-gray-400">عرض:</label>
-                                <select id="yearFilter" class="inp" style="width:auto; padding:5px 10px;">
-                                    <option value="all">كل السنوات</option>
-                                    <option value="5">كل 5 سنوات</option>
-                                    <option value="10">كل 10 سنوات</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="tbl-wrap">
-                            <table class="tbl">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">السنة</th>
-                                        <th>القسط الشهري</th>
-                                        <th>الإيجار الشهري</th>
-                                        <th>حقوق الملكية</th>
-                                        <th>تملك (تراكمي)</th>
-                                        <th>إيجار (تراكمي)</th>
-                                        <th class="text-center">الأفضل</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="yearTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- ── تبويب السيناريو ── -->
-                    <div id="tab-scenario" class="tab-content hidden">
-
-                        <!-- Panel: العائلي -->
-                        <div id="familyPanel" class="hidden">
-                            <div class="sec-hdr mb-4">
-                                <i class="fas fa-users text-[.65rem]"></i> تحليل الوضع العائلي
-                            </div>
-                            <div id="familyContent"></div>
-                            <div class="ch-card mt-4">
-                                <div class="ch-title">بناء الثروة: حقوق الملكية مقابل الاستثمار البديل</div>
-                                <canvas id="netWorthChart" height="200"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Panel: الاستثماري -->
-                        <div id="investPanel" class="hidden">
-                            <div class="sec-hdr mb-4">
-                                <i class="fas fa-chart-line text-[.65rem]"></i> تحليل العائد الاستثماري
-                            </div>
-                            <div id="investContent"></div>
-                            <div class="ch-card mt-4" style="margin-bottom:0">
-                                <div class="ch-title">بناء الثروة: حقوق الملكية مقابل الاستثمار البديل</div>
-                                <canvas id="netWorthChart2" height="200"></canvas>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-</div>
-</div>
-
-<!-- Toast Container -->
-<div id="toastContainer"
-     class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 space-y-2 pointer-events-none
-            flex flex-col items-center">
-</div>
-
-<!-- Entry point: ES6 Module -->
 <script type="module" src="app.js"></script>
-
 </body>
 </html>

@@ -121,13 +121,16 @@ export class Calculator {
         // ── نقطة التعادل الحقيقية ──
         const breakEvenYear = this._findBreakeven(yearData, price, appreciateRate, sellingRate);
 
+        // صافي تكلفة الإيجار: الإيجار المدفوع ناقص العائد من استثمار الدفعة المقدمة
+        const netRent = cumRent - investedGain;
+
         return {
             inputs,
             price, downPayment, loanAmount, monthly, closingCostAmt,
             years, yearData,
             totalInterest, totalMaint, totalIns,
             futureValue, sellingCostAmt, netFutureVal,
-            netOwnership, cumOwn, cumRent,
+            netOwnership, netRent, cumOwn, cumRent,
             invested, investedGain, investedFV,
             netWorthOwn, netWorthRent,
             breakEvenYear,
