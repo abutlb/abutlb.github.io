@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InvoScan — قارئ الفواتير الذكي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<script>
+    (function(){
+        const t = localStorage.getItem('invoscan-theme');
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches))
+            document.documentElement.classList.add('dark');
+    })();
+</script>
+
+<!-- CDN Libraries (globals) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     TOOLBAR
+══════════════════════════════════════════════ -->
+<header class="toolbar" style="direction:ltr">
+    <a href="../index.html" class="toolbar-logo">
+        <div class="logo-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <div>
+            <div class="logo-name">InvoScan</div>
+            <div class="logo-sub">قارئ الفواتير الذكي</div>
+        </div>
+    </a>
+    <div class="toolbar-sep"></div>
+
+    <div class="batch-pill" id="batch-pill" style="display:none">
+        <i class="fas fa-layer-group"></i>
+        <span id="batch-count-lbl">0</span> فواتير في الانتظار
+    </div>
+
+    <div class="toolbar-spacer"></div>
+
+    <button class="tb-btn" id="btn-new-invoice" style="display:none">
+        <i class="fas fa-plus"></i>
+        <span>فاتورة جديدة</span>
+    </button>
+    <div class="toolbar-sep" id="sep-new" style="display:none"></div>
+    <button class="tb-btn" id="btn-theme">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+</header>
+
+
+<!-- ══════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════ -->
+<main class="app-main">
+
+    <!-- ══════ STATE: UPLOAD ══════ -->
+    <section id="panel-upload" class="app-panel active">
+        <div class="upload-layout" style="direction:ltr">
+
+            <!-- Drop Zone (Right in RTL, Left in layout) -->
+            <div class="dropzone-col">
+                <div class="dropzone" id="dropzone">
+                    <div class="dz-body">
+                        <div class="dz-icon-wrap">
+                            <i class="fas fa-file-invoice-dollar dz-icon"></i>
+                        </div>
+                        <h2 class="dz-title">ارفع فاتورتك هنا</h2>
+                        <p class="dz-subtitle">اسحب وأفلت الملف أو اضغط للاختيار</p>
+                        <button class="dz-browse-btn" id="dz-browse-btn">
+                            <i class="fas fa-folder-open"></i>
+                            استعراض الملفات
+                        </button>
+                        <p class="dz-formats">PDF · JPG · PNG · WEBP &nbsp;—&nbsp; حتى 20MB</p>
+                    </div>
+                </div>
+
+                <!-- Batch queue (shown when >1 file) -->
+                <div class="batch-queue" id="batch-queue" style="display:none">
+                    <div class="batch-queue-header">
+                        <span><i class="fas fa-layer-group"></i> قائمة الانتظار</span>
+                        <button class="btn-process-all" id="btn-process-all">
+                            <i class="fas fa-bolt"></i> معالجة الكل
+                        </button>
+                    </div>
+                    <div class="batch-list" id="batch-list"></div>
+                    <button class="btn-add-more" id="btn-add-more">
+                        <i class="fas fa-plus"></i> إضافة المزيد
+                    </button>
+                </div>
+            </div>
+
+            <!-- Guidelines (Left in RTL, Right in layout) -->
+            <aside class="guidelines-col">
+                <div class="guide-card">
+                    <div class="guide-card-title">
+                        <i class="fas fa-lightbulb" style="color:var(--warn)"></i>
+                        إرشادات للحصول على أفضل نتيجة
+                    </div>
+
+                    <div class="guide-items">
+                        <div class="guide-item gi-best">
+                            <div class="gi-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="gi-text">
+                                <strong>PDF رقمي</strong>
+                                <span>النص قابل للنسخ — دقة مثالية</span>
+                            </div>
+                        </div>
+                        <div class="guide-item gi-good">
+                            <div class="gi-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="gi-text">
+                                <strong>صورة واضحة مضاءة</strong>
+                                <span>بدون ظلال أو انعكاسات</span>
+                            </div>
+                        </div>
+                        <div class="guide-item gi-good">
+                            <div class="gi-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="gi-text">
+                                <strong>نص مقروء وكبير</strong>
+                                <span>غير ضبابي أو مضغوط</span>
+                            </div>
+                        </div>
+                        <div class="guide-item gi-warn">
+                            <div class="gi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="gi-text">
+                                <strong>صورة ملتوية قليلاً</strong>
+                                <span>يُقلّل من الدقة</span>
+                            </div>
+                        </div>
+                        <div class="guide-item gi-bad">
+                            <div class="gi-icon"><i class="fas fa-times-circle"></i></div>
+                            <div class="gi-text">
+                                <strong>معتمة أو ضبابية</strong>
+                                <span>قد يفشل الاستخراج تماماً</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-formats-row">
+                        <span class="fmt-badge fmt-pdf">PDF</span>
+                        <span class="fmt-badge fmt-img">JPG</span>
+                        <span class="fmt-badge fmt-img">PNG</span>
+                        <span class="fmt-badge fmt-img">WEBP</span>
+                    </div>
+
+                    <div class="guide-note">
+                        <i class="fas fa-info-circle"></i>
+                        يدعم العربية والإنجليزية. المعالجة تتم بالكامل في متصفحك — لا يُرفع أي ملف للإنترنت.
+                    </div>
+                </div>
+
+                <!-- OCR Accuracy levels -->
+                <div class="accuracy-card">
+                    <div class="accuracy-title">مؤشر الدقة المتوقعة</div>
+                    <div class="accuracy-row">
+                        <div class="acc-dot acc-high"></div>
+                        <span>PDF رقمي</span>
+                        <div class="acc-bar"><div class="acc-fill" style="width:95%"></div></div>
+                        <span class="acc-pct">~95%</span>
+                    </div>
+                    <div class="accuracy-row">
+                        <div class="acc-dot acc-med"></div>
+                        <span>صورة واضحة</span>
+                        <div class="acc-bar"><div class="acc-fill" style="width:75%"></div></div>
+                        <span class="acc-pct">~75%</span>
+                    </div>
+                    <div class="accuracy-row">
+                        <div class="acc-dot acc-low"></div>
+                        <span>صورة ضعيفة</span>
+                        <div class="acc-bar"><div class="acc-fill" style="width:35%"></div></div>
+                        <span class="acc-pct">~35%</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+
+    <!-- ══════ STATE: PROCESSING ══════ -->
+    <section id="panel-processing" class="app-panel" style="display:none">
+        <div class="processing-wrap">
+            <div class="proc-preview-box">
+                <canvas id="proc-canvas"></canvas>
+                <div class="proc-page-badge" id="proc-page-badge">صفحة 1</div>
+            </div>
+            <div class="proc-info-box">
+                <div class="proc-logo">
+                    <div class="proc-spinner"><i class="fas fa-cog fa-spin"></i></div>
+                    <span>جاري المعالجة...</span>
+                </div>
+                <div class="proc-filename" id="proc-filename">—</div>
+
+                <!-- Stage indicators -->
+                <div class="proc-stages" id="proc-stages">
+                    <div class="proc-stage" id="stage-load">
+                        <div class="stage-dot"></div>
+                        <span>تحميل الملف</span>
+                    </div>
+                    <div class="proc-stage" id="stage-render">
+                        <div class="stage-dot"></div>
+                        <span>تحويل الصفحات</span>
+                    </div>
+                    <div class="proc-stage" id="stage-preprocess">
+                        <div class="stage-dot"></div>
+                        <span>تحسين الصورة</span>
+                    </div>
+                    <div class="proc-stage" id="stage-ocr">
+                        <div class="stage-dot"></div>
+                        <span>التعرف على النص (OCR)</span>
+                    </div>
+                    <div class="proc-stage" id="stage-extract">
+                        <div class="stage-dot"></div>
+                        <span>استخراج البيانات</span>
+                    </div>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="proc-bar-wrap">
+                    <div class="proc-bar">
+                        <div class="proc-bar-fill" id="proc-bar-fill"></div>
+                    </div>
+                    <span class="proc-pct" id="proc-pct">0%</span>
+                </div>
+
+                <div class="proc-status-msg" id="proc-status-msg">جاري التحضير...</div>
+
+                <button class="btn-cancel-proc" id="btn-cancel-proc">
+                    <i class="fas fa-times"></i> إلغاء
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ══════ STATE: RESULTS ══════ -->
+    <section id="panel-results" class="app-panel" style="display:none">
+
+        <!-- Results sub-toolbar -->
+        <div class="results-bar" style="direction:ltr">
+            <div class="res-file-info">
+                <i class="fas fa-file-invoice" style="color:var(--accent)"></i>
+                <span id="res-filename-lbl">—</span>
+            </div>
+            <div class="quality-badge" id="quality-badge"></div>
+            <div class="toolbar-spacer"></div>
+            <button class="tb-btn" id="btn-back">
+                <i class="fas fa-arrow-right"></i>
+                <span>فاتورة جديدة</span>
+            </button>
+            <div class="toolbar-sep"></div>
+            <div class="dropdown">
+                <button class="btn-export-trigger">
+                    <i class="fas fa-download"></i>
+                    تصدير
+                    <i class="fas fa-caret-down" style="font-size:9px;margin-inline-start:2px"></i>
+                </button>
+                <div class="dropdown-menu" style="direction:rtl">
+                    <button class="dropdown-item" id="btn-export-excel">
+                        <i class="fas fa-file-excel" style="color:#16a34a;width:16px"></i>
+                        Excel (.xlsx)
+                    </button>
+                    <button class="dropdown-item" id="btn-export-csv">
+                        <i class="fas fa-file-csv" style="color:#2563eb;width:16px"></i>
+                        CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results layout -->
+        <div class="results-layout" style="direction:ltr">
+
+            <!-- Preview panel (left) -->
+            <div class="res-preview-col">
+                <div class="preview-header">
+                    <i class="fas fa-eye"></i> معاينة المستند
+                </div>
+                <div class="preview-pages-wrap" id="preview-pages-wrap"></div>
+                <div class="preview-nav" id="preview-nav" style="display:none">
+                    <button class="nav-btn" id="btn-prev-page">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <span id="page-info-lbl">صفحة 1 من 1</span>
+                    <button class="nav-btn" id="btn-next-page">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Data panel (right) -->
+            <div class="res-data-col">
+
+                <!-- Invoice header fields -->
+                <div class="data-section">
+                    <div class="section-header">
+                        <i class="fas fa-info-circle"></i>
+                        بيانات الفاتورة
+                        <span class="section-hint">انقر على أي حقل للتعديل</span>
+                    </div>
+                    <div class="fields-grid" id="fields-grid"></div>
+                </div>
+
+                <!-- Line items -->
+                <div class="data-section" id="items-section">
+                    <div class="section-header">
+                        <i class="fas fa-list-ul"></i>
+                        بنود الفاتورة
+                        <span class="items-badge" id="items-badge">0</span>
+                    </div>
+                    <div class="items-scroll">
+                        <table class="items-table" id="items-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:36px">#</th>
+                                    <th>الوصف / البند</th>
+                                    <th style="width:80px">الكمية</th>
+                                    <th style="width:110px">سعر الوحدة</th>
+                                    <th style="width:110px">الإجمالي</th>
+                                    <th style="width:36px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="items-tbody"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn-add-row" id="btn-add-row">
+                        <i class="fas fa-plus"></i> إضافة بند
+                    </button>
+                </div>
+
+                <!-- Totals -->
+                <div class="data-section">
+                    <div class="totals-grid" id="totals-grid"></div>
+                </div>
+
+                <!-- Raw OCR text -->
+                <details class="raw-text-details">
+                    <summary>
+                        <i class="fas fa-code"></i>
+                        النص الخام المستخرج
+                        <span class="raw-conf" id="raw-conf"></span>
+                        <button class="btn-copy-raw" id="btn-copy-raw" onclick="event.stopPropagation();navigator.clipboard?.writeText(document.getElementById('raw-text-pre').textContent).then(()=>this.textContent='✓ تم النسخ').catch(()=>{})">نسخ</button>
+                    </summary>
+                    <pre class="raw-text-pre" id="raw-text-pre"></pre>
+                </details>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Hidden file input -->
+<input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png,.webp" multiple style="display:none">
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
