@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — الصفحة غير موجودة</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { tajawal: ['Tajawal','sans-serif'] } } }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Tajawal', sans-serif; }
+
+    /* Gradient text */
+    .grad-text {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .grad-text-green {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Glass */
+    .glass {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .dark .glass {
+      background: rgba(15,23,42,0.7);
+      border-color: rgba(255,255,255,0.08);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    /* Floating blobs */
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(20px,-30px) scale(1.05); }
+      66%      { transform: translate(-15px,20px) scale(0.97); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(-25px,-20px) scale(1.08); }
+    }
+    @keyframes float3 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      40%      { transform: translate(18px,25px) scale(0.95); }
+      80%      { transform: translate(-10px,-15px) scale(1.04); }
+    }
+    .blob1 { animation: float1 8s ease-in-out infinite; }
+    .blob2 { animation: float2 11s ease-in-out infinite; }
+    .blob3 { animation: float3 9s ease-in-out infinite; }
+
+    /* 404 glitch */
+    @keyframes glitch {
+      0%,95%,100% { text-shadow: none; transform: skew(0); }
+      96%          { text-shadow: -3px 0 #ec4899, 3px 0 #3b82f6; transform: skew(-1deg); }
+      98%          { text-shadow: 3px 0 #ec4899, -3px 0 #3b82f6; transform: skew(1deg); }
+    }
+    .num-404 { animation: glitch 5s ease-in-out infinite; }
+
+    /* Countdown ring */
+    @keyframes shrink {
+      from { stroke-dashoffset: 0; }
+      to   { stroke-dashoffset: 283; }
+    }
+    #countdown-ring { animation: shrink 10s linear forwards; }
+
+    /* Fade in */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease forwards; }
+    .fade-up-2 { animation: fadeUp 0.6s ease 0.15s forwards; opacity:0; }
+    .fade-up-3 { animation: fadeUp 0.6s ease 0.3s forwards; opacity:0; }
+    .fade-up-4 { animation: fadeUp 0.6s ease 0.45s forwards; opacity:0; }
+
+    /* Button hover */
+    .btn-main {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-main:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+    .btn-tools {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-tools:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 24px rgba(239,68,68,0.35); }
+    .btn-cheat {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-cheat:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 24px rgba(16,185,129,0.35); }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/40 to-purple-50/30
+             dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 transition-colors duration-300">
+
+  <!-- Dark mode init -->
+  <script>
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+      document.documentElement.classList.add('dark');
+  </script>
+
+  <!-- Floating Blobs -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="blob1 absolute top-16 right-24 w-72 h-72 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-3xl"></div>
+    <div class="blob2 absolute bottom-24 left-16 w-80 h-80 rounded-full bg-gradient-to-br from-emerald-400/15 to-cyan-400/15 blur-3xl"></div>
+    <div class="blob3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-gradient-to-br from-pink-400/10 to-amber-400/10 blur-3xl"></div>
+  </div>
+
+  <!-- Theme toggle -->
+  <button id="themeBtn" onclick="toggleTheme()"
+    class="fixed top-4 left-4 z-50 w-10 h-10 rounded-full glass flex items-center justify-center text-lg
+           text-slate-600 dark:text-slate-300 hover:scale-110 transition-transform">
+    🌙
+  </button>
+
+  <!-- Main -->
+  <main class="min-h-screen flex flex-col items-center justify-center px-4 py-16">
+
+    <div class="glass rounded-3xl p-10 md:p-14 text-center max-w-xl w-full mx-auto relative overflow-hidden">
+
+      <!-- Decorative corner accents -->
+      <div class="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-bl-full"></div>
+      <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-emerald-400/15 to-cyan-400/15 rounded-tr-full"></div>
+
+      <!-- 404 Number -->
+      <div class="fade-up mb-2 relative z-10">
+        <span class="num-404 grad-text font-extrabold select-none"
+              style="font-size: clamp(5rem, 18vw, 9rem); line-height:1;">
+          404
+        </span>
+      </div>
+
+      <!-- Icon -->
+      <div class="fade-up-2 text-5xl mb-5 relative z-10">🔍</div>
+
+      <!-- Message -->
+      <div class="fade-up-2 relative z-10">
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+          هذه الصفحة لا وجود لها!
+        </h1>
+        <p class="text-slate-500 dark:text-slate-400 leading-relaxed text-base">
+          يبدو أنك وصلت لرابط غير صحيح أو أن الصفحة انتقلت لمكان آخر.<br>
+          لا تقلق، يمكنك الانطلاق من هنا:
+        </p>
+      </div>
+
+      <!-- Countdown -->
+      <div class="fade-up-3 relative z-10 flex items-center justify-center gap-3 my-6">
+        <div class="relative w-12 h-12">
+          <svg class="w-12 h-12 -rotate-90" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" stroke-width="8"/>
+            <circle id="countdown-ring" cx="50" cy="50" r="45" fill="none"
+                    stroke="#8b5cf6" stroke-width="8"
+                    stroke-dasharray="283" stroke-dashoffset="0"
+                    stroke-linecap="round"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="countdown-num" class="text-sm font-bold text-purple-600 dark:text-purple-400">10</span>
+          </div>
+        </div>
+        <p class="text-sm text-slate-400 dark:text-slate-500">
+          سيتم توجيهك للرئيسية تلقائياً
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="fade-up-4 relative z-10 flex flex-col gap-3">
+        <a href="/index.html"
+           class="btn-main flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-white font-bold text-base shadow-md">
+          🏠 الصفحة الرئيسية
+        </a>
+        <div class="grid grid-cols-2 gap-3">
+          <a href="/mytools/index.html"
+             class="btn-tools flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-bold text-sm shadow-md">
+            🛠️ أدواتي
+          </a>
+          <a href="/cheat_sheet/index.html"
+             class="btn-cheat flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-bold text-sm shadow-md">
+            📚 المراجع
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer note -->
+    <p class="mt-8 text-xs text-slate-400 dark:text-slate-600 fade-up-4">
+      عبدالله التويجري · محلل بيانات
+    </p>
+  </main>
+
+  <script>
+    // Dark mode toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      document.getElementById('themeBtn').textContent =
+        html.classList.contains('dark') ? '☀️' : '🌙';
+    }
+
+    // Countdown & auto-redirect
+    let seconds = 10;
+    const numEl  = document.getElementById('countdown-num');
+
+    const timer = setInterval(() => {
+      seconds--;
+      if (numEl) numEl.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(timer);
+        window.location.href = '/index.html';
+      }
+    }, 1000);
+
+    // Cancel redirect on any button click
+    document.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => clearInterval(timer));
+    });
+  </script>
+</body>
+</html>
