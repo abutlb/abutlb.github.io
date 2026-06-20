@@ -1,5 +1,6 @@
 // extraction/InvoiceParser.js — المنسّق الرئيسي: يشغّل الـ plugins ثم الـ AI اختيارياً
 
+import { Lang }                from '../i18n/Lang.js';
 import { ExtractionEngine }    from './engine/ExtractionEngine.js';
 import { DatePlugin }          from './plugins/DatePlugin.js';
 import { InvoiceNumberPlugin } from './plugins/InvoiceNumberPlugin.js';
@@ -72,26 +73,28 @@ export class InvoiceParser {
     }
 
     static headerFields() {
+        const t = k => Lang.t(k);
         return [
-            { key: 'invoiceNumber', label: 'رقم الفاتورة',       icon: 'fa-hashtag',        wide: false },
-            { key: 'date',          label: 'تاريخ الفاتورة',      icon: 'fa-calendar',       wide: false },
-            { key: 'dueDate',       label: 'تاريخ الاستحقاق',    icon: 'fa-calendar-check', wide: false },
-            { key: 'supplier',      label: 'المورد / الشركة',     icon: 'fa-building',       wide: true  },
-            { key: 'customer',      label: 'العميل / المشتري',    icon: 'fa-user',           wide: true  },
-            { key: 'vatNumber',     label: 'الرقم الضريبي',       icon: 'fa-receipt',        wide: false },
-            { key: 'poNumber',      label: 'رقم أمر الشراء',      icon: 'fa-file-alt',       wide: false },
-            { key: 'currency',      label: 'العملة',               icon: 'fa-coins',          wide: false },
-            { key: 'paymentTerms',  label: 'شروط الدفع',          icon: 'fa-handshake',      wide: true  },
-            { key: 'notes',         label: 'ملاحظات',              icon: 'fa-sticky-note',    wide: true  },
+            { key: 'invoiceNumber', label: t('invoiceNumber'), icon: 'fa-hashtag',        wide: false },
+            { key: 'date',          label: t('date'),           icon: 'fa-calendar',       wide: false },
+            { key: 'dueDate',       label: t('dueDate'),        icon: 'fa-calendar-check', wide: false },
+            { key: 'supplier',      label: t('supplier'),       icon: 'fa-building',       wide: true  },
+            { key: 'customer',      label: t('customer'),       icon: 'fa-user',           wide: true  },
+            { key: 'vatNumber',     label: t('vatNumber'),      icon: 'fa-receipt',        wide: false },
+            { key: 'poNumber',      label: t('poNumber'),       icon: 'fa-file-alt',       wide: false },
+            { key: 'currency',      label: t('currency'),       icon: 'fa-coins',          wide: false },
+            { key: 'paymentTerms',  label: t('paymentTerms'),   icon: 'fa-handshake',      wide: true  },
+            { key: 'notes',         label: t('notes'),          icon: 'fa-sticky-note',    wide: true  },
         ];
     }
 
     static totalFields() {
+        const t = k => Lang.t(k);
         return [
-            { key: 'subtotal', label: 'المجموع الفرعي', cls: '' },
-            { key: 'discount', label: 'الخصم',           cls: '' },
-            { key: 'tax',      label: 'الضريبة (VAT)',   cls: '' },
-            { key: 'total',    label: 'الإجمالي الكلي', cls: 'grand' },
+            { key: 'subtotal', label: t('subtotal'), cls: '' },
+            { key: 'discount', label: t('discount'), cls: '' },
+            { key: 'tax',      label: t('tax'),      cls: '' },
+            { key: 'total',    label: t('total'),    cls: 'grand' },
         ];
     }
 }

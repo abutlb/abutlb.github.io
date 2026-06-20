@@ -1,6 +1,7 @@
 // ui/PreviewPanel.js — معاينة صفحات المستند مع تنقل
 
 import { ImageProcessor } from '../core/ImageProcessor.js';
+import { Lang }           from '../i18n/Lang.js';
 
 export class PreviewPanel {
     constructor() {
@@ -54,7 +55,8 @@ export class PreviewPanel {
 
     _updateInfo() {
         if (this._pageInfo) {
-            this._pageInfo.textContent = `صفحة ${this._current + 1} من ${this._pages.length}`;
+            const of = Lang.isRTL() ? 'من' : 'of';
+            this._pageInfo.textContent = `${Lang.t('procPage')} ${this._current + 1} ${of} ${this._pages.length}`;
         }
     }
 

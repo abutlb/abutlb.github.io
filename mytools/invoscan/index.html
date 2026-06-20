@@ -35,21 +35,21 @@
         <div class="logo-icon"><i class="fas fa-file-invoice-dollar"></i></div>
         <div>
             <div class="logo-name">InvoScan</div>
-            <div class="logo-sub">قارئ الفواتير الذكي</div>
+            <div class="logo-sub" data-i18n="logoSub">قارئ الفواتير الذكي</div>
         </div>
     </a>
     <div class="toolbar-sep"></div>
 
     <div class="batch-pill" id="batch-pill" style="display:none">
         <i class="fas fa-layer-group"></i>
-        <span id="batch-count-lbl">0</span> فواتير في الانتظار
+        <span id="batch-count-lbl">0</span> <span data-i18n="invoicesWaiting">فواتير في الانتظار</span>
     </div>
 
     <div class="toolbar-spacer"></div>
 
     <button class="tb-btn" id="btn-new-invoice" style="display:none">
         <i class="fas fa-plus"></i>
-        <span>فاتورة جديدة</span>
+        <span data-i18n="newInvoice">فاتورة جديدة</span>
     </button>
     <div class="toolbar-sep" id="sep-new" style="display:none"></div>
     <button class="tb-btn" id="btn-settings" title="الإعدادات">
@@ -58,6 +58,9 @@
     <div class="ai-mode-badge" id="ai-mode-badge" style="display:none">
         <i class="fas fa-robot"></i> AI
     </div>
+    <div class="toolbar-sep"></div>
+    <button class="tb-btn" id="btn-lang" title="Switch language / تغيير اللغة"
+            style="font-weight:700;font-size:.8rem;letter-spacing:.5px;min-width:40px">EN</button>
     <div class="toolbar-sep"></div>
     <button class="tb-btn" id="btn-theme">
         <i class="fas fa-moon" id="theme-icon"></i>
@@ -81,27 +84,27 @@
                         <div class="dz-icon-wrap">
                             <i class="fas fa-file-invoice-dollar dz-icon"></i>
                         </div>
-                        <h2 class="dz-title">ارفع فاتورتك هنا</h2>
-                        <p class="dz-subtitle">اسحب وأفلت الملف أو اضغط للاختيار</p>
+                        <h2 class="dz-title" data-i18n="dropTitle">ارفع فاتورتك هنا</h2>
+                        <p class="dz-subtitle" data-i18n="dropSub">اسحب وأفلت الملف أو اضغط للاختيار</p>
                         <button class="dz-browse-btn" id="dz-browse-btn">
                             <i class="fas fa-folder-open"></i>
-                            استعراض الملفات
+                            <span data-i18n="browsBtn">استعراض الملفات</span>
                         </button>
-                        <p class="dz-formats">PDF · JPG · PNG · WEBP &nbsp;—&nbsp; حتى 20MB</p>
+                        <p class="dz-formats" data-i18n="formats">PDF · JPG · PNG · WEBP &nbsp;—&nbsp; حتى 20MB</p>
                     </div>
                 </div>
 
                 <!-- Batch queue (shown when >1 file) -->
                 <div class="batch-queue" id="batch-queue" style="display:none">
                     <div class="batch-queue-header">
-                        <span><i class="fas fa-layer-group"></i> قائمة الانتظار</span>
+                        <span><i class="fas fa-layer-group"></i> <span data-i18n="queueTitle">قائمة الانتظار</span></span>
                         <button class="btn-process-all" id="btn-process-all">
-                            <i class="fas fa-bolt"></i> معالجة الكل
+                            <i class="fas fa-bolt"></i> <span data-i18n="processAll">معالجة الكل</span>
                         </button>
                     </div>
                     <div class="batch-list" id="batch-list"></div>
                     <button class="btn-add-more" id="btn-add-more">
-                        <i class="fas fa-plus"></i> إضافة المزيد
+                        <i class="fas fa-plus"></i> <span data-i18n="addMore">إضافة المزيد</span>
                     </button>
                 </div>
             </div>
@@ -111,43 +114,43 @@
                 <div class="guide-card">
                     <div class="guide-card-title">
                         <i class="fas fa-lightbulb" style="color:var(--warn)"></i>
-                        إرشادات للحصول على أفضل نتيجة
+                        <span data-i18n="guideTitle">إرشادات للحصول على أفضل نتيجة</span>
                     </div>
 
                     <div class="guide-items">
                         <div class="guide-item gi-best">
                             <div class="gi-icon"><i class="fas fa-check-circle"></i></div>
                             <div class="gi-text">
-                                <strong>PDF رقمي</strong>
-                                <span>النص قابل للنسخ — دقة مثالية</span>
+                                <strong data-i18n="guideDigital">PDF رقمي</strong>
+                                <span data-i18n="guideDigitalSub">النص قابل للنسخ — دقة مثالية</span>
                             </div>
                         </div>
                         <div class="guide-item gi-good">
                             <div class="gi-icon"><i class="fas fa-check-circle"></i></div>
                             <div class="gi-text">
-                                <strong>صورة واضحة مضاءة</strong>
-                                <span>بدون ظلال أو انعكاسات</span>
+                                <strong data-i18n="guideClear">صورة واضحة مضاءة</strong>
+                                <span data-i18n="guideClearSub">بدون ظلال أو انعكاسات</span>
                             </div>
                         </div>
                         <div class="guide-item gi-good">
                             <div class="gi-icon"><i class="fas fa-check-circle"></i></div>
                             <div class="gi-text">
-                                <strong>نص مقروء وكبير</strong>
-                                <span>غير ضبابي أو مضغوط</span>
+                                <strong data-i18n="guideLarge">نص مقروء وكبير</strong>
+                                <span data-i18n="guideLargeSub">غير ضبابي أو مضغوط</span>
                             </div>
                         </div>
                         <div class="guide-item gi-warn">
                             <div class="gi-icon"><i class="fas fa-exclamation-triangle"></i></div>
                             <div class="gi-text">
-                                <strong>صورة ملتوية قليلاً</strong>
-                                <span>يُقلّل من الدقة</span>
+                                <strong data-i18n="guideTilted">صورة ملتوية قليلاً</strong>
+                                <span data-i18n="guideTiltedSub">يُقلّل من الدقة</span>
                             </div>
                         </div>
                         <div class="guide-item gi-bad">
                             <div class="gi-icon"><i class="fas fa-times-circle"></i></div>
                             <div class="gi-text">
-                                <strong>معتمة أو ضبابية</strong>
-                                <span>قد يفشل الاستخراج تماماً</span>
+                                <strong data-i18n="guideDark">معتمة أو ضبابية</strong>
+                                <span data-i18n="guideDarkSub">قد يفشل الاستخراج تماماً</span>
                             </div>
                         </div>
                     </div>
@@ -161,28 +164,28 @@
 
                     <div class="guide-note">
                         <i class="fas fa-info-circle"></i>
-                        يدعم العربية والإنجليزية. المعالجة تتم بالكامل في متصفحك — لا يُرفع أي ملف للإنترنت.
+                        <span data-i18n="guideNote">يدعم العربية والإنجليزية. المعالجة تتم بالكامل في متصفحك — لا يُرفع أي ملف للإنترنت.</span>
                     </div>
                 </div>
 
                 <!-- OCR Accuracy levels -->
                 <div class="accuracy-card">
-                    <div class="accuracy-title">مؤشر الدقة المتوقعة</div>
+                    <div class="accuracy-title" data-i18n="accTitle">مؤشر الدقة المتوقعة</div>
                     <div class="accuracy-row">
                         <div class="acc-dot acc-high"></div>
-                        <span>PDF رقمي</span>
+                        <span data-i18n="accDigital">PDF رقمي</span>
                         <div class="acc-bar"><div class="acc-fill" style="width:95%"></div></div>
                         <span class="acc-pct">~95%</span>
                     </div>
                     <div class="accuracy-row">
                         <div class="acc-dot acc-med"></div>
-                        <span>صورة واضحة</span>
+                        <span data-i18n="accClear">صورة واضحة</span>
                         <div class="acc-bar"><div class="acc-fill" style="width:75%"></div></div>
                         <span class="acc-pct">~75%</span>
                     </div>
                     <div class="accuracy-row">
                         <div class="acc-dot acc-low"></div>
-                        <span>صورة ضعيفة</span>
+                        <span data-i18n="accWeak">صورة ضعيفة</span>
                         <div class="acc-bar"><div class="acc-fill" style="width:35%"></div></div>
                         <span class="acc-pct">~35%</span>
                     </div>
@@ -197,12 +200,12 @@
         <div class="processing-wrap">
             <div class="proc-preview-box">
                 <canvas id="proc-canvas"></canvas>
-                <div class="proc-page-badge" id="proc-page-badge">صفحة 1</div>
+                <div class="proc-page-badge" id="proc-page-badge" data-i18n="procPage">صفحة 1</div>
             </div>
             <div class="proc-info-box">
                 <div class="proc-logo">
                     <div class="proc-spinner"><i class="fas fa-cog fa-spin"></i></div>
-                    <span>جاري المعالجة...</span>
+                    <span data-i18n="processing">جاري المعالجة...</span>
                 </div>
                 <div class="proc-filename" id="proc-filename">—</div>
 
@@ -210,23 +213,23 @@
                 <div class="proc-stages" id="proc-stages">
                     <div class="proc-stage" id="stage-load">
                         <div class="stage-dot"></div>
-                        <span>تحميل الملف</span>
+                        <span data-i18n="stageLoad">تحميل الملف</span>
                     </div>
                     <div class="proc-stage" id="stage-render">
                         <div class="stage-dot"></div>
-                        <span>تحويل الصفحات</span>
+                        <span data-i18n="stageRender">تحويل الصفحات</span>
                     </div>
                     <div class="proc-stage" id="stage-preprocess">
                         <div class="stage-dot"></div>
-                        <span>تحسين الصورة</span>
+                        <span data-i18n="stagePreprocess">تحسين الصورة</span>
                     </div>
                     <div class="proc-stage" id="stage-ocr">
                         <div class="stage-dot"></div>
-                        <span>التعرف على النص (OCR)</span>
+                        <span data-i18n="stageOcr">التعرف على النص (OCR)</span>
                     </div>
                     <div class="proc-stage" id="stage-extract">
                         <div class="stage-dot"></div>
-                        <span>استخراج البيانات</span>
+                        <span data-i18n="stageExtract">استخراج البيانات</span>
                     </div>
                 </div>
 
@@ -238,10 +241,10 @@
                     <span class="proc-pct" id="proc-pct">0%</span>
                 </div>
 
-                <div class="proc-status-msg" id="proc-status-msg">جاري التحضير...</div>
+                <div class="proc-status-msg" id="proc-status-msg" data-i18n="preparing">جاري التحضير...</div>
 
                 <button class="btn-cancel-proc" id="btn-cancel-proc">
-                    <i class="fas fa-times"></i> إلغاء
+                    <i class="fas fa-times"></i> <span data-i18n="cancelProc">إلغاء</span>
                 </button>
             </div>
         </div>
@@ -255,17 +258,17 @@
         <div class="tmpl-header" style="direction:ltr">
             <button class="tb-btn" id="btn-tmpl-back">
                 <i class="fas fa-arrow-right"></i>
-                <span>رجوع</span>
+                <span data-i18n="back">رجوع</span>
             </button>
             <div class="toolbar-sep"></div>
             <span class="tmpl-header-title">
                 <i class="fas fa-drafting-compass" style="color:var(--accent)"></i>
-                محرر القالب
+                <span data-i18n="tmplEditor">محرر القالب</span>
             </span>
             <div class="toolbar-spacer"></div>
             <button class="tb-btn" id="btn-tmpl-clear">
                 <i class="fas fa-trash-alt"></i>
-                <span>مسح الكل</span>
+                <span data-i18n="tmplClearAll">مسح الكل</span>
             </button>
         </div>
 
@@ -276,7 +279,7 @@
             <div class="tmpl-canvas-col">
                 <div class="tmpl-canvas-hint" id="tmpl-hint">
                     <i class="fas fa-mouse-pointer"></i>
-                    اسحب على الفاتورة لتحديد منطقة، ثم اختر نوعها
+                    <span data-i18n="tmplHint">اسحب على الفاتورة لتحديد منطقة، ثم اختر نوعها</span>
                 </div>
                 <div class="tmpl-canvas-wrap" id="tmpl-canvas-wrap">
                     <div id="tmpl-canvas-inner" style="position:relative;display:inline-block;line-height:0">
@@ -289,25 +292,25 @@
             <!-- Sidebar -->
             <div class="tmpl-sidebar">
                 <div class="tmpl-meta-block">
-                    <label class="tmpl-label">اسم القالب</label>
-                    <input id="tmpl-name" class="tmpl-input" placeholder="مثال: فاتورة شركة الدواء">
-                    <label class="tmpl-label" style="margin-top:10px">نص التعرف التلقائي</label>
-                    <input id="tmpl-anchor" class="tmpl-input" placeholder="نص مميز يظهر في هذا النوع من الفواتير">
+                    <label class="tmpl-label" data-i18n="tmplName">اسم القالب</label>
+                    <input id="tmpl-name" class="tmpl-input" data-i18n-placeholder="tmplNamePh">
+                    <label class="tmpl-label" style="margin-top:10px" data-i18n="tmplAnchor">نص التعرف التلقائي</label>
+                    <input id="tmpl-anchor" class="tmpl-input" data-i18n-placeholder="tmplAnchorPh">
                     <p class="tmpl-hint-text">
                         <i class="fas fa-info-circle"></i>
-                        يُستخدم للكشف التلقائي عند رفع فاتورة جديدة من نفس المورد
+                        <span data-i18n="tmplAnchorHint">يُستخدم للكشف التلقائي عند رفع فاتورة جديدة من نفس المورد</span>
                     </p>
                 </div>
 
                 <div class="tmpl-regions-block">
                     <div class="tmpl-regions-hdr">
-                        <span>المناطق المحددة</span>
+                        <span data-i18n="tmplRegions">المناطق المحددة</span>
                         <span class="tmpl-count-badge" id="tmpl-count">0</span>
                     </div>
                     <div class="tmpl-regions-list" id="tmpl-regions-list">
                         <div class="tmpl-empty-hint">
                             <i class="fas fa-draw-polygon"></i>
-                            ارسم مربعاً على الفاتورة لتحديد منطقة
+                            <span data-i18n="tmplDrawHint">ارسم مربعاً على الفاتورة لتحديد منطقة</span>
                         </div>
                     </div>
                 </div>
@@ -315,18 +318,18 @@
                 <div class="tmpl-actions-block">
                     <button class="btn-tmpl-save" id="btn-tmpl-save">
                         <i class="fas fa-save"></i>
-                        حفظ القالب
+                        <span data-i18n="tmplSave">حفظ القالب</span>
                     </button>
                     <div class="tmpl-secondary-btns">
                         <button class="btn-tmpl-sec" id="btn-tmpl-export">
-                            <i class="fas fa-download"></i> تصدير JSON
+                            <i class="fas fa-download"></i> <span data-i18n="tmplExportJson">تصدير JSON</span>
                         </button>
                         <button class="btn-tmpl-sec" id="btn-tmpl-library">
-                            <i class="fas fa-folder-open"></i> مكتبة القوالب
+                            <i class="fas fa-folder-open"></i> <span data-i18n="tmplLibrary">مكتبة القوالب</span>
                         </button>
                     </div>
                     <label class="btn-tmpl-sec btn-tmpl-import-lbl" for="tmpl-import-input">
-                        <i class="fas fa-upload"></i> استيراد قالب
+                        <i class="fas fa-upload"></i> <span data-i18n="tmplImport">استيراد قالب</span>
                     </label>
                     <input type="file" id="tmpl-import-input" accept=".json" style="display:none">
                 </div>
@@ -345,15 +348,19 @@
             <button class="nav-btn" id="btn-batch-next"><i class="fas fa-chevron-left"></i></button>
             <div style="flex:1"></div>
             <button class="tb-btn btn-export-all" id="btn-export-all" style="display:none">
-                <i class="fas fa-layer-group"></i>
-                <span>تصدير الكل</span>
+                <i class="fas fa-file-excel"></i>
+                <span data-i18n="exportAll">Excel الكل</span>
+            </button>
+            <button class="tb-btn" id="btn-export-all-csv" style="display:none">
+                <i class="fas fa-file-csv"></i>
+                <span data-i18n="exportAllCsv">CSV الكل</span>
             </button>
         </div>
 
         <!-- Template used banner -->
         <div class="template-used-banner" id="template-used-banner" style="display:none">
             <i class="fas fa-magic"></i>
-            <span>تم تطبيق قالب: <strong id="template-used-name"></strong></span>
+            <span><span data-i18n="tmplApplied">تم تطبيق قالب:</span> <strong id="template-used-name"></strong></span>
             <div style="flex:1"></div>
             <button class="banner-dismiss" id="btn-dismiss-template-banner">×</button>
         </div>
@@ -366,20 +373,20 @@
             </div>
             <div class="quality-badge" id="quality-badge"></div>
             <div class="toolbar-spacer"></div>
-            <button class="tb-btn" id="btn-create-template" title="إنشاء قالب من هذه الفاتورة">
+            <button class="tb-btn" id="btn-create-template">
                 <i class="fas fa-drafting-compass"></i>
-                <span>قالب</span>
+                <span data-i18n="exportTemplate">قالب</span>
             </button>
             <div class="toolbar-sep"></div>
             <button class="tb-btn" id="btn-back">
                 <i class="fas fa-arrow-right"></i>
-                <span>فاتورة جديدة</span>
+                <span data-i18n="newInvoice">فاتورة جديدة</span>
             </button>
             <div class="toolbar-sep"></div>
             <div class="dropdown">
                 <button class="btn-export-trigger">
                     <i class="fas fa-download"></i>
-                    تصدير
+                    <span data-i18n="exportBtn">تصدير</span>
                     <i class="fas fa-caret-down" style="font-size:9px;margin-inline-start:2px"></i>
                 </button>
                 <div class="dropdown-menu" style="direction:rtl">
@@ -401,7 +408,7 @@
             <!-- Preview panel (left) -->
             <div class="res-preview-col">
                 <div class="preview-header">
-                    <i class="fas fa-eye"></i> معاينة المستند
+                    <i class="fas fa-eye"></i> <span data-i18n="previewDoc">معاينة المستند</span>
                 </div>
                 <div class="preview-pages-wrap" id="preview-pages-wrap"></div>
                 <div class="preview-nav" id="preview-nav" style="display:none">
@@ -422,8 +429,8 @@
                 <div class="data-section">
                     <div class="section-header">
                         <i class="fas fa-info-circle"></i>
-                        بيانات الفاتورة
-                        <span class="section-hint">انقر على أي حقل للتعديل</span>
+                        <span data-i18n="invoiceData">بيانات الفاتورة</span>
+                        <span class="section-hint" data-i18n="clickToEdit">انقر على أي حقل للتعديل</span>
                     </div>
                     <div class="fields-grid" id="fields-grid"></div>
                 </div>
@@ -432,7 +439,7 @@
                 <div class="data-section" id="items-section">
                     <div class="section-header">
                         <i class="fas fa-list-ul"></i>
-                        بنود الفاتورة
+                        <span data-i18n="itemsTitle">بنود الفاتورة</span>
                         <span class="items-badge" id="items-badge">0</span>
                     </div>
                     <div class="items-scroll">
@@ -440,10 +447,10 @@
                             <thead>
                                 <tr>
                                     <th style="width:36px">#</th>
-                                    <th>الوصف / البند</th>
-                                    <th style="width:80px">الكمية</th>
-                                    <th style="width:110px">سعر الوحدة</th>
-                                    <th style="width:110px">الإجمالي</th>
+                                    <th data-i18n="colDesc">الوصف / البند</th>
+                                    <th style="width:80px" data-i18n="colQty">الكمية</th>
+                                    <th style="width:110px" data-i18n="colUnit">سعر الوحدة</th>
+                                    <th style="width:110px" data-i18n="colTotal">الإجمالي</th>
                                     <th style="width:36px"></th>
                                 </tr>
                             </thead>
@@ -451,7 +458,7 @@
                         </table>
                     </div>
                     <button class="btn-add-row" id="btn-add-row">
-                        <i class="fas fa-plus"></i> إضافة بند
+                        <i class="fas fa-plus"></i> <span data-i18n="addRow">إضافة بند</span>
                     </button>
                 </div>
 
@@ -464,9 +471,9 @@
                 <details class="raw-text-details">
                     <summary>
                         <i class="fas fa-code"></i>
-                        النص الخام المستخرج
+                        <span data-i18n="rawText">النص الخام المستخرج</span>
                         <span class="raw-conf" id="raw-conf"></span>
-                        <button class="btn-copy-raw" id="btn-copy-raw" onclick="event.stopPropagation();navigator.clipboard?.writeText(document.getElementById('raw-text-pre').textContent).then(()=>this.textContent='✓ تم النسخ').catch(()=>{})">نسخ</button>
+                        <button class="btn-copy-raw" id="btn-copy-raw" data-i18n="copyRaw">نسخ</button>
                     </summary>
                     <pre class="raw-text-pre" id="raw-text-pre"></pre>
                 </details>
@@ -481,30 +488,30 @@
 
 <!-- ══════ FIELD PICKER (floating) ══════ -->
 <div class="field-picker" id="field-picker" style="display:none;position:fixed;z-index:500">
-    <div class="fp-title"><i class="fas fa-tag"></i> نوع المنطقة</div>
-    <div class="fp-group-label">بيانات الفاتورة</div>
+    <div class="fp-title"><i class="fas fa-tag"></i> <span data-i18n="fpTitle">نوع المنطقة</span></div>
+    <div class="fp-group-label" data-i18n="invoiceData">بيانات الفاتورة</div>
     <div class="fp-grid">
-        <button class="fp-btn" data-field="invoiceNumber"><i class="fas fa-hashtag"></i>رقم الفاتورة</button>
-        <button class="fp-btn" data-field="date"><i class="fas fa-calendar"></i>تاريخ الفاتورة</button>
-        <button class="fp-btn" data-field="dueDate"><i class="fas fa-calendar-check"></i>تاريخ الاستحقاق</button>
-        <button class="fp-btn" data-field="supplier"><i class="fas fa-building"></i>المورد</button>
-        <button class="fp-btn" data-field="customer"><i class="fas fa-user"></i>العميل</button>
-        <button class="fp-btn" data-field="vatNumber"><i class="fas fa-receipt"></i>الرقم الضريبي</button>
-        <button class="fp-btn" data-field="poNumber"><i class="fas fa-file-alt"></i>رقم أمر الشراء</button>
+        <button class="fp-btn" data-field="invoiceNumber"><i class="fas fa-hashtag"></i><span data-i18n="invoiceNumber">رقم الفاتورة</span></button>
+        <button class="fp-btn" data-field="date"><i class="fas fa-calendar"></i><span data-i18n="date">تاريخ الفاتورة</span></button>
+        <button class="fp-btn" data-field="dueDate"><i class="fas fa-calendar-check"></i><span data-i18n="dueDate">تاريخ الاستحقاق</span></button>
+        <button class="fp-btn" data-field="supplier"><i class="fas fa-building"></i><span data-i18n="fpSupplier">المورد</span></button>
+        <button class="fp-btn" data-field="customer"><i class="fas fa-user"></i><span data-i18n="fpCustomer">العميل</span></button>
+        <button class="fp-btn" data-field="vatNumber"><i class="fas fa-receipt"></i><span data-i18n="vatNumber">الرقم الضريبي</span></button>
+        <button class="fp-btn" data-field="poNumber"><i class="fas fa-file-alt"></i><span data-i18n="poNumber">رقم أمر الشراء</span></button>
     </div>
-    <div class="fp-group-label">المبالغ</div>
+    <div class="fp-group-label" data-i18n="fpAmounts">المبالغ</div>
     <div class="fp-grid">
-        <button class="fp-btn" data-field="subtotal"><i class="fas fa-sigma"></i>المجموع الفرعي</button>
-        <button class="fp-btn" data-field="tax"><i class="fas fa-percent"></i>الضريبة</button>
-        <button class="fp-btn" data-field="discount"><i class="fas fa-tag"></i>الخصم</button>
-        <button class="fp-btn" data-field="total"><i class="fas fa-coins"></i>الإجمالي الكلي</button>
+        <button class="fp-btn" data-field="subtotal"><i class="fas fa-sigma"></i><span data-i18n="subtotal">المجموع الفرعي</span></button>
+        <button class="fp-btn" data-field="tax"><i class="fas fa-percent"></i><span data-i18n="fpTax">الضريبة</span></button>
+        <button class="fp-btn" data-field="discount"><i class="fas fa-tag"></i><span data-i18n="discount">الخصم</span></button>
+        <button class="fp-btn" data-field="total"><i class="fas fa-coins"></i><span data-i18n="total">الإجمالي الكلي</span></button>
     </div>
     <button class="fp-btn fp-table-btn" data-field="table">
         <i class="fas fa-table"></i>
-        جدول البنود ★
+        <span data-i18n="fpTable">جدول البنود ★</span>
     </button>
     <button class="fp-btn fp-cancel-btn" data-field="__cancel__">
-        <i class="fas fa-times"></i> إلغاء
+        <i class="fas fa-times"></i> <span data-i18n="cancelProc">إلغاء</span>
     </button>
 </div>
 
@@ -513,18 +520,18 @@
     <div class="col-step-card">
         <div class="col-step-title">
             <i class="fas fa-table" style="color:var(--accent)"></i>
-            تحديد أعمدة الجدول
+            <span data-i18n="colStepTitle">تحديد أعمدة الجدول</span>
         </div>
-        <p class="col-step-desc">
+        <p class="col-step-desc" data-i18n="colStepDesc">
             اكتُشفت الأعمدة التالية من صف الرأس — حدد ما يمثله كل عمود أو اختر "تجاهل"
         </p>
         <div id="column-assignments" class="col-assignments"></div>
         <div class="col-step-actions">
             <button id="btn-col-confirm" class="btn-col-confirm">
-                <i class="fas fa-check"></i> تأكيد
+                <i class="fas fa-check"></i> <span data-i18n="colConfirm">تأكيد</span>
             </button>
             <button id="btn-col-cancel" class="btn-col-cancel">
-                <i class="fas fa-times"></i> إلغاء
+                <i class="fas fa-times"></i> <span data-i18n="cancelProc">إلغاء</span>
             </button>
         </div>
     </div>
@@ -534,7 +541,7 @@
 <div class="modal-overlay" id="template-library-overlay" style="display:none">
     <div class="settings-modal">
         <div class="settings-modal-header">
-            <h3><i class="fas fa-layer-group"></i> مكتبة القوالب</h3>
+            <h3><i class="fas fa-layer-group"></i> <span data-i18n="tmplLibrary">مكتبة القوالب</span></h3>
             <button class="btn-modal-close" id="btn-lib-close">
                 <i class="fas fa-times"></i>
             </button>
@@ -551,15 +558,15 @@
 <div class="modal-overlay" id="settings-overlay" style="display:none">
     <div class="settings-modal">
         <div class="settings-modal-header">
-            <h3><i class="fas fa-cog"></i> الإعدادات</h3>
+            <h3><i class="fas fa-cog"></i> <span data-i18n="settings">الإعدادات</span></h3>
             <button class="btn-modal-close" id="btn-settings-close">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="settings-body">
             <div class="settings-section">
-                <h4><i class="fas fa-robot" style="color:var(--accent)"></i> وضع الذكاء الاصطناعي</h4>
-                <p class="settings-hint">
+                <h4><i class="fas fa-robot" style="color:var(--accent)"></i> <span data-i18n="aiMode">وضع الذكاء الاصطناعي</span></h4>
+                <p class="settings-hint" data-i18n="aiHint">
                     اختر مزوداً وأدخل مفتاحه لرفع دقة الاستخراج إلى ~95%.
                     المفتاح يُحفظ في متصفحك فقط ولا يمرّ بأي خادم وسيط.
                 </p>
@@ -569,15 +576,15 @@
 
                 <!-- Model + Key -->
                 <div class="key-form">
-                    <label class="key-label">النموذج</label>
+                    <label class="key-label" data-i18n="aiModel">النموذج</label>
                     <select id="ai-model-select" class="key-select"></select>
 
-                    <label class="key-label">مفتاح API</label>
+                    <label class="key-label" data-i18n="aiKey">مفتاح API</label>
                     <div class="key-row">
                         <input type="password" id="gemini-key-input"
                                placeholder="AIzaSy..." autocomplete="off" spellcheck="false">
                         <button class="btn-key-action" id="btn-test-key">
-                            <i class="fas fa-plug"></i> اختبار
+                            <i class="fas fa-plug"></i> <span data-i18n="aiTest">اختبار</span>
                         </button>
                     </div>
 
@@ -585,10 +592,10 @@
 
                     <div class="key-actions">
                         <button class="btn-key-save" id="btn-save-key">
-                            <i class="fas fa-save"></i> حفظ وتفعيل
+                            <i class="fas fa-save"></i> <span data-i18n="aiSave">حفظ وتفعيل</span>
                         </button>
                         <button class="btn-key-clear" id="btn-clear-key">
-                            <i class="fas fa-trash"></i> مسح
+                            <i class="fas fa-trash"></i> <span data-i18n="aiClear">مسح</span>
                         </button>
                     </div>
 
@@ -596,7 +603,7 @@
                        href="https://aistudio.google.com/app/apikey"
                        target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-external-link-alt"></i>
-                        احصل على مفتاح مجاناً ←
+                        <span data-i18n="aiGetKey">احصل على مفتاح مجاناً ←</span>
                     </a>
                 </div>
             </div>

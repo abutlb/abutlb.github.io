@@ -1,4 +1,5 @@
 // ui/ProgressPanel.js — لوحة تقدم المعالجة
+import { Lang } from '../i18n/Lang.js';
 
 const STAGES = ['stage-load', 'stage-render', 'stage-preprocess', 'stage-ocr', 'stage-extract'];
 
@@ -19,7 +20,7 @@ export class ProgressPanel {
     }
 
     reset() {
-        this.setProgress(0, 'جاري التحضير...');
+        this.setProgress(0, Lang.t('preparing'));
         this._current = -1;
         STAGES.forEach(id => {
             const el = document.getElementById(id);
@@ -57,6 +58,6 @@ export class ProgressPanel {
         this._canvas.width  = canvas.width  * scale;
         this._canvas.height = canvas.height * scale;
         ctx.drawImage(canvas, 0, 0, this._canvas.width, this._canvas.height);
-        if (this._badge) this._badge.textContent = `صفحة ${pageNum}`;
+        if (this._badge) this._badge.textContent = `${Lang.t('procPage')} ${pageNum}`;
     }
 }

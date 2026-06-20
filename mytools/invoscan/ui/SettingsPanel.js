@@ -1,6 +1,7 @@
 // ui/SettingsPanel.js — لوحة إعدادات BYOK متعددة المزودين
 import { AIRouter }                     from '../ai/AIRouter.js';
 import { PROVIDERS, lsKey, lsModel, LS_PROVIDER } from '../ai/BaseAIClient.js';
+import { Lang }                         from '../i18n/Lang.js';
 
 export class SettingsPanel {
     constructor() {
@@ -31,6 +32,7 @@ export class SettingsPanel {
         });
 
         this._syncToolbar();
+        Lang.onChange(() => { this._renderProviders(); this._loadCurrent(); });
     }
 
     open()  { if (this._overlay) this._overlay.style.display = 'flex'; this._loadCurrent(); }
@@ -48,7 +50,7 @@ export class SettingsPanel {
                 <i class="fab ${p.icon}" style="color:${p.color};font-size:1.2rem"></i>
                 <span class="pc-name">${p.name}</span>
                 <span class="pc-company">${p.company}</span>
-                ${p.free ? '<span class="pc-free">مجاني</span>' : ''}
+                ${p.free ? `<span class="pc-free">${Lang.t('aiFree')}</span>` : ''}
                 ${localStorage.getItem(lsKey(p.id)) ? '<span class="pc-connected"><i class="fas fa-check-circle"></i></span>' : ''}
             </button>
         `).join('');
@@ -81,17 +83,20 @@ export class SettingsPanel {
         }
 
         const link = document.getElementById('settings-key-link');
-        if (link) { link.href = p.keyUrl; link.textContent = `احصل على مفتاح ${p.name} مجاناً ←`; }
+        if (link) {
+            link.href = p.keyUrl;
+            link.innerHTML = `<i class="fas fa-external-link-alt"></i> ${Lang.isRTL() ? `احصل على مفتاح ${p.name} مجاناً ←` : `Get a free ${p.name} key →`}`;
+        }
     }
 
     _save() {
         const key = document.getElementById('gemini-key-input')?.value?.trim();
-        if (!key) { this._status('أدخل المفتاح أولاً', 'warn'); return; }
+        if (!key) { this._status(Lang.t('aiEnterKey'), 'warn'); return; }
         localStorage.setItem(lsKey(this._provider), key);
         localStorage.setItem(LS_PROVIDER, this._provider);
         const model = document.getElementById('ai-model-select')?.value;
         if (model) localStorage.setItem(lsModel(this._provider), model);
-        this._status('تم الحفظ ✓', 'success');
+        this._status(Lang.t('aiSaved'), 'success');
         this._renderProviders();
         this._syncToolbar();
     }
@@ -100,7 +105,7 @@ export class SettingsPanel {
         localStorage.removeItem(lsKey(this._provider));
         const inp = document.getElementById('gemini-key-input');
         if (inp) inp.value = '';
-        this._status('تم مسح المفتاح', 'warn');
+        this._status(Lang.t('aiCleared'), 'warn');
         this._renderProviders();
         this._syncToolbar();
     }
@@ -108,13 +113,13 @@ export class SettingsPanel {
     async _test() {
         const key   = document.getElementById('gemini-key-input')?.value?.trim();
         const model = document.getElementById('ai-model-select')?.value;
-        if (!key) { this._status('أدخل المفتاح أولاً', 'warn'); return; }
-        this._status('جاري الاختبار...', 'loading');
+        if (!key) { this._status(Lang.t('aiEnterKey'), 'warn'); return; }
+        this._status(Lang.t('aiTesting'), 'loading');
         try {
             await AIRouter.test(this._provider, key, model);
-            this._status(`✓ ${PROVIDERS[this._provider].name} يعمل بنجاح`, 'success');
+            this._status(`✓ ${PROVIDERS[this._provider].name} ${Lang.t('aiWorking')}`, 'success');
         } catch (e) {
-            this._status('فشل: ' + e.message, 'error');
+            this._status(`${Lang.t('aiFailed')}: ` + e.message, 'error');
         }
     }
 

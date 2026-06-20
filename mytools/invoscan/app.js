@@ -1,5 +1,6 @@
 // app.js — InvoScan: نقطة الدخول والمنسق الرئيسي
 
+import { Lang }           from './i18n/Lang.js';
 import { FileHandler }    from './core/FileHandler.js';
 import { PDFProcessor }   from './core/PDFProcessor.js';
 import { ImageProcessor } from './core/ImageProcessor.js';
@@ -110,23 +111,24 @@ async function processFile(file) {
 
     // Stage 0: تحميل
     progress.setStage(0);
-    progress.setProgress(5, 'جاري تحميل الملف...');
+    progress.setProgress(5, Lang.t('procLoading'));
 
     // Stage 1: تحويل
     progress.setStage(1);
-    progress.setProgress(15, isPDF ? 'تحويل صفحات PDF...' : 'تحميل الصورة...');
+    progress.setProgress(15, isPDF ? Lang.t('procConvertPdf') : Lang.t('procLoadImg'));
 
     if (isPDF) {
         const hasText = await PDFProcessor.hasEmbeddedText(file);
         canvases = await PDFProcessor.renderAll(file, (p, total, canvas) => {
             progress.showPageCanvas(canvas, p);
-            progress.setProgress(15 + Math.round((p / total) * 20), `تحويل صفحة ${p} من ${total}...`);
+            const of = Lang.isRTL() ? 'من' : 'of';
+            progress.setProgress(15 + Math.round((p / total) * 20), `${Lang.t('procPage')} ${p} ${of} ${total}...`);
         });
 
         if (hasText) {
             progress.doneStage(1);
             progress.setStage(2);
-            progress.setProgress(50, 'استخراج النص المنظم...');
+            progress.setProgress(50, Lang.t('procExtractTxt'));
             rawText    = await PDFProcessor.extractStructuredText(file);
             confidence = 95;
             progress.setStage(3);
@@ -151,7 +153,7 @@ async function processFile(file) {
 
     // Stage 4: استخراج البيانات
     progress.setStage(4);
-    progress.setProgress(95, settings.hasKey() ? 'استخراج ذكي بـ AI...' : 'استخراج البيانات...');
+    progress.setProgress(95, settings.hasKey() ? Lang.t('procAiExtract') : Lang.t('procExtract'));
     await delay(200);
 
     // Debug
@@ -182,7 +184,7 @@ async function processFile(file) {
     state.currentFile = file;
     console.log('InvoScan — Parsed:', parsed);
 
-    progress.setProgress(100, 'اكتمل!');
+    progress.setProgress(100, Lang.t('procDone'));
     progress.doneStage(4);
     await delay(400);
 
@@ -191,15 +193,15 @@ async function processFile(file) {
 
 async function runPreprocessAndOCR(canvases) {
     progress.setStage(2);
-    progress.setProgress(35, 'تحسين جودة الصورة...');
+    progress.setProgress(35, Lang.t('procEnhance'));
     const processed = canvases.map(c => ImageProcessor.preprocess(c));
     progress.doneStage(2);
 
     progress.setStage(3);
-    progress.setProgress(40, 'تهيئة محرك OCR...');
+    progress.setProgress(40, Lang.t('procInitOcr'));
 
     state.ocr = new OCREngine((pct, msg) => {
-        if (pct !== null) progress.setProgress(40 + Math.round(pct * 0.5), msg || 'جاري التعرف على النص...');
+        if (pct !== null) progress.setProgress(40 + Math.round(pct * 0.5), msg || Lang.t('procOcr'));
         else if (msg)     progress.setProgress(null, msg);
     });
 
@@ -305,14 +307,16 @@ function updateBatchNav() {
     const lbl  = document.getElementById('batch-nav-lbl');
     const prev = document.getElementById('btn-batch-prev');
     const next = document.getElementById('btn-batch-next');
-    const btnAll = document.getElementById('btn-export-all');
+    const btnAll    = document.getElementById('btn-export-all');
+    const btnAllCsv = document.getElementById('btn-export-all-csv');
     const n    = state.results.length;
 
     if (nav)  nav.style.display    = n > 1 ? 'flex' : 'none';
     if (lbl)  lbl.textContent      = `${state.currentIdx + 1} / ${n}`;
     if (prev) prev.disabled        = state.currentIdx === 0;
     if (next) next.disabled        = state.currentIdx === n - 1;
-    if (btnAll) btnAll.style.display = n > 1 ? 'flex' : 'none';
+    if (btnAll)    btnAll.style.display    = n > 1 ? 'flex' : 'none';
+    if (btnAllCsv) btnAllCsv.style.display = n > 1 ? 'flex' : 'none';
 }
 
 document.getElementById('btn-batch-prev')?.addEventListener('click', () => {
@@ -398,10 +402,16 @@ document.getElementById('btn-export-all')?.addEventListener('click', async () =>
     if (!state.results.length) return;
     try {
         await ExcelExporter.exportBatch(state.results);
-        toast.success(`تم تصدير ${state.results.length} فواتير بنجاح`);
+        toast.success(`تم تصدير ${state.results.length} فاتورة في جدول واحد`);
     } catch (e) {
         toast.error('فشل التصدير: ' + e.message);
     }
+});
+
+document.getElementById('btn-export-all-csv')?.addEventListener('click', () => {
+    if (!state.results.length) return;
+    CSVExporter.exportBatch(state.results);
+    toast.success(`تم تصدير ${state.results.length} فاتورة (CSV)`);
 });
 
 // ════════════════════════════════════════════════════════
@@ -468,9 +478,34 @@ if (document.documentElement.classList.contains('dark')) {
 }
 
 // ════════════════════════════════════════════════════════
+//  COPY RAW TEXT
+// ════════════════════════════════════════════════════════
+document.getElementById('btn-copy-raw')?.addEventListener('click', e => {
+    e.stopPropagation();
+    const pre = document.getElementById('raw-text-pre');
+    if (!pre) return;
+    navigator.clipboard?.writeText(pre.textContent).then(() => {
+        const btn = document.getElementById('btn-copy-raw');
+        if (btn) {
+            btn.textContent = Lang.t('copiedRaw');
+            setTimeout(() => { btn.textContent = Lang.t('copyRaw'); }, 2000);
+        }
+    }).catch(() => {});
+});
+
+// ════════════════════════════════════════════════════════
+//  LANGUAGE
+// ════════════════════════════════════════════════════════
+Lang.init();
+document.getElementById('btn-lang')?.addEventListener('click', () => Lang.toggle());
+
+// ════════════════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════════════════
 showPanel('upload');
-setTimeout(() => toast.show('مرحباً! ارفع فاتورة للبدء', 'success'), 600);
+setTimeout(() => toast.show(
+    Lang.isRTL() ? 'مرحباً! ارفع فاتورة للبدء' : 'Welcome! Upload an invoice to start',
+    'success'
+), 600);
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
