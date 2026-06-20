@@ -204,7 +204,46 @@
   </main>
 
   <script>
-    // Dark mode toggle
+    // ── Smart redirect: match path segments to known tool/cheat-sheet folders ──
+    const TOOLS = [
+      'automation_decision','balanced_time_manager','browser_data_education',
+      'color_palette','color_picker','commute-calculator','content_calendar',
+      'data-cleaning','email_signature','family_housing_calculator',
+      'imagePosCheck','prompt_engineering','regex_designer','sample_size_calculator',
+      'schedule_builder','todo_list','data_quality','fikra','DAMAQ','qr_gen',
+      'buy_or_rent','text-analyzer','data_flow_diagram_generator','invoscan',
+      'health_calculator'
+    ];
+    const CHEAT_SHEETS = [
+      'data_analysis','data_visualization','machine_learning',
+      'python_basics','sql','statistics'
+    ];
+
+    (function smartRedirect() {
+      const segments = window.location.pathname.split('/').filter(Boolean);
+
+      for (const seg of segments) {
+        // Strip .html extension (old URLs were /tool_name.html)
+        const clean = seg.replace(/\.html$/i, '');
+
+        if (TOOLS.includes(clean)) {
+          window.location.replace('/mytools/' + clean + '/');
+          return;
+        }
+        // Case-insensitive fallback (e.g. /Health_Calculator.html)
+        const toolMatch = TOOLS.find(t => t.toLowerCase() === clean.toLowerCase());
+        if (toolMatch) {
+          window.location.replace('/mytools/' + toolMatch + '/');
+          return;
+        }
+        if (CHEAT_SHEETS.includes(clean)) {
+          window.location.replace('/cheat_sheet/' + clean + '/');
+          return;
+        }
+      }
+    })();
+
+    // ── Dark mode toggle ──
     function toggleTheme() {
       const html = document.documentElement;
       html.classList.toggle('dark');
@@ -212,9 +251,9 @@
         html.classList.contains('dark') ? '☀️' : '🌙';
     }
 
-    // Countdown & auto-redirect
+    // ── Countdown & auto-redirect to home ──
     let seconds = 10;
-    const numEl  = document.getElementById('countdown-num');
+    const numEl = document.getElementById('countdown-num');
 
     const timer = setInterval(() => {
       seconds--;
@@ -225,10 +264,10 @@
       }
     }, 1000);
 
-    // Cancel redirect on any button click
-    document.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => clearInterval(timer));
-    });
+    // Cancel countdown if user clicks a link
+    document.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => clearInterval(timer))
+    );
   </script>
 </body>
 </html>
