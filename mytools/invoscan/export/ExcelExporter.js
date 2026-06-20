@@ -150,6 +150,71 @@ export class ExcelExporter {
         ws.getColumn(5).width = 16;
     }
 
+    // ── Batch export: sheet per invoice + summary ────────
+    static async exportBatch(results) {
+        if (!window.ExcelJS) throw new Error('ExcelJS لم يُحمَّل');
+        const wb = new window.ExcelJS.Workbook();
+        wb.creator  = 'InvoScan';
+        wb.created  = new Date();
+        wb.modified = new Date();
+
+        // ورقة الملخص
+        const summary = wb.addWorksheet('ملخص', { views: [{ rightToLeft: true }] });
+        ExcelExporter._buildBatchSummary(summary, results);
+
+        // ورقة لكل فاتورة — أسماء فريدة
+        const usedNames = new Set(['ملخص']);
+        results.forEach((data, i) => {
+            const raw  = String(data.invoiceNumber || data.filename || `فاتورة ${i + 1}`);
+            let   base = raw.replace(/[\/\\:*?"<>|\[\]]/g, '_').slice(0, 25).trim() || `فاتورة ${i + 1}`;
+            let   name = base;
+            let   n    = 2;
+            while (usedNames.has(name)) { name = `${base}_${n++}`; }
+            usedNames.add(name);
+            const ws = wb.addWorksheet(name, { views: [{ rightToLeft: true }] });
+            ExcelExporter._buildItemsSheet(ws, data);
+        });
+
+        const buffer = await wb.xlsx.writeBuffer();
+        const blob   = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        const date = new Date().toISOString().slice(0, 10);
+        ExcelExporter._download(blob, `InvoScan_batch_${date}.xlsx`);
+        return true;
+    }
+
+    static _buildBatchSummary(ws, results) {
+        const accent  = { argb: 'FF2563EB' };
+        const white   = { argb: 'FFFFFFFF' };
+        const hdrFill = { type: 'pattern', pattern: 'solid', fgColor: accent };
+        const altFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+        const border  = { style: 'thin', color: { argb: 'FFE2E8F0' } };
+        const borders = { top: border, left: border, bottom: border, right: border };
+
+        const hdrRow = ws.addRow(['#', 'اسم الملف', 'رقم الفاتورة', 'التاريخ', 'المورد', 'العميل', 'الإجمالي']);
+        hdrRow.height = 28;
+        hdrRow.eachCell(cell => {
+            cell.font      = { bold: true, color: white, size: 11 };
+            cell.fill      = hdrFill;
+            cell.alignment = { horizontal: 'center', vertical: 'middle', readingOrder: 'rightToLeft' };
+            cell.border    = borders;
+        });
+
+        results.forEach((d, i) => {
+            const row = ws.addRow([i + 1, d.filename || '', d.invoiceNumber || '', d.date || '', d.supplier || '', d.customer || '', d.total || '']);
+            row.height = 22;
+            row.eachCell(cell => {
+                cell.font      = { size: 11 };
+                cell.fill      = i % 2 === 0 ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } } : altFill;
+                cell.alignment = { readingOrder: 'rightToLeft', vertical: 'middle' };
+                cell.border    = borders;
+            });
+        });
+
+        [5, 22, 18, 14, 26, 26, 14].forEach((w, i) => { ws.getColumn(i + 1).width = w; });
+    }
+
     static _download(blob, filename) {
         const a   = document.createElement('a');
         a.href    = URL.createObjectURL(blob);

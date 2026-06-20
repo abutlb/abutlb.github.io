@@ -27,6 +27,10 @@
      TOOLBAR
 ══════════════════════════════════════════════ -->
 <header class="toolbar" style="direction:ltr">
+    <a href="../index.html" class="tb-btn" title="العودة للأدوات" style="text-decoration:none">
+        <i class="fas fa-arrow-right"></i>
+    </a>
+    <div class="toolbar-sep"></div>
     <a href="../index.html" class="toolbar-logo">
         <div class="logo-icon"><i class="fas fa-file-invoice-dollar"></i></div>
         <div>
@@ -48,6 +52,13 @@
         <span>فاتورة جديدة</span>
     </button>
     <div class="toolbar-sep" id="sep-new" style="display:none"></div>
+    <button class="tb-btn" id="btn-settings" title="الإعدادات">
+        <i class="fas fa-cog"></i>
+    </button>
+    <div class="ai-mode-badge" id="ai-mode-badge" style="display:none">
+        <i class="fas fa-robot"></i> AI
+    </div>
+    <div class="toolbar-sep"></div>
     <button class="tb-btn" id="btn-theme">
         <i class="fas fa-moon" id="theme-icon"></i>
     </button>
@@ -237,8 +248,115 @@
     </section>
 
 
+    <!-- ══════ STATE: TEMPLATE EDITOR ══════ -->
+    <section id="panel-template" class="app-panel" style="display:none;flex-direction:column">
+
+        <!-- Template header -->
+        <div class="tmpl-header" style="direction:ltr">
+            <button class="tb-btn" id="btn-tmpl-back">
+                <i class="fas fa-arrow-right"></i>
+                <span>رجوع</span>
+            </button>
+            <div class="toolbar-sep"></div>
+            <span class="tmpl-header-title">
+                <i class="fas fa-drafting-compass" style="color:var(--accent)"></i>
+                محرر القالب
+            </span>
+            <div class="toolbar-spacer"></div>
+            <button class="tb-btn" id="btn-tmpl-clear">
+                <i class="fas fa-trash-alt"></i>
+                <span>مسح الكل</span>
+            </button>
+        </div>
+
+        <!-- Editor layout -->
+        <div class="tmpl-layout">
+
+            <!-- Canvas area -->
+            <div class="tmpl-canvas-col">
+                <div class="tmpl-canvas-hint" id="tmpl-hint">
+                    <i class="fas fa-mouse-pointer"></i>
+                    اسحب على الفاتورة لتحديد منطقة، ثم اختر نوعها
+                </div>
+                <div class="tmpl-canvas-wrap" id="tmpl-canvas-wrap">
+                    <div id="tmpl-canvas-inner" style="position:relative;display:inline-block;line-height:0">
+                        <canvas id="tmpl-bg-canvas" style="display:block;max-width:100%"></canvas>
+                        <canvas id="tmpl-draw-canvas" style="position:absolute;top:0;left:0;cursor:crosshair;width:100%;height:100%"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="tmpl-sidebar">
+                <div class="tmpl-meta-block">
+                    <label class="tmpl-label">اسم القالب</label>
+                    <input id="tmpl-name" class="tmpl-input" placeholder="مثال: فاتورة شركة الدواء">
+                    <label class="tmpl-label" style="margin-top:10px">نص التعرف التلقائي</label>
+                    <input id="tmpl-anchor" class="tmpl-input" placeholder="نص مميز يظهر في هذا النوع من الفواتير">
+                    <p class="tmpl-hint-text">
+                        <i class="fas fa-info-circle"></i>
+                        يُستخدم للكشف التلقائي عند رفع فاتورة جديدة من نفس المورد
+                    </p>
+                </div>
+
+                <div class="tmpl-regions-block">
+                    <div class="tmpl-regions-hdr">
+                        <span>المناطق المحددة</span>
+                        <span class="tmpl-count-badge" id="tmpl-count">0</span>
+                    </div>
+                    <div class="tmpl-regions-list" id="tmpl-regions-list">
+                        <div class="tmpl-empty-hint">
+                            <i class="fas fa-draw-polygon"></i>
+                            ارسم مربعاً على الفاتورة لتحديد منطقة
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tmpl-actions-block">
+                    <button class="btn-tmpl-save" id="btn-tmpl-save">
+                        <i class="fas fa-save"></i>
+                        حفظ القالب
+                    </button>
+                    <div class="tmpl-secondary-btns">
+                        <button class="btn-tmpl-sec" id="btn-tmpl-export">
+                            <i class="fas fa-download"></i> تصدير JSON
+                        </button>
+                        <button class="btn-tmpl-sec" id="btn-tmpl-library">
+                            <i class="fas fa-folder-open"></i> مكتبة القوالب
+                        </button>
+                    </div>
+                    <label class="btn-tmpl-sec btn-tmpl-import-lbl" for="tmpl-import-input">
+                        <i class="fas fa-upload"></i> استيراد قالب
+                    </label>
+                    <input type="file" id="tmpl-import-input" accept=".json" style="display:none">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- ══════ STATE: RESULTS ══════ -->
     <section id="panel-results" class="app-panel" style="display:none">
+
+        <!-- Batch navigation (shown when multiple results) -->
+        <div class="batch-result-nav" id="batch-result-nav" style="display:none;direction:ltr">
+            <button class="nav-btn" id="btn-batch-prev"><i class="fas fa-chevron-right"></i></button>
+            <span id="batch-nav-lbl" style="font-size:.82rem;font-weight:700;color:var(--text);padding:0 6px">1 / 1</span>
+            <button class="nav-btn" id="btn-batch-next"><i class="fas fa-chevron-left"></i></button>
+            <div style="flex:1"></div>
+            <button class="tb-btn btn-export-all" id="btn-export-all" style="display:none">
+                <i class="fas fa-layer-group"></i>
+                <span>تصدير الكل</span>
+            </button>
+        </div>
+
+        <!-- Template used banner -->
+        <div class="template-used-banner" id="template-used-banner" style="display:none">
+            <i class="fas fa-magic"></i>
+            <span>تم تطبيق قالب: <strong id="template-used-name"></strong></span>
+            <div style="flex:1"></div>
+            <button class="banner-dismiss" id="btn-dismiss-template-banner">×</button>
+        </div>
 
         <!-- Results sub-toolbar -->
         <div class="results-bar" style="direction:ltr">
@@ -248,6 +366,11 @@
             </div>
             <div class="quality-badge" id="quality-badge"></div>
             <div class="toolbar-spacer"></div>
+            <button class="tb-btn" id="btn-create-template" title="إنشاء قالب من هذه الفاتورة">
+                <i class="fas fa-drafting-compass"></i>
+                <span>قالب</span>
+            </button>
+            <div class="toolbar-sep"></div>
             <button class="tb-btn" id="btn-back">
                 <i class="fas fa-arrow-right"></i>
                 <span>فاتورة جديدة</span>
@@ -356,8 +479,130 @@
 <!-- Hidden file input -->
 <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png,.webp" multiple style="display:none">
 
+<!-- ══════ FIELD PICKER (floating) ══════ -->
+<div class="field-picker" id="field-picker" style="display:none;position:fixed;z-index:500">
+    <div class="fp-title"><i class="fas fa-tag"></i> نوع المنطقة</div>
+    <div class="fp-group-label">بيانات الفاتورة</div>
+    <div class="fp-grid">
+        <button class="fp-btn" data-field="invoiceNumber"><i class="fas fa-hashtag"></i>رقم الفاتورة</button>
+        <button class="fp-btn" data-field="date"><i class="fas fa-calendar"></i>تاريخ الفاتورة</button>
+        <button class="fp-btn" data-field="dueDate"><i class="fas fa-calendar-check"></i>تاريخ الاستحقاق</button>
+        <button class="fp-btn" data-field="supplier"><i class="fas fa-building"></i>المورد</button>
+        <button class="fp-btn" data-field="customer"><i class="fas fa-user"></i>العميل</button>
+        <button class="fp-btn" data-field="vatNumber"><i class="fas fa-receipt"></i>الرقم الضريبي</button>
+        <button class="fp-btn" data-field="poNumber"><i class="fas fa-file-alt"></i>رقم أمر الشراء</button>
+    </div>
+    <div class="fp-group-label">المبالغ</div>
+    <div class="fp-grid">
+        <button class="fp-btn" data-field="subtotal"><i class="fas fa-sigma"></i>المجموع الفرعي</button>
+        <button class="fp-btn" data-field="tax"><i class="fas fa-percent"></i>الضريبة</button>
+        <button class="fp-btn" data-field="discount"><i class="fas fa-tag"></i>الخصم</button>
+        <button class="fp-btn" data-field="total"><i class="fas fa-coins"></i>الإجمالي الكلي</button>
+    </div>
+    <button class="fp-btn fp-table-btn" data-field="table">
+        <i class="fas fa-table"></i>
+        جدول البنود ★
+    </button>
+    <button class="fp-btn fp-cancel-btn" data-field="__cancel__">
+        <i class="fas fa-times"></i> إلغاء
+    </button>
+</div>
+
+<!-- ══════ COLUMN STEP MODAL ══════ -->
+<div class="column-step" id="column-step" style="display:none">
+    <div class="col-step-card">
+        <div class="col-step-title">
+            <i class="fas fa-table" style="color:var(--accent)"></i>
+            تحديد أعمدة الجدول
+        </div>
+        <p class="col-step-desc">
+            اكتُشفت الأعمدة التالية من صف الرأس — حدد ما يمثله كل عمود أو اختر "تجاهل"
+        </p>
+        <div id="column-assignments" class="col-assignments"></div>
+        <div class="col-step-actions">
+            <button id="btn-col-confirm" class="btn-col-confirm">
+                <i class="fas fa-check"></i> تأكيد
+            </button>
+            <button id="btn-col-cancel" class="btn-col-cancel">
+                <i class="fas fa-times"></i> إلغاء
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ TEMPLATE LIBRARY MODAL ══════ -->
+<div class="modal-overlay" id="template-library-overlay" style="display:none">
+    <div class="settings-modal">
+        <div class="settings-modal-header">
+            <h3><i class="fas fa-layer-group"></i> مكتبة القوالب</h3>
+            <button class="btn-modal-close" id="btn-lib-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="settings-body" id="template-library-body" style="padding:12px">
+        </div>
+    </div>
+</div>
+
 <!-- Toast -->
 <div id="toast-container"></div>
+
+<!-- ══════ SETTINGS MODAL ══════ -->
+<div class="modal-overlay" id="settings-overlay" style="display:none">
+    <div class="settings-modal">
+        <div class="settings-modal-header">
+            <h3><i class="fas fa-cog"></i> الإعدادات</h3>
+            <button class="btn-modal-close" id="btn-settings-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="settings-body">
+            <div class="settings-section">
+                <h4><i class="fas fa-robot" style="color:var(--accent)"></i> وضع الذكاء الاصطناعي</h4>
+                <p class="settings-hint">
+                    اختر مزوداً وأدخل مفتاحه لرفع دقة الاستخراج إلى ~95%.
+                    المفتاح يُحفظ في متصفحك فقط ولا يمرّ بأي خادم وسيط.
+                </p>
+
+                <!-- Provider cards -->
+                <div class="provider-cards" id="provider-cards"></div>
+
+                <!-- Model + Key -->
+                <div class="key-form">
+                    <label class="key-label">النموذج</label>
+                    <select id="ai-model-select" class="key-select"></select>
+
+                    <label class="key-label">مفتاح API</label>
+                    <div class="key-row">
+                        <input type="password" id="gemini-key-input"
+                               placeholder="AIzaSy..." autocomplete="off" spellcheck="false">
+                        <button class="btn-key-action" id="btn-test-key">
+                            <i class="fas fa-plug"></i> اختبار
+                        </button>
+                    </div>
+
+                    <div class="key-status" id="key-status" style="display:none"></div>
+
+                    <div class="key-actions">
+                        <button class="btn-key-save" id="btn-save-key">
+                            <i class="fas fa-save"></i> حفظ وتفعيل
+                        </button>
+                        <button class="btn-key-clear" id="btn-clear-key">
+                            <i class="fas fa-trash"></i> مسح
+                        </button>
+                    </div>
+
+                    <a class="settings-link" id="settings-key-link"
+                       href="https://aistudio.google.com/app/apikey"
+                       target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i>
+                        احصل على مفتاح مجاناً ←
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="module" src="app.js"></script>
 </body>

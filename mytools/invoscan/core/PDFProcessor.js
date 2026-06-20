@@ -112,4 +112,36 @@ export class PDFProcessor {
             return t.replace(/\s/g, '').length > 30;
         } catch { return false; }
     }
+
+    // ── Extract text items with normalized (0-1) coordinates ─
+    // يُستخدم من قِبَل TemplateEngine لتطبيق القوالب
+    // x, y, w كلها بين 0 و 1 نسبةً لأبعاد الصفحة
+    // ملاحظة: PDF y=0 في الأسفل → نعكسه ليصبح y=0 في الأعلى
+    static async extractItems(file) {
+        PDFProcessor.init();
+        const ab  = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: ab }).promise;
+        const allItems = [];
+
+        for (let p = 1; p <= pdf.numPages; p++) {
+            const page     = await pdf.getPage(p);
+            const viewport = page.getViewport({ scale: 1 });
+            const content  = await page.getTextContent({ normalizeWhitespace: true });
+
+            for (const item of content.items) {
+                const str = (item.str || '').trim();
+                if (!str) continue;
+                const pdfX = item.transform[4];
+                const pdfY = item.transform[5];
+                allItems.push({
+                    str,
+                    x: pdfX / viewport.width,
+                    y: 1 - (pdfY / viewport.height), // flip Y
+                    w: (item.width > 0 ? item.width : str.length * 6) / viewport.width,
+                    page: p,
+                });
+            }
+        }
+        return allItems;
+    }
 }
