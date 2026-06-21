@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://abutlb.github.io/sitemap.xml
+Sitemap: https://abutlb.github.io/site__map.xml
