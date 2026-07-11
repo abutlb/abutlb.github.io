@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ناسج — نسج البيانات</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Tajawal -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+      rel="stylesheet">
+
+<!-- SheetJS (reading CSV / Excel) -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
+<!-- ExcelJS (styled output) -->
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+
+<!-- Custom styles -->
+<link rel="stylesheet" href="style.css">
+
+<!-- Dark mode (prevent flash) -->
+<script>
+(function () {
+    const t = localStorage.getItem('nasij_theme');
+    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme:dark)').matches))
+        document.documentElement.classList.add('dark');
+})();
+</script>
+
+<!-- Tailwind config -->
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: { extend: {} }
+};
+</script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-200
+             min-h-screen transition-colors duration-300">
+
+<!-- ══════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════ -->
+<header class="bg-white dark:bg-gray-900 sticky top-0 z-40
+               border-b border-gray-200 dark:border-gray-800
+               shadow-[0_1px_12px_rgba(124,58,237,0.07)]">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700
+                        rounded-xl flex items-center justify-center
+                        shadow-md shadow-violet-200 dark:shadow-violet-900/40">
+                <i class="fas fa-bezier-curve text-white text-base"></i>
+            </div>
+            <div>
+                <h1 class="text-base font-black text-gray-800 dark:text-gray-100 leading-tight">
+                    ناسج
+                    <span class="text-xs font-bold text-violet-600 dark:text-violet-400
+                                 bg-violet-50 dark:bg-violet-900/30 px-2 py-0.5
+                                 rounded-full mr-1">Nāsij</span>
+                </h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">
+                    نسج · دمج · تنظيف · تصدير Excel
+                </p>
+            </div>
+        </div>
+
+        <!-- Header actions -->
+        <div class="flex items-center gap-2">
+            <!-- New session -->
+            <button id="btn-new-session"
+                class="hidden py-1.5 px-3 bg-gray-100 dark:bg-gray-800
+                       hover:bg-gray-200 dark:hover:bg-gray-700
+                       text-gray-600 dark:text-gray-400 text-sm font-medium
+                       rounded-lg transition-colors">
+                <i class="fas fa-plus ml-1"></i>جلسة جديدة
+            </button>
+
+            <!-- Theme toggle -->
+            <button id="theme-toggle"
+                class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800
+                       flex items-center justify-center
+                       hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i id="theme-icon" class="fas fa-moon text-gray-600 dark:text-yellow-400 text-sm"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     UPLOAD SCREEN
+══════════════════════════════════════════════════════════ -->
+<div id="upload-screen" class="max-w-2xl mx-auto px-4 py-14">
+
+    <!-- Hero -->
+    <div class="text-center mb-10">
+        <div class="relative w-24 h-24 mx-auto mb-6">
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-400 to-indigo-600
+                        rounded-3xl opacity-20 blur-xl scale-110"></div>
+            <div class="relative w-24 h-24 bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700
+                        rounded-3xl flex items-center justify-center
+                        shadow-xl shadow-violet-300/40 dark:shadow-violet-900/50">
+                <i class="fas fa-bezier-curve text-white text-4xl"></i>
+            </div>
+        </div>
+
+        <h2 class="text-3xl font-black text-gray-800 dark:text-gray-100 mb-2">
+            ناسج
+        </h2>
+        <p class="text-violet-600 dark:text-violet-400 font-bold text-sm mb-3">
+            أداة نسج البيانات وتكديسها · Nāsij
+        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
+            ارفع ملفين أو أكثر من <strong class="text-gray-700 dark:text-gray-300">Excel أو CSV</strong>،
+            ادمجها بمفتاح مشترك أو كدّسها عمودياً، نظّفها، وصدّرها ملفاً منسّقاً.
+        </p>
+
+        <!-- Feature pills -->
+        <div class="flex justify-center gap-3 mt-5 flex-wrap">
+            <span class="text-xs px-3 py-1.5 rounded-full bg-violet-50 dark:bg-violet-900/30
+                         text-violet-600 dark:text-violet-400 font-medium border border-violet-100
+                         dark:border-violet-800">
+                <i class="fas fa-link ml-1"></i>ربط بمفتاح مشترك
+            </span>
+            <span class="text-xs px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30
+                         text-indigo-600 dark:text-indigo-400 font-medium border border-indigo-100
+                         dark:border-indigo-800">
+                <i class="fas fa-layer-group ml-1"></i>تكديس (Append)
+            </span>
+            <span class="text-xs px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30
+                         text-emerald-600 dark:text-emerald-400 font-medium border border-emerald-100
+                         dark:border-emerald-800">
+                <i class="fas fa-broom ml-1"></i>تنظيف تلقائي
+            </span>
+            <span class="text-xs px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30
+                         text-blue-600 dark:text-blue-400 font-medium border border-blue-100
+                         dark:border-blue-800">
+                <i class="fas fa-file-excel ml-1"></i>تصدير Excel منسّق
+            </span>
+        </div>
+    </div>
+
+    <!-- Drop zone -->
+    <div id="drop-zone"
+         class="relative border-2 border-dashed border-violet-300 dark:border-violet-700
+                rounded-2xl p-10 text-center bg-white dark:bg-gray-900 cursor-pointer
+                hover:border-violet-500 dark:hover:border-violet-500
+                hover:bg-violet-50/50 dark:hover:bg-violet-950/20
+                transition-all duration-200 group">
+
+        <input type="file" id="file-input"
+               accept=".csv,.xlsx,.xls" multiple
+               class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+
+        <div class="w-14 h-14 bg-violet-100 dark:bg-violet-900/50 rounded-xl
+                    flex items-center justify-center mx-auto mb-4
+                    group-hover:scale-110 transition-transform">
+            <i class="fas fa-cloud-upload-alt text-violet-500 text-2xl"></i>
+        </div>
+        <p class="text-base font-bold text-gray-700 dark:text-gray-300 mb-1">
+            اسحب الملفات هنا أو انقر للاختيار
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">
+            يدعم: CSV · Excel (xlsx, xls) — ملفين على الأقل
+        </p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">
+            الحد الأقصى: 50MB لكل ملف
+        </p>
+    </div>
+
+    <!-- Uploaded files list -->
+    <div id="upload-file-list" class="mt-3 space-y-2"></div>
+
+    <!-- Loading -->
+    <div id="upload-loading" class="hidden mt-4">
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-4 border
+                    border-gray-200 dark:border-gray-800 flex items-center gap-3">
+            <div class="spinner"></div>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                جاري قراءة الملف...
+            </span>
+        </div>
+    </div>
+
+    <!-- Supported formats -->
+    <div class="grid grid-cols-2 gap-3 mt-5">
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-3 text-center
+                    border border-gray-200 dark:border-gray-800">
+            <i class="fas fa-file-csv text-emerald-500 text-xl mb-1"></i>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">CSV</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">فواصل، Tab، Semicolon</p>
+        </div>
+        <div class="bg-white dark:bg-gray-900 rounded-xl p-3 text-center
+                    border border-gray-200 dark:border-gray-800">
+            <i class="fas fa-file-excel text-emerald-600 text-xl mb-1"></i>
+            <p class="text-xs font-bold text-gray-700 dark:text-gray-300">Excel</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">xlsx، xls، أوراق متعددة</p>
+        </div>
+    </div>
+
+    <!-- Start button -->
+    <button id="btn-start" disabled
+        class="w-full mt-6 py-3 flex items-center justify-center gap-2
+               bg-violet-600 hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed
+               text-white font-bold text-sm rounded-xl transition-colors
+               shadow-sm shadow-violet-300/50 dark:shadow-violet-900/40">
+        <i class="fas fa-bezier-curve"></i>
+        <span>ابدأ النسج (0 / 2 ملف على الأقل)</span>
+    </button>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════════════════ -->
+<div id="main-app" class="hidden max-w-7xl mx-auto px-4 py-6">
+
+    <!-- ── Info Bar ── -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl p-4 mb-5 border
+                border-gray-200 dark:border-gray-800
+                flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/50 rounded-lg
+                        flex items-center justify-center">
+                <i class="fas fa-layer-group text-violet-600 dark:text-violet-400"></i>
+            </div>
+            <div>
+                <p class="font-bold text-gray-800 dark:text-gray-200 text-sm">جلسة نسج نشطة</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">اختر أسلوب الدمج ثم شغّل</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <label for="file-input-extra"
+                   class="py-1.5 px-3 border border-gray-200 dark:border-gray-700
+                          text-gray-600 dark:text-gray-400 text-sm font-medium rounded-lg
+                          cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                <i class="fas fa-plus ml-1"></i>إضافة ملف
+            </label>
+            <input type="file" id="file-input-extra" accept=".csv,.xlsx,.xls" multiple class="hidden">
+
+            <button id="btn-run-merge"
+                class="py-2 px-5 bg-violet-600 hover:bg-violet-700 text-white
+                       font-bold text-sm rounded-lg transition-colors flex items-center gap-2">
+                <i class="fas fa-play"></i>تشغيل الدمج
+            </button>
+        </div>
+    </div>
+
+    <!-- ── Tabs ── -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl border
+                border-gray-200 dark:border-gray-800 overflow-hidden">
+
+        <!-- Tab header -->
+        <div class="flex overflow-x-auto border-b border-gray-200 dark:border-gray-800
+                    bg-gray-50 dark:bg-gray-900/50">
+
+            <button data-tab="files"
+                class="tab-btn active flex items-center gap-2 px-5 py-3.5 text-sm
+                       font-bold whitespace-nowrap transition-all border-b-2
+                       text-violet-600 dark:text-violet-400
+                       border-violet-600 dark:border-violet-400
+                       bg-white dark:bg-gray-900">
+                <i class="fas fa-layer-group text-xs"></i>الملفات
+            </button>
+
+            <button data-tab="merge"
+                class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+                       font-medium whitespace-nowrap transition-all border-b-2
+                       border-transparent text-gray-500 dark:text-gray-400
+                       hover:text-gray-700 dark:hover:text-gray-200
+                       hover:bg-white/60 dark:hover:bg-gray-800/60">
+                <i class="fas fa-bezier-curve text-xs"></i>أسلوب الدمج
+            </button>
+
+            <button data-tab="cleaning"
+                class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+                       font-medium whitespace-nowrap transition-all border-b-2
+                       border-transparent text-gray-500 dark:text-gray-400
+                       hover:text-gray-700 dark:hover:text-gray-200
+                       hover:bg-white/60 dark:hover:bg-gray-800/60">
+                <i class="fas fa-broom text-xs"></i>التنظيف
+            </button>
+
+            <button data-tab="preview"
+                class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+                       font-medium whitespace-nowrap transition-all border-b-2
+                       border-transparent text-gray-500 dark:text-gray-400
+                       hover:text-gray-700 dark:hover:text-gray-200
+                       hover:bg-white/60 dark:hover:bg-gray-800/60">
+                <i class="fas fa-table text-xs"></i>المعاينة
+            </button>
+
+            <button data-tab="export"
+                class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+                       font-medium whitespace-nowrap transition-all border-b-2
+                       border-transparent text-gray-500 dark:text-gray-400
+                       hover:text-gray-700 dark:hover:text-gray-200
+                       hover:bg-white/60 dark:hover:bg-gray-800/60">
+                <i class="fas fa-file-excel text-xs"></i>التصدير
+            </button>
+
+        </div>
+
+        <!-- ── Tab: الملفات ── -->
+        <div id="tab-files" class="tab-content p-5">
+            <div id="files-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+        <!-- ── Tab: أسلوب الدمج ── -->
+        <div id="tab-merge" class="tab-content hidden p-5">
+
+            <!-- ▶ Mode selector cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+
+                <div class="mode-card">
+                    <input type="radio" name="merge-mode" id="mode-join" value="join" checked class="hidden">
+                    <label for="mode-join" class="mode-card-label cursor-pointer block">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/40 rounded-xl
+                                        flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-code-merge text-violet-600 dark:text-violet-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-black text-sm text-gray-800 dark:text-gray-200">ربط بمفتاح</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">VLOOKUP · JOIN — إضافة أعمدة جانبياً</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="mode-card">
+                    <input type="radio" name="merge-mode" id="mode-append" value="append" class="hidden">
+                    <label for="mode-append" class="mode-card-label cursor-pointer block">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl
+                                        flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-layer-group text-indigo-600 dark:text-indigo-400"></i>
+                            </div>
+                            <div>
+                                <p class="font-black text-sm text-gray-800 dark:text-gray-200">تكديس (Append)</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">UNION · Stack — جمع صفوف عمودياً</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+            </div>
+
+            <!-- ▶ JOIN section -->
+            <div id="join-section">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+
+                    <!-- Base file -->
+                    <div class="bg-violet-50 dark:bg-violet-900/20 border border-violet-100
+                                dark:border-violet-800 rounded-xl p-4">
+                        <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                            <i class="fas fa-database text-violet-500 text-xs"></i>
+                            الملف الأساسي (Base)
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                            هو الجدول الرئيسي الذي سيُضاف إليه باقي البيانات.
+                        </p>
+                        <div class="mb-3">
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                                اختر الملف الأساسي
+                            </label>
+                            <select id="merge-base-select" class="dm-select">
+                                <option value="">— اختر الملف —</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                                عمود المفتاح
+                            </label>
+                            <select id="merge-base-key" class="dm-select">
+                                <option value="">— اختر العمود —</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Join info -->
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200
+                                dark:border-gray-700 rounded-xl p-4">
+                        <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                            <i class="fas fa-info-circle text-blue-500 text-xs"></i>
+                            أنواع الربط
+                        </h3>
+                        <div class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-violet-600 dark:text-violet-400 flex-shrink-0">الكل من الأساسي</span>
+                                <span>كل صفوف الأساسي + بيانات المطابق (LEFT JOIN)</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400 flex-shrink-0">المطابق فقط</span>
+                                <span>الصفوف الموجودة في كلا الملفين (INNER JOIN)</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-orange-600 dark:text-orange-400 flex-shrink-0">كل الصفوف</span>
+                                <span>كل صفوف الملفين مع فراغ للغير مطابق (OUTER JOIN)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lookup files -->
+                <div>
+                    <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                        <i class="fas fa-search text-violet-500 text-xs"></i>
+                        ملفات البحث (Lookup)
+                    </h3>
+                    <div id="merge-lookups" class="space-y-3"></div>
+                </div>
+
+            </div>
+            <!-- End join-section -->
+
+            <!-- ▶ APPEND (تكديس) section -->
+            <div id="append-section" class="hidden">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+
+                    <!-- Source column toggle -->
+                    <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100
+                                dark:border-indigo-800 rounded-xl p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                    إضافة عمود المصدر
+                                </p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                    يُضاف عمود «المصدر» يُبيّن اسم الملف لكل صف
+                                </p>
+                            </div>
+                            <button id="opt-source-col" role="switch" aria-checked="true"
+                                    class="toggle-sw"></button>
+                        </div>
+                    </div>
+
+                    <!-- Info box -->
+                    <div class="bg-white dark:bg-gray-800 border border-gray-200
+                                dark:border-gray-700 rounded-xl p-4">
+                        <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                            <i class="fas fa-info-circle text-indigo-500 text-xs"></i>
+                            كيف يعمل التكديس؟
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                            يُجمع كل صفوف الملفات عمودياً في جدول واحد. مناسب لدمج تقارير بنفس الهيكل (مثل بيانات شهرية متعددة).
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Dedup settings -->
+                <div class="bg-white dark:bg-gray-800 border border-gray-200
+                            dark:border-gray-700 rounded-xl p-5">
+                    <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                        <i class="fas fa-clone text-indigo-500 text-xs"></i>
+                        التعامل مع التكرار بين الملفات
+                    </h3>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                            عمود المفتاح للمقارنة (اختياري)
+                        </label>
+                        <select id="append-dedup-key" class="dm-select">
+                            <option value="">— بلا مقارنة (احتفظ بالكل) —</option>
+                        </select>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            إذا اخترت عموداً، سيُبحث عن التكرار استناداً إليه
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                            عند وجود تكرار — ماذا تفعل؟
+                        </label>
+                        <div class="join-pills flex-wrap gap-2">
+                            <div class="join-pill">
+                                <input type="radio" name="dup-mode" id="dm-first" value="first" checked>
+                                <label for="dm-first">
+                                    <i class="fas fa-arrow-up text-xs"></i>احتفظ بالأول
+                                </label>
+                            </div>
+                            <div class="join-pill">
+                                <input type="radio" name="dup-mode" id="dm-last" value="last">
+                                <label for="dm-last">
+                                    <i class="fas fa-arrow-down text-xs"></i>احتفظ بالأخير
+                                </label>
+                            </div>
+                            <div class="join-pill">
+                                <input type="radio" name="dup-mode" id="dm-all" value="all">
+                                <label for="dm-all">
+                                    <i class="fas fa-copy text-xs"></i>احتفظ بالكل
+                                </label>
+                            </div>
+                            <div class="join-pill">
+                                <input type="radio" name="dup-mode" id="dm-highlight" value="highlight">
+                                <label for="dm-highlight">
+                                    <i class="fas fa-highlighter text-xs"></i>أبرز بالأحمر في Excel
+                                </label>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                            خيار «أبرز بالأحمر» يحتفظ بكل النسخ المكررة ويلوّنها باللون الأحمر في ملف Excel
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End append-section -->
+
+        </div>
+
+        <!-- ── Tab: التنظيف ── -->
+        <div id="tab-cleaning" class="tab-content hidden p-5">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+
+                <!-- Remove duplicates -->
+                <div class="bg-white dark:bg-gray-800 border border-gray-200
+                            dark:border-gray-700 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <p class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                حذف التكرارات
+                            </p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                إزالة الصفوف المكررة بناءً على جميع الأعمدة
+                            </p>
+                        </div>
+                        <button id="opt-dedup" role="switch" aria-checked="true" class="toggle-sw"></button>
+                    </div>
+                </div>
+
+                <!-- Fill empty -->
+                <div class="bg-white dark:bg-gray-800 border border-gray-200
+                            dark:border-gray-700 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <p class="text-sm font-bold text-gray-800 dark:text-gray-200">
+                                ملء الخلايا الفارغة
+                            </p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                استبدال الخلايا الفارغة بقيمة محددة
+                            </p>
+                        </div>
+                        <button id="opt-fill" role="switch" aria-checked="false" class="toggle-sw"></button>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                            قيمة الاستبدال
+                        </label>
+                        <input id="fill-value" type="text" value="—"
+                               class="w-full px-3 py-1.5 text-sm rounded-lg
+                                      bg-gray-50 dark:bg-gray-900
+                                      border border-gray-200 dark:border-gray-700
+                                      text-gray-800 dark:text-gray-200
+                                      focus:outline-none focus:ring-2 focus:ring-violet-400
+                                      focus:border-transparent transition">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Row filters -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                            <i class="fas fa-filter text-violet-500 text-xs"></i>
+                            فلترة الصفوف
+                        </h3>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                            احتفظ فقط بالصفوف التي تُحقق الشروط
+                        </p>
+                    </div>
+                    <button id="btn-add-filter"
+                        class="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold
+                               border border-violet-300 dark:border-violet-700 text-violet-600
+                               dark:text-violet-400 rounded-lg
+                               hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors">
+                        <i class="fas fa-plus text-xs"></i>إضافة فلتر
+                    </button>
+                </div>
+                <div id="filters-list" class="space-y-2">
+                    <div class="empty-state">
+                        <i class="fas fa-filter"></i>
+                        <p class="text-sm">لا توجد فلاتر — انقر «إضافة فلتر»</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── Tab: المعاينة ── -->
+        <div id="tab-preview" class="tab-content hidden p-5">
+
+            <div id="preview-stats"
+                 class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-5">
+                <div class="stat-mini col-span-full empty-state" style="padding:2rem">
+                    <i class="fas fa-play-circle"></i>
+                    <p class="text-sm">اضغط «تشغيل الدمج» لرؤية النتيجة</p>
+                    <button onclick="document.getElementById('btn-run-merge').click()"
+                        class="mt-3 px-4 py-1.5 bg-violet-600 hover:bg-violet-700 text-white
+                               text-sm font-bold rounded-lg transition-colors">
+                        <i class="fas fa-play ml-1"></i>تشغيل الدمج
+                    </button>
+                </div>
+            </div>
+
+            <div id="preview-table-wrap"></div>
+
+        </div>
+
+        <!-- ── Tab: التصدير ── -->
+        <div id="tab-export" class="tab-content hidden p-5">
+
+            <div id="export-summary">
+                <div class="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/20
+                            border border-amber-100 dark:border-amber-800 rounded-xl mb-5">
+                    <i class="fas fa-info-circle text-amber-500"></i>
+                    <p class="text-sm text-amber-700 dark:text-amber-300 font-medium">
+                        شغّل الدمج أولاً من تبويب «المعاينة» لتفعيل التصدير.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Output options -->
+                <div>
+                    <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                        <i class="fas fa-cog text-violet-500 text-xs"></i>
+                        خيارات الملف الناتج
+                    </h3>
+
+                    <div class="space-y-2 mb-4">
+                        <div class="export-opt">
+                            <input type="radio" name="out-format" id="fmt-single" value="single" checked>
+                            <label for="fmt-single" class="text-sm text-gray-700 dark:text-gray-300">
+                                <div class="w-9 h-9 bg-violet-100 dark:bg-violet-900/40 rounded-lg
+                                            flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-file-excel text-violet-600 dark:text-violet-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm">ورقة واحدة مدمجة</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">كل البيانات في sheet واحد</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="export-opt">
+                            <input type="radio" name="out-format" id="fmt-multi" value="multi">
+                            <label for="fmt-multi" class="text-sm text-gray-700 dark:text-gray-300">
+                                <div class="w-9 h-9 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg
+                                            flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-copy text-emerald-600 dark:text-emerald-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm">ورقة لكل مصدر + مدمجة</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">كل ملف في sheet خاص + sheet مدمج</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                                اسم الملف
+                            </label>
+                            <div class="flex items-center gap-1">
+                                <input id="out-filename" type="text" value="nasij_output"
+                                       class="flex-1 px-3 py-1.5 text-sm rounded-lg
+                                              bg-gray-50 dark:bg-gray-800
+                                              border border-gray-200 dark:border-gray-700
+                                              text-gray-800 dark:text-gray-200
+                                              focus:outline-none focus:ring-2 focus:ring-violet-400
+                                              focus:border-transparent transition">
+                                <span class="text-sm text-gray-400 dark:text-gray-500">.xlsx</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                                اسم الورقة المدمجة
+                            </label>
+                            <input id="out-sheetname" type="text" value="البيانات المنسوجة"
+                                   class="w-full px-3 py-1.5 text-sm rounded-lg
+                                          bg-gray-50 dark:bg-gray-800
+                                          border border-gray-200 dark:border-gray-700
+                                          text-gray-800 dark:text-gray-200
+                                          focus:outline-none focus:ring-2 focus:ring-violet-400
+                                          focus:border-transparent transition">
+                        </div>
+
+                        <!-- ★ Sheet direction -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+                                اتجاه الورقة في Excel
+                            </label>
+                            <div class="join-pills">
+                                <div class="join-pill">
+                                    <input type="radio" name="sheet-dir" id="dir-rtl" value="rtl" checked>
+                                    <label for="dir-rtl">
+                                        <i class="fas fa-align-right text-xs"></i>RTL — عربي
+                                    </label>
+                                </div>
+                                <div class="join-pill">
+                                    <input type="radio" name="sheet-dir" id="dir-ltr" value="ltr">
+                                    <label for="dir-ltr">
+                                        <i class="fas fa-align-left text-xs"></i>LTR — إنجليزي
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Excel styling preview -->
+                <div>
+                    <h3 class="text-sm font-black text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+                        <i class="fas fa-palette text-violet-500 text-xs"></i>
+                        معاينة التنسيق
+                    </h3>
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-3 text-right text-white font-bold"
+                                        style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">العمود 1</th>
+                                    <th class="py-2 px-3 text-right text-white font-bold"
+                                        style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">العمود 2</th>
+                                    <th class="py-2 px-3 text-right text-white font-bold"
+                                        style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">العمود 3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white dark:bg-gray-900">
+                                    <td class="py-1.5 px-3 text-gray-700 dark:text-gray-300">بيانات ١</td>
+                                    <td class="py-1.5 px-3 text-gray-700 dark:text-gray-300">قيمة ١</td>
+                                    <td class="py-1.5 px-3 text-gray-700 dark:text-gray-300">نتيجة ١</td>
+                                </tr>
+                                <tr style="background:#f5f3ff">
+                                    <td class="py-1.5 px-3 text-gray-700 dark:text-gray-300">بيانات ٢</td>
+                                    <td class="py-1.5 px-3 text-gray-700 dark:text-gray-300">قيمة ٢</td>
+                                    <td class="py-1.5 px-3 text-gray-700 dark:text-gray-300">نتيجة ٢</td>
+                                </tr>
+                                <tr style="background:#fde8e8">
+                                    <td class="py-1.5 px-3 text-red-700">مكرر (أبرز)</td>
+                                    <td class="py-1.5 px-3 text-red-700">قيمة ٢</td>
+                                    <td class="py-1.5 px-3 text-red-700">من الملف ٢</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
+                        رأس بنفسجي · صفوف بديلة · تكرارات بالأحمر · تجميد الرأس
+                    </p>
+                </div>
+            </div>
+
+            <!-- Download button -->
+            <div class="mt-6 pt-5 border-t border-gray-200 dark:border-gray-800">
+                <button id="btn-download"
+                    class="w-full flex items-center justify-center gap-2 py-3
+                           bg-emerald-600 hover:bg-emerald-700 text-white font-bold
+                           text-sm rounded-xl transition-colors
+                           shadow-sm shadow-emerald-300/40 dark:shadow-emerald-900/40">
+                    <i class="fas fa-file-excel text-base"></i>
+                    تحميل ملف Excel
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- App script -->
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
