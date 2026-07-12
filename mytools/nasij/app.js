@@ -28,6 +28,27 @@ function fileColor(name) {
   return name.toLowerCase().endsWith('.csv') ? 'text-emerald-500' : 'text-emerald-600';
 }
 
+/* عربي: مفرد / مثنى / جمع حسب العدد (١ عمود، عمودان، ٣ أعمدة) */
+function arWord(n, singular, dual, plural) {
+  const v = Math.abs(n);
+  if (v === 1) return singular;
+  if (v === 2) return dual;
+  return plural;
+}
+/* "عمود" | "عمودان" | "٣ أعمدة" */
+function arCount(n, singular, dual, plural) {
+  const v = Math.abs(n);
+  if (v === 1) return singular;
+  if (v === 2) return dual;
+  return `${fmt(v)} ${plural}`;
+}
+const NOUNS = {
+  file   : ['ملف',   'ملفان',   'ملفات'],
+  row    : ['صف',    'صفان',    'صفوف'],
+  col    : ['عمود',  'عمودان',  'أعمدة'],
+  dup    : ['تكرار', 'تكراران', 'تكرارات'],
+};
+
 /* ════════════════════════════
    Toast
 ════════════════════════════ */
@@ -452,7 +473,7 @@ class NasijApp {
           ${esc(f.fileName)}
         </span>
         <span class="text-xs text-gray-400 dark:text-gray-500">
-          ${fmt(f.sheets[0].rowCount)} صف
+          ${arCount(f.sheets[0].rowCount, ...NOUNS.row)}
         </span>
         <button class="text-gray-400 hover:text-red-500 transition-colors px-1"
                 onclick="app.removeFile('${f.id}')" title="حذف">
@@ -473,8 +494,8 @@ class NasijApp {
     const count = this.#files.size;
     btn.disabled = count < 2;
     btn.querySelector('span').textContent = count < 2
-      ? `ابدأ النسج (${count} / 2 ملف على الأقل)`
-      : `ابدأ النسج ← (${count} ملف)`;
+      ? `ابدأ النسج (${arCount(count, ...NOUNS.file)} — يلزم ملفان على الأقل)`
+      : `ابدأ النسج ← (${arCount(count, ...NOUNS.file)})`;
   }
 
   /* ══════════════════════════
@@ -564,11 +585,11 @@ class NasijApp {
           <div class="grid grid-cols-3 gap-2 text-center">
             <div class="stat-mini">
               <div class="num text-base">${fmt(sheet.rowCount)}</div>
-              <div class="lbl">صف</div>
+              <div class="lbl">${arWord(sheet.rowCount, ...NOUNS.row)}</div>
             </div>
             <div class="stat-mini">
               <div class="num text-base">${sheet.columns.length}</div>
-              <div class="lbl">عمود</div>
+              <div class="lbl">${arWord(sheet.columns.length, ...NOUNS.col)}</div>
             </div>
             <div class="stat-mini">
               <div class="num text-base">${f.isCSV ? 'CSV' : 'XLSX'}</div>
@@ -777,7 +798,7 @@ class NasijApp {
       const modeLabel = { first:'احتُفظ بالأول', last:'احتُفظ بالأخير',
                           all:'احتُفظ بالكل', highlight:'مُبرَّز بالأحمر' };
       this.#toast.show(
-        `وُجد ${fmt(appendResult.dupCount)} تكرار — ${modeLabel[conflictMode] ?? ''}`,
+        `وُجد ${arCount(appendResult.dupCount, ...NOUNS.dup)} — ${modeLabel[conflictMode] ?? ''}`,
         'info', 4000
       );
     }
@@ -794,7 +815,7 @@ class NasijApp {
     this.#result  = { rows, stats, columns };
     this.#renderPreview();
     this.#renderExportStats();
-    this.#toast.show(`تم النسج: ${fmt(rows.length)} صف · ${columns.length} عمود`);
+    this.#toast.show(`تم النسج: ${arCount(rows.length, ...NOUNS.row)} · ${arCount(columns.length, ...NOUNS.col)}`);
   }
 
   /* ══════════════════════════
@@ -910,15 +931,15 @@ class NasijApp {
       </div>
       <div class="stat-mini">
         <div class="num text-red-500">${fmt(stats.dupesRemoved)}</div>
-        <div class="lbl">مكرر محذوف</div>
+        <div class="lbl">${arWord(stats.dupesRemoved, 'مكرر محذوف', 'مكرران محذوفان', 'مكررات محذوفة')}</div>
       </div>
       <div class="stat-mini">
         <div class="num text-amber-500">${fmt(stats.filtered)}</div>
-        <div class="lbl">صف مُصفَّى</div>
+        <div class="lbl">${arWord(stats.filtered, 'صف مُصفَّى', 'صفان مُصفَّيان', 'صفوف مُصفَّاة')}</div>
       </div>
       <div class="stat-mini">
         <div class="num">${columns.length}</div>
-        <div class="lbl">عمود</div>
+        <div class="lbl">${arWord(columns.length, ...NOUNS.col)}</div>
       </div>`;
 
     $('preview-table-wrap').innerHTML = `
@@ -939,7 +960,7 @@ class NasijApp {
       </div>
       ${rows.length > LIMIT ? `
         <p class="text-xs text-gray-400 dark:text-gray-500 text-center mt-2">
-          عرض أول ${LIMIT} صف من ${fmt(rows.length)}. التصدير يشمل الكل.
+          عرض أول ${arCount(LIMIT, ...NOUNS.row)} من ${arCount(rows.length, ...NOUNS.row)}. التصدير يشمل الكل.
         </p>` : ''}`;
   }
 
@@ -961,7 +982,7 @@ class NasijApp {
             البيانات جاهزة للتصدير
           </p>
           <p class="text-xs text-violet-600/70 dark:text-violet-400/70">
-            ${fmt(rows.length)} صف · ${columns.length} عمود
+            ${arCount(rows.length, ...NOUNS.row)} · ${arCount(columns.length, ...NOUNS.col)}
           </p>
         </div>
       </div>`;
@@ -1040,5 +1061,4 @@ class NasijApp {
 /* ════════════════════════════
    BOOT
 ════════════════════════════ */
-let app;
-document.addEventListener('DOMContentLoaded', () => { app = new NasijApp(); });
+document.addEventListener('DOMContentLoaded', () => { window.app = new NasijApp(); });
