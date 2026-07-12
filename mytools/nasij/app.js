@@ -28,19 +28,26 @@ function fileColor(name) {
   return name.toLowerCase().endsWith('.csv') ? 'text-emerald-500' : 'text-emerald-600';
 }
 
-/* عربي: مفرد / مثنى / جمع حسب العدد (١ عمود، عمودان، ٣ أعمدة) */
-function arWord(n, singular, dual, plural) {
+/* عربي: مفرد / مثنى / جمع حسب العدد
+   ١ عمود · عمودان · ٣-١٠ أعمدة · ١١ فأكثر يرجع للمفرد (١١ عمود، ٢٠ عمود...) */
+function arBucket(n) {
   const v = Math.abs(n);
-  if (v === 1) return singular;
-  if (v === 2) return dual;
-  return plural;
+  if (v === 1) return 'singular';
+  if (v === 2) return 'dual';
+  const mod = v % 100;
+  return (mod >= 3 && mod <= 10) ? 'plural' : 'singular';
 }
-/* "عمود" | "عمودان" | "٣ أعمدة" */
+function arWord(n, singular, dual, plural) {
+  const forms = { singular, dual, plural };
+  return forms[arBucket(n)];
+}
+/* "عمود" | "عمودان" | "٣ أعمدة" | "١١ عمود" */
 function arCount(n, singular, dual, plural) {
   const v = Math.abs(n);
-  if (v === 1) return singular;
-  if (v === 2) return dual;
-  return `${fmt(v)} ${plural}`;
+  const b = arBucket(n);
+  if (b === 'singular' && v === 1) return singular;
+  if (b === 'dual') return dual;
+  return `${fmt(v)} ${b === 'plural' ? plural : singular}`;
 }
 const NOUNS = {
   file   : ['ملف',   'ملفان',   'ملفات'],
@@ -71,14 +78,46 @@ class Toast {
    FileLoader  (SheetJS)
 ════════════════════════════ */
 class FileLoader {
+  static isBlankRow(r) {
+    return !r || r.every(cell => String(cell ?? '').trim() === '');
+  }
+
+  /* يبني rows/columns من مصفوفة خام بدءاً من صف عناوين وعمود بداية معيّنين (0-based) */
+  static buildFromAoa(aoa, headerIdx, startCol) {
+    const headerCells = (aoa[headerIdx] ?? []).slice(startCol);
+    const columns = headerCells.map((h, i) => String(h ?? '').trim() || `عمود ${i + 1}`);
+    const rows = aoa.slice(headerIdx + 1)
+      .filter(r => !FileLoader.isBlankRow(r))
+      .map(r => Object.fromEntries(columns.map((h, i) => [h, r[startCol + i] ?? ''])));
+    return { rows, columns };
+  }
+
   static async load(file) {
     const buf = await file.arrayBuffer();
     const wb  = XLSX.read(new Uint8Array(buf), { type: 'array', cellText: false, cellDates: true });
 
     const sheets = wb.SheetNames.map(sName => {
-      const rows = XLSX.utils.sheet_to_json(wb.Sheets[sName], { defval: '', raw: false });
-      const columns = rows.length ? Object.keys(rows[0]) : [];
-      return { name: sName, rows, columns, rowCount: rows.length };
+      const ws  = wb.Sheets[sName];
+      const aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false });
+
+      let rows, columns, headerShifted = false, headerRowNum = 1, startCol = 0;
+
+      if (FileLoader.isBlankRow(aoa[0])) {
+        const headerIdx = aoa.findIndex(r => !FileLoader.isBlankRow(r));
+        if (headerIdx === -1) {
+          /* الورقة فارغة تماماً — لا بيانات ولا عناوين */
+          rows = []; columns = [];
+        } else {
+          ({ rows, columns } = FileLoader.buildFromAoa(aoa, headerIdx, 0));
+          headerShifted = headerIdx > 0;
+          headerRowNum  = headerIdx + 1;
+        }
+      } else {
+        rows    = XLSX.utils.sheet_to_json(ws, { defval: '', raw: false });
+        columns = rows.length ? Object.keys(rows[0]) : [];
+      }
+
+      return { name: sName, rows, columns, rowCount: rows.length, headerShifted, headerRowNum, startCol, aoa };
     });
 
     return {
@@ -582,6 +621,37 @@ class NasijApp {
               </select>
             </div>
           ` : ''}
+          ${sheet.headerShifted ? `
+            <div class="mb-3 text-xs bg-amber-50 dark:bg-amber-900/20
+                        border border-amber-200 dark:border-amber-800 rounded-lg p-2
+                        text-amber-700 dark:text-amber-400">
+              <div class="flex items-start gap-2">
+                <i class="fas fa-triangle-exclamation mt-0.5 flex-shrink-0"></i>
+                <span class="flex-1">الصف الأول فارغ — اعتُمد الصف ${fmt(sheet.headerRowNum)} كعناوين تلقائياً.</span>
+              </div>
+              <button class="mt-1.5 font-bold underline hover:no-underline"
+                      onclick="app.toggleHeaderPicker('${f.id}')">
+                تحديد الصف والعمود يدوياً
+              </button>
+              <div class="hidden mt-2 flex items-center gap-1.5 flex-wrap" id="hdr-picker-${f.id}">
+                <label class="text-xs">صف العناوين</label>
+                <input type="number" min="1" value="${sheet.headerRowNum}"
+                       id="hdr-row-${f.id}"
+                       class="w-14 px-1.5 py-1 text-xs rounded border border-amber-300
+                              dark:border-amber-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+                <label class="text-xs">عمود البداية</label>
+                <input type="number" min="1" value="${sheet.startCol + 1}"
+                       id="hdr-col-${f.id}"
+                       class="w-14 px-1.5 py-1 text-xs rounded border border-amber-300
+                              dark:border-amber-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+                <button onclick="app.applyHeaderPick('${f.id}')"
+                        class="px-2.5 py-1 text-xs font-bold bg-amber-600 hover:bg-amber-700
+                               text-white rounded-md transition-colors">
+                  تطبيق
+                </button>
+              </div>
+            </div>
+          ` : ''}
           <div class="grid grid-cols-3 gap-2 text-center">
             <div class="stat-mini">
               <div class="num text-base">${fmt(sheet.rowCount)}</div>
@@ -613,6 +683,34 @@ class NasijApp {
     const f = this.#files.get(fileId);
     if (!f) return;
     f.activeSheet = +sheetIndex;
+    this.#renderFilesTab();
+    this.#renderMergeTab();
+    this.#result = null;
+  }
+
+  toggleHeaderPicker(fileId) {
+    $(`hdr-picker-${fileId}`)?.classList.toggle('hidden');
+  }
+
+  applyHeaderPick(fileId) {
+    const f = this.#files.get(fileId);
+    if (!f) return;
+    const sheet = f.sheets[f.activeSheet];
+
+    const headerRow1 = Math.max(1, parseInt($(`hdr-row-${fileId}`).value, 10) || 1);
+    const startCol1  = Math.max(1, parseInt($(`hdr-col-${fileId}`).value, 10) || 1);
+    const headerIdx  = headerRow1 - 1;
+    const startCol   = startCol1  - 1;
+
+    const { rows, columns } = FileLoader.buildFromAoa(sheet.aoa, headerIdx, startCol);
+    sheet.rows          = rows;
+    sheet.columns       = columns;
+    sheet.rowCount       = rows.length;
+    sheet.headerRowNum   = headerRow1;
+    sheet.startCol       = startCol;
+    sheet.headerShifted  = headerRow1 > 1 || startCol > 0;
+
+    this.#toast.show('تم تحديث عناوين الأعمدة');
     this.#renderFilesTab();
     this.#renderMergeTab();
     this.#result = null;
