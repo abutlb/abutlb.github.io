@@ -313,6 +313,15 @@ tailwind.config = {
                 <i class="fas fa-file-excel text-xs"></i>التصدير
             </button>
 
+            <button data-tab="about"
+                class="tab-btn flex items-center gap-2 px-5 py-3.5 text-sm
+                       font-medium whitespace-nowrap transition-all border-b-2
+                       border-transparent text-gray-500 dark:text-gray-400
+                       hover:text-gray-700 dark:hover:text-gray-200
+                       hover:bg-white/60 dark:hover:bg-gray-800/60">
+                <i class="fas fa-circle-info text-xs"></i>عن الأداة
+            </button>
+
         </div>
 
         <!-- ── Tab: الملفات ── -->
@@ -787,6 +796,56 @@ tailwind.config = {
                 </button>
             </div>
 
+        </div>
+
+        <!-- ── Tab: عن الأداة ── -->
+        <div id="tab-about" class="tab-content hidden p-5">
+            <div class="max-w-2xl mx-auto text-center py-6">
+
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-indigo-700
+                            flex items-center justify-center text-white text-2xl font-black
+                            mx-auto mb-5 shadow-lg shadow-violet-300/40 dark:shadow-violet-900/50">
+                    ع.ت
+                </div>
+
+                <h2 class="text-2xl font-black text-gray-800 dark:text-gray-100 mb-1">
+                    عبدالله التويجري
+                </h2>
+                <p class="text-violet-600 dark:text-violet-400 font-bold text-sm mb-4">
+                    محلل بيانات · ذكاء أعمال · مطوّر Python &amp; Django
+                </p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-md mx-auto mb-6">
+                    ناسج أداة مجانية لدمج وتنظيف وتصدير بيانات Excel وCSV، جزء من مجموعة أدوات رقمية
+                    أبنيها لتبسيط العمل مع البيانات.
+                </p>
+
+                <div class="flex justify-center gap-3 flex-wrap mb-6">
+                    <a href="https://github.com/abutlb" target="_blank"
+                       class="px-4 py-2 rounded-full border-2 border-violet-300 dark:border-violet-700
+                              text-violet-600 dark:text-violet-400 font-bold text-sm
+                              hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors">
+                        <i class="fab fa-github ml-2"></i>GitHub
+                    </a>
+                    <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank"
+                       class="px-4 py-2 rounded-full border-2 border-blue-300 dark:border-blue-700
+                              text-blue-600 dark:text-blue-400 font-bold text-sm
+                              hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                        <i class="fab fa-linkedin-in ml-2"></i>LinkedIn
+                    </a>
+                    <a href="mailto:abutlb10015@gmail.com"
+                       class="px-4 py-2 rounded-full border-2 border-red-300 dark:border-red-700
+                              text-red-500 dark:text-red-400 font-bold text-sm
+                              hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                        <i class="fas fa-envelope ml-2"></i>راسلني
+                    </a>
+                </div>
+
+                <a href="../index.html"
+                   class="text-xs text-gray-400 dark:text-gray-500 hover:text-violet-500
+                          dark:hover:text-violet-400 transition-colors">
+                    <i class="fas fa-arrow-right ml-1"></i>عودة إلى البورتفوليو
+                </a>
+            </div>
         </div>
 
     </div>
