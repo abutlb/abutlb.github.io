@@ -475,21 +475,25 @@ export class SingleTab {
         const data = this._content();
         this.renderer.render(this._buildOptions(data));
 
+        const shapeLabelKey = SHAPES.find(([v]) => v === this.style.dotType)?.[1];
+
         document.getElementById("qr-stat-error").textContent = this.style.errorLevel;
         document.getElementById("qr-stat-size").textContent  = `${this.style.size}px`;
         document.getElementById("qr-stat-logo").textContent  = this.style.logo ? "✓" : "—";
-        document.getElementById("qr-stat-shape").textContent = this.style.dotType;
+        document.getElementById("qr-stat-shape").textContent = shapeLabelKey ? i18n.t(shapeLabelKey) : this.style.dotType;
 
         document.getElementById("qr-actions").classList.toggle("hidden", !data);
 
-        // تنبيه التباين (فقط عند وجود خلفية غير شفافة)
+        // تنبيه التباين — الخلفية الشفافة تُعامل كأنها أبيض (أغلب الخلفيات الحقيقية فاتحة)
         const contrastWarn = document.getElementById("qr-contrast-warning");
-        const showContrastWarn = !!data && !this.style.bgTransparent &&
-            contrastRatio(this.style.dotColor, this.style.bgColor) < 2.5;
+        const effectiveBg = this.style.bgTransparent ? "#ffffff" : this.style.bgColor;
+        const showContrastWarn = !!data && contrastRatio(this.style.dotColor, effectiveBg) < 3;
         contrastWarn.classList.toggle("hidden", !showContrastWarn);
 
-        // تنبيه الشعار الكبير (imageSize > 0.35 يبدأ يؤثر فعلياً)
-        document.getElementById("qr-logo-warning").classList.toggle("hidden", !this.style.logo);
+        // تنبيه الشعار — فقط إذا كان هناك شعار فعلياً ومستوى تصحيح الخطأ منخفض
+        // (لا حاجة للتنبيه مع Q/H لأن التصحيح العالي يستوعب تغطية الشعار بأمان)
+        const logoRisksReadability = !!this.style.logo && (this.style.errorLevel === "L" || this.style.errorLevel === "M");
+        document.getElementById("qr-logo-warning").classList.toggle("hidden", !logoRisksReadability);
     }
 
     _download(extension) {

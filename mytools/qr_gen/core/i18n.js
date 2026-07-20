@@ -12,7 +12,7 @@ export const translations = {
         privacyNote: "الخصوصية: تتم معالجة البيانات داخل المتصفح فقط، ولا يتم رفع الروابط أو الملفات إلى خادم خارجي.",
 
         tabSingle: "رمز واحد",
-        tabBatch: "روابط متعددة",
+        tabBatch: "توليد دفعات",
         tabAbout: "عن الأداة",
 
         // ── محتوى ──
@@ -156,7 +156,7 @@ export const translations = {
         privacyNote: "Privacy: All data is processed locally in your browser. Links and files are not uploaded to any external server.",
 
         tabSingle: "Single QR",
-        tabBatch: "Batch QR",
+        tabBatch: "Bulk QR",
         tabAbout: "About",
 
         contentTitle: "Content",

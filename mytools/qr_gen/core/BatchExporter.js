@@ -1,5 +1,6 @@
 // core/BatchExporter.js
 // يولّد عدة رموز QR من قائمة عناصر ويصدرها كملف ZIP واحد (JSZip)
+import { toUtf8SafeString } from "./textEncoding.js";
 
 export class BatchExporter {
 
@@ -18,7 +19,7 @@ export class BatchExporter {
 
         for (let i = 0; i < items.length; i++) {
             const item = items[i];
-            const qr = new QRCodeStyling({ ...baseOptions, data: item.content });
+            const qr = new QRCodeStyling({ ...baseOptions, data: toUtf8SafeString(item.content) });
             const blob = await qr.getRawData(extension);
 
             const index = String(i + 1).padStart(3, "0");

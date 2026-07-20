@@ -2,6 +2,7 @@
 import { BatchExporter } from "../core/BatchExporter.js";
 import { i18n }          from "../core/i18n.js";
 import { Settings }      from "../core/Settings.js";
+import { toUtf8SafeString } from "../core/textEncoding.js";
 
 const SHAPES = [
     ["square", "shapeSquare"], ["dots", "shapeDots"], ["rounded", "shapeRounded"],
@@ -331,7 +332,7 @@ export class BatchTab {
         this.items.forEach((item, i) => {
             const el = document.getElementById(`batch-item-${i}`);
             const qr = new QRCodeStyling({
-                width: 160, height: 160, data: item.content, margin: 4,
+                width: 160, height: 160, data: toUtf8SafeString(item.content), margin: 4,
                 qrOptions: { errorCorrectionLevel: this.style.errorLevel },
                 dotsOptions: { color: this.style.dotColor, type: this.style.dotType },
                 backgroundOptions: { color: "#ffffff" },

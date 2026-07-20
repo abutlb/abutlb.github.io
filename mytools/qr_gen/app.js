@@ -33,7 +33,7 @@ function applyStaticTranslations() {
         el.textContent = i18n.t(el.dataset.i18n);
     });
     const langLabel = document.getElementById("lang-toggle-label");
-    if (langLabel) langLabel.textContent = i18n.lang === "ar" ? "EN" : "عربي";
+    if (langLabel) langLabel.textContent = i18n.lang === "ar" ? "English" : "العربية";
 }
 
 i18n.applyDom();
