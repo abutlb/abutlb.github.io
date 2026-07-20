@@ -352,38 +352,66 @@
 
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-8">
+  <footer class="bg-gray-800 text-white py-10">
     <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="flex flex-col md:flex-row justify-between items-start gap-8">
         <div class="mb-4 md:mb-0">
           <h3 class="text-xl font-bold mb-2">المحاسبة المتوسطة 1</h3>
           <p class="text-gray-400">موارد تعليمية للطلاب والمهنيين في مجال المحاسبة</p>
+          <p class="text-gray-400 text-sm mt-1">بناءً على كتاب كين لو</p>
         </div>
-        <div class="flex space-x-4 space-x-reverse">
-          <a href="#" class="text-gray-400 hover:text-white transition">
-            <i class="fab fa-twitter text-xl"></i>
-          </a>
-          <a href="#" class="text-gray-400 hover:text-white transition">
-            <i class="fab fa-linkedin text-xl"></i>
-          </a>
-          <a href="#" class="text-gray-400 hover:text-white transition">
-            <i class="fab fa-youtube text-xl"></i>
-          </a>
-          <a href="#" class="text-gray-400 hover:text-white transition">
-            <i class="fab fa-telegram text-xl"></i>
-          </a>
+
+        <!-- Social links -->
+        <div class="text-center">
+          <p class="text-gray-300 font-semibold mb-4 text-sm tracking-wide uppercase">تواصل مع المطوّر</p>
+          <div class="flex items-center gap-4 justify-center">
+
+            <!-- X (Twitter) -->
+            <a href="https://x.com/abutlb" target="_blank" rel="noopener"
+               title="X (تويتر)"
+               class="flex flex-col items-center gap-1 group">
+              <div class="w-14 h-14 rounded-full bg-black flex items-center justify-center shadow-lg ring-2 ring-transparent group-hover:ring-white transition-all duration-200 group-hover:scale-110">
+                <i class="fa-brands fa-x-twitter text-white text-xl"></i>
+              </div>
+              <span class="text-gray-400 text-xs group-hover:text-white transition">X</span>
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank" rel="noopener"
+               title="LinkedIn"
+               class="flex flex-col items-center gap-1 group">
+              <div class="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center shadow-lg ring-2 ring-transparent group-hover:ring-white transition-all duration-200 group-hover:scale-110">
+                <i class="fab fa-linkedin-in text-white text-xl"></i>
+              </div>
+              <span class="text-gray-400 text-xs group-hover:text-white transition">LinkedIn</span>
+            </a>
+
+            <!-- GitHub -->
+            <a href="https://github.com/abutlb" target="_blank" rel="noopener"
+               title="GitHub"
+               class="flex flex-col items-center gap-1 group">
+              <div class="w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center shadow-lg ring-2 ring-transparent group-hover:ring-white transition-all duration-200 group-hover:scale-110">
+                <i class="fab fa-github text-white text-xl"></i>
+              </div>
+              <span class="text-gray-400 text-xs group-hover:text-white transition">GitHub</span>
+            </a>
+
+            <!-- Email -->
+            <a href="mailto:abutlb10015@gmail.com"
+               title="البريد الإلكتروني"
+               class="flex flex-col items-center gap-1 group">
+              <div class="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center shadow-lg ring-2 ring-transparent group-hover:ring-white transition-all duration-200 group-hover:scale-110">
+                <i class="fas fa-envelope text-white text-xl"></i>
+              </div>
+              <span class="text-gray-400 text-xs group-hover:text-white transition">Email</span>
+            </a>
+
+          </div>
         </div>
       </div>
-      <div class="border-t border-gray-700 mt-6 pt-6 flex flex-col md:flex-row justify-between">
-        <div class="text-gray-400 text-sm mb-4 md:mb-0">
-          © 2025 المحاسبة المتوسطة. جميع الحقوق محفوظة.
-        </div>
-        <div class="flex flex-wrap justify-center md:justify-end space-x-4 space-x-reverse text-sm">
-          <a href="#" class="text-gray-400 hover:text-white transition mb-2 md:mb-0">سياسة الخصوصية</a>
-          <a href="#" class="text-gray-400 hover:text-white transition mb-2 md:mb-0">شروط الاستخدام</a>
-          <a href="#" class="text-gray-400 hover:text-white transition mb-2 md:mb-0">اتصل بنا</a>
-          <a href="#" class="text-gray-400 hover:text-white transition">المساعدة</a>
-        </div>
+
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center">
+        <p class="text-gray-500 text-sm">© 2025 المحاسبة المتوسطة. جميع الحقوق محفوظة.</p>
       </div>
     </div>
   </footer>
