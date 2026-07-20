@@ -156,6 +156,10 @@ const sheetsPages  = [
     status:      "coming-soon",
     color:       "green",
     updated:     "2026-07-20",
+    image: {
+      src: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=600&q=80&auto=format&fit=crop",
+      alt: "Git Version Control"
+    }
   },
   {
     slug:        "regex",
@@ -170,6 +174,10 @@ const sheetsPages  = [
     status:      "coming-soon",
     color:       "pink",
     updated:     "2026-07-20",
+    image: {
+      src: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=600&q=80&auto=format&fit=crop",
+      alt: "Regular Expressions Code"
+    }
   },
   {
     slug:        "power_bi",
@@ -184,6 +192,10 @@ const sheetsPages  = [
     status:      "coming-soon",
     color:       "yellow",
     updated:     "2026-07-20",
+    image: {
+      src: "https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?w=600&q=80&auto=format&fit=crop",
+      alt: "Power BI Dashboard"
+    }
   },
   {
     slug:        "time_series",
@@ -198,6 +210,10 @@ const sheetsPages  = [
     status:      "coming-soon",
     color:       "blue",
     updated:     "2026-07-20",
+    image: {
+      src: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80&auto=format&fit=crop",
+      alt: "Time Series Chart"
+    }
   },
   {
     slug:        "web_scraping",
@@ -212,6 +228,10 @@ const sheetsPages  = [
     status:      "coming-soon",
     color:       "indigo",
     updated:     "2026-07-20",
+    image: {
+      src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&q=80&auto=format&fit=crop",
+      alt: "Web Scraping API"
+    }
   },
   {
     slug:        "data_engineering",
@@ -226,6 +246,10 @@ const sheetsPages  = [
     status:      "coming-soon",
     color:       "purple",
     updated:     "2026-07-20",
+    image: {
+      src: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=600&q=80&auto=format&fit=crop",
+      alt: "Data Engineering Pipeline"
+    }
   },
 
 ];
