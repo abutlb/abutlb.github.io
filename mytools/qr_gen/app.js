@@ -1,6 +1,8 @@
 // app.js — نقطة الدخول
-import { SingleTab } from "./ui/SingleTab.js";
-import { BatchTab }  from "./ui/BatchTab.js";
+import { SingleTab }  from "./ui/SingleTab.js";
+import { BatchTab }   from "./ui/BatchTab.js";
+import { i18n }       from "./core/i18n.js";
+import { Settings }   from "./core/Settings.js";
 
 // ══════════════════════════════════════════════════════════════
 //  TOAST
@@ -22,6 +24,30 @@ class Toast {
 }
 
 const toast = new Toast();
+
+// ══════════════════════════════════════════════════════════════
+//  I18N — تطبيق الترجمة على العناصر الثابتة
+// ══════════════════════════════════════════════════════════════
+function applyStaticTranslations() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        el.textContent = i18n.t(el.dataset.i18n);
+    });
+    const langLabel = document.getElementById("lang-toggle-label");
+    if (langLabel) langLabel.textContent = i18n.lang === "ar" ? "EN" : "عربي";
+}
+
+i18n.applyDom();
+applyStaticTranslations();
+
+document.getElementById("lang-toggle").addEventListener("click", () => {
+    i18n.setLang(i18n.lang === "ar" ? "en" : "ar");
+});
+
+i18n.onChange(() => {
+    applyStaticTranslations();
+    window.singleTab?.render();
+    window.batchTab?.render();
+});
 
 // ══════════════════════════════════════════════════════════════
 //  DARK MODE
@@ -65,10 +91,18 @@ function switchTab(tabId) {
         );
         activeBtn.classList.remove("text-gray-500", "dark:text-gray-400", "border-transparent");
     }
+
+    Settings.save({ lastTab: tabId });
 }
 
 // ══════════════════════════════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════════════════════════════
-window.singleTab = new SingleTab("tab-single-container", toast);
-window.batchTab  = new BatchTab("tab-batch-container", toast);
+const savedSettings = Settings.load();
+
+window.singleTab = new SingleTab("tab-single-container", toast, savedSettings);
+window.batchTab  = new BatchTab("tab-batch-container", toast, savedSettings);
+
+if (savedSettings.lastTab && savedSettings.lastTab !== "single") {
+    switchTab(savedSettings.lastTab);
+}

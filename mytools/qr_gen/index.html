@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="مولد QR Code مجاني — أنشئ رمز QR لأي رابط أو نص أو بيانات اتصال في ثوانٍ وحمّله بجودة عالية بدون حساب أو اشتراك.">
+<meta name="description" content="أنشئ رموز QR مجاناً للرابط، النص، WiFi، بطاقة الاتصال والموقع. يدعم توليد دفعات من Excel/CSV وتحميل PNG أو SVG أو ZIP.">
 <meta name="keywords" content="مولد QR, QR code generator, رمز QR, QR مجاني, إنشاء QR, barcode, qr code online">
 <meta name="author" content="عبدالله التويجري">
 <meta property="og:title" content="مولد QR Code | عبدالله التويجري">
 <meta property="og:description" content="أنشئ رمز QR لأي رابط أو نص في ثوانٍ — مجاني بالكامل.">
 <meta property="og:url" content="https://abutlb.github.io/mytools/qr_gen/">
 <meta property="og:type" content="website">
-<title>مولد QR Code | عبدالله التويجري</title>
+<title>مولّد QR Code مجاني أونلاين — فردي ودفعات من Excel/CSV</title>
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
@@ -40,6 +40,13 @@
         (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.classList.add("dark");
     }
+    // اللغة قبل أول رسم لتفادي وميض الاتجاه
+    (function () {
+        var saved = localStorage.getItem("qrgen_lang");
+        var lang  = saved || (navigator.language && navigator.language.toLowerCase().startsWith("ar") ? "ar" : "en");
+        document.documentElement.lang = lang;
+        document.documentElement.dir  = lang === "ar" ? "rtl" : "ltr";
+    })();
     tailwind.config = {
         darkMode: "class",
         theme: { extend: {} }
@@ -65,28 +72,53 @@
                 <i class="fas fa-qrcode text-white text-base"></i>
             </div>
             <div>
-                <h1 class="text-base font-black text-gray-800 dark:text-gray-100 leading-tight">
+                <h1 class="text-base font-black text-gray-800 dark:text-gray-100 leading-tight" data-i18n="appTitle">
                     QR Gen
                 </h1>
-                <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight">
+                <p class="text-xs text-gray-500 dark:text-gray-400 leading-tight" data-i18n="appSubtitle">
                     مولّد رموز QR — فردي ودُفعات
                 </p>
             </div>
         </div>
 
-        <button id="theme-toggle"
-            class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800
-                   flex items-center justify-center
-                   hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <i id="theme-icon" class="fas fa-moon text-gray-600 dark:text-yellow-400 text-sm"></i>
-        </button>
+        <div class="flex items-center gap-2">
+            <button id="lang-toggle"
+                class="h-9 px-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-bold
+                       text-gray-600 dark:text-gray-300
+                       flex items-center gap-1.5
+                       hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i class="fas fa-globe text-[11px]"></i>
+                <span id="lang-toggle-label">EN</span>
+            </button>
+
+            <button id="theme-toggle"
+                class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800
+                       flex items-center justify-center
+                       hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i id="theme-icon" class="fas fa-moon text-gray-600 dark:text-yellow-400 text-sm"></i>
+            </button>
+        </div>
     </div>
 </header>
 
 <!-- ══════════════════════════════════════════════════════════
+     HERO / PRIVACY
+══════════════════════════════════════════════════════════ -->
+<div class="max-w-7xl mx-auto px-4 pt-6">
+    <p id="hero-description"
+       class="text-center text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-3" data-i18n="heroDescription">
+    </p>
+    <div class="max-w-2xl mx-auto mb-5 flex items-start gap-2 px-4 py-2.5 rounded-xl
+                bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+        <i class="fas fa-shield-halved text-emerald-500 mt-0.5 flex-shrink-0"></i>
+        <p id="privacy-note" class="text-xs text-emerald-700 dark:text-emerald-400" data-i18n="privacyNote"></p>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
      MAIN APP
 ══════════════════════════════════════════════════════════ -->
-<div class="max-w-7xl mx-auto px-4 py-6">
+<div class="max-w-7xl mx-auto px-4 pb-6">
 
     <!-- ── Tabs ── -->
     <div class="bg-white dark:bg-gray-900 rounded-xl border
@@ -100,7 +132,7 @@
                        text-blue-600 dark:text-blue-400
                        border-blue-600 dark:border-blue-400
                        bg-white dark:bg-gray-900">
-                <i class="fas fa-qrcode text-xs"></i>رمز واحد
+                <i class="fas fa-qrcode text-xs"></i><span data-i18n="tabSingle">رمز واحد</span>
             </button>
 
             <button data-tab="batch"
@@ -109,7 +141,7 @@
                        border-transparent text-gray-500 dark:text-gray-400
                        hover:text-gray-700 dark:hover:text-gray-200
                        hover:bg-white/60 dark:hover:bg-gray-800/60">
-                <i class="fas fa-th text-xs"></i>روابط متعددة
+                <i class="fas fa-th text-xs"></i><span data-i18n="tabBatch">روابط متعددة</span>
             </button>
 
             <button data-tab="about"
@@ -118,7 +150,7 @@
                        border-transparent text-gray-500 dark:text-gray-400
                        hover:text-gray-700 dark:hover:text-gray-200
                        hover:bg-white/60 dark:hover:bg-gray-800/60">
-                <i class="fas fa-circle-info text-xs"></i>عن الأداة
+                <i class="fas fa-circle-info text-xs"></i><span data-i18n="tabAbout">عن الأداة</span>
             </button>
         </div>
     </div>
@@ -128,7 +160,7 @@
         <div id="tab-single-container"></div>
     </div>
 
-    <!-- ── Tab: دفعة رموز ── -->
+    <!-- ── Tab: روابط متعددة ── -->
     <div id="tab-batch" class="tab-content hidden">
         <div id="tab-batch-container"></div>
     </div>
@@ -145,15 +177,13 @@
                     ع.ت
                 </div>
 
-                <h2 class="text-2xl font-black text-gray-800 dark:text-gray-100 mb-1">
+                <h2 class="text-2xl font-black text-gray-800 dark:text-gray-100 mb-1" data-i18n="aboutName">
                     عبدالله التويجري
                 </h2>
-                <p class="text-blue-600 dark:text-blue-400 font-bold text-sm mb-4">
+                <p class="text-blue-600 dark:text-blue-400 font-bold text-sm mb-4" data-i18n="aboutRole">
                     محلل بيانات · ذكاء أعمال · مطوّر Python &amp; Django
                 </p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-md mx-auto mb-6">
-                    QR Gen أداة مجانية لتوليد رموز QR فردية أو بدُفعات كاملة، جزء من مجموعة أدوات رقمية
-                    أبنيها لتبسيط العمل اليومي.
+                <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-md mx-auto mb-6" data-i18n="aboutBio">
                 </p>
 
                 <div class="flex justify-center gap-3 flex-wrap mb-6">
@@ -161,26 +191,26 @@
                        class="px-4 py-2 rounded-full border-2 border-blue-300 dark:border-blue-700
                               text-blue-600 dark:text-blue-400 font-bold text-sm
                               hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
-                        <i class="fab fa-github ml-2"></i>GitHub
+                        <i class="fab fa-github ml-2"></i><span data-i18n="aboutGithub">GitHub</span>
                     </a>
                     <a href="https://www.linkedin.com/in/abdullah-altwijri-b053b1234/" target="_blank"
                        class="px-4 py-2 rounded-full border-2 border-blue-300 dark:border-blue-700
                               text-blue-600 dark:text-blue-400 font-bold text-sm
                               hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
-                        <i class="fab fa-linkedin-in ml-2"></i>LinkedIn
+                        <i class="fab fa-linkedin-in ml-2"></i><span data-i18n="aboutLinkedin">LinkedIn</span>
                     </a>
                     <a href="mailto:abutlb10015@gmail.com"
                        class="px-4 py-2 rounded-full border-2 border-red-300 dark:border-red-700
                               text-red-500 dark:text-red-400 font-bold text-sm
                               hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                        <i class="fas fa-envelope ml-2"></i>راسلني
+                        <i class="fas fa-envelope ml-2"></i><span data-i18n="aboutEmail">راسلني</span>
                     </a>
                 </div>
 
                 <a href="../../index.html"
                    class="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-500
                           dark:hover:text-blue-400 transition-colors">
-                    <i class="fas fa-arrow-right ml-1"></i>عودة إلى البورتفوليو
+                    <i class="fas fa-arrow-right ml-1"></i><span data-i18n="aboutBack">عودة إلى البورتفوليو</span>
                 </a>
             </div>
         </div>
